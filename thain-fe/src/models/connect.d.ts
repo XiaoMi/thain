@@ -15,7 +15,8 @@ import { FlowEditorModelState } from '../pages/FlowEditor/model';
 import { FlowListModelState } from '@/pages/Flow/List/model';
 import { FlowExecutionDetailModelState } from '@/pages/FlowExecution/Detail/model';
 import { DashboardState } from '@/pages/Dashboard/model';
-import { AdminUserModel } from '@/pages/admin/model';
+import { AdminUserModel } from '@/pages/admin/models/UserAdminModel';
+import { X5TableModel } from '@/pages/admin/models/X5ConfigModel';
 export { GlobalModelState, SettingModelState, UserModelState };
 
 export type Effect = (
@@ -47,6 +48,7 @@ export interface Loading {
     flowEditor?: boolean;
     flowList?: boolean;
     admin?: boolean;
+    x5config?: boolean;
   };
 }
 
@@ -64,6 +66,7 @@ export interface ConnectState {
   flowEditor: FlowEditorModelState;
   dashboard: DashboardState;
   admin: AdminUserModel;
+  x5config: X5TableModel;
 }
 
 export interface Route extends MenuDataItem {

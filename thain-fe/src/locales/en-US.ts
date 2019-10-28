@@ -14,6 +14,7 @@ import exception403 from '@/pages/Exception/403/locales/en-US';
 import exception404 from '@/pages/Exception/404/locales/en-US';
 import exception500 from '@/pages/Exception/500/locales/en-US';
 import admin from './en-US/admin';
+import x5config from './en-US/x5config';
 export default {
   ...global,
   ...flow,
@@ -26,4 +27,5 @@ export default {
   ...exception404,
   ...exception500,
   ...admin,
+  ...x5config,
 };

@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import AdminTabs from './AdminTabs';
 import { ConnectProps } from '@/models/connect';
-import AdminUserModelType from './model';
+import AdminUserModelType from './models/UserAdminModel';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Card } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';

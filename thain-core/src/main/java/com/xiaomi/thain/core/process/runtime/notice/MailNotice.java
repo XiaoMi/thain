@@ -40,7 +40,7 @@ public class MailNotice {
         try {
             mailService.send(callbackEmail, "Thain flow executed failed", errorMessage);
         } catch (Exception e) {
-            log.warn(e.getMessage());
+            log.error("", e);
         }
     }
 }

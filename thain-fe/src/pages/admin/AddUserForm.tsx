@@ -6,7 +6,7 @@
 import { connect } from 'dva';
 import React, { useState } from 'react';
 import { Button, Form, Icon, Input, Modal, notification, Select } from 'antd';
-import { UserModel } from './model';
+import { UserModel } from './models/UserAdminModel';
 import { ConnectProps } from '@/models/connect';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { WrappedFormUtils } from 'antd/lib/form/Form';

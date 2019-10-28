@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ * This source code is licensed under the Apache License Version 2.0, which
+ * can be found in the LICENSE file in the root directory of this source tree.
+ */
 export default {
   'admin.user.addUser': '添加用户',
   'admin.user.userId': '用户ID',
@@ -15,4 +20,5 @@ export default {
   'admin.index.ClientAdmin': '客户端管理',
   'admin.user.info': '用户信息',
   'admin.home.index': '管理列表',
+  'admin.user.edit': '编辑',
 };

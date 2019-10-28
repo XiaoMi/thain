@@ -81,6 +81,7 @@ create table thain_user
     user_id       varchar(100) default '' not null comment '用户id',
     user_name     varchar(100) default '' not null comment '用户名',
     password_hash varchar(100) default '' not null comment '密码',
+    email         varchar(300) default '' not null comment 'email',
     admin         tinyint(1)   default 0  not null comment '是否管理员',
     constraint thain_user_user_id_uindex
         unique (user_id)

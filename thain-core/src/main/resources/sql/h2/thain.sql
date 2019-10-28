@@ -1,7 +1,8 @@
 -- Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
 -- This source code is licensed under the Apache License Version 2.0, which
 -- can be found in the LICENSE file in the root directory of this source tree.
-CREATE ALIAS if not exists UNIX_TIMESTAMP FOR "com.xiaomi.thain.core.utils.H2Extended.unixTimestamp";
+CREATE
+ALIAS if not exists UNIX_TIMESTAMP FOR "com.xiaomi.thain.core.utils.H2Extended.unixTimestamp";
 
 create table thain_flow
 (
@@ -73,6 +74,7 @@ create table thain_user
     user_id       varchar(100) default '' not null comment '用户id',
     user_name     varchar(100) default '' not null comment '用户名',
     password_hash varchar(100) default '' not null comment '密码',
+    email         varchar(300) default '' not null comment 'email',
     admin         int(1)       default 0  not null comment '是否管理员',
     constraint thain_user_user_id_uindex
         unique (user_id)

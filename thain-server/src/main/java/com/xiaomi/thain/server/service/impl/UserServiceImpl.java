@@ -8,6 +8,7 @@ package com.xiaomi.thain.server.service.impl;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.dao.UserDao;
 import com.xiaomi.thain.server.entity.request.UserRequest;
+import com.xiaomi.thain.server.entity.rq.UserRq;
 import com.xiaomi.thain.server.entity.user.ThainUser;
 import com.xiaomi.thain.server.service.UserService;
 import lombok.NonNull;
@@ -60,5 +61,11 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public boolean updateUser(@NonNull UserRq userRq) {
+        return userDao.updateUser(userRq);
+    }
+
 }
 

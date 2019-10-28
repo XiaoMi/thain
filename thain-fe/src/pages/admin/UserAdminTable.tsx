@@ -145,12 +145,12 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
       >
         <Form>
           <Item label={formatMessage({ id: 'admin.user.admin' })}>
-            <Select
+            <Select<string>
               defaultValue={defaultValue}
-              onChange={(value: string) => {
-                let isAdmin: boolean;
-                value === 'false' ? (isAdmin = false) : (isAdmin = true);
-                setModel({ ...model, admin: isAdmin });
+              onChange={value => {
+                let admin: boolean;
+                value === 'false' ? (admin = false) : (admin = true);
+                setModel({ ...model, admin: admin });
               }}
             >
               <Option value="true">{formatMessage({ id: 'admin.user.admin.yes' })}</Option>

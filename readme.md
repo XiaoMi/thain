@@ -5,7 +5,7 @@
 -->
 # Thain
 
-![Thain Logo](https://raw.githubusercontent.com/XiaoMi/Thain/master/docs/images/logo.png)
+![Thain Logo](./docs/images/logo.png)
 
 ## Other language versions
 

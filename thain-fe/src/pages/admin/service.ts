@@ -4,8 +4,8 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 import { get, post, del } from '@/utils/request';
-import { UserModel } from './model';
 import { ApiResult, TableResult } from '@/typings/ApiResult';
+import { UserModel } from './models/UserAdminModel';
 
 export async function addUser(props: UserModel) {
   return post('api/admin/user', props);

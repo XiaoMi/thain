@@ -36,10 +36,10 @@ const AdminTabs: React.FC<ConnectProps> = ({ dispatch }) => {
           activeKey === '1' ? handleAdminClick() : handleClientClick();
         }}
       >
-        <TabPane tab={formatMessage({ id: 'admin.index.userAdmin' })} key='1'>
+        <TabPane tab={formatMessage({ id: 'admin.index.userAdmin' })} key="1">
           <UserAdminTable />
         </TabPane>
-        <TabPane tab={formatMessage({ id: 'admin.index.ClientAdmin' })} key='2'>
+        <TabPane tab={formatMessage({ id: 'admin.index.ClientAdmin' })} key="2">
           <X5ConfigTable />
         </TabPane>
       </Tabs>

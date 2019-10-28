@@ -221,9 +221,7 @@ const X5ConfigTable: React.FC<Props> = ({
     </>
   );
 };
-const configTable = Form.create()(X5ConfigTable);
-
 export default connect(({ x5config, loading }: ConnectState) => ({
   tableResult: x5config.tableResult,
   loading: loading.models.x5config,
-}))(configTable);
+}))(X5ConfigTable);

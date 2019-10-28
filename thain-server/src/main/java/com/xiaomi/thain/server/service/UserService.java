@@ -6,6 +6,7 @@
 package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.server.entity.request.UserRequest;
+import com.xiaomi.thain.server.entity.rq.UserRq;
 import com.xiaomi.thain.server.entity.user.ThainUser;
 import lombok.NonNull;
 
@@ -25,5 +26,6 @@ public interface UserService {
     List<ThainUser> getAllUsers();
 
     boolean insertUser(@NonNull UserRequest userRequest);
+    boolean updateUser(@NonNull UserRq userRq);
 }
 

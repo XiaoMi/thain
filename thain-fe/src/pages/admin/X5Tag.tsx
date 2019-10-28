@@ -9,24 +9,22 @@ interface TagState {
 
 const X5Tag: React.FC<TagState> = ({ setTag, principals }) => {
   const [inputValue, setInputValue] = useState<string>('');
-  const [visiable, setviable] = useState(false);
-  console.log(principals);
+  const [visiable, setViable] = useState(false);
   const handleClose = () => {
     if (inputValue === '') {
-      setviable(false);
+      setViable(false);
       return;
     }
     if (principals.filter(value => value === inputValue).length > 0) {
-      setviable(false);
+      setViable(false);
       return;
     }
     setTag(model => ({ ...model, principals: [...model.principals, inputValue] }));
-    setviable(false);
+    setViable(false);
   };
   return (
     <div>
       {principals.map((s: string, index: number) => {
-        console.log(s, index);
         const longTag = s.length > 20;
         const tageElement = (
           <Tag
@@ -59,7 +57,7 @@ const X5Tag: React.FC<TagState> = ({ setTag, principals }) => {
       ) : (
         <Tag
           onClick={() => {
-            setviable(true);
+            setViable(true);
             setInputValue('');
           }}
         >

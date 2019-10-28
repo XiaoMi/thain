@@ -1,21 +1,23 @@
-package com.xiaomi.thain.server.entity.request;
-
+package com.xiaomi.thain.server.entity.rq;
 
 import lombok.Builder;
 import lombok.NonNull;
 
+import javax.annotation.Nullable;
+
 /**
- * @author wangsimin@xiaomi.com
+ * @author wangsimin3@xiaomi.com
+ * @date 2019/10/28
  */
 @Builder
-public class UserRequest {
+public class UserRq {
     @NonNull
     public final String userId;
     public final boolean admin;
-    @NonNull
+    @Nullable
     public final String email;
-    @NonNull
+    @Nullable
     public final String username;
-    @NonNull
+    @Nullable
     public final String password;
 }

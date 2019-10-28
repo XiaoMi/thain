@@ -6,9 +6,13 @@
 package com.xiaomi.thain.server.dao;
 
 import com.xiaomi.thain.server.entity.X5Config;
+import com.xiaomi.thain.server.entity.dr.X5ConfigDr;
 import com.xiaomi.thain.server.mapper.X5Mapper;
 import lombok.NonNull;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author liangyongrui@xiaomi.com
@@ -24,8 +28,22 @@ public class X5Dao {
         this.x5Mapper = x5Mapper;
     }
 
-    public X5Config getX5Config(@NonNull String appId) {
+    public Optional<X5Config> getX5Config(@NonNull String appId) {
         return x5Mapper.getX5Config(appId);
     }
+
+    public List<X5ConfigDr> getAllX5Config(){
+        return  x5Mapper.getAllX5Config();
+    }
+
+    public void addX5Config(@NonNull X5ConfigDr x5ConfigDr){
+        x5Mapper.addOrUpdateX5Config(x5ConfigDr);
+    }
+
+    public  void deleteX5Config(@NonNull String appId){
+        x5Mapper.deleteX5Config(appId);
+    }
+
+    public void updateX5Config(@NonNull X5ConfigDr x5ConfigDr){x5Mapper.updateX5Config(x5ConfigDr);}
 }
 

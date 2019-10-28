@@ -6,7 +6,11 @@
 package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.server.entity.X5Config;
+import com.xiaomi.thain.server.entity.request.X5ConfigRequest;
+import com.xiaomi.thain.server.entity.response.X5ConfigResponse;
 import lombok.NonNull;
+
+import java.util.List;
 
 /**
  * @author liangyongrui@xiaomi.com
@@ -16,5 +20,30 @@ public interface X5Service {
 
     X5Config getX5Config(@NonNull String appid);
 
+    /**
+     * get all x5Configs
+     * @return
+     */
+    List<X5ConfigResponse> getAllConfigs();
+
+    /**
+     * delete x5Config
+     * @param appId
+     */
+    void deleteX5Config(@NonNull String appId);
+
+    /**
+     * insert x5Config
+     * @param x5ConfigRequest
+     * @return
+     */
+    boolean insertX5Config(@NonNull X5ConfigRequest x5ConfigRequest);
+
+    /**
+     * update X5Config
+     * @return
+     * @param x5ConfigRequest
+     */
+    boolean updateX5Config(@NonNull  X5ConfigRequest x5ConfigRequest);
 }
 

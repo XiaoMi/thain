@@ -7,6 +7,7 @@
 package com.xiaomi.thain.server.dao;
 
 import com.xiaomi.thain.server.entity.request.UserRequest;
+import com.xiaomi.thain.server.entity.rq.UserRq;
 import com.xiaomi.thain.server.entity.user.ThainUser;
 import com.xiaomi.thain.server.mapper.UserMapper;
 import lombok.NonNull;
@@ -56,6 +57,14 @@ public class UserDao {
 
     public List<ThainUser> getAllUsers() {
         return userMapper.getAllUsers();
+    }
+
+    public boolean updateUser(@NonNull UserRq userRq) {
+        if (userMapper.getUserById(userRq.userId).isPresent()) {
+            userMapper.updateUserBySelective(userRq);
+            return true;
+        }
+        return false;
     }
 
 

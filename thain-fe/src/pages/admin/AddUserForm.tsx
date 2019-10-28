@@ -39,7 +39,6 @@ const addUserForm: React.FC<Props> = ({ form, dispatch }) => {
       if (errors[error] !== undefined) return;
     }
     addUserModel.admin = isAdmin;
-    //调用接口发请求
     if (dispatch) {
       dispatch({
         payload: addUserModel,

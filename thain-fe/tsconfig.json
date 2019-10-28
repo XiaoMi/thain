@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "outDir": "build/dist",
+    "module": "esnext",
+    "target": "esnext",
+    "lib": ["esnext", "dom"],
+    "sourceMap": true,
+    "baseUrl": ".",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noUnusedLocals": true, // 有未使用的变量时，抛出错误
+    "noImplicitReturns": true, // 并不是所有函数里的代码都有返回值时，抛出错误
+    "noFallthroughCasesInSwitch": true, // 报告 switch 语句的 fallthrough 错误。（即，不允许 switch 的 case 语句贯穿）
+
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "src/setupTests.ts",
+    "tslint:latest",
+    "tslint-config-prettier"
+  ]
+}

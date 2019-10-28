@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ComponentDefineJson": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "property": {
+            "description": "传到后端的key",
+            "type": "string",
+            "title": "property"
+          },
+          "required": {
+            "description": "是否必填，false 或不写 则为不是必填",
+            "type": "boolean",
+            "title": "required"
+          },
+          "label": {
+            "description": "输入框前面的标识，不写默认用property",
+            "type": "string",
+            "title": "label"
+          },
+          "input": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "enum": [
+                      "line",
+                      "richText",
+                      "shell",
+                      "sql",
+                      "textarea"
+                    ],
+                    "type": "string",
+                    "title": "id"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "enum": [
+                      "select"
+                    ],
+                    "title": "id"
+                  },
+                  "options": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "description": "属性的值",
+                          "type": "string",
+                          "title": "id"
+                        },
+                        "name": {
+                          "description": "下拉框中的候选项，不写用id代替",
+                          "type": "string",
+                          "title": "name"
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ]
+                    },
+                    "title": "options"
+                  }
+                },
+                "required": [
+                  "id",
+                  "options"
+                ]
+              }
+            ],
+            "title": "input"
+          }
+        },
+        "required": [
+          "input",
+          "property"
+        ]
+      }
+    }
+  }
+}

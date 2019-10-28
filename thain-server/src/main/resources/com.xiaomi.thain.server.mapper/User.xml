@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ This source code is licensed under the Apache License Version 2.0, which
+ can be found in the LICENSE file in the root directory of this source tree.
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaomi.thain.server.mapper.UserMapper">
+    <resultMap id="ThainUser" type="com.xiaomi.thain.server.entity.user.ThainUser">
+        <id column="user_id" javaType="java.lang.String" property="userId"/>
+        <result column="user_name" javaType="java.lang.String" property="username"/>
+        <result column="password_hash" javaType="java.lang.String" property="passwordHash"/>
+        <result column="admin" javaType="java.lang.Boolean" property="admin"/>
+        <collection property="appIds" ofType="java.lang.String">
+            <result column="app_id"/>
+        </collection>
+
+    </resultMap>
+    <insert id="insertUser">
+        replace into thain_user(user_id, user_name, password_hash, email)
+        values (#{userId}, #{username} ,
+        <choose>
+            <when test="passwordHash != null">
+                #{passwordHash}
+            </when>
+            <otherwise>
+                ''
+            </otherwise>
+        </choose>
+        ,
+        <choose>
+            <when test="email != null">
+                #{email}
+            </when>
+            <otherwise>
+                ''
+            </otherwise>
+        </choose>
+        )
+    </insert>
+    <select id="getUserById" resultMap="ThainUser">
+        select user_id,
+               user_name,
+               password_hash,
+               admin,
+               app_id
+        from thain_user as tu
+                 left join thain_x5_config as txc
+                           on principal like concat('%"', #{userId}, '"%')
+        where tu.user_id = #{userId}
+    </select>
+</mapper>

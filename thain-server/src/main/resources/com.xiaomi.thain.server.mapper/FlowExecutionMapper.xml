@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ This source code is licensed under the Apache License Version 2.0, which
+ can be found in the LICENSE file in the root directory of this source tree.
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaomi.thain.server.mapper.FlowExecutionMapper">
+    <select id="getFlowExecutionList" resultType="com.xiaomi.thain.common.model.FlowExecutionModel">
+        select id,
+               flow_id,
+               status,
+               host_info,
+               trigger_type,
+               logs,
+               create_time,
+               update_time
+        from thain_flow_execution
+        where flow_id = #{flowId}
+        order by id desc
+        limit #{offset}, #{limit}
+    </select>
+    <select id="getFlowExecution" resultType="com.xiaomi.thain.common.model.FlowExecutionModel">
+        select id,
+               flow_id,
+               status,
+               host_info,
+               trigger_type,
+               logs,
+               create_time,
+               update_time
+        from thain_flow_execution
+        where id = #{flowExecutionId}
+    </select>
+    <select id="getJobModelList" resultType="com.xiaomi.thain.common.model.JobModel">
+        select a.id,
+               a.flow_id,
+               a.name,
+               a.`condition`,
+               a.component,
+               a.callback_url,
+               a.properties,
+               a.x_axis,
+               a.y_axis,
+               a.create_time,
+               a.deleted
+        from thain_job a
+                 inner join thain_job_execution b on a.id = b.job_id and b.flow_execution_id = #{flowExecutionId}
+    </select>
+    <select id="getJobExecutionModelList" resultType="com.xiaomi.thain.common.model.JobExecutionModel">
+        select id,
+               flow_execution_id,
+               job_id,
+               status,
+               logs,
+               create_time,
+               update_time
+        from thain_job_execution
+        where flow_execution_id = #{flowExecutionId}
+    </select>
+
+    <select id="getUserAccessible" resultType="java.lang.Boolean">
+        select count(1) from thain_flow as tf inner join thain_flow_execution as tfe on
+        tf.id = tfe.flow_id
+        and tfe.id = #{flowExecutionId}
+        and (tf.create_user = #{userId}
+        <if test="appIds!=null and appIds.size > 0">
+            or tf.create_app_id in
+            <foreach collection="appIds" separator="," open="(" close=")" item="appId">
+                #{appId}
+            </foreach>
+        </if>
+        )
+    </select>
+    <select id="getAppIdAccessible" resultType="java.lang.Boolean">
+        select count(1)
+        from thain_flow as tf
+                 inner join thain_flow_execution as tfe on
+                tf.id = tfe.flow_id
+                and tfe.id = #{flowExecutionId}
+                and tf.create_app_id = #{appId}
+
+    </select>
+</mapper>

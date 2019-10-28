@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ This source code is licensed under the Apache License Version 2.0, which
+ can be found in the LICENSE file in the root directory of this source tree.
+-->
+<Configuration status="info" monitorInterval="5">
+    <!-- 全局参数 -->
+    <Properties>
+        <Property name="pattern">[%-5p %d] [%t %c{10}] - %m %n</Property>
+    </Properties>
+    <Appenders>
+        <!--这个输出控制台的配置-->
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout>
+                <pattern>${pattern}</pattern>
+            </PatternLayout>
+        </Console>
+
+        <RollingFile name="rollingFile"
+                     fileName="log/application.log"
+                     filePattern="log/application-%d{yyyyMMdd}-%i.log">
+            <PatternLayout>
+                <pattern>${pattern}</pattern>
+            </PatternLayout>
+            <Policies>
+                <!--<TimeBasedTriggeringPolicy />-->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了10 -->
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="rollingFile"/>
+            <AppenderRef ref="console"/>
+        </Root>
+        <AsyncLogger name="com.xiaomi.infra.galaxy.lcs.log.log4j2.LCSLogger" level="info" additivity="false">
+            <AppenderRef ref="LCS" level="info"/>
+        </AsyncLogger>
+    </Loggers>
+</Configuration>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

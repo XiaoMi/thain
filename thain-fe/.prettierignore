@@ -1,0 +1,10 @@
+**/*.svg
+**/*.png
+**/*.eot
+**/*.ttf
+.*
+package.json
+.umi
+.umi-production
+**/editor.js
+/build

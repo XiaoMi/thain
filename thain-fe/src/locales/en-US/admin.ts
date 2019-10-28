@@ -1,0 +1,18 @@
+export default {
+  'admin.user.addUser': 'Add User',
+  'admin.user.userId': 'UserId',
+  'admin.user.userName': 'UserName',
+  'admin.user.email': 'Email',
+  'admin.user.operation': 'Operation',
+  'admin.user.delete': 'Delete',
+  'admin.user.password': 'Password',
+  'admin.user.admin.yes': 'Yes',
+  'admin.user.admin.no': 'No',
+  'admin.user.cancel': 'Cancel',
+  'admin.user.comfirm': 'Confirm',
+  'admin.user.admin': 'Admin',
+  'admin.index.userAdmin': 'User Management',
+  'admin.index.ClientAdmin': 'Client Management',
+  'admin.user.info': 'UserInfo',
+  'admin.home.index': 'Admin List',
+};

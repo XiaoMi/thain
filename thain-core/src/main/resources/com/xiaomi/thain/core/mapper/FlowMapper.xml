@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ This source code is licensed under the Apache License Version 2.0, which
+ can be found in the LICENSE file in the root directory of this source tree.
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaomi.thain.core.mapper.FlowMapper">
+
+    <insert id="addFlow" parameterType="com.xiaomi.thain.common.model.FlowModel" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into thain_flow (name,
+        <if test="cron != null">
+            cron,
+        </if>
+        create_user,
+        <if test="callbackUrl != null">
+            callback_url,
+        </if>
+        pause_continuous_failure,
+        <if test="emailContinuousFailure != null">
+            email_continuous_failure,
+        </if>
+        <if test="modifyCallbackUrl != null">
+            modify_callback_url,
+        </if>
+        <if test="callbackEmail != null">
+            callback_email,
+        </if>
+        <if test="createAppId != null">
+            create_app_id,
+        </if>
+        sla_duration,
+        <if test="slaEmail != null">
+            sla_email,
+        </if>
+        sla_kill,
+        <if test="lastRunStatus != null">
+            last_run_status,
+        </if>
+        scheduling_status,
+        create_time, update_time, status_update_time)
+        values (#{name},
+        <if test="cron != null">
+            #{cron},
+        </if>
+        #{createUser},
+        <if test="callbackUrl != null">
+            #{callbackUrl},
+        </if>
+        #{pauseContinuousFailure},
+        <if test="emailContinuousFailure != null">
+            #{emailContinuousFailure},
+        </if>
+        <if test="modifyCallbackUrl != null">
+            #{modifyCallbackUrl},
+        </if>
+        <if test="callbackEmail != null">
+            #{callbackEmail},
+        </if>
+        <if test="createAppId != null">
+            #{createAppId},
+        </if>
+        #{slaDuration},
+        <if test="slaEmail != null">
+            #{slaEmail},
+        </if>
+        #{slaKill},
+        <if test="lastRunStatus != null">
+            #{lastRunStatus},
+        </if>
+        #{schedulingStatus},
+        now(), now(), now())
+    </insert>
+    <insert id="addJobList">
+        insert into thain_job(
+        flow_id,
+        name,
+        `condition`,
+        callback_url,
+        properties,
+        x_axis,
+        y_axis,
+        component
+        ) values
+        <foreach collection="collection" item="job" separator=",">
+            (
+            #{job.flowId},
+            #{job.name},
+            <choose>
+                <when test="job.condition != null and job.condition != ''">#{job.condition}</when>
+                <otherwise>''</otherwise>
+            </choose>
+            ,
+            <choose>
+                <when test="job.callbackUrl != null">#{job.callbackUrl}</when>
+                <otherwise>''</otherwise>
+            </choose>
+            ,
+            <choose>
+                <when test="job.propertiesString != null">#{job.propertiesString}</when>
+                <otherwise>''</otherwise>
+            </choose>
+            ,
+            <choose>
+                <when test="job.xAxis != null">#{job.xAxis}</when>
+                <otherwise>0</otherwise>
+            </choose>
+            ,
+            <choose>
+                <when test="job.yAxis != null">#{job.yAxis}</when>
+                <otherwise>0</otherwise>
+            </choose>
+            ,
+            #{job.component}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateFlow" parameterType="com.xiaomi.thain.common.model.FlowModel">
+        update thain_flow
+        set `id`= #{id},
+        <if test="name != null and name != ''">
+            `name` = #{name},
+        </if>
+        <if test="cron != null and cron != ''">
+            `cron` = #{cron},
+        </if>
+        <if test="modifyCallbackUrl != null and modifyCallbackUrl != ''">
+            modify_callback_url = #{modifyCallbackUrl},
+        </if>
+        <if test="pauseContinuousFailure != null">
+            pause_continuous_failure = #{pauseContinuousFailure},
+        </if>
+        <if test="emailContinuousFailure != null and emailContinuousFailure != ''">
+            email_continuous_failure = #{emailContinuousFailure},
+        </if>
+        <if test="callbackUrl != null and callbackUrl != ''">
+            `callback_url` = #{callbackUrl},
+        </if>
+        <if test="callbackEmail != null and callbackEmail != ''">
+            `callback_email` = #{callbackEmail},
+        </if>
+        <if test="slaDuration != null">
+            `sla_duration` = #{slaDuration},
+        </if>
+        <if test="slaEmail != null and slaEmail != ''">
+            `sla_email` = #{slaEmail},
+        </if>
+        <if test="slaKill != null">
+            `sla_kill` = #{slaKill},
+        </if>
+        `update_time` = now(),
+        `scheduling_status` = #{schedulingStatus}
+        where id = #{id}
+    </update>
+
+    <update id="updateLastRunStatus">
+        update thain_flow
+        set last_run_status = #{lastRunStatus}
+        where id = #{flowId}
+    </update>
+
+    <delete id="deleteFlow">
+        delete
+        from thain_flow
+        where id = #{flowId}
+    </delete>
+    <delete id="deleteJob">
+        delete
+        from thain_job
+        where flow_id = #{flowId}
+    </delete>
+    <update id="invalidJobList">
+        update thain_job
+        set deleted = 1
+        where flow_id = #{flowId}
+    </update>
+    <update id="updateSchedulingStatus">
+        update thain_flow
+        set scheduling_status = #{schedulingStatus},
+            update_time       = now()
+        where id = #{flowId}
+    </update>
+    <select id="getFlow" resultType="com.xiaomi.thain.common.model.FlowModel">
+        select id,
+               name,
+               cron,
+               modify_callback_url,
+               pause_continuous_failure,
+               email_continuous_failure,
+               create_user,
+               callback_url,
+               callback_email,
+               create_app_id,
+               sla_duration,
+               sla_email,
+               sla_kill,
+               last_run_status,
+               scheduling_status,
+               create_time,
+               update_time,
+               status_update_time,
+               deleted
+        from thain_flow
+        where id = #{flowId}
+          and deleted = 0
+    </select>
+    <select id="getAllFlowIds" resultType="java.lang.Long">
+        select id
+        from thain_flow;
+    </select>
+
+</mapper>

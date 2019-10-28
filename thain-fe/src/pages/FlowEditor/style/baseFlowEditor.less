@@ -1,0 +1,79 @@
+/*
+ * Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ * This source code is licensed under the Apache License Version 2.0, which
+ * can be found in the LICENSE file in the root directory of this source tree.
+ *
+ * date 2019年03月19日
+ * @author liangyongrui@xiaomi.com
+ */
+:global {
+  .itempanel {
+    position: absolute;
+    left: 0;
+    z-index: 2;
+    height: 100%;
+    padding-top: 8px;
+    background: #f7f9fb;
+    border-right: 1px solid #e6e9ed;
+  }
+
+  .detailpanel {
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    width: 250px;
+    height: calc(100% - 176px);
+    overflow: auto;
+    background: #f7f9fb;
+    border-left: 1px solid #e6e9ed;
+  }
+
+  .detailpanel .panel {
+    display: none;
+  }
+
+  .detailpanel .block-containe {
+    padding-top: 20px;
+  }
+
+  .detailpanel .input {
+    margin-left: 16px;
+  }
+
+  .detailpanel .name-input {
+    width: 120px;
+  }
+
+  .detailpanel .width-input {
+    width: 52px;
+  }
+
+  .detailpanel .height-input {
+    width: 52px;
+  }
+
+  .detailpanel .block-container {
+    padding: 16px 8px;
+  }
+
+  .bottom-container {
+    position: relative;
+  }
+
+  .zoom-dropdown-btn {
+    margin-left: 4px;
+    color: rgba(0, 0, 0, 0.45);
+    font-weight: 100;
+    line-height: 24px;
+    text-decoration: none;
+  }
+
+  .color-picker {
+    margin-left: 16px;
+    vertical-align: middle;
+  }
+
+  .p {
+    margin-bottom: 12px;
+  }
+}

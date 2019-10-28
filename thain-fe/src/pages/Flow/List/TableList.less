@@ -1,0 +1,59 @@
+/*
+ * Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ * This source code is licensed under the Apache License Version 2.0, which
+ * can be found in the LICENSE file in the root directory of this source tree.
+ */
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+
+.tableList {
+  .tableListOperator {
+    margin-bottom: 16px;
+
+    button {
+      margin-right: 8px;
+    }
+  }
+}
+
+.tableListForm {
+  :global {
+    .ant-form-item {
+      display: flex;
+      margin-right: 0;
+      margin-bottom: 24px;
+
+      > .ant-form-item-label {
+        width: auto;
+        padding-right: 8px;
+        line-height: 32px;
+      }
+
+      .ant-form-item-control {
+        line-height: 32px;
+      }
+    }
+
+    .ant-form-item-control-wrapper {
+      flex: 1;
+    }
+  }
+
+  .submitButtons {
+    display: block;
+    margin-bottom: 24px;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: @screen-lg) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 24px;
+  }
+}
+
+@media screen and (max-width: @screen-md) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 8px;
+  }
+}

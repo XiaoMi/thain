@@ -1,0 +1,36 @@
+/*
+ * Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ * This source code is licensed under the Apache License Version 2.0, which
+ * can be found in the LICENSE file in the root directory of this source tree.
+ */
+:global {
+  .a-upload {
+    position: relative;
+    display: inline-block;
+    *display: inline;
+    padding: 0 10px;
+    color: #888;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    *zoom: 1;
+  }
+
+  .a-upload input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 100px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+
+  .a-upload:hover {
+    color: #444;
+    text-decoration: none;
+    background: #eee;
+    border-color: #ccc;
+  }
+}

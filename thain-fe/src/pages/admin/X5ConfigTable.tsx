@@ -6,14 +6,12 @@ import ButtonGroup from 'antd/es/button/button-group';
 import { Button, Table, Modal, Form, Input, message } from 'antd';
 import { connect } from 'dva';
 import { TableResult } from '@/typings/ApiResult';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { PaginationConfig } from 'antd/lib/table';
 import X5Tag from './X5Tag';
 
 interface Props extends ConnectProps {
   tableResult: TableResult<X5ConfigModel>;
   loading?: boolean;
-  form: WrappedFormUtils;
 }
 
 const { Item } = Form;

@@ -6,6 +6,7 @@
 package com.xiaomi.thain.server.mapper;
 
 import com.xiaomi.thain.server.entity.X5Config;
+import com.xiaomi.thain.server.entity.dp.X5ConfigDp;
 import com.xiaomi.thain.server.entity.dr.X5ConfigDr;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.*;
@@ -44,17 +45,17 @@ public interface X5Mapper {
 
     /**
      * add x5config
-     * @param x5ConfigDr
+     * @param x5ConfigDp
      */
     @Insert("insert into thain_x5_config(app_id,app_key,app_name,principal,app_description)" +
             " values(#{appId},#{appKey},#{appName},#{principal},#{description}) " )
-    void addOrUpdateX5Config(@NonNull X5ConfigDr x5ConfigDr);
+    void addOrUpdateX5Config(@NonNull X5ConfigDp x5ConfigDp);
 
     /**
      * update X5Config
-     * @param x5ConfigDr
+     * @param x5ConfigDp
      */
     @Update("update thain_x5_config set app_key=#{appKey},app_name=#{appName},principal=#{principal},app_description=#{description} where app_id=#{appId} ")
-    void updateX5Config(@NonNull X5ConfigDr x5ConfigDr);
+    void updateX5Config(@NonNull X5ConfigDp x5ConfigDp);
 }
 

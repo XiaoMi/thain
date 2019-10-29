@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.dao.X5Dao;
 import com.xiaomi.thain.server.entity.X5Config;
-import com.xiaomi.thain.server.entity.dr.X5ConfigDr;
+import com.xiaomi.thain.server.entity.dp.X5ConfigDp;
 import com.xiaomi.thain.server.entity.request.X5ConfigRequest;
 import com.xiaomi.thain.server.entity.response.X5ConfigResponse;
 import com.xiaomi.thain.server.service.X5Service;
@@ -69,7 +69,7 @@ public class X5ServiceImpl implements X5Service {
             return false;
         }
         if (!x5Dao.getX5Config(x5ConfigRequest.appId).isPresent()) {
-            x5Dao.addX5Config(X5ConfigDr.builder()
+            x5Dao.addX5Config(X5ConfigDp.builder()
                     .appId(x5ConfigRequest.appId)
                     .appKey(x5ConfigRequest.appKey)
                     .appName(x5ConfigRequest.appName)
@@ -84,7 +84,7 @@ public class X5ServiceImpl implements X5Service {
     @Override
     public boolean updateX5Config(@NonNull X5ConfigRequest x5ConfigRequest) {
         if (x5Dao.getX5Config(x5ConfigRequest.appId).isPresent()) {
-            x5Dao.updateX5Config(X5ConfigDr.builder()
+            x5Dao.updateX5Config(X5ConfigDp.builder()
                     .appId(x5ConfigRequest.appId)
                     .appKey(x5ConfigRequest.appKey)
                     .appName(x5ConfigRequest.appName)

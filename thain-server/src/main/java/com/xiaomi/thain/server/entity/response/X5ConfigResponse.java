@@ -19,8 +19,6 @@ public class X5ConfigResponse {
     @NonNull
     public final String appKey;
     @NonNull
-    public final String principal;
-    @NonNull
     public final List<String> principals;
     @Nullable
     public final String description;

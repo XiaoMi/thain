@@ -6,6 +6,7 @@
 package com.xiaomi.thain.server.dao;
 
 import com.xiaomi.thain.server.entity.X5Config;
+import com.xiaomi.thain.server.entity.dp.X5ConfigDp;
 import com.xiaomi.thain.server.entity.dr.X5ConfigDr;
 import com.xiaomi.thain.server.mapper.X5Mapper;
 import lombok.NonNull;
@@ -36,14 +37,14 @@ public class X5Dao {
         return  x5Mapper.getAllX5Config();
     }
 
-    public void addX5Config(@NonNull X5ConfigDr x5ConfigDr){
-        x5Mapper.addOrUpdateX5Config(x5ConfigDr);
+    public void addX5Config(@NonNull X5ConfigDp x5ConfigDp){
+        x5Mapper.addOrUpdateX5Config(x5ConfigDp);
     }
 
     public  void deleteX5Config(@NonNull String appId){
         x5Mapper.deleteX5Config(appId);
     }
 
-    public void updateX5Config(@NonNull X5ConfigDr x5ConfigDr){x5Mapper.updateX5Config(x5ConfigDr);}
+    public void updateX5Config(@NonNull X5ConfigDp x5ConfigDp){x5Mapper.updateX5Config(x5ConfigDp);}
 }
 

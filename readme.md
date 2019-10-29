@@ -34,6 +34,9 @@ Thain has completed backend management system which supports depending, re-run, 
 @liangyongrui
 @miaoyu3
 
+## WeChat user group
+![WeChat](http://cnbj1.fds.api.xiaomi.com/xdata-mail/WechatIMG3.png)
+
 ## Help Us Do Better
 
 Now Thain continues to be developed by xiaomi internal developers. If you have any questions, you can ask in the issues or send email to:

@@ -55,8 +55,8 @@ public class ThainFacade {
         schedulerEngine.start();
     }
 
-    public static ThainFacade getInstance(ProcessEngineConfiguration processEngineConfiguration,
-                                          SchedulerEngineConfiguration schedulerEngineConfiguration)
+    public static ThainFacade getInstance(@NonNull ProcessEngineConfiguration processEngineConfiguration,
+                                          @NonNull SchedulerEngineConfiguration schedulerEngineConfiguration)
             throws ThainSchedulerException, ThainMissRequiredArgumentsException, IOException, SQLException {
         return new ThainFacade(processEngineConfiguration, schedulerEngineConfiguration);
     }
@@ -64,7 +64,7 @@ public class ThainFacade {
     /**
      * 新建任务, cron为空的则只部署，不调度, 这个flowJson是不含id的，如果含id也没用
      */
-    public long addFlow(AddRq addRq) throws ThainException {
+    public long addFlow(@NonNull AddRq addRq) throws ThainException {
         val flowId = processEngine.addFlow(addRq.flowModel, addRq.jobModelList).orElseThrow(() -> new ThainException("failed to insert flow"));
         if (StringUtils.isBlank(addRq.flowModel.cron)) {
             return flowId;
@@ -79,7 +79,7 @@ public class ThainFacade {
         return flowId;
     }
 
-    public long updateFlow(String flowJson) throws SchedulerException, ThainException, ParseException {
+    public long updateFlow(@NonNull String flowJson) throws SchedulerException, ThainException, ParseException {
         val addDto = JSON.parseObject(flowJson, AddRq.class);
         return updateFlow(addDto);
     }
@@ -87,7 +87,7 @@ public class ThainFacade {
     /**
      * 更新flow
      */
-    public long updateFlow(AddRq addRq) throws SchedulerException, ThainException, ParseException {
+    public long updateFlow(@NonNull AddRq addRq) throws SchedulerException, ThainException, ParseException {
         val flowModel = addRq.flowModel;
         val jobModelList = addRq.jobModelList;
 

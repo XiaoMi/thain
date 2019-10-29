@@ -83,7 +83,7 @@ const X5ConfigTable: React.FC<Props> = ({
         return (
           <>
             {record.principals.map((value: string, index: number) => {
-              return <div key={index}>{value}</div>;
+              return <div key={index + value}>{value}</div>;
             })}
           </>
         );
@@ -107,7 +107,7 @@ const X5ConfigTable: React.FC<Props> = ({
             <Button
               onClick={() => {
                 setIsVisiable(true);
-                const modalArray: Array<string> = new Array();
+                const modalArray: string[] = [];
                 record.principals.forEach(element => {
                   modalArray.push(element);
                 });

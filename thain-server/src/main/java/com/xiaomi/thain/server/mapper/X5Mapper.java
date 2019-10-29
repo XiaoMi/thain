@@ -22,11 +22,19 @@ import java.util.Optional;
 @Component
 public interface X5Mapper {
 
+    /**
+     * select X5config
+     *
+     * @param appId appId
+     * @return see {@link X5Config}
+     */
     @Select("select id, app_id, app_key, create_time from thain_x5_config where app_id = #{appId}")
     Optional<X5Config> getX5Config(@NonNull @Param("appId") String appId);
 
     /**
      * select all x5Configs
+     *
+     * @return see {@link X5ConfigDr}
      */
     @Results(value = {
             @Result(column = "app_id", property = "appId"),
@@ -41,12 +49,16 @@ public interface X5Mapper {
 
     /**
      * delete a x5config
+     *
+     * @param appId appId
      */
     @Delete("delete from thain_x5_config where app_id=#{appId}")
     void deleteX5Config(@NonNull @Param("appId") String appId);
 
     /**
      * add x5config
+     *
+     * @param x5ConfigDp see {@link X5ConfigDp}
      */
     @Insert("insert into thain_x5_config(app_id,app_key,app_name,principal,app_description)" +
             " values(#{appId},#{appKey},#{appName},#{principal},#{description}) ")
@@ -54,6 +66,8 @@ public interface X5Mapper {
 
     /**
      * update X5Config
+     *
+     * @param x5ConfigDp see {@link X5ConfigDp}
      */
     @Update("update thain_x5_config set app_key=#{appKey},app_name=#{appName},principal=#{principal},app_description=#{description} where app_id=#{appId} ")
     void updateX5Config(@NonNull X5ConfigDp x5ConfigDp);

@@ -35,7 +35,7 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
     {
       dataIndex: 'admin',
       title: formatMessage({ id: 'admin.user.admin' }),
-      render(text: any, record: UserModel, index: number) {
+      render(text: boolean, record: UserModel, index: number) {
         if (record.admin) {
           return <div>{formatMessage({ id: 'admin.user.admin.yes' })}</div>;
         } else {
@@ -45,7 +45,7 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
     },
     {
       title: formatMessage({ id: 'admin.user.operation' }),
-      render(text: any, record: UserModel, index: number) {
+      render(text: string, record: UserModel, index: number) {
         return (
           <ButtonGroup>
             <Button

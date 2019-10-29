@@ -17,33 +17,42 @@ import java.util.List;
  * @date 19-5-7 上午11:40
  */
 public interface X5Service {
-
+    /**
+     * get Config By AppId
+     *
+     * @param appid appId
+     * @return see {@link X5Config}
+     */
     X5Config getX5Config(@NonNull String appid);
 
     /**
-     * get all x5Configs
-     * @return
+     * get All Configs
+     *
+     * @return see {@link X5ConfigResponse}
      */
     List<X5ConfigResponse> getAllConfigs();
 
     /**
-     * delete x5Config
-     * @param appId
+     * delete Config
+     *
+     * @param appId AppId
      */
     void deleteX5Config(@NonNull String appId);
 
     /**
-     * insert x5Config
-     * @param x5ConfigRequest
-     * @return
+     * insert Config
+     *
+     * @param x5ConfigRequest see {@link X5ConfigRequest}
+     * @return false-failure true-success
      */
     boolean insertX5Config(@NonNull X5ConfigRequest x5ConfigRequest);
 
     /**
-     * update X5Config
-     * @return
-     * @param x5ConfigRequest
+     * update Config
+     *
+     * @param x5ConfigRequest see {@link X5ConfigRequest}
+     * @return false-failure true-success
      */
-    boolean updateX5Config(@NonNull  X5ConfigRequest x5ConfigRequest);
+    boolean updateX5Config(@NonNull X5ConfigRequest x5ConfigRequest);
 }
 

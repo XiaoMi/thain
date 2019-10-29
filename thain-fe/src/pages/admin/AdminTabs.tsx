@@ -30,8 +30,8 @@ const AdminTabs: React.FC<ConnectProps> = ({ dispatch }) => {
   return (
     <div>
       <Tabs
-        defaultActiveKey={'1'}
-        tabPosition={'left'}
+        defaultActiveKey="1"
+        tabPosition="left"
         onChange={activeKey => {
           activeKey === '1' ? handleAdminClick() : handleClientClick();
         }}

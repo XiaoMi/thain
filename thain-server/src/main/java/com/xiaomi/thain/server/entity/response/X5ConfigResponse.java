@@ -1,6 +1,8 @@
 package com.xiaomi.thain.server.entity.response;
 
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
@@ -23,5 +25,5 @@ public class X5ConfigResponse {
     @Nullable
     public final String description;
     @NonNull
-    public final String createTime;
+    public final long createTime;
 }

@@ -1,15 +1,16 @@
 package com.xiaomi.thain.server.entity.dr;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
+import java.sql.Timestamp;
 
 /**
  * @author wangsimin3@xiaomi.com
  * @date 2019/10/29
  */
-@Builder
+@AllArgsConstructor
 public class X5ConfigDr {
     @NonNull
     public final String appId;
@@ -18,9 +19,9 @@ public class X5ConfigDr {
     @NonNull
     public final String appName;
     @NonNull
-    public final String createTime;
+    public final String principal;
     @Nullable
     public final String description;
     @NonNull
-    public final String principal;
+    public final Timestamp createTime;
 }

@@ -90,7 +90,15 @@ const X5ConfigTable: React.FC<Props> = ({
       },
     },
     { title: formatMessage({ id: 'x5config.app.description' }), dataIndex: 'description' },
-    { title: formatMessage({ id: 'x5config.app.create.time' }), dataIndex: 'createTime' },
+    {
+      title: formatMessage({ id: 'x5config.app.create.time' }),
+      render(record: X5ConfigModel) {
+        if (record.createTime) {
+          return <>{new Date(record.createTime).toLocaleString()}</>;
+        }
+        return <></>;
+      },
+    },
     {
       title: formatMessage({ id: 'x5config.app.operation' }),
       render: (record: X5ConfigModel) => {

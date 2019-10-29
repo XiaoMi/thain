@@ -52,7 +52,7 @@ public class X5ServiceImpl implements X5Service {
                     .appKey(config.appKey)
                     .appName(config.appName)
                     .description(config.description)
-                    .createTime(config.createTime)
+                    .createTime(config.createTime.getTime())
                     .principals(principals).build());
         });
         return x5Configs;

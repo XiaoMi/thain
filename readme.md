@@ -14,7 +14,7 @@
 ## Introduction
 
 Thain is a distributed flow schedule platform, it was invented at XiaoMi Technology and the project has been proven easily-learning, developed-rapidly, stable in the XiaoMi internal departments.
-Thain has completed backend management system which supports depending, re-run, roll-back and monitoring of the flows.
+Thain has completed backend management system which supports depending, re-run, roll-back and monitoring of the flows, contains bautiful and easily-manipulating web UI for users to maintain your jobs.
 
 ## Documentation Contents
 
@@ -32,6 +32,7 @@ Thain has completed backend management system which supports depending, re-run, 
 ## Maintainers
 
 @liangyongrui
+@miaoyu3
 
 ## Help Us Do Better
 
@@ -40,6 +41,7 @@ Now Thain continues to be developed by xiaomi internal developers. If you have a
 - zuojianguang@xiaomi.com
 - liangyongrui@xiaomi.com
 - miaoyu3@xiaomi.com
+- lupeng5@xiaomi.com
 
 ## License
 

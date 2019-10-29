@@ -5,6 +5,8 @@
  */
 package com.xiaomi.thain.server.dao;
 
+import com.xiaomi.thain.server.entity.dr.SourceAndCountDr;
+import com.xiaomi.thain.server.entity.dr.StatusAndCountDr;
 import com.xiaomi.thain.server.entity.response.StatusHistoryCount;
 import com.xiaomi.thain.server.mapper.DashboardMapper;
 import lombok.NonNull;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author miaoyu3@xiaomi.com
@@ -27,19 +28,19 @@ public class DashboardDao {
         this.dashboardMapper = dashboardMapper;
     }
 
-    public List<Map> getScheduleStatusCount(@Nullable String[] filterSource) {
+    public List<StatusAndCountDr> getScheduleStatusCount(@Nullable String[] filterSource) {
         return dashboardMapper.getScheduleStatusCount(filterSource);
     }
 
-    public List<Map> getFlowSourceCount(@Nullable String[] filterScheduleStatus) {
+    public List<SourceAndCountDr> getFlowSourceCount(@Nullable String[] filterScheduleStatus) {
         return dashboardMapper.getFlowSourceCount(filterScheduleStatus);
     }
 
-    public List<Map> getFlowExecutionStatusCount(@NonNull Long[] period) {
+    public List<StatusAndCountDr> getFlowExecutionStatusCount(@NonNull Long[] period) {
         return dashboardMapper.getFlowExecutionStatusCount(period);
     }
 
-    public List<Map> getJobExecutionStatusCount(@NonNull Long[] period) {
+    public List<StatusAndCountDr> getJobExecutionStatusCount(@NonNull Long[] period) {
         return dashboardMapper.getJobExecutionStatusCount(period);
     }
 

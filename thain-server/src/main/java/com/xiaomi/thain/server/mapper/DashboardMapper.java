@@ -5,6 +5,8 @@
  */
 package com.xiaomi.thain.server.mapper;
 
+import com.xiaomi.thain.server.entity.dr.SourceAndCountDr;
+import com.xiaomi.thain.server.entity.dr.StatusAndCountDr;
 import com.xiaomi.thain.server.entity.response.StatusHistoryCount;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Param;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author miaoyu3@xiaomi.com
@@ -26,7 +27,7 @@ public interface DashboardMapper {
      * @param filterSource 需要过滤的已接入系统
      * @return 统计列表
      */
-    List<Map> getScheduleStatusCount(@Nullable @Param("filterSource") String[] filterSource);
+    List<StatusAndCountDr> getScheduleStatusCount(@Nullable @Param("filterSource") String[] filterSource);
 
     /**
      * 统计不同已接入系统的任务
@@ -34,7 +35,7 @@ public interface DashboardMapper {
      * @param filterScheduleStatus 需要过滤的调度状态
      * @return 统计列表
      */
-    List<Map> getFlowSourceCount(@Nullable @Param("filterScheduleStatus") String[] filterScheduleStatus);
+    List<SourceAndCountDr> getFlowSourceCount(@Nullable @Param("filterScheduleStatus") String[] filterScheduleStatus);
 
     /**
      * 统计flow运行状况
@@ -42,7 +43,7 @@ public interface DashboardMapper {
      * @param period 统计时间段
      * @return 统计列表
      */
-    List<Map> getFlowExecutionStatusCount(@NonNull @Param("period") Long[] period);
+    List<StatusAndCountDr> getFlowExecutionStatusCount(@NonNull @Param("period") Long[] period);
 
     /**
      * 统计job运行状况
@@ -50,7 +51,7 @@ public interface DashboardMapper {
      * @param period 统计时间段
      * @return 统计列表
      */
-    List<Map> getJobExecutionStatusCount(@NonNull @Param("period") Long[] period);
+    List<StatusAndCountDr> getJobExecutionStatusCount(@NonNull @Param("period") Long[] period);
 
     /**
      * 统计正在运行的flow

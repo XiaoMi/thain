@@ -6,7 +6,7 @@
 import { Effect } from 'dva';
 import { ApiResult, TableResult } from '@/typings/ApiResult';
 import { Reducer } from 'redux';
-import { addUser, deleteUser, getUsers } from './service';
+import { addUser, deleteUser, getUsers, updateUser } from '../adminService';
 import ConnectState from '@/models/connect';
 import { notification } from 'antd';
 
@@ -33,6 +33,7 @@ interface AdminModel {
     delete: Effect;
     add: Effect;
     fetchTable: Effect;
+    update: Effect;
   };
 }
 
@@ -40,7 +41,7 @@ const AdminUserModelType: AdminModel = {
   namespace: 'admin',
   state: new AdminUserModel(),
   effects: {
-    *add({ payload, callBack }, { call }) {
+    *add({ payload, callBack }, { call, select, put }) {
       const result: ApiResult = yield call(addUser, payload);
       if (result !== undefined && callBack) {
         notification.success({
@@ -50,6 +51,15 @@ const AdminUserModelType: AdminModel = {
         });
         callBack();
       }
+      const model: TableResult<UserModel> = yield select((s: ConnectState) => s.admin.tableResult);
+      const callbackModel: TableResult<UserModel> = yield call(getUsers, {
+        page: model.page,
+        pageSize: model.pageSize,
+      });
+      yield put({
+        type: 'updateState',
+        payload: { ...callbackModel },
+      });
     },
     *fetchTable({ payload }, { call, put }) {
       const tableResult: AdminUserModel = yield call(getUsers, payload);
@@ -68,6 +78,24 @@ const AdminUserModelType: AdminModel = {
       yield put({
         type: 'updateState',
         payload: { tableResult },
+      });
+    },
+    *update({ payload, callback }, { call, select, put }) {
+      yield call(updateUser, payload);
+      callback();
+      const model: AdminUserModel = yield select((s: ConnectState) => s.admin);
+      const updateModel: AdminUserModel = yield call(getUsers, {
+        page: model.tableResult.page,
+        pageSize: model.tableResult.pageSize,
+      });
+      notification.success({
+        message: 'Tips',
+        description: 'Update User Success',
+        duration: 1,
+      });
+      yield put({
+        type: 'updateState',
+        payload: { tableResult: updateModel },
       });
     },
   },

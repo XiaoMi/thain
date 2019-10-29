@@ -4,9 +4,9 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 import { connect } from 'dva';
-import { Button, Modal, Table } from 'antd';
+import { Button, Modal, Table, Select, Form } from 'antd';
 import { TableResult } from '@/typings/ApiResult';
-import { UserModel } from './model';
+import { UserModel } from './models/UserAdminModel';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import React, { useState } from 'react';
 import ButtonGroup from 'antd/es/button/button-group';
@@ -23,6 +23,11 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
   const { data, count, page, pageSize } = tableResult;
   const [isVisiable, setIsvisiable] = useState<boolean>(false);
   const [deleteId, setDeleteId] = useState();
+  const { Option } = Select;
+  const [model, setModel] = useState({ ...new UserModel() });
+  const [editVisiable, setEditVisiable] = useState(false);
+  const { Item } = Form;
+  const [defaultValue, setDefaultValue] = useState('false');
   const columuns = [
     { dataIndex: 'userId', title: formatMessage({ id: 'admin.user.userId' }) },
     { dataIndex: 'userName', title: formatMessage({ id: 'admin.user.userName' }) },
@@ -30,19 +35,28 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
     {
       dataIndex: 'admin',
       title: formatMessage({ id: 'admin.user.admin' }),
-      render(admin: boolean) {
-        if (admin) {
-          return <div>{formatMessage({ id: 'admin.user.admin.yes' })}</div>;
+      render(text: boolean, record: UserModel, index: number) {
+        if (record.admin) {
+          return <>{formatMessage({ id: 'admin.user.admin.yes' })}</>;
         } else {
-          return <div>{formatMessage({ id: 'admin.user.admin.no' })}</div>;
+          return <>{formatMessage({ id: 'admin.user.admin.no' })}</>;
         }
       },
     },
     {
       title: formatMessage({ id: 'admin.user.operation' }),
-      render(text: any, record: UserModel, index: number) {
+      render(text: string, record: UserModel, index: number) {
         return (
           <ButtonGroup>
+            <Button
+              onClick={() => {
+                setModel({ ...new UserModel(), userId: record.userId });
+                setEditVisiable(true);
+                record.admin === true ? setDefaultValue('true') : setDefaultValue('false');
+              }}
+            >
+              {formatMessage({ id: 'admin.user.edit' })}
+            </Button>
             <Button
               onClick={() => {
                 setDeleteId(record.userId);
@@ -79,6 +93,18 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
       });
     }
   }
+
+  function updateUser() {
+    if (dispatch) {
+      dispatch({
+        type: 'admin/update',
+        payload: model,
+        callback: () => {
+          setEditVisiable(false);
+        },
+      });
+    }
+  }
   return (
     <>
       <AddUserForm />
@@ -106,7 +132,32 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
           setIsvisiable(false);
         }}
       >
-        {'do you want to delete this user?'}
+        'do you want to delete this user?'
+      </Modal>
+      <Modal
+        destroyOnClose
+        closable={false}
+        visible={editVisiable}
+        onCancel={() => {
+          setEditVisiable(false);
+        }}
+        onOk={updateUser}
+      >
+        <Form>
+          <Item label={formatMessage({ id: 'admin.user.admin' })}>
+            <Select<string>
+              defaultValue={defaultValue}
+              onChange={value => {
+                let admin: boolean;
+                value === 'false' ? (admin = false) : (admin = true);
+                setModel({ ...model, admin: admin });
+              }}
+            >
+              <Option value="true">{formatMessage({ id: 'admin.user.admin.yes' })}</Option>
+              <Option value="false">{formatMessage({ id: 'admin.user.admin.no' })}</Option>
+            </Select>
+          </Item>
+        </Form>
       </Modal>
     </>
   );

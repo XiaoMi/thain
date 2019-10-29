@@ -6,7 +6,7 @@
 import { connect } from 'dva';
 import React, { useState } from 'react';
 import { Button, Form, Icon, Input, Modal, notification, Select } from 'antd';
-import { UserModel } from './model';
+import { UserModel } from './models/UserAdminModel';
 import { ConnectProps } from '@/models/connect';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -39,7 +39,6 @@ const addUserForm: React.FC<Props> = ({ form, dispatch }) => {
       if (errors[error] !== undefined) return;
     }
     addUserModel.admin = isAdmin;
-    //调用接口发请求
     if (dispatch) {
       dispatch({
         payload: addUserModel,

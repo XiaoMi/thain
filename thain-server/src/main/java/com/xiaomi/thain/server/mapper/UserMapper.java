@@ -6,6 +6,7 @@
 
 package com.xiaomi.thain.server.mapper;
 
+import com.xiaomi.thain.server.entity.rq.UserRq;
 import com.xiaomi.thain.server.entity.user.ThainUser;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Delete;
@@ -22,17 +23,17 @@ import java.util.Optional;
 @Component
 public interface UserMapper {
     /**
-     * 根据id获取用户信息
+     * get userInfo by Id
      *
-     * @param userId 用户id
+     * @param userId userId
      * @return see {@link ThainUser}
      */
     Optional<ThainUser> getUserById(@NonNull @Param("userId") String userId);
 
     /**
-     * 添加用户
+     * insert user
      *
-     * @param user 用户对象
+     * @param user see {@link ThainUser}
      */
     void insertUser(@NonNull ThainUser user);
 
@@ -46,7 +47,16 @@ public interface UserMapper {
 
     /**
      * delete user
+     *
+     * @param userId userId
      */
     @Delete("delete from thain_user where user_id=#{userId} ")
-    void deleteUser(String userId);
+    void deleteUser(@NonNull String userId);
+
+    /**
+     * update user bySelective
+     *
+     * @param userRq see {@link UserRq}
+     */
+    void updateUserBySelective(@NonNull UserRq userRq);
 }

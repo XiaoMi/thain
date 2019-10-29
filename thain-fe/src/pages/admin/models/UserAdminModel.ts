@@ -58,7 +58,7 @@ const AdminUserModelType: AdminModel = {
       });
       yield put({
         type: 'updateState',
-        payload: { ...callbackModel },
+        payload: { tableResult: callbackModel },
       });
     },
     *fetchTable({ payload }, { call, put }) {

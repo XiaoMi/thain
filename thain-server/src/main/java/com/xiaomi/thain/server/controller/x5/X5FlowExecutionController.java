@@ -83,7 +83,7 @@ public class X5FlowExecutionController {
             if (pageSize<1){
                 pageSize=10;
             }
-            return ApiResult.success(flowExecutionService.getFlowExecutionList(flowId, page, pageSize),
+            ApiResult.success(flowExecutionService.getFlowExecutionList(flowId, page, pageSize),
                     flowExecutionService.getFlowExecutionCount(flowId),
                     page,
                     pageSize);

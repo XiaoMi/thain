@@ -13,6 +13,7 @@ import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.utils.HttpUtils;
 import com.xiaomi.thain.common.utils.X5Utils;
 import lombok.NonNull;
+import lombok.val;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +33,7 @@ public class ThainClient {
     private static final String SCHEDULE_PATH = "/x5/flow/schedule";
     private static final String KILL_PATH = "/x5/flow-execution/kill";
     private static final String ALL_INFO_PATH = "/x5/flow-execution/all-info";
-    private static final String ALL_EXECUTION_INFO = "x5/flow-execution/infos";
+    private static final String ALL_EXECUTION_INFO = "/x5/flow-execution/infos";
 
     public static ThainClient getInstance(@NonNull String appId, @NonNull String appKey, @NonNull String host) {
         return new ThainClient(appId, appKey, host);
@@ -84,7 +85,16 @@ public class ThainClient {
         return buildRequest(url + SCHEDULE_PATH, JSON.toJSONString(ImmutableMap.of("flowId", flowId)));
     }
 
-    public ApiResult getFlowExecutionInfos(@NonNull long flowId, @NonNull int page, @NonNull int pageSize) throws IOException {
+    /**
+     * get FlowExecution by flowId
+     *
+     * @param flowId   flowId
+     * @param page     page
+     * @param pageSize pageSize
+     * @return {@link ApiResult}
+     * @throws IOException {@link IOException}
+     */
+    public ApiResult getFlowExecutionList(@NonNull long flowId, int page, int pageSize) throws IOException {
         return buildRequest(url + ALL_EXECUTION_INFO, JSON.toJSONString(ImmutableMap.of("flowId", flowId, "page", page, "pageSize", pageSize)));
     }
 

@@ -31,16 +31,18 @@ Thain提供了任务调度与执行的一整套解决方案，在小米集团内
     - [自定义组件](./docs/zh/3.组件说明/2.自定义组件.md)
 
 ## Maintainers
+- @liangyongrui
+- @holiday12138
 
-@liangyongrui
+## 微信用户群
+![WeChat](http://cnbj1.fds.api.xiaomi.com/xdata-mail/WechatIMG.png)
 
 ## 帮助我们做的更好
-
 有任何疑问都可以在issues中提出，或发送邮件到：
-    
 - zuojianguang@xiaomi.com
 - liangyongrui@xiaomi.com
 - miaoyu3@xiaomi.com
+- lupeng5@xiaomi.com
 
 ## License
 

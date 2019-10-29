@@ -8,12 +8,12 @@ package com.xiaomi.thain.server.controller;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import com.xiaomi.thain.common.entity.ApiResult;
-import com.xiaomi.thain.server.entity.request.UserRequest;
-import com.xiaomi.thain.server.entity.request.X5ConfigRequest;
-import com.xiaomi.thain.server.entity.response.UserResponse;
-import com.xiaomi.thain.server.entity.response.X5ConfigResponse;
-import com.xiaomi.thain.server.entity.rq.UserRq;
-import com.xiaomi.thain.server.entity.user.ThainUser;
+import com.xiaomi.thain.server.model.rq.AddUserRq;
+import com.xiaomi.thain.server.model.rq.X5ConfigRq;
+import com.xiaomi.thain.server.model.rp.UserResponse;
+import com.xiaomi.thain.server.model.rp.X5ConfigResponse;
+import com.xiaomi.thain.server.model.rq.UpdateUserRq;
+import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.service.UserService;
 import com.xiaomi.thain.server.service.X5Service;
 import lombok.NonNull;
@@ -72,9 +72,9 @@ public class AdminController {
     }
 
     @PostMapping("/user")
-    public ApiResult addUser(@RequestBody @NonNull UserRequest userRequest) {
+    public ApiResult addUser(@RequestBody @NonNull AddUserRq addUserRq) {
         if (isAdmin()) {
-            if (userService.insertUser(userRequest)) {
+            if (userService.insertUser(addUserRq)) {
                 return ApiResult.success();
             }
             return ApiResult.fail("userId has existed ");
@@ -83,7 +83,7 @@ public class AdminController {
     }
 
     @PatchMapping("/user")
-    public ApiResult updateUser(@RequestBody @NonNull UserRq request) {
+    public ApiResult updateUser(@RequestBody @NonNull UpdateUserRq request) {
         if (isAdmin()) {
             if (userService.updateUser(request)) {
                 return ApiResult.success();
@@ -112,9 +112,9 @@ public class AdminController {
     }
 
     @PostMapping("/client")
-    public ApiResult addConfig(@RequestBody @NonNull X5ConfigRequest x5ConfigRequest) {
+    public ApiResult addConfig(@RequestBody @NonNull X5ConfigRq x5ConfigRq) {
         if (isAdmin()) {
-            if (x5Service.insertX5Config(x5ConfigRequest)) {
+            if (x5Service.insertX5Config(x5ConfigRq)) {
                 return ApiResult.success();
             }
             return ApiResult.fail("AppId existed or principal is null ");
@@ -123,9 +123,9 @@ public class AdminController {
     }
 
     @PatchMapping("/client")
-    public ApiResult updateConfig(@RequestBody @NonNull X5ConfigRequest x5ConfigRequest) {
+    public ApiResult updateConfig(@RequestBody @NonNull X5ConfigRq x5ConfigRq) {
         if (isAdmin()) {
-            if (x5Service.updateX5Config(x5ConfigRequest)) {
+            if (x5Service.updateX5Config(x5ConfigRq)) {
                 return ApiResult.success();
             }
             return ApiResult.fail("X5config has been delete");

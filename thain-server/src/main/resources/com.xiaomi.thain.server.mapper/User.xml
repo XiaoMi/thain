@@ -7,7 +7,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaomi.thain.server.mapper.UserMapper">
-    <resultMap id="ThainUser" type="com.xiaomi.thain.server.entity.user.ThainUser">
+    <resultMap id="ThainUser" type="com.xiaomi.thain.server.model.ThainUser">
         <id column="user_id" javaType="java.lang.String" property="userId"/>
         <result column="user_name" javaType="java.lang.String" property="username"/>
         <result column="password_hash" javaType="java.lang.String" property="passwordHash"/>
@@ -51,7 +51,7 @@
         where tu.user_id = #{userId}
     </select>
 
-    <update id="updateUserBySelective" parameterType="com.xiaomi.thain.server.entity.rq.UserRq">
+    <update id="updateUserBySelective" parameterType="com.xiaomi.thain.server.model.rq.UpdateUserRq">
         update thain_user
         <trim prefix="set" suffixOverrides=",">
         <if test="admin!=null">

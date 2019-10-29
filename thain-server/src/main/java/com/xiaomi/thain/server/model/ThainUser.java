@@ -4,7 +4,7 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 
-package com.xiaomi.thain.server.entity.user;
+package com.xiaomi.thain.server.model;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

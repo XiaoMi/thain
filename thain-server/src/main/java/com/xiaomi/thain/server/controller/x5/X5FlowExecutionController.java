@@ -7,7 +7,7 @@ package com.xiaomi.thain.server.controller.x5;
 
 import com.alibaba.fastjson.JSON;
 import com.xiaomi.thain.common.entity.ApiResult;
-import com.xiaomi.thain.server.entity.query.FlowExecutionAllInfoQuery;
+import com.xiaomi.thain.server.model.rp.FlowExecutionAllInfoRp;
 import com.xiaomi.thain.server.service.FlowExecutionService;
 import com.xiaomi.thain.server.service.PermissionService;
 import lombok.NonNull;
@@ -47,7 +47,7 @@ public class X5FlowExecutionController {
             val flowExecutionModel = flowExecutionService.getFlowExecution(flowExecutionId);
             val jobExecutionModelList = flowExecutionService.getJobExecutionModelList(flowExecutionId);
             val jobModelList = flowExecutionService.getJobModelList(flowExecutionId);
-            return ApiResult.success(FlowExecutionAllInfoQuery.builder()
+            return ApiResult.success(FlowExecutionAllInfoRp.builder()
                     .flowExecutionModel(flowExecutionModel)
                     .jobModelList(jobModelList)
                     .jobExecutionModelList(jobExecutionModelList)

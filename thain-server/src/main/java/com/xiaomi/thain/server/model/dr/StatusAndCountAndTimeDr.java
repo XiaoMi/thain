@@ -3,7 +3,7 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-package com.xiaomi.thain.server.entity.response;
+package com.xiaomi.thain.server.model.dr;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -14,7 +14,7 @@ import lombok.NonNull;
  * @author liangyongrui@xiaomi.com
  */
 @Builder(toBuilder = true)
-public class StatusHistoryCount {
+public class StatusAndCountAndTimeDr {
     public final int status;
     public final long count;
     @NonNull

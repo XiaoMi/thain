@@ -5,9 +5,9 @@
  */
 package com.xiaomi.thain.server.mapper;
 
-import com.xiaomi.thain.server.entity.X5Config;
-import com.xiaomi.thain.server.entity.dp.X5ConfigDp;
-import com.xiaomi.thain.server.entity.dr.X5ConfigDr;
+import com.xiaomi.thain.server.model.X5Config;
+import com.xiaomi.thain.server.model.dp.X5ConfigDp;
+import com.xiaomi.thain.server.model.dr.X5ConfigDr;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;

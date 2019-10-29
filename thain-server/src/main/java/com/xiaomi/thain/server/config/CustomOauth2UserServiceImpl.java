@@ -5,7 +5,7 @@
  */
 package com.xiaomi.thain.server.config;
 
-import com.xiaomi.thain.server.entity.user.ThainUser;
+import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.service.UserService;
 import lombok.NonNull;
 import org.springframework.security.core.GrantedAuthority;

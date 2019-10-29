@@ -6,7 +6,7 @@
 
 package com.xiaomi.thain.server.config;
 
-import com.xiaomi.thain.server.entity.user.ThainUser;
+import com.xiaomi.thain.server.model.ThainUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;

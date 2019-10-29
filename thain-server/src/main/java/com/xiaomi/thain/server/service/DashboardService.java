@@ -5,9 +5,9 @@
  */
 package com.xiaomi.thain.server.service;
 
-import com.xiaomi.thain.server.entity.dr.SourceAndCountDr;
-import com.xiaomi.thain.server.entity.dr.StatusAndCountDr;
-import com.xiaomi.thain.server.entity.response.StatusHistoryCount;
+import com.xiaomi.thain.server.model.dr.SourceAndCountDr;
+import com.xiaomi.thain.server.model.dr.StatusAndCountDr;
+import com.xiaomi.thain.server.model.dr.StatusAndCountAndTimeDr;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -93,5 +93,5 @@ public interface DashboardService {
      * @param pointNum 折线图的点数
      * @return 统计列表
      */
-    List<StatusHistoryCount> getStatusHistoryCount(@NonNull Long[] period, int pointNum);
+    List<StatusAndCountAndTimeDr> getStatusHistoryCount(@NonNull Long[] period, int pointNum);
 }

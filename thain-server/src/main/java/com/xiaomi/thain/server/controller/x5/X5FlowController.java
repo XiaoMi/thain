@@ -10,7 +10,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
-import com.xiaomi.thain.common.model.dto.AddDto;
+import com.xiaomi.thain.common.model.rq.AddRq;
 import com.xiaomi.thain.server.controller.FlowController;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;
@@ -52,7 +52,7 @@ public class X5FlowController {
     public ApiResult add(@NonNull @RequestBody String json, @NonNull String appId) {
         try {
             Gson gson = new Gson();
-            val addDto = gson.fromJson(json, AddDto.class);
+            val addDto = gson.fromJson(json, AddRq.class);
             return flowController.add(addDto, appId);
         } catch (Exception e) {
             log.error("add:", e);

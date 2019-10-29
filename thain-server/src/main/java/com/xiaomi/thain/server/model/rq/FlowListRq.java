@@ -4,7 +4,7 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 
-package com.xiaomi.thain.server.entity.request;
+package com.xiaomi.thain.server.model.rq;
 
 import lombok.AllArgsConstructor;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * @date 18-12-29 上午11:15
  */
 @AllArgsConstructor
-public class FlowListRequest {
+public class FlowListRq {
     @Nullable
     public final Integer page;
     @Nullable

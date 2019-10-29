@@ -9,7 +9,7 @@ package com.xiaomi.thain.server.service;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.server.entity.query.FlowListQuery;
+import com.xiaomi.thain.server.model.sp.FlowListSp;
 import lombok.NonNull;
 import org.quartz.SchedulerException;
 import org.springframework.stereotype.Service;
@@ -26,9 +26,9 @@ import javax.annotation.Nullable;
 @Service
 public interface FlowService {
 
-    List<FlowModel> getFlowList(@NonNull FlowListQuery flowListQuery);
+    List<FlowModel> getFlowList(@NonNull FlowListSp flowListSp);
 
-    Long getFlowListCount(@NonNull FlowListQuery flowListQuery);
+    Long getFlowListCount(@NonNull FlowListSp flowListSp);
 
     /**
      * 创建或更新任务

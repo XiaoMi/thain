@@ -7,9 +7,9 @@ package com.xiaomi.thain.server.service.impl;
 
 import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.server.dao.DashboardDao;
-import com.xiaomi.thain.server.entity.dr.SourceAndCountDr;
-import com.xiaomi.thain.server.entity.dr.StatusAndCountDr;
-import com.xiaomi.thain.server.entity.response.StatusHistoryCount;
+import com.xiaomi.thain.server.model.dr.SourceAndCountDr;
+import com.xiaomi.thain.server.model.dr.StatusAndCountDr;
+import com.xiaomi.thain.server.model.dr.StatusAndCountAndTimeDr;
 import com.xiaomi.thain.server.service.DashboardService;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +75,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public List<StatusHistoryCount> getStatusHistoryCount(@NonNull Long[] period, int maxPointNum) {
+    public List<StatusAndCountAndTimeDr> getStatusHistoryCount(@NonNull Long[] period, int maxPointNum) {
         val resList = dashboardDao.getStatusHistoryCount(period);
         if (resList.isEmpty()) {
             return resList;
@@ -83,15 +83,15 @@ public class DashboardServiceImpl implements DashboardService {
         long startTime = period[0];
         long endTime = period[1];
         long interval = (endTime - startTime) / maxPointNum;
-        val formatResult = new ArrayList<StatusHistoryCount>(maxPointNum * 2);
+        val formatResult = new ArrayList<StatusAndCountAndTimeDr>(maxPointNum * 2);
         for (long time = startTime; time < endTime; time += interval) {
-            formatResult.add(StatusHistoryCount.builder()
+            formatResult.add(StatusAndCountAndTimeDr.builder()
                     .status(FlowExecutionStatus.SUCCESS.code)
                     .count(0)
                     .time(time + "~" + (time + interval))
                     .build()
             );
-            formatResult.add(StatusHistoryCount.builder()
+            formatResult.add(StatusAndCountAndTimeDr.builder()
                     .status(FlowExecutionStatus.ERROR.code)
                     .count(0)
                     .time(time + "~" + (time + interval))

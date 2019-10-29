@@ -8,7 +8,7 @@ package com.xiaomi.thain.server.mapper;
 
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.server.entity.query.FlowListQuery;
+import com.xiaomi.thain.server.model.sp.FlowListSp;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -28,9 +28,9 @@ public interface FlowMapper {
 
     boolean getAppIdAccessible(@Param("flowId") long flowId, @NonNull @Param("appId") String appId);
 
-    List<FlowModel> getFlowList(@NonNull FlowListQuery flowListQuery);
+    List<FlowModel> getFlowList(@NonNull FlowListSp flowListSp);
 
-    Long getFlowListCount(@NonNull FlowListQuery flowListQuery);
+    Long getFlowListCount(@NonNull FlowListSp flowListSp);
 
     boolean flowExist(long flowId);
 

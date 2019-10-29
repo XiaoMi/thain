@@ -5,9 +5,9 @@
  */
 package com.xiaomi.thain.server.mapper;
 
-import com.xiaomi.thain.server.entity.dr.SourceAndCountDr;
-import com.xiaomi.thain.server.entity.dr.StatusAndCountDr;
-import com.xiaomi.thain.server.entity.response.StatusHistoryCount;
+import com.xiaomi.thain.server.model.dr.SourceAndCountDr;
+import com.xiaomi.thain.server.model.dr.StatusAndCountDr;
+import com.xiaomi.thain.server.model.dr.StatusAndCountAndTimeDr;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -93,5 +93,5 @@ public interface DashboardMapper {
      * @param period 统计时间段
      * @return 统计列表
      */
-    List<StatusHistoryCount> getStatusHistoryCount(@NonNull @Param("period") Long[] period);
+    List<StatusAndCountAndTimeDr> getStatusHistoryCount(@NonNull @Param("period") Long[] period);
 }

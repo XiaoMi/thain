@@ -7,8 +7,6 @@
 package com.xiaomi.thain.server;
 
 import com.xiaomi.thain.server.dao.UserDao;
-import com.xiaomi.thain.server.entity.user.ThainUser;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

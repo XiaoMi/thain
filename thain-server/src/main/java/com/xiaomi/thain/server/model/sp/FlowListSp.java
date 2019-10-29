@@ -4,9 +4,9 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 
-package com.xiaomi.thain.server.entity.query;
+package com.xiaomi.thain.server.model.sp;
 
-import com.xiaomi.thain.server.entity.request.FlowListRequest;
+import com.xiaomi.thain.server.model.rq.FlowListRq;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Set;
  * @author liangyongrui@xiaomi.com
  * @date 18-12-29 上午11:59
  */
-public class FlowListQuery {
+public class FlowListSp {
     public final int offset;
     public final int limit;
     @Nullable
@@ -51,39 +51,39 @@ public class FlowListQuery {
     private static final int DEFAULT_PAGE = 1;
     private static final int DEFAULT_PAGE_SIZE = 20;
 
-    public static FlowListQuery getInstance(FlowListRequest flowListRequest) {
-        return new FlowListQuery(flowListRequest);
+    public static FlowListSp getInstance(FlowListRq flowListRq) {
+        return new FlowListSp(flowListRq);
     }
 
-    public static FlowListQuery getInstance(FlowListRequest flowListRequest, String username, Set<String> ids) {
-        return new FlowListQuery(flowListRequest, username, ids);
+    public static FlowListSp getInstance(FlowListRq flowListRq, String username, Set<String> ids) {
+        return new FlowListSp(flowListRq, username, ids);
     }
 
-    private FlowListQuery(FlowListRequest flowListRequest, @Nullable String username, @Nullable Set<String> appIds) {
+    private FlowListSp(FlowListRq flowListRq, @Nullable String username, @Nullable Set<String> appIds) {
         queryUsername = username;
-        Integer page = flowListRequest.page;
+        Integer page = flowListRq.page;
         if (page == null || page < 1) {
             page = DEFAULT_PAGE;
         }
-        Integer pageSize = flowListRequest.pageSize;
+        Integer pageSize = flowListRq.pageSize;
         if (pageSize == null || pageSize < 1) {
             pageSize = DEFAULT_PAGE_SIZE;
         }
-        lastRunStatus = flowListRequest.lastRunStatus;
+        lastRunStatus = flowListRq.lastRunStatus;
         offset = (page - 1) * pageSize;
         limit = pageSize;
-        flowId = flowListRequest.flowId;
-        sortKey = flowListRequest.sortKey;
-        sortOrderDesc = flowListRequest.sortOrderDesc != null && flowListRequest.sortOrderDesc;
-        flowName = flowListRequest.flowName;
-        scheduleStatus = flowListRequest.scheduleStatus;
-        updateTime = flowListRequest.updateTime;
+        flowId = flowListRq.flowId;
+        sortKey = flowListRq.sortKey;
+        sortOrderDesc = flowListRq.sortOrderDesc != null && flowListRq.sortOrderDesc;
+        flowName = flowListRq.flowName;
+        scheduleStatus = flowListRq.scheduleStatus;
+        updateTime = flowListRq.updateTime;
         this.appIds = appIds;
-        this.searchApp = flowListRequest.searchApp;
-        this.createUser = flowListRequest.createUser;
+        this.searchApp = flowListRq.searchApp;
+        this.createUser = flowListRq.createUser;
     }
 
-    private FlowListQuery(FlowListRequest flowListRequest) {
-        this(flowListRequest, null, null);
+    private FlowListSp(FlowListRq flowListRq) {
+        this(flowListRq, null, null);
     }
 }

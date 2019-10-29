@@ -3,7 +3,7 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-package com.xiaomi.thain.common.model.dto;
+package com.xiaomi.thain.common.model.rq;
 
 import com.google.common.collect.ImmutableList;
 import com.xiaomi.thain.common.model.FlowModel;
@@ -19,13 +19,13 @@ import java.util.List;
  * @author liangyongrui@xiaomi.com
  */
 @Builder(toBuilder = true)
-public class AddDto {
+public class AddRq {
     @NonNull
     public final FlowModel flowModel;
     @NonNull
     public final List<JobModel> jobModelList;
 
-    public AddDto(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList) {
+    public AddRq(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList) {
         this.flowModel = flowModel;
         this.jobModelList = ImmutableList.copyOf(jobModelList);
     }

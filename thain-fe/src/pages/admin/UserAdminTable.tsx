@@ -37,9 +37,9 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
       title: formatMessage({ id: 'admin.user.admin' }),
       render(text: boolean, record: UserModel, index: number) {
         if (record.admin) {
-          return <div>{formatMessage({ id: 'admin.user.admin.yes' })}</div>;
+          return <>{formatMessage({ id: 'admin.user.admin.yes' })}</>;
         } else {
-          return <div>{formatMessage({ id: 'admin.user.admin.no' })}</div>;
+          return <>{formatMessage({ id: 'admin.user.admin.no' })}</>;
         }
       },
     },
@@ -132,7 +132,7 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
           setIsvisiable(false);
         }}
       >
-        {'do you want to delete this user?'}
+        'do you want to delete this user?'
       </Modal>
       <Modal
         destroyOnClose

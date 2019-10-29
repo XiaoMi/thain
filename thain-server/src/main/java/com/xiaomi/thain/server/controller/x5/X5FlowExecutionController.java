@@ -74,14 +74,14 @@ public class X5FlowExecutionController {
     @PostMapping("infos")
     public ApiResult getInfos(@NonNull String json, @NonNull String appId) {
         Long flowId = JSON.parseObject(json).getLong("flowId");
-        if (permissionService.getFlowAccessible(flowId, appId)){
+        if (permissionService.getFlowAccessible(flowId, appId)) {
             int page = JSON.parseObject(json).getInteger("page");
             int pageSize = JSON.parseObject(json).getInteger("pageSize");
-            if (page<1){
-                page=1;
+            if (page < 1) {
+                page = 1;
             }
-            if (pageSize<1){
-                pageSize=10;
+            if (pageSize < 1) {
+                pageSize = 10;
             }
             return ApiResult.success(flowExecutionService.getFlowExecutionList(flowId, page, pageSize),
                     flowExecutionService.getFlowExecutionCount(flowId),

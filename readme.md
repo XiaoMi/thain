@@ -35,7 +35,7 @@ Thain has completed backend management system which supports depending, re-run, 
 @miaoyu3
 
 ## WeChat user group
-![WeChat](http://cnbj1.fds.api.xiaomi.com/xdata-mail/WechatIMG3.png)
+![WeChat](http://cnbj1.fds.api.xiaomi.com/xdata-mail/WechatIMG.png)
 
 ## Help Us Do Better
 

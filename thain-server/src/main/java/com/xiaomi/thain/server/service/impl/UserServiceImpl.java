@@ -17,6 +17,7 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author miaoyu3@xiaomi.com
@@ -38,9 +39,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ThainUser getUserById(@NonNull String userId) {
-        val user = userDao.getUserById(userId);
-        return user.orElseThrow(() -> new ThainRuntimeException("user does not exist"));
+    public Optional<ThainUser> getUserById(@NonNull String userId) {
+        return userDao.getUserById(userId);
     }
 
     @Override

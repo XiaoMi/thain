@@ -11,6 +11,7 @@ import com.xiaomi.thain.server.model.ThainUser;
 import lombok.NonNull;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author miaoyu3@xiaomi.com
@@ -30,7 +31,7 @@ public interface UserService {
      * @param userId userId
      * @return see {@link ThainUser}
      */
-    ThainUser getUserById(@NonNull String userId);
+    Optional<ThainUser> getUserById(@NonNull String userId);
 
     /**
      * delete user

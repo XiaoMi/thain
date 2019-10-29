@@ -7,7 +7,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaomi.thain.server.mapper.DashboardMapper">
-    <select id="getScheduleStatusCount" resultType="java.util.Map">
+    <select id="getScheduleStatusCount" resultType="com.xiaomi.thain.server.entity.dr.StatusAndCountDr">
         select scheduling_status as `status`,count(1) as `count` from thain_flow
         <if test="filterSource != null and filterSource.length > 0">
             where create_app_id not in
@@ -17,7 +17,7 @@
         </if>
         group by scheduling_status
     </select>
-    <select id="getFlowSourceCount" resultType="java.util.Map">
+    <select id="getFlowSourceCount" resultType="com.xiaomi.thain.server.entity.dr.SourceAndCountDr">
         select create_app_id as `source`,count(1) as `count` from thain_flow
         <if test="filterScheduleStatus != null and filterScheduleStatus.length > 0">
             where scheduling_status not in
@@ -27,7 +27,7 @@
         </if>
         group by create_app_id
     </select>
-    <select id="getFlowExecutionStatusCount" resultType="java.util.Map">
+    <select id="getFlowExecutionStatusCount" resultType="com.xiaomi.thain.server.entity.dr.StatusAndCountDr">
         select `status`,count(1) as `count` from thain_flow_execution
         <where>
             unix_timestamp(create_time) >= #{period[0]}
@@ -35,7 +35,7 @@
         </where>
         group by `status`
     </select>
-    <select id="getJobExecutionStatusCount" resultType="java.util.Map">
+    <select id="getJobExecutionStatusCount" resultType="com.xiaomi.thain.server.entity.dr.StatusAndCountDr">
         select `status`, count(1) as `count`
         from thain_job_execution
         where unix_timestamp(create_time) >= #{period[0]}

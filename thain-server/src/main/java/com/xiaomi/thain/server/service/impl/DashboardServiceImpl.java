@@ -7,6 +7,8 @@ package com.xiaomi.thain.server.service.impl;
 
 import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.server.dao.DashboardDao;
+import com.xiaomi.thain.server.entity.dr.SourceAndCountDr;
+import com.xiaomi.thain.server.entity.dr.StatusAndCountDr;
 import com.xiaomi.thain.server.entity.response.StatusHistoryCount;
 import com.xiaomi.thain.server.service.DashboardService;
 import lombok.NonNull;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author miaoyu3@xiaomi.com
@@ -34,22 +35,22 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public List<Map> getScheduleStatusCount(@Nullable String[] filterSource) {
+    public List<StatusAndCountDr> getScheduleStatusCount(@Nullable String[] filterSource) {
         return dashboardDao.getScheduleStatusCount(filterSource);
     }
 
     @Override
-    public List<Map> getFlowSourceCount(@Nullable String[] filterScheduleStatus) {
+    public List<SourceAndCountDr> getFlowSourceCount(@Nullable String[] filterScheduleStatus) {
         return dashboardDao.getFlowSourceCount(filterScheduleStatus);
     }
 
     @Override
-    public List<Map> getFlowExecutionStatusCount(@NonNull Long[] period) {
+    public List<StatusAndCountDr> getFlowExecutionStatusCount(@NonNull Long[] period) {
         return dashboardDao.getFlowExecutionStatusCount(period);
     }
 
     @Override
-    public List<Map> getJobExecutionStatusCount(@NonNull Long[] period) {
+    public List<StatusAndCountDr> getJobExecutionStatusCount(@NonNull Long[] period) {
         return dashboardDao.getJobExecutionStatusCount(period);
     }
 

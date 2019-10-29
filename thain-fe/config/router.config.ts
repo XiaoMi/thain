@@ -23,12 +23,13 @@ export default [
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
-      { path: '/', redirect: '/dashboard' },
+      { path: '/', redirect: '/flow/list' },
       {
         path: '/dashboard',
         name: 'dashboard',
         icon: 'dashboard',
         component: './Dashboard',
+        authority: ['admin'],
       },
       {
         path: '/flow-editor',

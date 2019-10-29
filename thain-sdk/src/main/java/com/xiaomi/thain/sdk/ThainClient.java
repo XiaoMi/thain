@@ -85,7 +85,7 @@ public class ThainClient {
     }
 
     public ApiResult getFlowExecutionInfos(@NonNull long flowId, @NonNull int page, @NonNull int pageSize) throws IOException {
-        return buildRequest(url + ALL_EXECUTION_INFO, JSON.toJSONString(ImmutableMap.of("flowId", flowId, "page", page, "pageSize", pageSize)));
+        return buildRequest(url + ALL_EXECUTION_INFO, JSON.toJSONString(ImmutableMap.of("flowId", flowId, "page", page, "page", pageSize)));
     }
 
     private ApiResult buildRequest(@NonNull String url, @NonNull String body) throws IOException {

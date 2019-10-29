@@ -33,6 +33,7 @@ public class ThainClient {
     private static final String SCHEDULE_PATH = "/x5/flow/schedule";
     private static final String KILL_PATH = "/x5/flow-execution/kill";
     private static final String ALL_INFO_PATH = "/x5/flow-execution/all-info";
+    private static final String ALL_EXECUTION_INFO = "/x5/flow-execution/infos";
 
     public static ThainClient getInstance(@NonNull String appId, @NonNull String appKey, @NonNull String host) {
         return new ThainClient(appId, appKey, host);
@@ -82,6 +83,19 @@ public class ThainClient {
 
     public ApiResult scheduleFlow(long flowId) throws IOException {
         return buildRequest(url + SCHEDULE_PATH, JSON.toJSONString(ImmutableMap.of("flowId", flowId)));
+    }
+
+    /**
+     * get FlowExecution by flowId
+     *
+     * @param flowId   flowId
+     * @param page     page
+     * @param pageSize pageSize
+     * @return {@link ApiResult}
+     * @throws IOException {@link IOException}
+     */
+    public ApiResult getFlowExecutionList(long flowId, int page, int pageSize) throws IOException {
+        return buildRequest(url + ALL_EXECUTION_INFO, JSON.toJSONString(ImmutableMap.of("flowId", flowId, "page", page, "pageSize", pageSize)));
     }
 
     private ApiResult buildRequest(@NonNull String url, @NonNull String body) throws IOException {

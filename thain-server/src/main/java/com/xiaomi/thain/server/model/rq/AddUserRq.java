@@ -3,7 +3,7 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-package com.xiaomi.thain.server.entity.request;
+package com.xiaomi.thain.server.model.rq;
 
 
 import lombok.Builder;
@@ -13,7 +13,7 @@ import lombok.NonNull;
  * @author wangsimin@xiaomi.com
  */
 @Builder
-public class UserRequest {
+public class AddUserRq {
     @NonNull
     public final String userId;
     public final boolean admin;

@@ -8,7 +8,7 @@ package com.xiaomi.thain.server.dao;
 
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.server.entity.query.FlowListQuery;
+import com.xiaomi.thain.server.model.sp.FlowListSp;
 import com.xiaomi.thain.server.mapper.FlowMapper;
 import lombok.NonNull;
 import org.springframework.stereotype.Repository;
@@ -35,12 +35,12 @@ public class FlowDao {
         return flowMapper.getUserAccessible(flowId, userId, appIds);
     }
 
-    public List<FlowModel> getFlowList(@NonNull FlowListQuery flowListQuery) {
-        return flowMapper.getFlowList(flowListQuery);
+    public List<FlowModel> getFlowList(@NonNull FlowListSp flowListSp) {
+        return flowMapper.getFlowList(flowListSp);
     }
 
-    public Long getFlowListCount(@NonNull FlowListQuery flowListQuery) {
-        return flowMapper.getFlowListCount(flowListQuery);
+    public Long getFlowListCount(@NonNull FlowListSp flowListSp) {
+        return flowMapper.getFlowListCount(flowListSp);
     }
 
     public boolean flowExist(long flowId) {

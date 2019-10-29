@@ -9,10 +9,10 @@ package com.xiaomi.thain.server.controller;
 import com.google.gson.Gson;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
-import com.xiaomi.thain.common.model.dto.AddDto;
-import com.xiaomi.thain.server.entity.query.FlowAllInfoQuery;
-import com.xiaomi.thain.server.entity.query.FlowListQuery;
-import com.xiaomi.thain.server.entity.request.FlowListRequest;
+import com.xiaomi.thain.common.model.rq.AddRq;
+import com.xiaomi.thain.server.model.rp.FlowAllInfoRp;
+import com.xiaomi.thain.server.model.sp.FlowListSp;
+import com.xiaomi.thain.server.model.rq.FlowListRq;
 import com.xiaomi.thain.server.service.CheckService;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;
@@ -60,19 +60,19 @@ public class FlowController {
     }
 
     @GetMapping("list")
-    public ApiResult list(@NonNull FlowListRequest flowListRequest) {
+    public ApiResult list(@NonNull FlowListRq flowListRq) {
         try {
-            FlowListQuery flowListQuery;
+            FlowListSp flowListSp;
             if (isAdmin()) {
-                flowListQuery = FlowListQuery.getInstance(flowListRequest);
+                flowListSp = FlowListSp.getInstance(flowListRq);
             } else {
-                flowListQuery = FlowListQuery.getInstance(flowListRequest, getUsername(), getAuthorities());
+                flowListSp = FlowListSp.getInstance(flowListRq, getUsername(), getAuthorities());
             }
             return ApiResult.success(
-                    flowService.getFlowList(flowListQuery),
-                    flowService.getFlowListCount(flowListQuery),
-                    flowListRequest.page == null ? 1 : flowListRequest.page,
-                    flowListRequest.pageSize == null ? 20 : flowListRequest.pageSize);
+                    flowService.getFlowList(flowListSp),
+                    flowService.getFlowListCount(flowListSp),
+                    flowListRq.page == null ? 1 : flowListRq.page,
+                    flowListRq.pageSize == null ? 20 : flowListRq.pageSize);
         } catch (Exception e) {
             return ApiResult.fail(e.getMessage());
         }
@@ -86,7 +86,7 @@ public class FlowController {
             }
             val flowModel = flowService.getFlow(flowId);
             val jobModelList = flowService.getJobModelList(flowId);
-            return ApiResult.success(FlowAllInfoQuery.builder()
+            return ApiResult.success(FlowAllInfoRp.builder()
                     .flowModel(flowModel)
                     .jobModelList(jobModelList).build());
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class FlowController {
     public ApiResult add(@NonNull @RequestBody String json) {
         try {
             Gson gson = new Gson();
-            val flowDefinition = gson.fromJson(json, AddDto.class);
+            val flowDefinition = gson.fromJson(json, AddRq.class);
             return add(flowDefinition
                     .toBuilder()
                     .flowModel(flowDefinition.flowModel
@@ -112,9 +112,9 @@ public class FlowController {
         }
     }
 
-    public ApiResult add(@NonNull AddDto addDto, @NonNull String appId) {
-        val flowModel = addDto.flowModel;
-        val jobModelList = addDto.jobModelList;
+    public ApiResult add(@NonNull AddRq addRq, @NonNull String appId) {
+        val flowModel = addRq.flowModel;
+        val jobModelList = addRq.jobModelList;
         try {
             checkService.checkFlowModel(flowModel);
             checkService.checkJobModelList(jobModelList);

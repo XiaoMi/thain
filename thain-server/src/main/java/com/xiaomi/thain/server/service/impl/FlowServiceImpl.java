@@ -10,10 +10,10 @@ import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.common.model.dto.AddDto;
+import com.xiaomi.thain.common.model.rq.AddRq;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.server.dao.FlowDao;
-import com.xiaomi.thain.server.entity.query.FlowListQuery;
+import com.xiaomi.thain.server.model.sp.FlowListSp;
 import com.xiaomi.thain.server.service.FlowService;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -48,17 +48,17 @@ public class FlowServiceImpl implements FlowService {
     }
 
     @Override
-    public List<FlowModel> getFlowList(@NonNull FlowListQuery flowListQuery) {
-        return flowDao.getFlowList(flowListQuery);
+    public List<FlowModel> getFlowList(@NonNull FlowListSp flowListSp) {
+        return flowDao.getFlowList(flowListSp);
     }
 
     @Override
-    public Long getFlowListCount(@NonNull FlowListQuery flowListQuery) {
-        return flowDao.getFlowListCount(flowListQuery);
+    public Long getFlowListCount(@NonNull FlowListSp flowListSp) {
+        return flowDao.getFlowListCount(flowListSp);
     }
 
-    private long update(@NonNull AddDto addDto) throws ThainException, ParseException, SchedulerException {
-        return thainFacade.updateFlow(addDto);
+    private long update(@NonNull AddRq addRq) throws ThainException, ParseException, SchedulerException {
+        return thainFacade.updateFlow(addRq);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class FlowServiceImpl implements FlowService {
         if (!flowModel.slaKill || flowModel.slaDuration == 0) {
             flowModel.toBuilder().slaKill(true).slaDuration(3L * 60 * 60).build();
         }
-        val addDto = AddDto.builder().flowModel(flowModel).jobModelList(jobModelList).build();
+        val addDto = AddRq.builder().flowModel(flowModel).jobModelList(jobModelList).build();
         if (flowDao.flowExist(flowModel.id)) {
             return update(addDto);
         }

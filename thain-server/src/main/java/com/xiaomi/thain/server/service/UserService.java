@@ -5,9 +5,9 @@
  */
 package com.xiaomi.thain.server.service;
 
-import com.xiaomi.thain.server.entity.request.UserRequest;
-import com.xiaomi.thain.server.entity.rq.UserRq;
-import com.xiaomi.thain.server.entity.user.ThainUser;
+import com.xiaomi.thain.server.model.rq.AddUserRq;
+import com.xiaomi.thain.server.model.rq.UpdateUserRq;
+import com.xiaomi.thain.server.model.ThainUser;
 import lombok.NonNull;
 
 import java.util.List;
@@ -49,17 +49,17 @@ public interface UserService {
     /**
      * insert user By admin
      *
-     * @param userRequest see {@link UserRequest}
+     * @param addUserRq see {@link AddUserRq}
      * @return false-failure true-success
      */
-    boolean insertUser(@NonNull UserRequest userRequest);
+    boolean insertUser(@NonNull AddUserRq addUserRq);
 
     /**
      * update user By admin
      *
-     * @param userRq see {@link UserRq}
+     * @param updateUserRq see {@link UpdateUserRq}
      * @return false-failure true-success
      */
-    boolean updateUser(@NonNull UserRq userRq);
+    boolean updateUser(@NonNull UpdateUserRq updateUserRq);
 }
 

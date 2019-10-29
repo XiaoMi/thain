@@ -5,9 +5,9 @@
  */
 package com.xiaomi.thain.server.service;
 
-import com.xiaomi.thain.server.entity.X5Config;
-import com.xiaomi.thain.server.entity.request.X5ConfigRequest;
-import com.xiaomi.thain.server.entity.response.X5ConfigResponse;
+import com.xiaomi.thain.server.model.X5Config;
+import com.xiaomi.thain.server.model.rq.X5ConfigRq;
+import com.xiaomi.thain.server.model.rp.X5ConfigResponse;
 import lombok.NonNull;
 
 import java.util.List;
@@ -42,17 +42,17 @@ public interface X5Service {
     /**
      * insert Config
      *
-     * @param x5ConfigRequest see {@link X5ConfigRequest}
+     * @param x5ConfigRq see {@link X5ConfigRq}
      * @return false-failure true-success
      */
-    boolean insertX5Config(@NonNull X5ConfigRequest x5ConfigRequest);
+    boolean insertX5Config(@NonNull X5ConfigRq x5ConfigRq);
 
     /**
      * update Config
      *
-     * @param x5ConfigRequest see {@link X5ConfigRequest}
+     * @param x5ConfigRq see {@link X5ConfigRq}
      * @return false-failure true-success
      */
-    boolean updateX5Config(@NonNull X5ConfigRequest x5ConfigRequest);
+    boolean updateX5Config(@NonNull X5ConfigRq x5ConfigRq);
 }
 

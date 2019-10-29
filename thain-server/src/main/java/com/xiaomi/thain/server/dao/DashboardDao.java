@@ -5,9 +5,9 @@
  */
 package com.xiaomi.thain.server.dao;
 
-import com.xiaomi.thain.server.entity.dr.SourceAndCountDr;
-import com.xiaomi.thain.server.entity.dr.StatusAndCountDr;
-import com.xiaomi.thain.server.entity.response.StatusHistoryCount;
+import com.xiaomi.thain.server.model.dr.SourceAndCountDr;
+import com.xiaomi.thain.server.model.dr.StatusAndCountDr;
+import com.xiaomi.thain.server.model.dr.StatusAndCountAndTimeDr;
 import com.xiaomi.thain.server.mapper.DashboardMapper;
 import lombok.NonNull;
 import org.springframework.stereotype.Repository;
@@ -60,7 +60,7 @@ public class DashboardDao {
         return dashboardMapper.getIncreaseJobCount(period);
     }
 
-    public List<StatusHistoryCount> getStatusHistoryCount(Long[] period) {
+    public List<StatusAndCountAndTimeDr> getStatusHistoryCount(Long[] period) {
         return dashboardMapper.getStatusHistoryCount(period);
     }
 }

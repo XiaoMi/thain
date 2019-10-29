@@ -6,9 +6,9 @@
 
 package com.xiaomi.thain.server.dao;
 
-import com.xiaomi.thain.server.entity.request.UserRequest;
-import com.xiaomi.thain.server.entity.rq.UserRq;
-import com.xiaomi.thain.server.entity.user.ThainUser;
+import com.xiaomi.thain.server.model.rq.AddUserRq;
+import com.xiaomi.thain.server.model.rq.UpdateUserRq;
+import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.mapper.UserMapper;
 import lombok.NonNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,11 +34,11 @@ public class UserDao {
         return userMapper.getUserById(userId);
     }
 
-    public void insertUser(@NonNull UserRequest userRequest) {
+    public void insertUser(@NonNull AddUserRq addUserRq) {
         ThainUser insertUser = new ThainUser();
-        insertUser.setUserId(userRequest.userId);
-        insertUser.setUsername(userRequest.username);
-        insertUser.setPasswordHash(new BCryptPasswordEncoder().encode(userRequest.password));
+        insertUser.setUserId(addUserRq.userId);
+        insertUser.setUsername(addUserRq.username);
+        insertUser.setPasswordHash(new BCryptPasswordEncoder().encode(addUserRq.password));
         userMapper.insertUser(insertUser);
     }
 
@@ -59,9 +59,9 @@ public class UserDao {
         return userMapper.getAllUsers();
     }
 
-    public boolean updateUser(@NonNull UserRq userRq) {
-        if (userMapper.getUserById(userRq.userId).isPresent()) {
-            userMapper.updateUserBySelective(userRq);
+    public boolean updateUser(@NonNull UpdateUserRq updateUserRq) {
+        if (userMapper.getUserById(updateUserRq.userId).isPresent()) {
+            userMapper.updateUserBySelective(updateUserRq);
             return true;
         }
         return false;

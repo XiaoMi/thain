@@ -6,8 +6,8 @@
 
 package com.xiaomi.thain.server.mapper;
 
-import com.xiaomi.thain.server.entity.rq.UserRq;
-import com.xiaomi.thain.server.entity.user.ThainUser;
+import com.xiaomi.thain.server.model.rq.UpdateUserRq;
+import com.xiaomi.thain.server.model.ThainUser;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
@@ -56,7 +56,7 @@ public interface UserMapper {
     /**
      * update user bySelective
      *
-     * @param userRq see {@link UserRq}
+     * @param updateUserRq see {@link UpdateUserRq}
      */
-    void updateUserBySelective(@NonNull UserRq userRq);
+    void updateUserBySelective(@NonNull UpdateUserRq updateUserRq);
 }

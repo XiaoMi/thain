@@ -13,7 +13,7 @@ import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.entity.X5;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.utils.X5Utils;
-import com.xiaomi.thain.server.entity.X5Config;
+import com.xiaomi.thain.server.model.X5Config;
 import com.xiaomi.thain.server.service.X5Service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

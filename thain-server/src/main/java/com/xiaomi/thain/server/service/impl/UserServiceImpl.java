@@ -7,9 +7,9 @@ package com.xiaomi.thain.server.service.impl;
 
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.dao.UserDao;
-import com.xiaomi.thain.server.entity.request.UserRequest;
-import com.xiaomi.thain.server.entity.rq.UserRq;
-import com.xiaomi.thain.server.entity.user.ThainUser;
+import com.xiaomi.thain.server.model.rq.AddUserRq;
+import com.xiaomi.thain.server.model.rq.UpdateUserRq;
+import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.service.UserService;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -54,17 +54,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean insertUser(@NonNull UserRequest userRequest) {
-        if (!userDao.getUserById(userRequest.userId).isPresent()) {
-            userDao.insertUser(userRequest);
+    public boolean insertUser(@NonNull AddUserRq addUserRq) {
+        if (!userDao.getUserById(addUserRq.userId).isPresent()) {
+            userDao.insertUser(addUserRq);
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean updateUser(@NonNull UserRq userRq) {
-        return userDao.updateUser(userRq);
+    public boolean updateUser(@NonNull UpdateUserRq updateUserRq) {
+        return userDao.updateUser(updateUserRq);
     }
 
 }

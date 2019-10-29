@@ -12,7 +12,7 @@ import com.xiaomi.thain.common.constant.FlowSchedulingStatus;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerException;
-import com.xiaomi.thain.common.model.dto.AddDto;
+import com.xiaomi.thain.common.model.rq.AddRq;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import com.xiaomi.thain.core.process.ProcessEngineConfiguration;
 import com.xiaomi.thain.core.scheduler.SchedulerEngine;
@@ -64,14 +64,14 @@ public class ThainFacade {
     /**
      * 新建任务, cron为空的则只部署，不调度, 这个flowJson是不含id的，如果含id也没用
      */
-    public long addFlow(AddDto addDto) throws ThainException {
-        val flowId = processEngine.addFlow(addDto.flowModel, addDto.jobModelList).orElseThrow(() -> new ThainException("failed to insert flow"));
-        if (StringUtils.isBlank(addDto.flowModel.cron)) {
+    public long addFlow(AddRq addRq) throws ThainException {
+        val flowId = processEngine.addFlow(addRq.flowModel, addRq.jobModelList).orElseThrow(() -> new ThainException("failed to insert flow"));
+        if (StringUtils.isBlank(addRq.flowModel.cron)) {
             return flowId;
         }
         try {
-            CronExpression.validateExpression(addDto.flowModel.cron);
-            schedulerEngine.addFlow(flowId, addDto.flowModel.cron);
+            CronExpression.validateExpression(addRq.flowModel.cron);
+            schedulerEngine.addFlow(flowId, addRq.flowModel.cron);
         } catch (Exception e) {
             processEngine.deleteFlow(flowId);
             throw new ThainException(e);
@@ -80,16 +80,16 @@ public class ThainFacade {
     }
 
     public long updateFlow(String flowJson) throws SchedulerException, ThainException, ParseException {
-        val addDto = JSON.parseObject(flowJson, AddDto.class);
+        val addDto = JSON.parseObject(flowJson, AddRq.class);
         return updateFlow(addDto);
     }
 
     /**
      * 更新flow
      */
-    public long updateFlow(AddDto addDto) throws SchedulerException, ThainException, ParseException {
-        val flowModel = addDto.flowModel;
-        val jobModelList = addDto.jobModelList;
+    public long updateFlow(AddRq addRq) throws SchedulerException, ThainException, ParseException {
+        val flowModel = addRq.flowModel;
+        val jobModelList = addRq.jobModelList;
 
         if (StringUtils.isBlank(flowModel.cron)) {
             processEngine.updateFlow(flowModel, jobModelList);
@@ -140,7 +140,7 @@ public class ThainFacade {
             try {
                 val jobModelList = processEngine.processEngineStorage
                         .jobDao.getJobs(flowId).orElseGet(Collections::emptyList);
-                updateFlow(AddDto.builder().flowModel(flowModel).jobModelList(jobModelList).build());
+                updateFlow(AddRq.builder().flowModel(flowModel).jobModelList(jobModelList).build());
             } catch (Exception ex) {
                 log.error("", ex);
             }
@@ -177,9 +177,9 @@ public class ThainFacade {
                 .orElseThrow(() -> new ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)));
         val jobModelList = processEngine.processEngineStorage.jobDao.getJobs(flowId).orElseGet(Collections::emptyList);
         if (cron == null) {
-            updateFlow(AddDto.builder().flowModel(flowModel).jobModelList(jobModelList).build());
+            updateFlow(AddRq.builder().flowModel(flowModel).jobModelList(jobModelList).build());
         } else {
-            updateFlow(AddDto.builder().flowModel(flowModel.toBuilder().cron(cron).build()).jobModelList(jobModelList).build());
+            updateFlow(AddRq.builder().flowModel(flowModel.toBuilder().cron(cron).build()).jobModelList(jobModelList).build());
         }
         if (Strings.isNotBlank(flowModel.modifyCallbackUrl)) {
             SendModifyUtils.sendScheduling(flowId, flowModel.modifyCallbackUrl);

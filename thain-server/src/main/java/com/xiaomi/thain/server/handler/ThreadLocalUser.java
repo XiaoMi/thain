@@ -7,7 +7,7 @@
 package com.xiaomi.thain.server.handler;
 
 import com.xiaomi.thain.common.exception.ThainException;
-import com.xiaomi.thain.server.entity.user.ThainUser;
+import com.xiaomi.thain.server.model.ThainUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

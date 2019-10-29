@@ -3,28 +3,26 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-package com.xiaomi.thain.server.entity.request;
+package com.xiaomi.thain.server.model.rq;
 
 import lombok.Builder;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * @author wangsimin3@xiaomi.com
- * @date 2019/10/24
+ * @date 2019/10/28
  */
 @Builder
-public class X5ConfigRequest {
+public class UpdateUserRq {
     @NonNull
-    public final String appId;
-    @NonNull
-    public final String appKey;
-    @NonNull
-    public final String appName;
-    @NonNull
-    public final List<String> principals;
+    public final String userId;
+    public final boolean admin;
     @Nullable
-    public final String description;
+    public final String email;
+    @Nullable
+    public final String username;
+    @Nullable
+    public final String password;
 }

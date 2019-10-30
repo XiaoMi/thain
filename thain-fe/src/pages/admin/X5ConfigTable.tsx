@@ -15,16 +15,17 @@ import { PaginationConfig } from 'antd/lib/table';
 import X5Tag from './X5Tag';
 
 interface Props extends ConnectProps {
-  tableResult: TableResult<X5ConfigModel>;
+  tableResult?: TableResult<X5ConfigModel>;
   loading?: boolean;
 }
 
 const { Item } = Form;
 
-const X5ConfigTable: React.FC<Props> = ({
-  tableResult: { data, page, count, pageSize },
-  dispatch,
-}) => {
+const X5ConfigTable: React.FC<Props> = ({ tableResult, dispatch }) => {
+  if (tableResult === undefined) {
+    tableResult = new TableResult();
+  }
+  const { data, page, count, pageSize } = tableResult;
   const [appId, setAppId] = useState<string>();
   const [model, setModel] = useState<X5ConfigModel>(new X5ConfigModel());
   const [isVisiable, setIsVisiable] = useState(false);

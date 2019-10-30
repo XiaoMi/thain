@@ -29,15 +29,15 @@ import { ClickParam } from 'antd/es/menu';
 import { formatMessage } from 'umi-plugin-react/locale';
 
 interface Props extends ConnectProps<{ flowId: number }> {
-  tableResult: TableResult<FlowModel>;
+  tableResult?: TableResult<FlowModel>;
   loading: boolean;
 }
 
-const FlowTable: React.FC<Props> = ({
-  tableResult: { data, count, page, pageSize },
-  loading,
-  dispatch,
-}) => {
+const FlowTable: React.FC<Props> = ({ tableResult, loading, dispatch }) => {
+  if (tableResult === undefined) {
+    tableResult = new TableResult();
+  }
+  const { data, count, page, pageSize } = tableResult;
   const [batchId, setBatchId] = useState<number[] | string[]>([]);
   function tableChange(
     pagination: PaginationConfig,

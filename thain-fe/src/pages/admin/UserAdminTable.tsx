@@ -15,11 +15,14 @@ import { PaginationConfig } from 'antd/lib/table';
 import { formatMessage } from 'umi-plugin-react/locale';
 
 interface Props extends ConnectProps {
-  tableResult: TableResult<UserModel>;
+  tableResult?: TableResult<UserModel>;
   loading?: boolean;
 }
 
 const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => {
+  if (tableResult === undefined) {
+    tableResult = new TableResult();
+  }
   const { data, count, page, pageSize } = tableResult;
   const [isVisiable, setIsvisiable] = useState<boolean>(false);
   const [deleteId, setDeleteId] = useState();

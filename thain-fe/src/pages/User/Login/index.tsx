@@ -107,9 +107,10 @@ class Login extends Component<LoginProps, LoginState> {
                   message: formatMessage({ id: 'user-login.password.required' }),
                 },
               ]}
-              onPressEnter={() =>
-                this.loginForm && this.loginForm.validateFields(this.handleSubmit)
-              }
+              onPressEnter={e => {
+                e.preventDefault();
+                if (this.loginForm) this.loginForm.validateFields(this.handleSubmit);
+              }}
             />
           </Tab>
           <Submit loading={submitting}>

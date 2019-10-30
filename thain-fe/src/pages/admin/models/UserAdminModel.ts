@@ -19,7 +19,7 @@ export class UserModel {
 }
 
 export class AdminUserModel {
-  tableResult = new TableResult<UserModel>();
+  tableResult?: TableResult = new TableResult<UserModel>();
 }
 
 interface AdminModel {
@@ -71,6 +71,9 @@ const AdminUserModelType: AdminModel = {
     *delete({ payload }, { call, put, select }) {
       yield call(deleteUser, payload);
       const model: AdminUserModel = yield select((s: ConnectState) => s.admin);
+      if (model.tableResult === undefined) {
+        return;
+      }
       const {
         tableResult: { page, pageSize },
       } = model;
@@ -85,8 +88,8 @@ const AdminUserModelType: AdminModel = {
       callback();
       const model: AdminUserModel = yield select((s: ConnectState) => s.admin);
       const updateModel: AdminUserModel = yield call(getUsers, {
-        page: model.tableResult.page,
-        pageSize: model.tableResult.pageSize,
+        page: model.tableResult ? model.tableResult.page : 1,
+        pageSize: model.tableResult ? model.tableResult.pageSize : 20,
       });
       notification.success({
         message: 'Tips',

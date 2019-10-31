@@ -9,17 +9,17 @@ import { ApiResult } from '@/typings/ApiResult';
 import { X5ConfigModel, X5TableModel } from './models/X5ConfigModel';
 
 export async function getClients(props: { page?: number; pageSize?: number }) {
-  return get<ApiResult>('api/admin/clients', props);
+  return get<ApiResult>('/api/admin/clients', props);
 }
 
 export async function delteClient(appId: string) {
-  return del<ApiResult>(`api/admin/client/${appId}`);
+  return del<ApiResult>(`/api/admin/client/${appId}`);
 }
 
 export async function addClient(params: X5ConfigModel) {
-  return post<ApiResult>('api/admin/client', params);
+  return post<ApiResult>('/api/admin/client', params);
 }
 
 export async function updateClent(params: X5TableModel) {
-  return patch<ApiResult>('api/admin/client', params);
+  return patch<ApiResult>('/api/admin/client', params);
 }

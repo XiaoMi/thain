@@ -5,7 +5,7 @@
  */
 import { Tabs } from 'antd';
 import { connect } from 'dva';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
 import UserAdminTable from './UserAdminTable';
 import X5ConfigTable from './X5ConfigTable';
@@ -17,21 +17,19 @@ interface Props extends ConnectProps {
 const AdminTabs: React.FC<Props> = ({ dispatch, type }) => {
   const { TabPane } = Tabs;
 
-  function handleAdminClick() {
+  useEffect(() => {
     if (dispatch) {
-      dispatch({
-        type: 'admin/fetchTable',
-      });
+      if (type === 'user') {
+        dispatch({
+          type: 'admin/fetchTable',
+        });
+      } else if (type === 'client') {
+        dispatch({
+          type: 'x5config/fetchTable',
+        });
+      }
     }
-  }
-
-  function handleClientClick() {
-    if (dispatch) {
-      dispatch({
-        type: 'x5config/fetchTable',
-      });
-    }
-  }
+  }, [type]);
 
   return (
     <div>
@@ -41,10 +39,8 @@ const AdminTabs: React.FC<Props> = ({ dispatch, type }) => {
         onChange={activeKey => {
           if (activeKey === 'user') {
             router.push('/admin/user');
-            handleAdminClick();
           } else {
             router.push('/admin/client');
-            handleClientClick();
           }
         }}
       >

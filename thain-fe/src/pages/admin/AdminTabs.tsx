@@ -16,28 +16,20 @@ interface Props extends ConnectProps {
 }
 const AdminTabs: React.FC<Props> = ({ dispatch, type }) => {
   const { TabPane } = Tabs;
-  function handleAdminClick() {
-    if (dispatch) {
-      dispatch({
-        type: 'admin/fetchTable',
-      });
-    }
-  }
 
-  function handleClientClick() {
-    if (dispatch) {
-      dispatch({
-        type: 'x5config/fetchTable',
-      });
-    }
-  }
   useEffect(() => {
-    if (type === 'user') {
-      handleAdminClick();
-    } else if (type === 'client') {
-      handleClientClick();
+    if (dispatch) {
+      if (type === 'user') {
+        dispatch({
+          type: 'admin/fetchTable',
+        });
+      } else if (type === 'client') {
+        dispatch({
+          type: 'x5config/fetchTable',
+        });
+      }
     }
-  }, []);
+  }, [type]);
 
   return (
     <div>
@@ -47,10 +39,8 @@ const AdminTabs: React.FC<Props> = ({ dispatch, type }) => {
         onChange={activeKey => {
           if (activeKey === 'user') {
             router.push('/admin/user');
-            handleAdminClick();
           } else {
             router.push('/admin/client');
-            handleClientClick();
           }
         }}
       >

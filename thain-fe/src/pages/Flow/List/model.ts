@@ -38,7 +38,7 @@ export class FlowListModelState {
   createUser?: string;
   scheduleStatus?: FlowSchedulingStatus;
   updateTime?: number[];
-  tableResult = new TableResult<FlowModel>();
+  tableResult?: TableResult<FlowModel> = new TableResult<FlowModel>();
 }
 
 interface FlowListModelType {
@@ -84,8 +84,9 @@ const FlowListModel: FlowListModelType = {
           payload && payload.lastRunStatus !== undefined
             ? payload.lastRunStatus
             : state.lastRunStatus,
-        page: (payload && payload.page) || state.tableResult.page,
-        pageSize: (payload && payload.pageSize) || state.tableResult.pageSize,
+        page: (payload && payload.page) || (state.tableResult ? state.tableResult.page : 1),
+        pageSize:
+          (payload && payload.pageSize) || (state.tableResult ? state.tableResult.pageSize : 20),
         sortKey: (payload && payload.sort && payload.sort.key) || 'id',
         sortOrderDesc: (payload && payload.sort && payload.sort.orderDesc) || false,
         flowName: payload && payload.flowName !== undefined ? payload.flowName : state.flowName,

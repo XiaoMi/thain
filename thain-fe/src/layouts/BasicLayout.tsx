@@ -46,10 +46,10 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const { dispatch, children, settings } = props;
+
   /**
    * constructor
    */
-
   useState(() => {
     if (dispatch) {
       dispatch({

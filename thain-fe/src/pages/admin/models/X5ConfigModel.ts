@@ -20,7 +20,7 @@ export class X5ConfigModel {
 }
 
 export class X5TableModel {
-  tableResult = new TableResult<X5ConfigModel>();
+  tableResult?: TableResult<X5ConfigModel> = new TableResult<X5ConfigModel>();
 }
 
 export interface X5Model {

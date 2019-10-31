@@ -5,6 +5,7 @@
  */
 package com.xiaomi.thain.server.config;
 
+import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.service.UserService;
 import lombok.NonNull;
@@ -53,9 +54,11 @@ public class CustomOauth2UserServiceImpl implements OAuth2UserService<OidcUserRe
         }
         //第三方登陆后插入数据库
         String userId = String.valueOf(user.getAttributes().get("email"));
-        String userName = String.valueOf(user.getAttributes().get("name"));
-        thainUserService.insertThirdUser(ThainUser.builder().userId(userId).username(userName).build());
-        return thainUserService.getUserById(userId);
+        return thainUserService.getUserById(userId).orElseGet(() -> {
+            String userName = String.valueOf(user.getAttributes().get("name"));
+            thainUserService.insertThirdUser(ThainUser.builder().userId(userId).username(userName).build());
+            return thainUserService.getUserById(userId).orElseThrow(() -> new ThainRuntimeException("get user error"));
+        });
     }
 
 }

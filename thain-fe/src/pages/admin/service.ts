@@ -8,13 +8,13 @@ import { ApiResult, TableResult } from '@/typings/ApiResult';
 import { UserModel } from './models/UserAdminModel';
 
 export async function addUser(props: UserModel) {
-  return post('api/admin/user', props);
+  return post('/api/admin/user', props);
 }
 
 export async function getUsers(props: { page?: number; pageSize?: number }) {
-  return get<TableResult>('api/admin/users', props);
+  return get<TableResult>('/api/admin/users', props);
 }
 
 export async function deleteUser(props: { userId: string }) {
-  return del<ApiResult>(`api/admin/user/${props.userId}`);
+  return del<ApiResult>(`/api/admin/user/${props.userId}`);
 }

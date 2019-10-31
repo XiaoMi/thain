@@ -24,10 +24,13 @@ const nodeCommonDefine = {
 };
 interface Props extends ConnectProps<{ flowId: number }> {
   readonly editor?: Editor;
-  componentDefines: ComponentDefineJsons;
+  componentDefines?: ComponentDefineJsons;
 }
 
 const ItemPanel: React.FC<Props> = ({ editor, componentDefines }) => {
+  if (componentDefines === undefined) {
+    return <div />;
+  }
   const itemPanelContainer = useRef(null);
   useEffect(() => {
     if (editor) {

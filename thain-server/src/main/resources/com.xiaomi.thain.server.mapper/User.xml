@@ -18,7 +18,7 @@
 
     </resultMap>
     <insert id="insertUser">
-        replace into thain_user(user_id, user_name, password_hash, email)
+        insert into thain_user(user_id, user_name, password_hash, email)
         values (#{userId}, #{username} ,
         <choose>
             <when test="passwordHash != null">
@@ -54,18 +54,18 @@
     <update id="updateUserBySelective" parameterType="com.xiaomi.thain.server.model.rq.UpdateUserRq">
         update thain_user
         <trim prefix="set" suffixOverrides=",">
-        <if test="admin!=null">
-            admin=#{admin},
-        </if>
-        <if test="email!=null">
-            email=#{email},
-        </if>
-        <if test="username!=null">
-            user_name=#{username},
-        </if>
-        <if test="password!=null">
-            password_hash=#{password},
-        </if>
+            <if test="admin!=null">
+                admin=#{admin},
+            </if>
+            <if test="email!=null">
+                email=#{email},
+            </if>
+            <if test="username!=null">
+                user_name=#{username},
+            </if>
+            <if test="password!=null">
+                password_hash=#{password},
+            </if>
         </trim>
         where user_id=#{userId}
     </update>

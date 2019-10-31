@@ -10,9 +10,13 @@ import { formatMessage } from 'umi-plugin-react/locale';
 import UserAdminTable from './UserAdminTable';
 import X5ConfigTable from './X5ConfigTable';
 import { ConnectProps } from '@/models/connect';
-
-const AdminTabs: React.FC<ConnectProps> = ({ dispatch }) => {
+import { router } from 'umi';
+interface Props extends ConnectProps {
+  type: string;
+}
+const AdminTabs: React.FC<Props> = ({ dispatch, type }) => {
   const { TabPane } = Tabs;
+
   function handleAdminClick() {
     if (dispatch) {
       dispatch({
@@ -20,6 +24,7 @@ const AdminTabs: React.FC<ConnectProps> = ({ dispatch }) => {
       });
     }
   }
+
   function handleClientClick() {
     if (dispatch) {
       dispatch({
@@ -27,19 +32,26 @@ const AdminTabs: React.FC<ConnectProps> = ({ dispatch }) => {
       });
     }
   }
+
   return (
     <div>
       <Tabs
-        defaultActiveKey="1"
+        activeKey={type}
         tabPosition="left"
         onChange={activeKey => {
-          activeKey === '1' ? handleAdminClick() : handleClientClick();
+          if (activeKey === 'user') {
+            router.push('/admin/user');
+            handleAdminClick();
+          } else {
+            router.push('/admin/client');
+            handleClientClick();
+          }
         }}
       >
-        <TabPane tab={formatMessage({ id: 'admin.index.userAdmin' })} key="1">
+        <TabPane tab={formatMessage({ id: 'admin.index.userAdmin' })} key="user">
           <UserAdminTable />
         </TabPane>
-        <TabPane tab={formatMessage({ id: 'admin.index.ClientAdmin' })} key="2">
+        <TabPane tab={formatMessage({ id: 'admin.index.ClientAdmin' })} key="client">
           <X5ConfigTable />
         </TabPane>
       </Tabs>

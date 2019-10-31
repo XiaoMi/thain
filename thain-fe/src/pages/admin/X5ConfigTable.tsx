@@ -3,7 +3,7 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ConnectState, { ConnectProps } from '@/models/connect';
 import { X5ConfigModel } from './models/X5ConfigModel';
 import { formatMessage } from 'umi-plugin-locale';
@@ -79,6 +79,15 @@ const X5ConfigTable: React.FC<Props> = ({ tableResult, dispatch }) => {
       }
     }
   }
+  useEffect(() => {
+    return () => {
+      if (dispatch) {
+        dispatch({
+          type: 'x5config/unmount',
+        });
+      }
+    };
+  }, []);
   const column = [
     { title: formatMessage({ id: 'x5config.app.id' }), dataIndex: 'appId' },
     { title: formatMessage({ id: 'x5config.app.key' }), dataIndex: 'appKey' },

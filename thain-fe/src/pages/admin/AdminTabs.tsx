@@ -33,7 +33,6 @@ const AdminTabs: React.FC<Props> = ({ dispatch, type }) => {
     }
   }
 
-  console.log(type);
   return (
     <div>
       <Tabs

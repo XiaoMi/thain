@@ -11,8 +11,15 @@ import AdminUserModelType from './models/UserAdminModel';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Card } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
-interface Prpos extends ConnectProps {}
-const Admin: React.FC<Prpos> = ({ dispatch }) => {
+interface Prpos extends ConnectProps<{ type: string }> {}
+const Admin: React.FC<Prpos> = ({ dispatch, computedMatch }) => {
+  let type;
+  if (computedMatch) {
+    type = computedMatch.params.type;
+  } else {
+    type = 'user';
+  }
+
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -31,7 +38,7 @@ const Admin: React.FC<Prpos> = ({ dispatch }) => {
   return (
     <PageHeaderWrapper title={formatMessage({ id: 'admin.home.index' })}>
       <Card bordered={false}>
-        <AdminTabs />
+        <AdminTabs type={type} />
       </Card>
     </PageHeaderWrapper>
   );

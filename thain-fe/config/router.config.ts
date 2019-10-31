@@ -59,12 +59,18 @@ export default [
         component: './FlowExecution/List',
         hideInMenu: true,
       },
+      { path: '/admin', redirect: '/admin/user' },
       {
         path: '/admin',
         icon: 'table',
         name: 'admin',
         component: './admin',
         authority: ['admin'],
+      },
+      {
+        path: '/admin/:type',
+        component: './admin',
+        hideInMenu: true,
       },
       {
         hideInMenu: true,

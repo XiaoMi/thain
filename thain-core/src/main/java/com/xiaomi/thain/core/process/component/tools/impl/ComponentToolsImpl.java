@@ -35,7 +35,7 @@ public class ComponentToolsImpl implements ComponentTools {
     private final JobExecutionLogHandler log;
     @NonNull
     private final MailService mailService;
-    @NonNull
+
     private final long jobExecutionId;
 
     public ComponentToolsImpl(@NonNull JobModel jobModel,

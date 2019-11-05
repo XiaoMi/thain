@@ -12,7 +12,7 @@ import com.xiaomi.thain.server.model.dr.StatusAndCountDr;
 import com.xiaomi.thain.server.model.dr.StatusAndCountAndTimeDr;
 import com.xiaomi.thain.server.service.DashboardService;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ import java.util.List;
  * @author miaoyu3@xiaomi.com
  * @date 19-7-30下午4:44
  */
-@Slf4j
+@Log4j2
 @Service
 public class DashboardServiceImpl implements DashboardService {
     @NonNull

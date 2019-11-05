@@ -15,7 +15,7 @@ import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.utils.X5Utils;
 import com.xiaomi.thain.server.model.X5Config;
 import com.xiaomi.thain.server.service.X5Service;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Aspect
 @Component
-@Slf4j
+@Log4j2
 public class X5Aop {
 
     private final LoadingCache<String, X5Config> appIdValue = Caffeine.newBuilder()

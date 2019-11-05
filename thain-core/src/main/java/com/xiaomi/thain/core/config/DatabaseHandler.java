@@ -12,7 +12,7 @@ import com.xiaomi.thain.core.mapper.JobExecutionMapper;
 import com.xiaomi.thain.core.mapper.JobMapper;
 import com.xiaomi.thain.core.mapper.UserMapper;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -27,7 +27,7 @@ import javax.sql.DataSource;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Slf4j
+@Log4j2
 public class DatabaseHandler {
 
     private DatabaseHandler() {

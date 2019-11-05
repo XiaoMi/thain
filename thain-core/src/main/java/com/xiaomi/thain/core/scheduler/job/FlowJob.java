@@ -10,7 +10,7 @@ import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author liangyongrui
  */
-@Slf4j
+@Log4j2
 public class FlowJob implements Job {
 
     @NonNull

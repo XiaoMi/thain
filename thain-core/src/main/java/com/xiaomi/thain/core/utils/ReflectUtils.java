@@ -7,7 +7,7 @@
 package com.xiaomi.thain.core.utils;
 
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 import java.io.File;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Slf4j
+@Log4j2
 public class ReflectUtils {
 
     private ReflectUtils() {

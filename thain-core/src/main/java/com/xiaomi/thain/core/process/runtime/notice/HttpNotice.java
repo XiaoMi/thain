@@ -16,7 +16,7 @@ import static com.xiaomi.thain.common.constant.HttpCallbackStatus.SUCCESS;
 
 import com.xiaomi.thain.common.utils.HttpUtils;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.util.Map;
@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Slf4j
+@Log4j2
 public class HttpNotice {
     @NonNull
     private final String url;

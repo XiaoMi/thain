@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ This source code is licensed under the Apache License Version 2.0, which
+ can be found in the LICENSE file in the root directory of this source tree.
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaomi.thain.server.mapper.JobMapper">
+    <update id="updateJobProperties">
+        update thain_job
+        set properties = #{properties}
+        where id = #{id}
+    </update>
+
+    <select id="getJobByFlowIdAndName" resultType="com.xiaomi.thain.server.model.dr.JobDr">
+        select id,
+               flow_id,
+               name,
+               `condition`,
+               component,
+               callback_url,
+               properties,
+               x_axis,
+               y_axis,
+               create_time,
+               deleted
+        from thain_job
+        where flow_id = #{flowId}
+          and name = #{name}
+          and deleted = 0
+    </select>
+</mapper>

@@ -27,7 +27,7 @@ import com.xiaomi.thain.core.process.runtime.notice.HttpNotice;
 import com.xiaomi.thain.core.process.runtime.storage.FlowExecutionStorage;
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -46,7 +46,7 @@ import static java.util.stream.Collectors.*;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Slf4j
+@Log4j2
 public class FlowExecutor {
 
     private final long flowExecutionId;

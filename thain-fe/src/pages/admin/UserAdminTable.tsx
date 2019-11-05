@@ -8,7 +8,7 @@ import { Button, Modal, Table, Select, Form } from 'antd';
 import { TableResult } from '@/typings/ApiResult';
 import { UserModel } from './models/UserAdminModel';
 import { ConnectProps, ConnectState } from '@/models/connect';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ButtonGroup from 'antd/es/button/button-group';
 import AddUserForm from './AddUserForm';
 import { PaginationConfig } from 'antd/lib/table';
@@ -73,6 +73,16 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
       },
     },
   ];
+
+  useEffect(() => {
+    return () => {
+      if (dispatch) {
+        dispatch({
+          type: 'admin/unmount',
+        });
+      }
+    };
+  }, []);
 
   function tableChange(pagination: PaginationConfig) {
     if (dispatch) {

@@ -14,9 +14,9 @@ import com.xiaomi.thain.core.scheduler.job.CleanJob;
 import com.xiaomi.thain.core.scheduler.job.FlowJob;
 import com.xiaomi.thain.core.scheduler.job.SlaJob;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -32,7 +32,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Slf4j
+@Log4j2
 public class SchedulerEngine {
 
     @NonNull
@@ -123,7 +123,7 @@ public class SchedulerEngine {
                 .withIdentity("flow_" + flowId, "flow")
                 .usingJobData("flowId", flowId)
                 .build();
-        if (Strings.isBlank(cron)) {
+        if (StringUtils.isBlank(cron)) {
             scheduler.deleteJob(jobDetail.getKey());
             return;
         }

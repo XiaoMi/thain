@@ -160,6 +160,7 @@
         from thain_flow
         where id = #{flowId}
           and create_app_id = #{appId}
+          and deleted = 0
     </select>
 
     <update id="updateAppId">

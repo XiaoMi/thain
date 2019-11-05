@@ -8,7 +8,7 @@ package com.xiaomi.thain.common.utils;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.http.Consts;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 /**
  * @author liangyongrui
  */
-@Slf4j
+@Log4j2
 public class HttpUtils {
 
     private HttpUtils() {

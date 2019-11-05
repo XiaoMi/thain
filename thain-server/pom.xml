@@ -5,20 +5,20 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.6.RELEASE</version>
+        <version>2.2.0.RELEASE</version>
         <relativePath/>
     </parent>
     <groupId>com.xiaomi.thain</groupId>
     <artifactId>thain-server</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.5</version>
     <name>thain-server</name>
     <packaging>jar</packaging>
 
     <properties>
         <java.version>1.8</java.version>
         <disruptor.version>3.4.2</disruptor.version>
-        <core.version>1.1.1</core.version>
-        <common.version>1.1.1</common.version>
+        <core.version>1.1.5</core.version>
+        <common.version>1.1.5</common.version>
         <mybatis.version>2.1.0</mybatis.version>
         <org.everit.json.schema.version>1.5.1</org.everit.json.schema.version>
         <druid.version>1.1.20</druid.version>

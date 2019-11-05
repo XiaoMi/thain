@@ -14,7 +14,7 @@ import com.xiaomi.thain.server.model.rq.X5ConfigRq;
 import com.xiaomi.thain.server.model.rp.X5ConfigResponse;
 import com.xiaomi.thain.server.service.X5Service;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ import java.util.List;
  * @author liangyongrui@xiaomi.com
  * @date 19-5-7 上午11:01
  */
-@Slf4j
+@Log4j2
 @Service
 public class X5ServiceImpl implements X5Service {
 

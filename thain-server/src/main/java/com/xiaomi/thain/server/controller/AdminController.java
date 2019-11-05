@@ -17,7 +17,7 @@ import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.service.UserService;
 import com.xiaomi.thain.server.service.X5Service;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +28,7 @@ import static com.xiaomi.thain.server.handler.ThreadLocalUser.isAdmin;
 /**
  * @author wangsimin3@xiaomi.com
  */
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("api/admin")
 public class AdminController {

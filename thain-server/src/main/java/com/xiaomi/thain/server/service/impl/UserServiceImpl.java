@@ -12,7 +12,7 @@ import com.xiaomi.thain.server.model.rq.UpdateUserRq;
 import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.service.UserService;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import java.util.Optional;
  * @author miaoyu3@xiaomi.com
  * @date 19-8-7下午2:03
  */
-@Slf4j
+@Log4j2
 @Service
 public class UserServiceImpl implements UserService {
     @NonNull

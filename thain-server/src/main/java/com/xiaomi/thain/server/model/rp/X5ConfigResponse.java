@@ -27,6 +27,6 @@ public class X5ConfigResponse {
     public final List<String> principals;
     @Nullable
     public final String description;
-    @NonNull
+
     public final long createTime;
 }

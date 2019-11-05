@@ -9,15 +9,15 @@ import com.xiaomi.thain.core.process.service.MailService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Date 19-5-21 下午12:46
  *
  * @author liangyongrui@xiaomi.com
  */
-@Slf4j
+@Log4j2
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MailNotice {
 
@@ -34,7 +34,7 @@ public class MailNotice {
      * 发送错误通知
      */
     public void sendError(@NonNull String errorMessage) {
-        if (Strings.isBlank(callbackEmail)) {
+        if (StringUtils.isBlank(callbackEmail)) {
             return;
         }
         try {

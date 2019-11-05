@@ -16,9 +16,9 @@ import com.xiaomi.thain.core.process.runtime.log.FlowExecutionLogHandler;
 import com.xiaomi.thain.core.process.runtime.notice.MailNotice;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Slf4j
+@Log4j2
 public class FlowExecutionService {
 
     public final long flowExecutionId;
@@ -155,7 +155,7 @@ public class FlowExecutionService {
             val count = latest.stream().filter(t -> FlowExecutionStatus.getInstance(t.status) == FlowExecutionStatus.ERROR).count();
             if (count >= flowModel.pauseContinuousFailure - 1) {
                 ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade.pauseFlow(flowModel.id);
-                if (Strings.isNotBlank(flowModel.emailContinuousFailure)) {
+                if (StringUtils.isNotBlank(flowModel.emailContinuousFailure)) {
                     processEngineStorage.mailService.send(
                             flowModel.emailContinuousFailure.trim().split(","),
                             "Thain 任务连续失败通知",

@@ -9,6 +9,9 @@ package com.xiaomi.thain.common.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.ToString;
 
+/**
+ * @author liangyongrui
+ */
 @ToString
 public class X5 {
     private String body = "";

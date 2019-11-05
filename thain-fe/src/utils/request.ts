@@ -102,7 +102,14 @@ export async function del<T = {}>(url: string, data?: any): Promise<T | undefine
 }
 
 export async function get<T = {}>(url: string, data?: any): Promise<T | undefined> {
-  const res: ApiResult<T> = await request(`${url}?${stringify(data)}`, {});
+  const newData = {};
+  for (const t in data) {
+    if (data[t] !== undefined && data[t] !== null) {
+      newData[t] = data[t];
+    }
+  }
+
+  const res: ApiResult<T> = await request(`${url}?${stringify(newData)}`, {});
   if (statusHandler(res.status, res.message)) {
     return undefined;
   }

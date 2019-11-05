@@ -8,7 +8,7 @@ package com.xiaomi.thain.server.controller;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.server.service.DashboardService;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 /**
  * @author miaoyu3@xiaomi.com
  */
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("api/dashboard")
 public class DashboardController {

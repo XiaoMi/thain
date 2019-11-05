@@ -19,10 +19,9 @@ import com.xiaomi.thain.core.scheduler.SchedulerEngine;
 import com.xiaomi.thain.core.scheduler.SchedulerEngineConfiguration;
 import com.xiaomi.thain.core.utils.SendModifyUtils;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.quartz.CronExpression;
 import org.quartz.SchedulerException;
 
@@ -38,7 +37,7 @@ import java.util.Map;
  * @author liangyongrui@xiaomi.com
  * @date 19-5-16 下午8:38
  */
-@Slf4j
+@Log4j2
 public class ThainFacade {
 
     private static final String NON_EXIST_FLOW = "flow does not exist:{0}";
@@ -132,7 +131,7 @@ public class ThainFacade {
         try {
             processEngine.processEngineStorage.flowDao.pauseFlow(flowId);
             schedulerEngine.deleteFlow(flowId);
-            if (Strings.isNotBlank(flowModel.modifyCallbackUrl)) {
+            if (StringUtils.isNotBlank(flowModel.modifyCallbackUrl)) {
                 SendModifyUtils.sendPause(flowId, flowModel.modifyCallbackUrl);
             }
         } catch (Exception e) {
@@ -155,7 +154,7 @@ public class ThainFacade {
         schedulerEngine.addFlow(flowModel.id, flowModel.cron);
         processEngine.processEngineStorage.flowDao
                 .updateSchedulingStatus(flowModel.id, FlowSchedulingStatus.SCHEDULING);
-        if (Strings.isNotBlank(flowModel.modifyCallbackUrl)) {
+        if (StringUtils.isNotBlank(flowModel.modifyCallbackUrl)) {
             SendModifyUtils.sendScheduling(flowId, flowModel.modifyCallbackUrl);
         }
     }
@@ -181,7 +180,7 @@ public class ThainFacade {
         } else {
             updateFlow(AddRq.builder().flowModel(flowModel.toBuilder().cron(cron).build()).jobModelList(jobModelList).build());
         }
-        if (Strings.isNotBlank(flowModel.modifyCallbackUrl)) {
+        if (StringUtils.isNotBlank(flowModel.modifyCallbackUrl)) {
             SendModifyUtils.sendScheduling(flowId, flowModel.modifyCallbackUrl);
         }
     }

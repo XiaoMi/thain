@@ -17,7 +17,7 @@ import com.xiaomi.thain.server.service.CheckService;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ import static com.xiaomi.thain.server.handler.ThreadLocalUser.*;
 /**
  * @author liangyongrui@xiaomi.com
  */
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("api/flow")
 public class FlowController {

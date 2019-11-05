@@ -12,7 +12,7 @@ import com.xiaomi.thain.core.process.service.MailService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -27,7 +27,7 @@ import java.util.function.Function;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Slf4j
+@Log4j2
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class JobExecutionDao {
     private final SqlSessionFactory sqlSessionFactory;

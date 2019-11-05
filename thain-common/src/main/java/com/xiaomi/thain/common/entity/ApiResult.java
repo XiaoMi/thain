@@ -48,5 +48,9 @@ public class ApiResult {
     public static ApiResult fail(@Nullable String message) {
         return new ApiResult(400, message == null ? "unknown error" : message, "");
     }
+
+    public static ApiResult forbidden() {
+        return new ApiResult(403, "forbidden", "");
+    }
 }
 

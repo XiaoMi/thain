@@ -10,13 +10,14 @@ import com.google.common.collect.ImmutableMap;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.rq.UpdateJobPropertiesRq;
 import com.xiaomi.thain.common.utils.HttpUtils;
 import com.xiaomi.thain.common.utils.X5Utils;
 import lombok.NonNull;
-import lombok.val;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author liangyongrui
@@ -34,6 +35,7 @@ public class ThainClient {
     private static final String KILL_PATH = "/x5/flow-execution/kill";
     private static final String ALL_INFO_PATH = "/x5/flow-execution/all-info";
     private static final String ALL_EXECUTION_INFO = "/x5/flow-execution/infos";
+    private static final String UPDATE_JOB_PROPERTIES = "/x5/job/update-properties";
 
     public static ThainClient getInstance(@NonNull String appId, @NonNull String appKey, @NonNull String host) {
         return new ThainClient(appId, appKey, host);
@@ -45,6 +47,20 @@ public class ThainClient {
         this.url = host;
     }
 
+
+    /**
+     * 存在的key，就更新
+     * 不存在的key，就新增
+     */
+    public ApiResult updateJobProperties(long flowId,
+                                         @NonNull String jobName,
+                                         @NonNull Map<String, Object> modifyProperties) throws IOException {
+        return buildRequest(url + UPDATE_JOB_PROPERTIES, JSON.toJSONString(UpdateJobPropertiesRq.builder()
+                .flowId(flowId)
+                .jobName(jobName)
+                .modifyProperties(modifyProperties)
+                .build()));
+    }
 
     /**
      * 创建或修改flow
@@ -92,7 +108,6 @@ public class ThainClient {
      * @param page     page
      * @param pageSize pageSize
      * @return {@link ApiResult}
-     * @throws IOException {@link IOException}
      */
     public ApiResult getFlowExecutionList(long flowId, int page, int pageSize) throws IOException {
         return buildRequest(url + ALL_EXECUTION_INFO, JSON.toJSONString(ImmutableMap.of("flowId", flowId, "page", page, "pageSize", pageSize)));

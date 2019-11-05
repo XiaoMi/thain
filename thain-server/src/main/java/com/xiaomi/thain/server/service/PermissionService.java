@@ -28,7 +28,7 @@ public interface PermissionService {
     boolean getFlowAccessible(long flowId, @NonNull String userId, @Nullable Set<String> appIds);
 
     /**
-     * 判断username 是否有权限访问、操作flowId指定的flow
+     * 判断appId 是否有权限访问、操作flowId
      *
      * @param appId  appId
      * @param flowId flow id

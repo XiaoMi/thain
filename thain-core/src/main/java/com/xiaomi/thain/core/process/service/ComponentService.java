@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableMap;
 import com.xiaomi.thain.component.annotation.ThainComponent;
 import com.xiaomi.thain.core.utils.ReflectUtils;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import java.util.Optional;
 /**
  * @author liangyongrui@xiaomi.com
  */
-@Slf4j
+@Log4j2
 public class ComponentService {
 
     @NonNull

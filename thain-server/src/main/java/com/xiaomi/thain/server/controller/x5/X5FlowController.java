@@ -15,7 +15,7 @@ import com.xiaomi.thain.server.controller.FlowController;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author miaoyu
  * @date 19-7-8 下午2:51
  */
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("x5/flow")
 public class X5FlowController {
@@ -52,8 +52,8 @@ public class X5FlowController {
     public ApiResult add(@NonNull @RequestBody String json, @NonNull String appId) {
         try {
             Gson gson = new Gson();
-            val addDto = gson.fromJson(json, AddRq.class);
-            return flowController.add(addDto, appId);
+            val addRq = gson.fromJson(json, AddRq.class);
+            return flowController.add(addRq, appId);
         } catch (Exception e) {
             log.error("add:", e);
             return ApiResult.fail(e.getMessage());

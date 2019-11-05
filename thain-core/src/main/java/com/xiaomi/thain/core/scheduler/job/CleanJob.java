@@ -8,7 +8,7 @@ package com.xiaomi.thain.core.scheduler.job;
 
 import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author liangyongrui
  */
-@Slf4j
+@Log4j2
 public class CleanJob implements Job {
 
     @NonNull

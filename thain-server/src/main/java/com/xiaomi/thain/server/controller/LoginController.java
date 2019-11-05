@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableMap;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainException;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,7 +30,7 @@ import static com.xiaomi.thain.server.handler.ThreadLocalUser.getThainUser;
 /**
  * @author liangyongrui
  */
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("api/login")
 public class LoginController {

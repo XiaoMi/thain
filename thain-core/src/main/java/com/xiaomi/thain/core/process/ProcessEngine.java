@@ -70,13 +70,9 @@ public class ProcessEngine {
 
         LongFunction<ThainThreadPool> flowExecutionJobExecutionThreadPool = flowExecutionId -> ThainThreadPool.getInstance(
                 "thain-job-execution-thread[flowExecutionId:" + flowExecutionId + "]",
-                processEngineConfiguration.flowExecutionJobExecutionThreadPoolCoreSize,
-                processEngineConfiguration.flowExecutionJobExecutionThreadPoolMaximumSize,
-                processEngineConfiguration.flowExecutionJobExecutionThreadPoolKeepAliveSecond);
+                processEngineConfiguration.flowExecutionJobExecutionThreadPoolCoreSize);
         val flowExecutionThreadPool = ThainThreadPool.getInstance("thain-flowExecution-thread",
-                processEngineConfiguration.flowExecutionThreadPoolCoreSize,
-                processEngineConfiguration.flowExecutionThreadPoolMaximumSize,
-                processEngineConfiguration.flowExecutionThreadPoolKeepAliveSecond);
+                processEngineConfiguration.flowExecutionThreadPoolCoreSize);
 
         val sqlSessionFactory = DatabaseHandler.getSqlSessionFactory(processEngineConfiguration.dataSource);
 

@@ -29,8 +29,8 @@ public class ThainThreadPool implements Executor {
                 TimeUnit.SECONDS, new LinkedBlockingDeque<>(), runnable -> new Thread(runnable, threadName));
     }
 
-    public static ThainThreadPool getInstance(@NonNull String threadName, int corePoolSize, int maximumPoolSize, long keepAliveSecond) {
-        return new ThainThreadPool(threadName, corePoolSize, maximumPoolSize, keepAliveSecond);
+    public static ThainThreadPool getInstance(@NonNull String threadName, int corePoolSize) {
+        return new ThainThreadPool(threadName, corePoolSize, corePoolSize, 60);
     }
 
     @Override

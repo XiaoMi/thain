@@ -101,12 +101,16 @@ export async function del<T = {}>(url: string, data?: any): Promise<T | undefine
   return res.data;
 }
 
-export async function get<T = {}>(url: string, data?: any): Promise<T | undefined> {
-  const newData = Object.keys(data)
-    .filter(t => data[t] !== undefined && data[t] !== null)
-    .reduce((p, c) => ({ ...p, [c]: data[c] }), {});
-
-  const res: ApiResult<T> = await request(`${url}?${stringify(newData)}`, {});
+export async function get<T = {}, U = {}>(url: string, data?: U): Promise<T | undefined> {
+  let res: ApiResult<T>;
+  if (data === undefined) {
+    res = await request(url, {});
+  } else {
+    const newData = Object.keys(data)
+      .filter(t => data[t] !== undefined && data[t] !== null)
+      .reduce((p, c) => ({ ...p, [c]: data[c] }), {});
+    res = await request(`${url}?${stringify(newData)}`, {});
+  }
   if (statusHandler(res.status, res.message)) {
     return undefined;
   }

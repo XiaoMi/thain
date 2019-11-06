@@ -43,20 +43,12 @@ public class ProcessEngineConfiguration {
      */
     @NonNull
     public final Integer flowExecutionThreadPoolCoreSize;
-    @NonNull
-    public final Integer flowExecutionThreadPoolMaximumSize;
-    @NonNull
-    public final Long flowExecutionThreadPoolKeepAliveSecond;
 
     /**
      * 每个flowExecution的jobExecution线程池
      */
     @NonNull
     public final Integer flowExecutionJobExecutionThreadPoolCoreSize;
-    @NonNull
-    public final Integer flowExecutionJobExecutionThreadPoolMaximumSize;
-    @NonNull
-    public final Long flowExecutionJobExecutionThreadPoolKeepAliveSecond;
 
     /**
      * 数据保留天数

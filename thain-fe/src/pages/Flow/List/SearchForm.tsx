@@ -7,74 +7,68 @@ import { Button, Col, DatePicker, Form, Icon, Input, Row, Select } from 'antd';
 import React, { ChangeEvent, useState } from 'react';
 import styles from './TableList.less';
 import { connect } from 'dva';
-import { ConnectProps, ConnectState } from '@/models/connect';
-import { FlowListModelState } from './model';
+import { ConnectProps } from '@/models/connect';
+import { FlowSearch } from './model';
 import { FlowLastRunStatusGetEntries } from '@/enums/FlowLastRunStatus';
 import { FlowSchedulingStatusGetEntries } from '@/enums/FlowSchedulingStatus';
 import { RangePickerPresetRange } from 'antd/lib/date-picker/interface';
 import { formatMessage } from 'umi-plugin-react/locale';
-
+import moment from 'moment';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 interface Props extends ConnectProps<{ flowId: number }> {
-  flowList: FlowListModelState;
+  condition: FlowSearch;
+  setCondition: Function;
 }
-const SearchForm: React.FC<Props> = ({
-  flowList: { flowId, lastRunStatus, flowName, scheduleStatus, updateTime, searchApp, createUser },
-  dispatch,
-}) => {
-  const [formFlowId, setFormFlowId] = useState(flowId);
-  const [formLastRunStatus, setFormLastRunStatus] = useState(lastRunStatus);
-  const [formFlowName, setFormFlowName] = useState(flowName);
-  const [formSearchApp, setFormSearchApp] = useState(searchApp);
-  const [formCreateUser, setFormCreateUser] = useState(createUser);
-  const [formScheduleStatus, setFormScheduleStatus] = useState(scheduleStatus);
-  const [formUpdateTime, setFormUpdateTime] = useState(updateTime);
+const SearchForm: React.FC<Props> = ({ condition, setCondition }) => {
   const [showMore, setShowMore] = useState(false);
+  const [model, setModel] = useState<FlowSearch>(condition);
+  const [searchDate, setSearchDate] = useState(initDate());
+  const format = 'YYYY-MM-DD HH:mm';
+  function initDate() {
+    let dateList: undefined | undefined[] | [moment.Moment, moment.Moment];
+    if (model.updateTime && model.updateTime.length === 2) {
+      dateList = [
+        moment(new Date(condition.updateTime[0] * 1000).toLocaleDateString(), format),
+        moment(new Date(condition.updateTime[1] * 1000).toLocaleDateString(), format),
+      ];
+    }
+    return dateList;
+  }
 
   function changeFormFlowId(event: ChangeEvent<HTMLInputElement>) {
-    setFormFlowId(Number(event.target.value) || undefined);
+    setModel({ ...model, flowId: Number(event.target.value) });
   }
 
   function changeFormLastRunStatus(value: number) {
-    setFormLastRunStatus(value);
+    setModel({ ...model, lastRunStatus: value });
   }
 
   function changeFormFlowName(event: ChangeEvent<HTMLInputElement>) {
-    setFormFlowName(String(event.target.value) || undefined);
+    setModel({ ...model, flowName: event.target.value });
   }
 
   function changeFormSearchApp(event: ChangeEvent<HTMLInputElement>) {
-    setFormSearchApp(String(event.target.value) || undefined);
+    setModel({ ...model, searchApp: event.target.value });
   }
 
   function changeFormCreateUser(event: ChangeEvent<HTMLInputElement>) {
-    setFormCreateUser(String(event.target.value) || undefined);
+    setModel({ ...model, createUser: event.target.value });
   }
 
   function changeFormScheduleStatus(value: number) {
-    setFormScheduleStatus(value);
+    setModel({ ...model, scheduleStatus: value });
   }
 
   function changeFormUpdateTime(dates: RangePickerPresetRange) {
-    setFormUpdateTime([dates[0] && dates[0].unix(), dates[1] && dates[1].unix()]);
+    setModel({
+      ...model,
+      updateTime: [dates[0] && dates[0].unix(), dates[1] && dates[1].unix()],
+    });
   }
 
   function searchSubmit() {
-    if (dispatch) {
-      dispatch({
-        type: 'flowList/fetchTable',
-        payload: {
-          flowId: formFlowId || 0,
-          lastRunStatus: formLastRunStatus || 0,
-          flowName: formFlowName || '',
-          scheduleStatus: formScheduleStatus || 0,
-          updateTime: formUpdateTime || [],
-          searchApp: formSearchApp || '',
-          createUser: formCreateUser || '',
-        },
-      });
-    }
+    setCondition({ ...model });
   }
   return (
     <Form layout="inline">
@@ -85,7 +79,7 @@ const SearchForm: React.FC<Props> = ({
               allowClear
               placeholder={formatMessage({ id: 'global.input.placeholder' })}
               type="number"
-              value={formFlowId}
+              value={model.flowId}
               onChange={changeFormFlowId}
             />
           </Form.Item>
@@ -96,8 +90,8 @@ const SearchForm: React.FC<Props> = ({
               placeholder={formatMessage({ id: 'global.select.placeholder' })}
               allowClear
               style={{ width: 150 }}
-              defaultValue={formLastRunStatus}
               onChange={changeFormLastRunStatus}
+              value={model.lastRunStatus}
             >
               {FlowLastRunStatusGetEntries().map(([key, value]) => {
                 return (
@@ -138,7 +132,7 @@ const SearchForm: React.FC<Props> = ({
                 allowClear
                 placeholder={formatMessage({ id: 'global.input.placeholder' })}
                 type="string"
-                value={formFlowName}
+                value={model.flowName}
                 onChange={changeFormFlowName}
               />
             </Form.Item>
@@ -149,7 +143,7 @@ const SearchForm: React.FC<Props> = ({
                 allowClear
                 placeholder={formatMessage({ id: 'global.input.placeholder' })}
                 type="string"
-                value={formSearchApp}
+                value={model.searchApp}
                 onChange={changeFormSearchApp}
               />
             </Form.Item>
@@ -160,7 +154,7 @@ const SearchForm: React.FC<Props> = ({
                 allowClear
                 placeholder={formatMessage({ id: 'global.input.placeholder' })}
                 type="string"
-                value={formCreateUser}
+                value={model.createUser}
                 onChange={changeFormCreateUser}
               />
             </Form.Item>
@@ -171,7 +165,7 @@ const SearchForm: React.FC<Props> = ({
                 placeholder={formatMessage({ id: 'global.select.placeholder' })}
                 allowClear
                 style={{ width: 150 }}
-                defaultValue={formScheduleStatus}
+                defaultValue={model.scheduleStatus}
                 onChange={changeFormScheduleStatus}
               >
                 {FlowSchedulingStatusGetEntries().map(([key, value]) => {
@@ -188,9 +182,18 @@ const SearchForm: React.FC<Props> = ({
             <Form.Item label={formatMessage({ id: 'flow.status.update.time' })}>
               <RangePicker
                 showTime={{ format: 'HH:mm' }}
-                format="YYYY-MM-DD HH:mm"
+                format={format}
                 placeholder={['Start Time', 'End Time']}
                 onOk={changeFormUpdateTime}
+                value={searchDate}
+                onChange={date => {
+                  if (date.length < 2 || date[0] === undefined || date[1] === undefined) {
+                    setModel({ ...model, updateTime: [] });
+                    setSearchDate(undefined);
+                    return;
+                  }
+                  setSearchDate([date[0], date[1]]);
+                }}
               />
             </Form.Item>
           </Col>
@@ -202,6 +205,4 @@ const SearchForm: React.FC<Props> = ({
   );
 };
 
-export default connect(({ flowList }: ConnectState) => ({
-  flowList,
-}))(SearchForm);
+export default connect()(SearchForm);

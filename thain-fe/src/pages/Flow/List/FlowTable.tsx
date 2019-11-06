@@ -27,38 +27,67 @@ import { FlowModel } from '@/commonModels/FlowModel';
 import { PaginationConfig, SorterResult } from 'antd/lib/table';
 import { ClickParam } from 'antd/es/menu';
 import { formatMessage } from 'umi-plugin-react/locale';
+import { FlowSearch } from './model';
 
 interface Props extends ConnectProps<{ flowId: number }> {
   tableResult?: TableResult<FlowModel>;
+  condition: FlowSearch;
   loading: boolean;
+  setCondition: Function;
 }
 
-const FlowTable: React.FC<Props> = ({ tableResult, loading, dispatch }) => {
+const FlowTable: React.FC<Props> = ({
+  tableResult,
+  loading,
+  dispatch,
+  condition,
+  setCondition,
+}) => {
   if (tableResult === undefined) {
     tableResult = new TableResult();
   }
   const { data, count, page, pageSize } = tableResult;
   const [batchId, setBatchId] = useState<number[] | string[]>([]);
+  const sorterIndex: [string, string] = initSorterIndex();
   function tableChange(
     pagination: PaginationConfig,
     filters: Record<any, string[]>,
     sorter: SorterResult<any>,
   ) {
-    const sort = sorter.columnKey && {
-      key: sorter.columnKey,
-      orderDesc: sorter.order === 'descend',
+    const sort = sorter.order && {
+      sortKey: sorter.columnKey,
+      sortOrderDesc: sorter.order === 'descend',
     };
-    if (dispatch) {
-      dispatch({
-        type: 'flowList/fetchTable',
-        payload: {
+    const requestParam = sort
+      ? {
+          ...condition,
           page: pagination.current,
           pageSize: pagination.pageSize,
-          sort,
-        },
-      });
-    }
+          ...sort,
+        }
+      : { ...condition, sortKey: undefined, sortOrderDesc: undefined };
+    setCondition(requestParam);
   }
+  function initSorterIndex(): [string, string] {
+    if (condition.sortKey) {
+      if (condition.sortKey === 'id') {
+        if (condition.sortOrderDesc === true) {
+          return ['descend', ''];
+        } else if (condition.sortOrderDesc === false) {
+          return ['ascend', ''];
+        }
+      }
+      if (condition.sortKey === 'updateTime') {
+        if (condition.sortOrderDesc === true) {
+          return ['', 'descend'];
+        } else if (condition.sortOrderDesc === false) {
+          return ['', 'ascend'];
+        }
+      }
+    }
+    return ['', ''];
+  }
+
   function renderButton(flow: FlowModel) {
     if (flow.schedulingStatus) {
       switch (flow.schedulingStatus) {
@@ -113,7 +142,14 @@ const FlowTable: React.FC<Props> = ({ tableResult, loading, dispatch }) => {
     return <div />;
   }
   const columns = [
-    { title: 'ID', dataIndex: 'id', key: 'id', sorter: true, fixed: 'left' },
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      sorter: true,
+      fixed: 'left',
+      defaultSortOrder: sorterIndex[0],
+    },
     {
       title: formatMessage({ id: 'flow.name' }),
       dataIndex: 'name',
@@ -156,6 +192,7 @@ const FlowTable: React.FC<Props> = ({ tableResult, loading, dispatch }) => {
       dataIndex: 'statusUpdateTime',
       key: 'status_update_time',
       sorter: true,
+      defaultSortOrder: sorterIndex[1],
       render(time: number) {
         return new Date(time).toLocaleString();
       },

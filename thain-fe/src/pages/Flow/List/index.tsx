@@ -90,15 +90,10 @@ const FlowList: React.FC<Props> = ({ dispatch }) => {
   }
 
   useEffect(() => {
-    router.push(`/flow/list/?${stringify(conditon as any)}`);
-    const requestParam = { ...conditon };
-    const entries = Object.entries(requestParam);
-    for (const [key, value] of entries) {
-      if (value === '') {
-        delete requestParam[key];
-      }
-    }
-    console.log(requestParam);
+    router.push(`/flow/list?${stringify(conditon as any)}`);
+    const requestParam = Object.keys(conditon)
+      .filter(t => conditon[t] !== '')
+      .reduce((p, c) => ({ ...p, [c]: conditon[c] }), {});
     if (dispatch) {
       dispatch({
         type: 'flowList/fetchTable',

@@ -105,11 +105,6 @@ export async function get<T = {}>(url: string, data?: any): Promise<T | undefine
   const newData = Object.keys(data)
     .filter(t => data[t] !== undefined && data[t] !== null)
     .reduce((p, c) => ({ ...p, [c]: data[c] }), {});
-  // for (const t in data) {
-  //   if (data[t] !== undefined && data[t] !== null) {
-  //     newData[t] = data[t];
-  //   }
-  // }
 
   const res: ApiResult<T> = await request(`${url}?${stringify(newData)}`, {});
   if (statusHandler(res.status, res.message)) {

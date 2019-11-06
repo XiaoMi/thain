@@ -20,13 +20,13 @@ interface Props extends ConnectProps<{ flowId: number }> {
   condition: FlowSearch;
   setCondition: Function;
 }
-const SearchForm: React.FC<Props> = ({ condition, dispatch, setCondition }) => {
+const SearchForm: React.FC<Props> = ({ condition, setCondition }) => {
   const [showMore, setShowMore] = useState(false);
   const [model, setModel] = useState<FlowSearch>(condition);
   const [searchDate, setSearchDate] = useState(initDate());
   const format = 'YYYY-MM-DD HH:mm';
   function initDate() {
-    let dateList: undefined | undefined[] | [moment.Moment, moment.Moment]; // = [undefined, undefined];
+    let dateList: undefined | undefined[] | [moment.Moment, moment.Moment];
     if (model.updateTime && model.updateTime.length === 2) {
       dateList = [
         moment(new Date(condition.updateTime[0] * 1000).toLocaleDateString(), format),
@@ -68,16 +68,7 @@ const SearchForm: React.FC<Props> = ({ condition, dispatch, setCondition }) => {
   }
 
   function searchSubmit() {
-    if (dispatch) {
-      // router.push(`/flow/list/?${stringify(model as any)}`);
-      setCondition({ ...model });
-      // dispatch({
-      //   type: 'flowList/fetchTable',
-      //   payload: {
-      //     ...model,
-      //   },
-      // });
-    }
+    setCondition({ ...model });
   }
   return (
     <Form layout="inline">

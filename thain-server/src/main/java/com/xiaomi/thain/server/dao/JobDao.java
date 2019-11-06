@@ -21,7 +21,7 @@ public class JobDao {
         this.jobMapper = jobMapper;
     }
 
-    public Optional<JobDr> getJobByFlowIdAndName(@Param("flowId") long flowId, @Param("name") @NonNull String name) {
+    public Optional<JobDr> getJobByFlowIdAndName(long flowId, @NonNull String name) {
         return jobMapper.getJobByFlowIdAndName(flowId, name);
     }
 

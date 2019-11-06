@@ -69,6 +69,7 @@ const FlowListModel: FlowListModelType = {
 
   effects: {
     *fetchTable({ payload }, { call, put, select }) {
+      // console.log(payload)
       const tableResult: TableResult<FlowModel> | undefined = yield call(getTableList, payload);
       yield put({
         type: 'updateState',

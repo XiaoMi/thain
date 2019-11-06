@@ -16,7 +16,7 @@ import {
   Tooltip,
 } from 'antd';
 import ButtonGroup from 'antd/lib/button/button-group';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { router } from 'umi';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { connect } from 'dva';
@@ -28,7 +28,6 @@ import { PaginationConfig, SorterResult } from 'antd/lib/table';
 import { ClickParam } from 'antd/es/menu';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { FlowSearch } from './model';
-import { splieceParam } from './SearchForm';
 
 interface Props extends ConnectProps<{ flowId: number }> {
   tableResult?: TableResult<FlowModel>;
@@ -50,8 +49,6 @@ const FlowTable: React.FC<Props> = ({
   const { data, count, page, pageSize } = tableResult;
   const [batchId, setBatchId] = useState<number[] | string[]>([]);
   const sorterIndex: [string, string] = initSorterIndex();
-  const [state, setState] = useState(false);
-
   function tableChange(
     pagination: PaginationConfig,
     filters: Record<any, string[]>,
@@ -67,10 +64,8 @@ const FlowTable: React.FC<Props> = ({
           page: pagination.current,
           pageSize: pagination.pageSize,
           ...sort,
-          flowId: undefined,
         }
       : { ...condition, sortKey: undefined, sortOrderDesc: undefined };
-    setState(prev => (prev === true ? false : true));
     setCondition(requestParam);
   }
   function initSorterIndex(): [string, string] {
@@ -92,25 +87,6 @@ const FlowTable: React.FC<Props> = ({
     }
     return ['', ''];
   }
-
-  useEffect(() => {
-    if (dispatch) {
-      router.push(`/flow/list/?${splieceParam(condition)}`);
-      dispatch({
-        type: 'flowList/fetchTable',
-        payload: {
-          ...condition,
-        },
-      });
-    }
-    return () => {
-      if (dispatch) {
-        dispatch({
-          type: 'flowList/unmount',
-        });
-      }
-    };
-  }, [state]);
 
   function renderButton(flow: FlowModel) {
     if (flow.schedulingStatus) {

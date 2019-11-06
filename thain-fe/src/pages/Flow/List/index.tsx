@@ -5,111 +5,116 @@
  */
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Card } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FlowTable from './FlowTable';
 import SearchForm from './SearchForm';
 import { connect } from 'dva';
 import { ConnectProps } from '@/models/connect';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { FlowSearch } from './model';
-
+import { parse } from 'querystring';
+import { router } from 'umi';
+import { stringify } from 'querystring';
 interface Props extends ConnectProps<{ flowId: number }> {}
-const FlowList: React.FC<Props> = () => {
+const FlowList: React.FC<Props> = ({ dispatch }) => {
   const [conditon, setCondition] = useState<FlowSearch>(initParam());
   function initParam() {
-    const paramObject = new FlowSearch();
-    const keys = [
-      'flowId',
-      'lastRunStatus',
-      'flowName',
-      'searchApp',
-      'createUser',
-      'scheduleStatus',
-      'updateTime',
-      'page',
-      'pageSize',
-      'sortKey',
-      'sortOrderDesc',
-    ];
-    const url = window.location.search.substring(1);
-    const params = url.split('&');
-    for (const key of keys) {
-      for (const param of params) {
-        const entry = param.split('=');
-        if (entry.length === 2 && key === entry[0]) {
-          if (
-            key === 'flowId' ||
-            key === 'lastRunStatus' ||
-            key === 'scheduleStatus' ||
-            key === 'page' ||
-            key === 'pageSize' ||
-            key === 'sortOrderDesc'
-          ) {
-            const value = parseInt(entry[1], 10);
-            if (!isNaN(value)) {
-              switch (key) {
-                case 'flowId':
-                  paramObject.flowId = value;
-                  break;
-                case 'lastRunStatus':
-                  paramObject.lastRunStatus = value;
-                  break;
-                case 'scheduleStatus':
-                  paramObject.scheduleStatus = value;
-                  break;
-                case 'page':
-                  paramObject.page = value;
-                  break;
-                case 'pageSize':
-                  paramObject.pageSize = value;
-                  break;
-                case 'sortOrderDesc':
-                  value === 1
-                    ? (paramObject.sortOrderDesc = true)
-                    : (paramObject.sortOrderDesc = false);
-                  break;
-                default:
-              }
-            }
-          } else if (
-            key === 'flowName' ||
-            key === 'searchApp' ||
-            key === 'createUser' ||
-            key === 'sortKey'
-          ) {
-            switch (key) {
-              case 'flowName':
-                paramObject.flowName = entry[1];
-                break;
-              case 'searchApp':
-                paramObject.searchApp = entry[1];
-                break;
-              case 'createUser':
-                paramObject.createUser = entry[1];
-                break;
-              case 'sortKey':
-                if (entry[0] === 'id' || entry[0] === 'updateTime') {
-                  paramObject.sortKey = entry[0];
-                }
-                break;
-              default:
-            }
-          } else if (key === 'updateTime') {
-            const arrays = entry[1].substring(1, entry[1].length - 1);
-            const date = arrays.split(',');
-            if (
-              date.length === 2 &&
-              !isNaN(parseInt(date[0], 10)) &&
-              !isNaN(parseInt(date[1], 10))
-            ) {
-              paramObject.updateTime = [...[parseInt(date[0], 10), parseInt(date[1], 10)]];
-            }
+    const createObject = new FlowSearch();
+    const paramObject = parse(window.location.search.substring(1));
+    const objectKeys = Object.entries(paramObject);
+    for (const [index, value] of objectKeys) {
+      if (value === '') {
+        delete paramObject[index];
+        continue;
+      }
+      if (
+        index === 'flowId' ||
+        index === 'lastRunStatus' ||
+        index === 'scheduleStatus' ||
+        index === 'page' ||
+        index === 'pageSize'
+      ) {
+        const parseValue = parseInt(value as string, 10);
+        if (!isNaN(parseValue)) {
+          switch (index) {
+            case 'flowId':
+              createObject.flowId = parseValue;
+              break;
+            case 'lastRunStatus':
+              createObject.lastRunStatus = parseValue;
+              break;
+            case 'scheduleStatus':
+              createObject.scheduleStatus = parseValue;
+              break;
+            case 'page':
+              createObject.page = parseValue;
+              break;
+            case 'pageSize':
+              createObject.pageSize = parseValue;
+              break;
+            default:
+              break;
           }
+        }
+      } else if (index === 'sortOrderDesc' && (value === 'true' || value === 'false')) {
+        if (value === 'true') {
+          createObject.sortOrderDesc = true;
+        } else if (value === 'false') {
+          createObject.sortOrderDesc = false;
+        }
+      } else {
+        switch (index) {
+          case 'flowName':
+            createObject.flowName = value as string;
+            break;
+          case 'searchApp':
+            createObject.searchApp = value as string;
+            break;
+          case 'createUser':
+            createObject.createUser = value as string;
+            break;
+          case 'updateTime':
+            if (!(value[0] === '' || value[1] === '')) {
+              createObject.updateTime = [parseInt(value[0], 10), parseInt(value[1], 10)];
+            }
+            break;
+          case 'sortKey':
+            createObject.sortKey = value as string;
+            break;
+          default:
+            break;
         }
       }
     }
-    return paramObject;
+    return createObject;
   }
+
+  useEffect(() => {
+    router.push(`/flow/list/?${stringify(conditon as any)}`);
+    const requestParam = { ...conditon };
+    const entries = Object.entries(requestParam);
+    for (const [key, value] of entries) {
+      if (value === '') {
+        delete requestParam[key];
+      }
+    }
+    console.log(requestParam);
+    if (dispatch) {
+      dispatch({
+        type: 'flowList/fetchTable',
+        payload: {
+          ...requestParam,
+        },
+      });
+    }
+    return () => {
+      if (dispatch) {
+        dispatch({
+          type: 'flowList/unmount',
+        });
+      }
+    };
+  }, [conditon]);
 
   return (
     <PageHeaderWrapper title={formatMessage({ id: 'flow.management' })}>

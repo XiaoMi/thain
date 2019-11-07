@@ -7,6 +7,7 @@ package com.xiaomi.thain.core.constant;
 
 /**
  * flowExecution触发类型
+ * @author liangyongrui
  */
 public enum FlowExecutionTriggerType {
     /**

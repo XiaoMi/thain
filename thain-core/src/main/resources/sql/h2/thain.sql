@@ -27,18 +27,17 @@ create table thain_flow
     deleted                  int(1)       default 0                     not null comment '标记是否删除'
 );
 
-
-
 create table thain_flow_execution
 (
     id           int auto_increment primary key,
     flow_id      int          default 0                     not null comment '所属flow id',
-    status       int          default 1                     not null comment '流程执行状态，1 执行中，2 执行结束，3执行异常,4 手动kill',
+    status       int          default 0                     not null comment '流程执行状态，0 排队中，1 执行中，2 执行结束，3执行异常,4 手动kill',
     host_info    varchar(128) default ''                    not null comment '机器信息',
     trigger_type int          default 1                     not null comment '触发类型 1手动 2自动',
     logs         mediumtext                                 null comment '日志',
     create_time  timestamp    default '2019-01-01 00:00:00' not null comment '创建时间',
-    update_time  timestamp    default '2019-01-01 00:00:00' not null comment '更新时间'
+    update_time  timestamp    default '2019-01-01 00:00:00' not null comment '更新时间',
+    heartbeat    timestamp    default '2019-01-01 00:00:00' not null comment '最近一次心跳时间'
 );
 
 create table thain_job
@@ -93,3 +92,19 @@ create table thain_x5_config
         unique (app_id)
 );
 
+# thain 运行状态表
+create table thain_runtime_status
+(
+    id             int auto_increment primary key,
+    runtime_key    varchar(50) default '' not null,
+    runtime_status int         default 0  not null,
+    comment        text                   null comment 'runtime_key 的说明',
+    constraint thain_runtime_status_runtime_key_uindex
+        unique (runtime_key)
+);
+
+insert into thain_runtime_status (runtime_key, runtime_status, comment)
+    value (
+           'check_dead_flow', 0,
+           'Mark if there is a task that is checking the dead flow. If it is 0, there is no task to check, and if it is 1, there is a task to check.'
+    );

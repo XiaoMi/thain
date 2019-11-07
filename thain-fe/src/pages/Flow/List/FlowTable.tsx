@@ -335,6 +335,10 @@ const FlowTable: React.FC<Props> = ({
         <Icon type="delete" theme="twoTone" />
         {formatMessage({ id: 'flow.delete' })}
       </Menu.Item>
+      <Menu.Item key="5">
+        <Icon type="delete" theme="twoTone" />
+        {formatMessage({ id: 'flow.kill.schedule' })}
+      </Menu.Item>
     </Menu>
   );
   const rowSelection = {

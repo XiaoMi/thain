@@ -24,6 +24,8 @@ public class ThainThreadPool implements Executor {
     @NonNull
     private final ThreadPoolExecutor threadPoolExecutor;
 
+    public static final ThainThreadPool DEFAULT_THREAD_POOL = getInstance("default", 100);
+
     private ThainThreadPool(@NonNull String threadName, int corePoolSize, int maximumPoolSize, long keepAliveSecond) {
         threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveSecond,
                 TimeUnit.SECONDS, new LinkedBlockingDeque<>(), runnable -> new Thread(runnable, threadName));

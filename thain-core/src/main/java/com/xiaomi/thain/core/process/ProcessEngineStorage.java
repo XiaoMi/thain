@@ -13,6 +13,7 @@ import com.xiaomi.thain.core.dao.FlowDao;
 import com.xiaomi.thain.core.dao.FlowExecutionDao;
 import com.xiaomi.thain.core.dao.JobDao;
 import com.xiaomi.thain.core.dao.JobExecutionDao;
+import com.xiaomi.thain.core.process.runtime.heartbeat.FlowExecutionHeartbeat;
 import com.xiaomi.thain.core.process.runtime.notice.MailNotice;
 import com.xiaomi.thain.core.process.service.ComponentService;
 import com.xiaomi.thain.core.process.service.MailService;
@@ -24,6 +25,7 @@ import lombok.ToString;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.LongFunction;
 
 /**
@@ -54,7 +56,9 @@ public final class ProcessEngineStorage {
     @NonNull
     private final LongFunction<ThainThreadPool> flowExecutionJobExecutionThreadPool;
     @NonNull
-    public final ArrayBlockingQueue<AddFlowExecutionDp> flowExecutionWaitingQueue;
+    public final LinkedBlockingQueue<AddFlowExecutionDp> flowExecutionWaitingQueue;
+    @NonNull
+    public final FlowExecutionHeartbeat flowExecutionHeartbeat;
 
     public MailNotice getMailNotice(@NonNull String noticeEmail) {
         return MailNotice.getInstance(mailService, noticeEmail);

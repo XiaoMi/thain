@@ -124,4 +124,11 @@ public class FlowExecutionDao {
     public List<Long> getAllFlowExecutionIds() {
         return execute(FlowExecutionMapper::getAllFlowExecutionIds).orElseGet(Collections::emptyList);
     }
+
+    public void setFlowExecutionHeartbeat(@NonNull List<Long> flowExecutionIds) {
+        if (flowExecutionIds.isEmpty()) {
+            return;
+        }
+        execute(t -> t.setFlowExecutionHeartbeat(flowExecutionIds));
+    }
 }

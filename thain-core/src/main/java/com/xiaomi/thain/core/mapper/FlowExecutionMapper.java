@@ -60,4 +60,9 @@ public interface FlowExecutionMapper {
     List<Long> getAllFlowExecutionIds();
 
     int addFlowExecution(@NonNull AddFlowExecutionDp addFlowExecutionDp);
+
+    /**
+     * 设置flowExecution的心跳为当前时间
+     */
+    int setFlowExecutionHeartbeat(@NonNull List<Long> flowExecutionIds);
 }

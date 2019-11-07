@@ -63,6 +63,7 @@ public class FlowJob implements Job {
                 throw new ThainCreateFlowExecutionException();
             }
             processEngine.processEngineStorage.flowExecutionWaitingQueue.put(addFlowExecutionDp);
+
 //
 //            log.info("auto execution: " + flowId);
 //            processEngine.schedulerStartProcess(flowId);

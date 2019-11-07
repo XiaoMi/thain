@@ -37,6 +37,14 @@
         set status = 4
         where id = #{flowExecutionId}
     </update>
+    <update id="setFlowExecutionHeartbeat">
+        update thain_flow_execution set heartbeat = now()
+        where id in (
+        <foreach collection="collection" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
     <delete id="clearFlowExecution">
         delete
         from thain_flow_execution

@@ -5,19 +5,18 @@
  */
 package com.xiaomi.thain.core.process;
 
-import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.NOT_SET;
-import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.SCHEDULING;
-
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.core.config.DatabaseHandler;
 import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.dao.*;
 import com.xiaomi.thain.core.process.runtime.executor.FlowExecutor;
+import com.xiaomi.thain.core.process.runtime.heartbeat.FlowExecutionHeartbeat;
 import com.xiaomi.thain.core.process.service.ComponentService;
 import com.xiaomi.thain.core.process.service.MailService;
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool;
@@ -33,16 +32,17 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.LongFunction;
 
 import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.NOT_SET;
 import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.SCHEDULING;
+import static com.xiaomi.thain.core.thread.pool.ThainThreadPool.DEFAULT_THREAD_POOL;
 
 /**
  * Date 19-5-17 下午2:09
@@ -100,8 +100,12 @@ public class ProcessEngine {
         val flowExecutionDao = FlowExecutionDao.getInstance(sqlSessionFactory, mailService, processEngineConfiguration.dataReserveDays);
         val jobDao = JobDao.getInstance(sqlSessionFactory, mailService);
         val jobExecutionDao = JobExecutionDao.getInstance(sqlSessionFactory, mailService);
-
+        val heartbeatDao = HeartbeatDao.getInstance(sqlSessionFactory, mailService);
         val componentService = ComponentService.getInstance();
+
+        val flowExecutionWaitingQueue = new LinkedBlockingQueue<AddFlowExecutionDp>();
+        val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService, heartbeatDao);
+        flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
 
         processEngineStorage = ProcessEngineStorage.builder()
                 .flowExecutionJobExecutionThreadPool(flowExecutionJobExecutionThreadPool)
@@ -113,6 +117,8 @@ public class ProcessEngine {
                 .jobExecutionDao(jobExecutionDao)
                 .mailService(mailService)
                 .componentService(componentService)
+                .flowExecutionWaitingQueue(flowExecutionWaitingQueue)
+                .flowExecutionHeartbeat(flowExecutionHeartbeat)
                 .build();
     }
 

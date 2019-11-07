@@ -6,6 +6,9 @@
 package com.xiaomi.thain.core.process;
 
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
+import com.xiaomi.thain.common.model.FlowExecutionModel;
+import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.core.dao.FlowDao;
 import com.xiaomi.thain.core.dao.FlowExecutionDao;
 import com.xiaomi.thain.core.dao.JobDao;
@@ -19,6 +22,7 @@ import lombok.NonNull;
 import lombok.ToString;
 
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.LongFunction;
 
@@ -49,6 +53,8 @@ public final class ProcessEngineStorage {
     public final ComponentService componentService;
     @NonNull
     private final LongFunction<ThainThreadPool> flowExecutionJobExecutionThreadPool;
+    @NonNull
+    public final ArrayBlockingQueue<AddFlowExecutionDp> flowExecutionWaitingQueue;
 
     public MailNotice getMailNotice(@NonNull String noticeEmail) {
         return MailNotice.getInstance(mailService, noticeEmail);

@@ -6,6 +6,7 @@
 package com.xiaomi.thain.core.dao;
 
 import com.xiaomi.thain.common.model.FlowExecutionModel;
+import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.core.mapper.FlowExecutionMapper;
 import com.xiaomi.thain.core.process.service.MailService;
 import lombok.AccessLevel;
@@ -61,9 +62,17 @@ public class FlowExecutionDao {
     /**
      * 数据库插入flowExecution
      */
-    public void addFlowExecution(@NonNull FlowExecutionModel flowExecutionModel) {
-        execute(t -> t.addFlowExecution(flowExecutionModel));
+    public void addFlowExecution_(@NonNull FlowExecutionModel flowExecutionModel) {
+        execute(t -> t.addFlowExecution_(flowExecutionModel));
     }
+
+    /**
+     * 数据库插入flowExecution
+     */
+    public void addFlowExecution(@NonNull AddFlowExecutionDp addFlowExecutionDp) {
+        execute(t -> t.addFlowExecution(addFlowExecutionDp));
+    }
+
 
     /**
      * 更新flowExecution日志

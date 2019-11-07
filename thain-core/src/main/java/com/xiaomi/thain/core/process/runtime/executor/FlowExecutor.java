@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.constant.FlowLastRunStatus;
 import com.xiaomi.thain.common.constant.JobExecutionStatus;
-import com.xiaomi.thain.common.exception.CreateFlowExecutionException;
+import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
@@ -107,7 +107,7 @@ public class FlowExecutor {
                     .triggerType(triggerTypeCode).build();
 
             //创建任务失败
-            processEngineStorage.flowExecutionDao.addFlowExecution(flowExecutionModel);
+            processEngineStorage.flowExecutionDao.addFlowExecution_(flowExecutionModel);
             if (flowExecutionModel.id == 0) {
                 throw new ThainException("Failed to insert into database");
             }
@@ -117,9 +117,9 @@ public class FlowExecutor {
                 processEngineStorage.mailService.sendSeriousError(
                         "FlowExecution create failed, flowId:" + flowId + "detail message：" + ExceptionUtils.getStackTrace(e));
             } catch (Exception ex) {
-                throw new CreateFlowExecutionException(e);
+                throw new ThainCreateFlowExecutionException(e);
             }
-            throw new CreateFlowExecutionException(e);
+            throw new ThainCreateFlowExecutionException(e);
         }
     }
 
@@ -136,7 +136,7 @@ public class FlowExecutor {
         this.jobFutureQueue = new ConcurrentLinkedQueue<>();
         try {
             this.flowExecutionId = newFlowExecutor(flowModel.id, flowExecutionTriggerType);
-            val jobModelList = processEngineStorage.jobDao.getJobs(flowModel.id).orElseThrow(CreateFlowExecutionException::new);
+            val jobModelList = processEngineStorage.jobDao.getJobs(flowModel.id).orElseThrow(ThainCreateFlowExecutionException::new);
             this.flowExecutionService = FlowExecutionService.getInstance(flowExecutionId, flowModel, processEngineStorage);
             this.notExecutedJobsPool = ImmutableList.copyOf(jobModelList);
             this.jobConditionChecker = JobConditionChecker.getInstance(flowExecutionId);
@@ -154,7 +154,7 @@ public class FlowExecutor {
             }));
         } catch (Exception e) {
             log.error("", e);
-            throw new CreateFlowExecutionException(flowModel.id, e.getMessage());
+            throw new ThainCreateFlowExecutionException(flowModel.id, e.getMessage());
         }
     }
 

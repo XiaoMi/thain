@@ -8,10 +8,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaomi.thain.core.mapper.FlowExecutionMapper">
 
-    <insert id="addFlowExecution" parameterType="com.xiaomi.thain.common.model.FlowExecutionModel"
+    <insert id="addFlowExecution_" parameterType="com.xiaomi.thain.common.model.FlowExecutionModel"
             useGeneratedKeys="true" keyProperty="id">
         insert into thain_flow_execution (flow_id, `status`, host_info, trigger_type, `logs`, create_time, update_time)
         values (#{flowId}, #{status}, #{hostInfo}, #{triggerType}, #{logs}, now(), now())
+    </insert>
+
+    <insert id="addFlowExecution" parameterType="com.xiaomi.thain.common.model.dp.AddFlowExecutionDp"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into thain_flow_execution (flow_id, status, host_info, trigger_type,
+                                          create_time, update_time, heartbeat)
+        values (#{flowId}, #{status}, #{hostInfo}, #{triggerType},
+                now(), now(), now())
     </insert>
 
     <update id="updateLogs">

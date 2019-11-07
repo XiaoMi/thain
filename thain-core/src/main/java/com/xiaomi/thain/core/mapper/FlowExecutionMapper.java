@@ -6,6 +6,7 @@
 package com.xiaomi.thain.core.mapper;
 
 import com.xiaomi.thain.common.model.FlowExecutionModel;
+import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,7 +22,7 @@ public interface FlowExecutionMapper {
 
     int updateLogs(@Param("flowExecutionId") long flowExecutionId, @NonNull @Param("content") String content);
 
-    int addFlowExecution(@NonNull FlowExecutionModel flowExecutionModel);
+    int addFlowExecution_(@NonNull FlowExecutionModel flowExecutionModel);
 
     int updateFlowExecutionStatus(@Param("flowExecutionId") long flowExecutionId, @Param("status") int status);
 
@@ -57,4 +58,6 @@ public interface FlowExecutionMapper {
      * 获取全部的flow execution ids
      */
     List<Long> getAllFlowExecutionIds();
+
+    int addFlowExecution(@NonNull AddFlowExecutionDp addFlowExecutionDp);
 }

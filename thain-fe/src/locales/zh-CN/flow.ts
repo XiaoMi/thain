@@ -53,4 +53,5 @@ export default {
   'flow.failure.alarm.mail': '失败报警邮箱',
   'flow.autokill.settings': 'SLA设置',
   'flow.duration': '持续时间',
+  'flow.kill.schedule': '杀死调度',
 };

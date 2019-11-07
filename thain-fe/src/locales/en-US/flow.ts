@@ -53,4 +53,5 @@ export default {
   'flow.failure.alarm.mail': 'Failure alarm mail',
   'flow.autokill.settings': 'SLA settings',
   'flow.duration': 'Duration',
+  'flow.kill.schedule': 'Kill scheduling',
 };

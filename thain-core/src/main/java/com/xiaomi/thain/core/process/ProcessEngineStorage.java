@@ -56,7 +56,7 @@ public final class ProcessEngineStorage {
     @NonNull
     private final LongFunction<ThainThreadPool> flowExecutionJobExecutionThreadPool;
     @NonNull
-    public final LinkedBlockingQueue<AddFlowExecutionDp> flowExecutionWaitingQueue;
+    public final LinkedBlockingQueue<FlowExecutionDr> flowExecutionWaitingQueue;
     @NonNull
     public final FlowExecutionHeartbeat flowExecutionHeartbeat;
 

@@ -8,17 +8,15 @@ package com.xiaomi.thain.core.process.runtime.executor;
 
 import com.google.common.collect.ImmutableList;
 import com.xiaomi.thain.common.constant.FlowExecutionStatus;
-import com.xiaomi.thain.common.constant.FlowLastRunStatus;
 import com.xiaomi.thain.common.constant.JobExecutionStatus;
 import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
-import com.xiaomi.thain.common.model.FlowExecutionModel;
-import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
+import com.xiaomi.thain.common.model.dr.FlowDr;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import com.xiaomi.thain.core.process.runtime.checker.JobConditionChecker;
@@ -31,7 +29,6 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Queue;
@@ -51,7 +48,7 @@ public class FlowExecutor {
 
     private final long flowExecutionId;
     @NonNull
-    private final FlowModel flowModel;
+    private final FlowDr flowDr;
     @NonNull
     private final ProcessEngineStorage processEngineStorage;
     @NonNull
@@ -84,64 +81,24 @@ public class FlowExecutor {
     private final Queue<CompletableFuture<Void>> jobFutureQueue;
 
     /**
-     * 是否killed
-     */
-    private long newFlowExecutor(long flowId, @NonNull FlowExecutionTriggerType flowExecutionTriggerType) throws ThainException {
-        try {
-            int triggerTypeCode;
-            switch (flowExecutionTriggerType) {
-                case MANUAL:
-                    triggerTypeCode = 1;
-                    break;
-                case AUTOMATIC:
-                    triggerTypeCode = 2;
-                    break;
-                default:
-                    throw new ThainRuntimeException("The trigger type is unknown");
-            }
-
-            val flowExecutionModel = FlowExecutionModel.builder()
-                    .flowId(flowId)
-                    .hostInfo(InetAddress.getLocalHost().toString())
-                    .status(FlowExecutionStatus.RUNNING.code)
-                    .triggerType(triggerTypeCode).build();
-
-            //创建任务失败
-            processEngineStorage.flowExecutionDao.addFlowExecution_(flowExecutionModel);
-            if (flowExecutionModel.id == 0) {
-                throw new ThainException("Failed to insert into database");
-            }
-            return flowExecutionModel.id;
-        } catch (Exception e) {
-            try {
-                processEngineStorage.mailService.sendSeriousError(
-                        "FlowExecution create failed, flowId:" + flowId + "detail message：" + ExceptionUtils.getStackTrace(e));
-            } catch (Exception ex) {
-                throw new ThainCreateFlowExecutionException(e);
-            }
-            throw new ThainCreateFlowExecutionException(e);
-        }
-    }
-
-    /**
      * 获取FlowExecutionExecutor实例
      * effect：为了获取flowExecutionId 会在数据库中创建一个flowExecution
      */
-    private FlowExecutor(@NonNull FlowModel flowModel, @NonNull ProcessEngineStorage processEngineStorage,
-                         @NonNull FlowExecutionTriggerType flowExecutionTriggerType)
+    private FlowExecutor(@NonNull FlowExecutionDr flowExecutionDr, @NonNull ProcessEngineStorage processEngineStorage)
             throws ThainException {
         this.processEngineStorage = processEngineStorage;
-        this.flowModel = flowModel;
+        this.flowDr = processEngineStorage.flowDao.getFlow(flowExecutionDr.flowId)
+                .orElseThrow(ThainFlowRunningException::new);
         this.jobFutureMap = new ConcurrentHashMap<>();
         this.jobFutureQueue = new ConcurrentLinkedQueue<>();
         try {
-            this.flowExecutionId = newFlowExecutor(flowModel.id, flowExecutionTriggerType);
-            val jobModelList = processEngineStorage.jobDao.getJobs(flowModel.id).orElseThrow(ThainCreateFlowExecutionException::new);
-            this.flowExecutionService = FlowExecutionService.getInstance(flowExecutionId, flowModel, processEngineStorage);
+            this.flowExecutionId = flowExecutionDr.id;
+            val jobModelList = processEngineStorage.jobDao.getJobs(flowDr.id).orElseThrow(ThainFlowRunningException::new);
+            this.flowExecutionService = FlowExecutionService.getInstance(flowExecutionId, flowDr, processEngineStorage);
             this.notExecutedJobsPool = ImmutableList.copyOf(jobModelList);
             this.jobConditionChecker = JobConditionChecker.getInstance(flowExecutionId);
             this.flowExecutionStorage = FlowExecutionStorage.getInstance(flowExecutionId);
-            this.httpNotice = HttpNotice.getInstance(flowModel.callbackUrl, flowModel.id, flowExecutionId);
+            this.httpNotice = HttpNotice.getInstance(flowDr.callbackUrl, flowDr.id, flowExecutionId);
             this.flowExecutionJobThreadPool = processEngineStorage.flowExecutionJobThreadPool(flowExecutionId);
             this.jobExecutionModelMap = jobModelList.stream().collect(toMap(t -> t.id, t -> {
                 val jobExecutionModel = JobExecutionModel.builder()
@@ -154,20 +111,17 @@ public class FlowExecutor {
             }));
         } catch (Exception e) {
             log.error("", e);
-            throw new ThainCreateFlowExecutionException(flowModel.id, e.getMessage());
+            throw new ThainCreateFlowExecutionException(flowDr.id, e.getMessage());
         }
     }
 
     /**
      * 开始执行流程，产生一个flowExecution，成功后异步执行start方法
      */
-    public static void startProcess(long flowId,
-                                    @NonNull ProcessEngineStorage processEngineStorage,
-                                    @NonNull FlowExecutionTriggerType flowExecutionTriggerType) throws ThainException {
-        val flowModel = processEngineStorage.flowDao.getFlow(flowId).orElseThrow(() -> new ThainException("flow does not exist"));
-        val flowExecutionService = new FlowExecutor(flowModel, processEngineStorage, flowExecutionTriggerType);
+    public static void startProcess(@NonNull FlowExecutionDr flowExecutionDr,
+                                    @NonNull ProcessEngineStorage processEngineStorage) throws ThainException {
+        val flowExecutionService = new FlowExecutor(flowExecutionDr, processEngineStorage);
         flowExecutionService.start();
-//        CompletableFuture.runAsync(flowExecutionService::start, processEngineStorage.flowExecutionThreadPool);
     }
 
     /**
@@ -177,11 +131,11 @@ public class FlowExecutor {
         try {
             flowExecutionService.startFlowExecution();
             httpNotice.sendStart();
-            if (flowModel.slaDuration > 0) {
+            if (flowDr.slaDuration > 0) {
                 ProcessEngine.getInstance(processEngineStorage.processEngineId)
                         .thainFacade
                         .schedulerEngine
-                        .addSla(flowExecutionId, flowModel);
+                        .addSla(flowExecutionId, flowDr);
             }
             runExecutableJobs();
             while (!jobFutureQueue.isEmpty()) {

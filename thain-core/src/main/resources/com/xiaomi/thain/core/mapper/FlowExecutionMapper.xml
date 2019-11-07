@@ -59,7 +59,7 @@
         </foreach>
         )
     </delete>
-    <select id="getFlowExecution" resultType="com.xiaomi.thain.common.model.FlowExecutionModel">
+    <select id="getFlowExecution" resultType="com.xiaomi.thain.common.model.dr.FlowExecutionDr">
         select id,
                flow_id,
                status,
@@ -67,7 +67,8 @@
                trigger_type,
                logs,
                create_time,
-               update_time
+               update_time,
+               heartbeat
         from thain_flow_execution
         where id = #{flowExecutionId}
     </select>

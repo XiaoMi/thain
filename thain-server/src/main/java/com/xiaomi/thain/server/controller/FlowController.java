@@ -106,7 +106,7 @@ public class FlowController {
             val flowDefinition = gson.fromJson(json, AddRq.class);
             return add(flowDefinition
                     .toBuilder()
-                    .flowModel(flowDefinition.flowModel
+                    .addFlowRq(flowDefinition.addFlowRq
                             .toBuilder()
                             .createUser(getUsername())
                             .build())
@@ -118,16 +118,16 @@ public class FlowController {
     }
 
     public ApiResult add(@NonNull AddRq addRq, @NonNull String appId) {
-        val flowModel = addRq.flowModel;
+        val addFlowRq = addRq.addFlowRq;
         val jobModelList = addRq.jobModelList;
         try {
-            checkService.checkFlowModel(flowModel);
+            checkService.checkFlowModel(addFlowRq);
             checkService.checkJobModelList(jobModelList);
         } catch (Exception e) {
             return ApiResult.fail(e.getMessage());
         }
         try {
-            return ApiResult.success(flowService.add(flowModel, jobModelList, appId));
+            return ApiResult.success(flowService.add(addFlowRq, jobModelList, appId));
         } catch (Exception e) {
             log.error("add", e);
             return ApiResult.fail(e.getMessage());

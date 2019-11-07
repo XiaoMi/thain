@@ -3,8 +3,7 @@ package com.xiaomi.thain.core.process.runtime;
 import com.xiaomi.thain.common.constant.FlowLastRunStatus;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
-import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
-import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.core.dao.FlowDao;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import com.xiaomi.thain.core.process.runtime.executor.FlowExecutor;
@@ -22,7 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Log4j2
 public class FlowExecutionLoader {
     @NonNull
-    private final LinkedBlockingQueue<AddFlowExecutionDp> flowExecutionWaitingQueue;
+    private final LinkedBlockingQueue<FlowExecutionDr> flowExecutionWaitingQueue;
     @NonNull
     private final ThainThreadPool flowExecutionThreadPool;
     @NonNull
@@ -48,14 +47,7 @@ public class FlowExecutionLoader {
                 //todo 执行队列是否满
                 val addFlowExecutionDp = flowExecutionWaitingQueue.take();
                 checkFLowRunStatus(addFlowExecutionDp.flowId);
-                flowExecutionThreadPool.execute(() -> {
-                    //todo 提取执行函数
-                    try {
-                        FlowExecutor.startProcess(addFlowExecutionDp.flowId, processEngineStorage, FlowExecutionTriggerType.AUTOMATIC);
-                    } catch (ThainException e) {
-                        e.printStackTrace();
-                    }
-                });
+                flowExecutionThreadPool.execute(() -> runFlowExecution(addFlowExecutionDp));
             } catch (ThainRepeatExecutionException e) {
                 log.warn(e.getMessage());
             } catch (Exception e) {
@@ -70,6 +62,14 @@ public class FlowExecutionLoader {
         val flowLastRunStatus = FlowLastRunStatus.getInstance(flowModel.lastRunStatus);
         if (flowLastRunStatus == FlowLastRunStatus.RUNNING) {
             throw new ThainRepeatExecutionException("flow is running");
+        }
+    }
+
+    private void runFlowExecution(@NonNull FlowExecutionDr flowExecutionDr) {
+        try {
+            FlowExecutor.startProcess(flowExecutionDr, processEngineStorage);
+        } catch (ThainException e) {
+            e.printStackTrace();
         }
     }
 

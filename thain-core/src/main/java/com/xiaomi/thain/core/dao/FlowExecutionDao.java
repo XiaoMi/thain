@@ -7,6 +7,7 @@ package com.xiaomi.thain.core.dao;
 
 import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.core.mapper.FlowExecutionMapper;
 import com.xiaomi.thain.core.process.service.MailService;
 import lombok.AccessLevel;
@@ -92,7 +93,7 @@ public class FlowExecutionDao {
         execute(t -> t.clearFlowExecution(dataReserveDays));
     }
 
-    public Optional<FlowExecutionModel> getFlowExecution(long flowExecutionId) {
+    public Optional<FlowExecutionDr> getFlowExecution(long flowExecutionId) {
         return execute(t -> t.getFlowExecution(flowExecutionId));
     }
 

@@ -8,15 +8,14 @@ package com.xiaomi.thain.core.process;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
-import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
+import com.xiaomi.thain.common.model.rq.AddFlowRq;
+import com.xiaomi.thain.common.model.rq.UpdateFlowRq;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.core.config.DatabaseHandler;
-import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.dao.*;
 import com.xiaomi.thain.core.process.runtime.FlowExecutionLoader;
-import com.xiaomi.thain.core.process.runtime.executor.FlowExecutor;
 import com.xiaomi.thain.core.process.runtime.heartbeat.FlowExecutionHeartbeat;
 import com.xiaomi.thain.core.process.service.ComponentService;
 import com.xiaomi.thain.core.process.service.MailService;
@@ -104,7 +103,7 @@ public class ProcessEngine {
         //todo
         val componentService = ComponentService.getInstance();
 
-        val flowExecutionWaitingQueue = new LinkedBlockingQueue<AddFlowExecutionDp>();
+        val flowExecutionWaitingQueue = new LinkedBlockingQueue<FlowExecutionDr>();
         val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService);
         flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
 
@@ -167,34 +166,32 @@ public class ProcessEngine {
      * 插入flow
      * 成功返回 flow id
      */
-    public Optional<Long> addFlow(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList) {
+    public Optional<Long> addFlow(@NonNull AddFlowRq addFlowRq, @NonNull List<JobModel> jobModelList) {
         try {
             int schedulingStatus = NOT_SET.code;
-            if (StringUtils.isNotBlank(flowModel.cron)) {
+            if (StringUtils.isNotBlank(addFlowRq.cron)) {
                 schedulingStatus = SCHEDULING.code;
             }
-            val cloneFlowModel = flowModel.toBuilder().schedulingStatus(schedulingStatus).build();
+            val cloneFlowModel = addFlowRq.toBuilder().schedulingStatus(schedulingStatus).build();
             processEngineStorage.flowDao.addFlow(cloneFlowModel, jobModelList);
-            return Optional.of(cloneFlowModel.id);
+            return Optional.ofNullable(cloneFlowModel.id);
         } catch (Exception e) {
             log.error("addFlow:", e);
         }
         return Optional.empty();
     }
 
-    public boolean updateFlow(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList) {
-        try {
-            int schedulingStatus = NOT_SET.code;
-            if (StringUtils.isNotBlank(flowModel.cron)) {
-                schedulingStatus = SCHEDULING.code;
-            }
-            val cloneFlowModel = flowModel.toBuilder().schedulingStatus(schedulingStatus).build();
-            processEngineStorage.flowDao.updateFlow(cloneFlowModel, jobModelList);
-            return true;
-        } catch (Exception e) {
-            log.error("updateFlow:", e);
+    public boolean updateFlow(@NonNull UpdateFlowRq updateFlowRq, @NonNull List<JobModel> jobModelList) throws ThainException {
+        int schedulingStatus = NOT_SET.code;
+        if (StringUtils.isNotBlank(updateFlowRq.cron)) {
+            schedulingStatus = SCHEDULING.code;
         }
-        return false;
+        val cloneFlowModel = updateFlowRq.toBuilder().schedulingStatus(schedulingStatus).build();
+        processEngineStorage.flowDao.updateFlow(cloneFlowModel, jobModelList);
+        if (cloneFlowModel.id == null) {
+            throw new ThainException("update failed");
+        }
+        return true;
     }
 
     /**
@@ -209,14 +206,8 @@ public class ProcessEngine {
      * 手动触发一次
      */
     public void startProcess(long flowId) throws ThainException {
-        FlowExecutor.startProcess(flowId, processEngineStorage, FlowExecutionTriggerType.MANUAL);
-    }
-
-    /**
-     * 自动触发一次
-     */
-    public void schedulerStartProcess(long flowId) throws ThainException {
-        FlowExecutor.startProcess(flowId, processEngineStorage, FlowExecutionTriggerType.AUTOMATIC);
+        //todo
+//        FlowExecutor.startProcess(flowId, processEngineStorage, FlowExecutionTriggerType.MANUAL);
     }
 
     public String getFlowCron(long flowId) throws ThainException {

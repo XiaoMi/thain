@@ -7,6 +7,7 @@ package com.xiaomi.thain.core.mapper;
 
 import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,10 +27,10 @@ public interface FlowExecutionMapper {
 
     int updateFlowExecutionStatus(@Param("flowExecutionId") long flowExecutionId, @Param("status") int status);
 
-    int clearFlowExecution(@Param("dataReserveDays") int dataReserveDays);
+    int clearFlowExecution(int dataReserveDays);
 
     @Nullable
-    FlowExecutionModel getFlowExecution(long flowExecutionId);
+    FlowExecutionDr getFlowExecution(long flowExecutionId);
 
     /**
      * 获取制定id的最近几条执行记录
@@ -40,7 +41,7 @@ public interface FlowExecutionMapper {
      */
     List<FlowExecutionModel> getLatest(@Param("flowId") long flowId, @Param("numbers") long numbers);
 
-    int killFlowExecution(@Param("flowExecutionId") long flowExecutionId);
+    int killFlowExecution(long flowExecutionId);
 
     /**
      * 获取所有需要删除的flow execution id

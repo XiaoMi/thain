@@ -1,6 +1,7 @@
 package com.xiaomi.thain.core.process.runtime.heartbeat;
 
 import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.core.dao.FlowExecutionDao;
 import com.xiaomi.thain.core.process.service.MailService;
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool;
@@ -24,13 +25,13 @@ import java.util.stream.Collectors;
 @Log4j2
 public class FlowExecutionHeartbeat {
 
-    private final Set<Collection<AddFlowExecutionDp>> collections = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Set<Collection<FlowExecutionDr>> collections = Collections.newSetFromMap(new IdentityHashMap<>());
     @NonNull
     private final FlowExecutionDao flowExecutionDao;
     @NonNull
     private final MailService mailService;
 
-    public void addCollections(Collection<AddFlowExecutionDp> collection) {
+    public void addCollections(Collection<FlowExecutionDr> collection) {
         collections.add(collection);
     }
 

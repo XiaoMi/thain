@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
 
+import javax.annotation.Nullable;
 import java.sql.Timestamp;
 
 /**
@@ -43,7 +44,7 @@ public class FlowExecutionDr {
     /**
      * 流程执行日志
      */
-    @NonNull
+    @Nullable
     public final String logs;
     /**
      * 创建时间
@@ -55,4 +56,9 @@ public class FlowExecutionDr {
      */
     @NonNull
     public final Timestamp updateTime;
+    /**
+     * 最近一次心跳时间
+     */
+    @NonNull
+    public final Timestamp heartbeat;
 }

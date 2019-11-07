@@ -10,7 +10,9 @@ import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.rq.AddFlowRq;
 import com.xiaomi.thain.common.model.rq.AddRq;
+import com.xiaomi.thain.common.model.rq.UpdateFlowRq;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.server.dao.FlowDao;
 import com.xiaomi.thain.server.model.sp.FlowListSp;
@@ -57,19 +59,17 @@ public class FlowServiceImpl implements FlowService {
         return flowDao.getFlowListCount(flowListSp);
     }
 
-    private long update(@NonNull AddRq addRq) throws ThainException, ParseException, SchedulerException {
-        return thainFacade.updateFlow(addRq);
-    }
-
     @Override
-    public long add(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList, String appId)
+    public long add(@NonNull AddFlowRq addFlowRq, @NonNull List<JobModel> jobModelList, String appId)
             throws ThainException, ParseException, SchedulerException {
-        if (!flowModel.slaKill || flowModel.slaDuration == 0) {
-            flowModel.toBuilder().slaKill(true).slaDuration(3L * 60 * 60).build();
+        if (!addFlowRq.slaKill || addFlowRq.slaDuration == 0) {
+            addFlowRq.toBuilder().slaKill(true).slaDuration(3L * 60 * 60).build();
         }
-        val addDto = AddRq.builder().flowModel(flowModel).jobModelList(jobModelList).build();
-        if (flowDao.flowExist(flowModel.id)) {
-            return update(addDto);
+        val addDto = AddRq.builder().addFlowRq(addFlowRq).jobModelList(jobModelList).build();
+        if (addFlowRq.id != null && flowDao.flowExist(addFlowRq.id)) {
+            val updateFlowRq = UpdateFlowRq.getInstance(addFlowRq, addFlowRq.id);
+            thainFacade.updateFlow(updateFlowRq, jobModelList);
+            return updateFlowRq.id;
         }
         long flowId = thainFacade.addFlow(addDto);
         flowDao.updateAppId(flowId, appId);

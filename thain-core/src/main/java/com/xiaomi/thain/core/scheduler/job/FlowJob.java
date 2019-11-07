@@ -10,6 +10,7 @@ import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
+import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
@@ -62,7 +63,10 @@ public class FlowJob implements Job {
             if (addFlowExecutionDp.id == null) {
                 throw new ThainCreateFlowExecutionException();
             }
-            processEngine.processEngineStorage.flowExecutionWaitingQueue.put(addFlowExecutionDp);
+
+            val flowExecutionDr = processEngine.processEngineStorage.flowExecutionDao
+                    .getFlowExecution(addFlowExecutionDp.id).orElseThrow(ThainRuntimeException::new);
+            processEngine.processEngineStorage.flowExecutionWaitingQueue.put(flowExecutionDr);
 
 //
 //            log.info("auto execution: " + flowId);

@@ -6,11 +6,6 @@
 
 package com.xiaomi.thain.core.dao;
 
-import com.xiaomi.thain.common.constant.FlowLastRunStatus;
-import com.xiaomi.thain.common.constant.FlowSchedulingStatus;
-import com.xiaomi.thain.common.model.FlowModel;
-import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.core.mapper.FlowMapper;
 import com.xiaomi.thain.core.mapper.HeartbeatMapper;
 import com.xiaomi.thain.core.process.service.MailService;
 import lombok.AccessLevel;
@@ -21,11 +16,8 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Date 19-5-17 下午5:22

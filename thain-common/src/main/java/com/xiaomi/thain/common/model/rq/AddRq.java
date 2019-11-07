@@ -21,12 +21,12 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class AddRq {
     @NonNull
-    public final FlowModel flowModel;
+    public final AddFlowRq addFlowRq;
     @NonNull
     public final List<JobModel> jobModelList;
 
-    public AddRq(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList) {
-        this.flowModel = flowModel;
+    public AddRq(@NonNull AddFlowRq addFlowRq, @NonNull List<JobModel> jobModelList) {
+        this.addFlowRq = addFlowRq;
         this.jobModelList = ImmutableList.copyOf(jobModelList);
     }
 }

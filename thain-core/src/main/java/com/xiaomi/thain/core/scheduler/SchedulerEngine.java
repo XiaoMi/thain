@@ -8,7 +8,7 @@ package com.xiaomi.thain.core.scheduler;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerInitException;
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerStartException;
-import com.xiaomi.thain.common.model.FlowModel;
+import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import com.xiaomi.thain.core.scheduler.job.CleanJob;
 import com.xiaomi.thain.core.scheduler.job.FlowJob;
@@ -89,15 +89,15 @@ public class SchedulerEngine {
         }
     }
 
-    public void addSla(long flowExecutionId, @NonNull FlowModel flowModel) throws SchedulerException {
+    public void addSla(long flowExecutionId, @NonNull FlowDr flowDr) throws SchedulerException {
         JobDetail jobDetail = newJob(SlaJob.class)
                 .withIdentity("flowExecution_" + flowExecutionId, "flowExecution")
                 .usingJobData("flowExecutionId", flowExecutionId)
-                .usingJobData("flowId", flowModel.id)
+                .usingJobData("flowId", flowDr.id)
                 .build();
         Trigger trigger = newTrigger()
                 .withIdentity("trigger_" + flowExecutionId, "flowExecution")
-                .startAt(Date.from(Instant.now().plusSeconds(flowModel.slaDuration)))
+                .startAt(Date.from(Instant.now().plusSeconds(flowDr.slaDuration)))
                 .build();
         scheduler.deleteJob(jobDetail.getKey());
         scheduler.scheduleJob(jobDetail, trigger);

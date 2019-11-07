@@ -104,8 +104,7 @@ public class ProcessEngine {
         val componentService = ComponentService.getInstance();
 
         val flowExecutionWaitingQueue = new LinkedBlockingQueue<FlowExecutionDr>();
-        val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService);
-        flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
+
 
         processEngineStorage = ProcessEngineStorage.builder()
                 .flowExecutionJobExecutionThreadPool(flowExecutionJobExecutionThreadPool)
@@ -118,10 +117,12 @@ public class ProcessEngine {
                 .mailService(mailService)
                 .componentService(componentService)
                 .flowExecutionWaitingQueue(flowExecutionWaitingQueue)
-                .flowExecutionHeartbeat(flowExecutionHeartbeat)
                 .build();
 
-        FlowExecutionLoader.getInstance(processEngineStorage);
+        val flowExecutionLoader = FlowExecutionLoader.getInstance(processEngineStorage);
+        val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService);
+        flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
+        flowExecutionHeartbeat.addCollections(flowExecutionLoader.runningFlowExecution);
 
     }
 

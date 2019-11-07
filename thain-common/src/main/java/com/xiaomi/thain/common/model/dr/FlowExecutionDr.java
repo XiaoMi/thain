@@ -7,6 +7,7 @@ package com.xiaomi.thain.common.model.dr;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
@@ -19,6 +20,7 @@ import java.sql.Timestamp;
  */
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class FlowExecutionDr {
     /**
      * 自增id

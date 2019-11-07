@@ -57,8 +57,6 @@ public final class ProcessEngineStorage {
     private final LongFunction<ThainThreadPool> flowExecutionJobExecutionThreadPool;
     @NonNull
     public final LinkedBlockingQueue<FlowExecutionDr> flowExecutionWaitingQueue;
-    @NonNull
-    public final FlowExecutionHeartbeat flowExecutionHeartbeat;
 
     public MailNotice getMailNotice(@NonNull String noticeEmail) {
         return MailNotice.getInstance(mailService, noticeEmail);

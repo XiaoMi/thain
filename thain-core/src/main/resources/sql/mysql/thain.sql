@@ -105,18 +105,18 @@ create table thain_x5_config
 )
     ENGINE = InnoDB;
 
-# thain 运行状态表
+-- thain 运行状态表
 create table thain_runtime_status
 (
     id             int unsigned auto_increment primary key,
     runtime_key    varchar(50)  default '' not null,
     runtime_status int unsigned default 0  not null,
-    comment        text                    null comment 'runtime_key 的说明',
+    status_comment        text                    null comment 'runtime_key 的说明',
     constraint thain_runtime_status_runtime_key_uindex
         unique (runtime_key)
 ) ENGINE = InnoDB;
 
-insert into thain_runtime_status (runtime_key, runtime_status, comment)
+insert into thain_runtime_status (runtime_key, runtime_status, `status_comment`)
     value (
            'check_dead_flow', 0,
            'Mark if there is a task that is checking the dead flow. If it is 0, there is no task to check, and if it is 1, there is a task to check.'

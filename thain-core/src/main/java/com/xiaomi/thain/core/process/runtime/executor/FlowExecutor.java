@@ -165,12 +165,9 @@ public class FlowExecutor {
                                     @NonNull ProcessEngineStorage processEngineStorage,
                                     @NonNull FlowExecutionTriggerType flowExecutionTriggerType) throws ThainException {
         val flowModel = processEngineStorage.flowDao.getFlow(flowId).orElseThrow(() -> new ThainException("flow does not exist"));
-        val flowLastRunStatus = FlowLastRunStatus.getInstance(flowModel.lastRunStatus);
-        if (flowLastRunStatus == FlowLastRunStatus.RUNNING) {
-            throw new ThainFlowRunningException(flowId);
-        }
         val flowExecutionService = new FlowExecutor(flowModel, processEngineStorage, flowExecutionTriggerType);
-        CompletableFuture.runAsync(flowExecutionService::start, processEngineStorage.flowExecutionThreadPool);
+        flowExecutionService.start();
+//        CompletableFuture.runAsync(flowExecutionService::start, processEngineStorage.flowExecutionThreadPool);
     }
 
     /**

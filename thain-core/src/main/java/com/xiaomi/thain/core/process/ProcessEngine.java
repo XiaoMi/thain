@@ -15,6 +15,7 @@ import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.core.config.DatabaseHandler;
 import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.dao.*;
+import com.xiaomi.thain.core.process.runtime.FlowExecutionLoader;
 import com.xiaomi.thain.core.process.runtime.executor.FlowExecutor;
 import com.xiaomi.thain.core.process.runtime.heartbeat.FlowExecutionHeartbeat;
 import com.xiaomi.thain.core.process.service.ComponentService;
@@ -42,7 +43,6 @@ import java.util.function.LongFunction;
 
 import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.NOT_SET;
 import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.SCHEDULING;
-import static com.xiaomi.thain.core.thread.pool.ThainThreadPool.DEFAULT_THREAD_POOL;
 
 /**
  * Date 19-5-17 下午2:09
@@ -101,10 +101,11 @@ public class ProcessEngine {
         val jobDao = JobDao.getInstance(sqlSessionFactory, mailService);
         val jobExecutionDao = JobExecutionDao.getInstance(sqlSessionFactory, mailService);
         val heartbeatDao = HeartbeatDao.getInstance(sqlSessionFactory, mailService);
+        //todo
         val componentService = ComponentService.getInstance();
 
         val flowExecutionWaitingQueue = new LinkedBlockingQueue<AddFlowExecutionDp>();
-        val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService, heartbeatDao);
+        val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService);
         flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
 
         processEngineStorage = ProcessEngineStorage.builder()
@@ -120,6 +121,9 @@ public class ProcessEngine {
                 .flowExecutionWaitingQueue(flowExecutionWaitingQueue)
                 .flowExecutionHeartbeat(flowExecutionHeartbeat)
                 .build();
+
+        FlowExecutionLoader.getInstance(processEngineStorage);
+
     }
 
     private void createTable(@NonNull Connection connection) throws IOException, SQLException {

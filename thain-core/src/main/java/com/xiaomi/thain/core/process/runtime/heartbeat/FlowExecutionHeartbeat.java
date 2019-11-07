@@ -2,7 +2,6 @@ package com.xiaomi.thain.core.process.runtime.heartbeat;
 
 import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.core.dao.FlowExecutionDao;
-import com.xiaomi.thain.core.dao.HeartbeatDao;
 import com.xiaomi.thain.core.process.service.MailService;
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool;
 import lombok.NonNull;
@@ -10,7 +9,10 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -26,22 +28,19 @@ public class FlowExecutionHeartbeat {
     @NonNull
     private final FlowExecutionDao flowExecutionDao;
     @NonNull
-    private final HeartbeatDao heartbeatDao;
-    @NonNull
     private final MailService mailService;
 
     public void addCollections(Collection<AddFlowExecutionDp> collection) {
         collections.add(collection);
     }
 
-    public static FlowExecutionHeartbeat getInstance(@NonNull FlowExecutionDao flowExecutionDao, @NonNull MailService mailService, @NonNull HeartbeatDao heartbeatDao) {
-        return new FlowExecutionHeartbeat(flowExecutionDao, mailService, heartbeatDao);
+    public static FlowExecutionHeartbeat getInstance(@NonNull FlowExecutionDao flowExecutionDao, @NonNull MailService mailService) {
+        return new FlowExecutionHeartbeat(flowExecutionDao, mailService);
     }
 
-    private FlowExecutionHeartbeat(@NonNull FlowExecutionDao flowExecutionDao, @NonNull MailService mailService, @NonNull HeartbeatDao heartbeatDao) {
+    private FlowExecutionHeartbeat(@NonNull FlowExecutionDao flowExecutionDao, @NonNull MailService mailService) {
         this.flowExecutionDao = flowExecutionDao;
         this.mailService = mailService;
-        this.heartbeatDao = heartbeatDao;
         ThainThreadPool.DEFAULT_THREAD_POOL.execute(this::sendHeartbeat);
     }
 

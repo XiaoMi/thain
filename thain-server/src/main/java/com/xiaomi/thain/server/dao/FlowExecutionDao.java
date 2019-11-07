@@ -59,4 +59,8 @@ public class FlowExecutionDao {
     public boolean getAccessible(long flowExecutionId, @NonNull String appId) {
         return flowExecutionMapper.getAppIdAccessible(flowExecutionId, appId);
     }
+
+    public List<Long> getRunningExecutionIdsByFlowId(long flowId) {
+        return flowExecutionMapper.getRunningExecutionIdsByFlowId(flowId, 1);
+    }
 }

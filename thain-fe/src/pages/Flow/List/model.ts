@@ -15,6 +15,7 @@ import {
   pauseFlow,
   schedulingFlow,
   startFlow,
+  killFlow,
 } from '@/pages/Flow/List/service';
 import { TableResult } from '@/typings/ApiResult';
 import { FlowModel } from '@/commonModels/FlowModel';
@@ -42,6 +43,7 @@ interface FlowListModelType {
     pause: Effect;
     start: Effect;
     delete: Effect;
+    kill: Effect;
   };
   reducers: {
     updateState: Reducer<FlowListModelState>;
@@ -68,7 +70,7 @@ const FlowListModel: FlowListModelType = {
   state: new FlowListModelState(),
 
   effects: {
-    *fetchTable({ payload }, { call, put, select }) {
+    *fetchTable({ payload }, { call, put }) {
       const tableResult: TableResult<FlowModel> | undefined = yield call(getTableList, payload);
       yield put({
         type: 'updateState',
@@ -77,7 +79,7 @@ const FlowListModel: FlowListModelType = {
         },
       });
     },
-    *scheduling({ payload: { id } }, { call, put }) {
+    *scheduling({ payload: { id, condition } }, { call, put }) {
       const result = yield call(schedulingFlow, id);
       if (result === undefined) {
         return;
@@ -87,9 +89,10 @@ const FlowListModel: FlowListModelType = {
       });
       yield put({
         type: 'fetchTable',
+        payload: condition,
       });
     },
-    *pause({ payload: { id } }, { call, put }) {
+    *pause({ payload: { id, condition } }, { call, put }) {
       const result = yield call(pauseFlow, id);
       if (result === undefined) {
         return;
@@ -99,9 +102,10 @@ const FlowListModel: FlowListModelType = {
       });
       yield put({
         type: 'fetchTable',
+        payload: condition,
       });
     },
-    *start({ payload: { id } }, { call, put }) {
+    *start({ payload: { id, condition } }, { call, put }) {
       const result = yield call(startFlow, id);
       if (result === undefined) {
         return;
@@ -111,9 +115,10 @@ const FlowListModel: FlowListModelType = {
       });
       yield put({
         type: 'fetchTable',
+        payload: condition,
       });
     },
-    *delete({ payload: { id } }, { call, put }) {
+    *delete({ payload: { id, condition } }, { call, put }) {
       const result = yield call(deleteFlow, id);
       if (result === undefined) {
         return;
@@ -123,6 +128,20 @@ const FlowListModel: FlowListModelType = {
       });
       yield put({
         type: 'fetchTable',
+        payload: condition,
+      });
+    },
+    *kill({ payload: { id, condition } }, { call, put }) {
+      const result = yield call(killFlow, id);
+      if (result === undefined) {
+        return;
+      }
+      notification.success({
+        message: `${id}:${formatMessage({ id: 'flow.kill.success' })}`,
+      });
+      yield put({
+        type: 'fetchTable',
+        payload: condition,
       });
     },
   },

@@ -116,6 +116,7 @@ const FlowTable: React.FC<Props> = ({
                     type: 'flowList/scheduling',
                     payload: {
                       id: flow.id,
+                      condition: condition,
                     },
                   });
                 }
@@ -133,6 +134,7 @@ const FlowTable: React.FC<Props> = ({
                     type: 'flowList/pause',
                     payload: {
                       id: flow.id,
+                      condition: condition,
                     },
                   });
                 }
@@ -228,7 +230,10 @@ const FlowTable: React.FC<Props> = ({
                   if (dispatch) {
                     dispatch({
                       type: 'flowList/start',
-                      payload: { id },
+                      payload: {
+                        id,
+                        condition,
+                      },
                     });
                   }
                 }}
@@ -256,7 +261,10 @@ const FlowTable: React.FC<Props> = ({
                   if (dispatch) {
                     dispatch({
                       type: 'flowList/delete',
-                      payload: { id },
+                      payload: {
+                        id,
+                        condition,
+                      },
                     });
                   }
                 }}
@@ -275,45 +283,63 @@ const FlowTable: React.FC<Props> = ({
     if (dispatch) {
       switch (e.key) {
         case '1':
-          notification.info({ message: formatMessage({ id: 'flow.batch.fire' }) + batchId });
+          notification.info({ message: formatMessage({ id: 'flow.batch.fire' }) + ':' + batchId });
           batchId.forEach((id: number | string) => {
             dispatch({
               type: 'flowList/start',
               payload: {
                 id,
+                condition,
               },
             });
           });
           break;
         case '2':
-          notification.info({ message: formatMessage({ id: 'flow.batch.begin' }) + batchId });
+          notification.info({ message: formatMessage({ id: 'flow.batch.begin' }) + ':' + batchId });
           batchId.forEach((id: number | string) => {
             dispatch({
               type: 'flowList/scheduling',
               payload: {
                 id,
+                condition,
               },
             });
           });
           break;
         case '3':
-          notification.info({ message: formatMessage({ id: 'flow.batch.pause' }) + batchId });
+          notification.info({ message: formatMessage({ id: 'flow.batch.pause' }) + ':' + batchId });
           batchId.forEach((id: number | string) => {
             dispatch({
               type: 'flowList/pause',
               payload: {
                 id,
+                condition,
               },
             });
           });
           break;
         case '4':
-          notification.info({ message: formatMessage({ id: 'flow.batch.delete' }) + batchId });
+          notification.info({
+            message: formatMessage({ id: 'flow.batch.delete' }) + ':' + batchId,
+          });
           batchId.forEach((id: number | string) => {
             dispatch({
               type: 'flowList/delete',
               payload: {
                 id,
+                condition,
+              },
+            });
+          });
+          break;
+        case '5':
+          notification.info({ message: formatMessage({ id: 'flow.batch.kill' }) + ':' + batchId });
+          batchId.forEach((id: number | string) => {
+            dispatch({
+              type: 'flowList/kill',
+              payload: {
+                id,
+                condition,
               },
             });
           });
@@ -340,6 +366,10 @@ const FlowTable: React.FC<Props> = ({
       <Menu.Item key="4">
         <Icon type="delete" theme="twoTone" />
         {formatMessage({ id: 'flow.delete' })}
+      </Menu.Item>
+      <Menu.Item key="5">
+        <Icon type="stop" theme="twoTone" />
+        {formatMessage({ id: 'flow.kill.schedule' })}
       </Menu.Item>
     </Menu>
   );

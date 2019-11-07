@@ -65,7 +65,13 @@ const FlowTable: React.FC<Props> = ({
           pageSize: pagination.pageSize,
           ...sort,
         }
-      : { ...condition, sortKey: undefined, sortOrderDesc: undefined };
+      : {
+          ...condition,
+          sortKey: undefined,
+          sortOrderDesc: undefined,
+          page: pagination.current,
+          pageSize: pagination.pageSize,
+        };
     setCondition(requestParam);
   }
   function initSorterIndex(): [string, string] {

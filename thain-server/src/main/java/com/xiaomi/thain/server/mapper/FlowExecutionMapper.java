@@ -39,4 +39,13 @@ public interface FlowExecutionMapper {
 
     List<JobExecutionModel> getJobExecutionModelList(long flowExecutionId);
 
+    /**
+     * get execution by flowId
+     *
+     * @param flowId flowId
+     * @param status status
+     * @return list execution Id
+     */
+    List<Long> getRunningExecutionIdsByFlowId(@Param("flowId") long flowId, @Param("status") int status);
+
 }

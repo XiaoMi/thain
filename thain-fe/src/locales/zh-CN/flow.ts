@@ -54,4 +54,5 @@ export default {
   'flow.autokill.settings': 'SLA设置',
   'flow.duration': '持续时间',
   'flow.kill.schedule': '杀死调度',
+  'flow.batch.kill': '批量杀死',
 };

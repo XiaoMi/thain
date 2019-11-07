@@ -54,4 +54,5 @@ export default {
   'flow.autokill.settings': 'SLA settings',
   'flow.duration': 'Duration',
   'flow.kill.schedule': 'Kill scheduling',
+  'flow.batch.kill': 'Batch kill',
 };

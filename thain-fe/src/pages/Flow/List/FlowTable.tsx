@@ -65,7 +65,13 @@ const FlowTable: React.FC<Props> = ({
           pageSize: pagination.pageSize,
           ...sort,
         }
-      : { ...condition, sortKey: undefined, sortOrderDesc: undefined };
+      : {
+          ...condition,
+          sortKey: undefined,
+          sortOrderDesc: undefined,
+          page: pagination.current,
+          pageSize: pagination.pageSize,
+        };
     setCondition(requestParam);
   }
   function initSorterIndex(): [string, string] {
@@ -110,6 +116,7 @@ const FlowTable: React.FC<Props> = ({
                     type: 'flowList/scheduling',
                     payload: {
                       id: flow.id,
+                      condition: condition,
                     },
                   });
                 }
@@ -127,6 +134,7 @@ const FlowTable: React.FC<Props> = ({
                     type: 'flowList/pause',
                     payload: {
                       id: flow.id,
+                      condition: condition,
                     },
                   });
                 }
@@ -222,7 +230,10 @@ const FlowTable: React.FC<Props> = ({
                   if (dispatch) {
                     dispatch({
                       type: 'flowList/start',
-                      payload: { id },
+                      payload: {
+                        id: id,
+                        condition: condition,
+                      },
                     });
                   }
                 }}
@@ -250,7 +261,10 @@ const FlowTable: React.FC<Props> = ({
                   if (dispatch) {
                     dispatch({
                       type: 'flowList/delete',
-                      payload: { id },
+                      payload: {
+                        id: id,
+                        condition: condition,
+                      },
                     });
                   }
                 }}
@@ -274,7 +288,8 @@ const FlowTable: React.FC<Props> = ({
             dispatch({
               type: 'flowList/start',
               payload: {
-                id,
+                id: id,
+                condition: condition,
               },
             });
           });
@@ -285,7 +300,8 @@ const FlowTable: React.FC<Props> = ({
             dispatch({
               type: 'flowList/scheduling',
               payload: {
-                id,
+                id: id,
+                condition: condition,
               },
             });
           });
@@ -296,7 +312,8 @@ const FlowTable: React.FC<Props> = ({
             dispatch({
               type: 'flowList/pause',
               payload: {
-                id,
+                id: id,
+                condition: condition,
               },
             });
           });
@@ -307,7 +324,20 @@ const FlowTable: React.FC<Props> = ({
             dispatch({
               type: 'flowList/delete',
               payload: {
-                id,
+                id: id,
+                condition: condition,
+              },
+            });
+          });
+          break;
+        case '5':
+          notification.info({ message: formatMessage({ id: 'flow.batch.kill' }) + batchId });
+          batchId.forEach((id: number | string) => {
+            dispatch({
+              type: 'flowList/kill',
+              payload: {
+                id: id,
+                condition: condition,
               },
             });
           });
@@ -336,7 +366,7 @@ const FlowTable: React.FC<Props> = ({
         {formatMessage({ id: 'flow.delete' })}
       </Menu.Item>
       <Menu.Item key="5">
-        <Icon type="delete" theme="twoTone" />
+        <Icon type="stop" theme="twoTone" />
         {formatMessage({ id: 'flow.kill.schedule' })}
       </Menu.Item>
     </Menu>

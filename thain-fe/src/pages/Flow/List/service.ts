@@ -27,3 +27,7 @@ export async function schedulingFlow(flowId: number) {
 export async function pauseFlow(flowId: number) {
   return patch('/api/flow/pause/' + flowId);
 }
+
+export async function killFlow(flowId: number) {
+  return patch(`/api/flow/kill/${flowId}`);
+}

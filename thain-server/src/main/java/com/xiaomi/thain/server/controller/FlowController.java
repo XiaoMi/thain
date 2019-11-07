@@ -14,6 +14,7 @@ import com.xiaomi.thain.server.model.rp.FlowAllInfoRp;
 import com.xiaomi.thain.server.model.sp.FlowListSp;
 import com.xiaomi.thain.server.model.rq.FlowListRq;
 import com.xiaomi.thain.server.service.CheckService;
+import com.xiaomi.thain.server.service.FlowExecutionService;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;
 import lombok.NonNull;
@@ -40,13 +41,17 @@ public class FlowController {
     private final CheckService checkService;
     @NonNull
     private final PermissionService permissionService;
+    @NonNull
+    private final FlowExecutionService flowExecutionService;
 
     public FlowController(@NonNull FlowService flowService,
                           @NonNull CheckService checkService,
-                          @NonNull PermissionService permissionService) {
+                          @NonNull PermissionService permissionService,
+                          @NonNull FlowExecutionService flowExecutionService) {
         this.flowService = flowService;
         this.checkService = checkService;
         this.permissionService = permissionService;
+        this.flowExecutionService = flowExecutionService;
     }
 
     @GetMapping("/getComponentDefineJson")
@@ -197,6 +202,22 @@ public class FlowController {
             flowService.pause(flowId);
         } catch (Exception e) {
             log.error("pause:", e);
+            return ApiResult.fail(e.getMessage());
+        }
+        return ApiResult.success();
+    }
+
+    @PatchMapping("/kill/{flowId}")
+    public ApiResult kill(@PathVariable long flowId) {
+        try {
+            if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
+                return ApiResult.fail(NO_PERMISSION_MESSAGE);
+            }
+            if (!flowExecutionService.killFlowExecutionsByFlowId(flowId)) {
+                return ApiResult.fail("No execution need kill");
+            }
+        } catch (Exception e) {
+            log.error("kill:", e);
             return ApiResult.fail(e.getMessage());
         }
         return ApiResult.success();

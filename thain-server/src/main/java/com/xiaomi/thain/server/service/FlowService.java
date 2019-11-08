@@ -7,6 +7,7 @@
 package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.common.exception.ThainException;
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.rq.AddFlowRq;
@@ -45,7 +46,7 @@ public interface FlowService {
     /**
      * 立即执行一次, 返回flow execution id
      */
-    long start(long flowId) throws ThainException;
+    long start(long flowId) throws ThainException, ThainRepeatExecutionException;
 
     FlowModel getFlow(long flowId);
 

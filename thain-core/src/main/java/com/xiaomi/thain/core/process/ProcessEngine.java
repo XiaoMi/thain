@@ -5,22 +5,18 @@
  */
 package com.xiaomi.thain.core.process;
 
-import com.xiaomi.thain.common.constant.FlowExecutionStatus;
-import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.common.model.rq.AddFlowRq;
 import com.xiaomi.thain.common.model.rq.UpdateFlowRq;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.core.config.DatabaseHandler;
-import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.dao.*;
 import com.xiaomi.thain.core.process.runtime.FlowExecutionLoader;
-import com.xiaomi.thain.core.process.runtime.executor.FlowExecutor;
 import com.xiaomi.thain.core.process.runtime.heartbeat.FlowExecutionHeartbeat;
 import com.xiaomi.thain.core.process.service.ComponentService;
 import com.xiaomi.thain.core.process.service.MailService;
@@ -47,7 +43,6 @@ import java.util.function.LongFunction;
 
 import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.NOT_SET;
 import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.SCHEDULING;
-import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
 
 /**
  * Date 19-5-17 下午2:09
@@ -213,7 +208,7 @@ public class ProcessEngine {
     /**
      * 手动触发一次
      */
-    public long startProcess(long flowId) throws ThainException {
+    public long startProcess(long flowId) throws ThainException, ThainRepeatExecutionException {
         return flowExecutionLoader.startAsync(flowId);
     }
 

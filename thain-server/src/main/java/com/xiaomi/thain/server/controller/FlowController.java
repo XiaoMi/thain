@@ -154,7 +154,7 @@ public class FlowController {
             if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowService.start(flowId);
+            return ApiResult.success(flowService.start(flowId));
         } catch (ThainFlowRunningException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
             return ApiResult.fail(e.getMessage());
@@ -162,7 +162,6 @@ public class FlowController {
             log.error("start:", e);
             return ApiResult.fail(e.getMessage());
         }
-        return ApiResult.success();
     }
 
     @PatchMapping("/scheduling/{flowId}")

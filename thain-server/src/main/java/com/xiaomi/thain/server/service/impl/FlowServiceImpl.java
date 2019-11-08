@@ -7,6 +7,7 @@
 package com.xiaomi.thain.server.service.impl;
 
 import com.xiaomi.thain.common.exception.ThainException;
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
@@ -83,7 +84,7 @@ public class FlowServiceImpl implements FlowService {
     }
 
     @Override
-    public long start(long flowId) throws ThainException {
+    public long start(long flowId) throws ThainException, ThainRepeatExecutionException {
         return thainFacade.startFlow(flowId);
     }
 

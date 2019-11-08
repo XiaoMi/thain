@@ -10,6 +10,7 @@ import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.constant.FlowSchedulingStatus;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerException;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.rq.AddRq;
@@ -111,7 +112,7 @@ public class ThainFacade {
     /**
      * 触发某个Flow
      */
-    public long startFlow(long flowId) throws ThainException {
+    public long startFlow(long flowId) throws ThainException, ThainRepeatExecutionException {
         return processEngine.startProcess(flowId);
     }
 

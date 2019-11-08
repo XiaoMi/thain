@@ -51,7 +51,6 @@ public class RecoveryJob implements Job {
         }
         val ids = flowExecutionDrList.stream().map(t -> t.id).collect(Collectors.toList());
         flowExecutionDao.reWaiting(ids);
-        log.info("Scanned some dead flows: \n" + JSON.toJSONString(flowExecutionDrList));
 
         flowExecutionDrList.stream()
                 .filter(t -> t.status == FlowExecutionStatus.RUNNING.code)
@@ -59,6 +58,7 @@ public class RecoveryJob implements Job {
                 .distinct()
                 .forEach(processEngine.processEngineStorage.flowDao::killFlow);
 
+        log.info("Scanned some dead flows: \n" + JSON.toJSONString(flowExecutionDrList));
         processEngine.processEngineStorage.flowExecutionWaitingQueue.addAll(flowExecutionDrList);
         val hostInfo = getHostInfo();
         flowExecutionDrList.forEach(t -> flowExecutionDao.updateHostInfo(t.id, hostInfo));

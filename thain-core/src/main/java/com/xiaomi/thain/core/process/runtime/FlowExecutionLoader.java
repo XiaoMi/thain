@@ -52,7 +52,7 @@ public class FlowExecutionLoader {
         for (int i = 0; i < flowExecutionThreadPool.corePoolSize(); i++) {
             idleThread.put(true);
         }
-        log.info("init FlowExecutionLoader");
+        log.info("init FlowExecutionLoader, idleThread size: {}", idleThread.size());
         ThainThreadPool.DEFAULT_THREAD_POOL.execute(this::loopLoader);
     }
 
@@ -117,7 +117,6 @@ public class FlowExecutionLoader {
         }
         val flowExecutionDr = processEngineStorage.flowExecutionDao
                 .getFlowExecution(addFlowExecutionDp.id).orElseThrow(ThainRuntimeException::new);
-        checkFlowRunStatus(flowExecutionDr);
         checkFlowRunStatus(flowExecutionDr);
         CompletableFuture.runAsync(() -> runFlowExecution(flowExecutionDr), ThainThreadPool.MANUAL_TRIGGER_THREAD_POOL);
         return addFlowExecutionDp.id;

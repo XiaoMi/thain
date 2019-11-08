@@ -8,22 +8,16 @@ package com.xiaomi.thain.core.scheduler.job;
 
 import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException;
-import com.xiaomi.thain.common.exception.ThainException;
-import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
-import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -68,7 +62,7 @@ public class FlowJob implements Job {
                     .getFlowExecution(addFlowExecutionDp.id).orElseThrow(ThainRuntimeException::new);
             processEngine.processEngineStorage.flowExecutionWaitingQueue.put(flowExecutionDr);
         } catch (Exception e) {
-            log.error("Failed to auto trigger flow：", e);
+            log.error("Failed to add queue：", e);
         }
     }
 

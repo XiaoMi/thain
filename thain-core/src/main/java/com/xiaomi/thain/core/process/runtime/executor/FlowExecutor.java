@@ -17,6 +17,7 @@ import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
+import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import com.xiaomi.thain.core.process.runtime.checker.JobConditionChecker;
@@ -122,6 +123,10 @@ public class FlowExecutor {
                                     @NonNull ProcessEngineStorage processEngineStorage) throws ThainException {
         processEngineStorage.flowExecutionDao
                 .updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.RUNNING.code);
+        log.info("begin start flow: {}, flowExecutionId: {}, Trigger: {}",
+                flowExecutionDr.flowId,
+                flowExecutionDr.id,
+                FlowExecutionTriggerType.getInstance(flowExecutionDr.triggerType));
         val flowExecutionService = new FlowExecutor(flowExecutionDr, processEngineStorage);
         flowExecutionService.start();
     }

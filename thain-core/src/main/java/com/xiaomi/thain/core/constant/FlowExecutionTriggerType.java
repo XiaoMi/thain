@@ -5,6 +5,8 @@
  */
 package com.xiaomi.thain.core.constant;
 
+import lombok.val;
+
 /**
  * flowExecution触发类型
  *
@@ -24,5 +26,14 @@ public enum FlowExecutionTriggerType {
 
     FlowExecutionTriggerType(int code) {
         this.code = code;
+    }
+
+    public static FlowExecutionTriggerType getInstance(int code) {
+        for (val t : FlowExecutionTriggerType.values()) {
+            if (t.code == code) {
+                return t;
+            }
+        }
+        return MANUAL;
     }
 }

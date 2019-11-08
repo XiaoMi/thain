@@ -16,8 +16,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author liangyongrui
@@ -34,26 +34,39 @@ public class FlowExecutionLoader {
     private final FlowDao flowDao;
     @NonNull
     private final ProcessEngineStorage processEngineStorage;
+    @NonNull
+    private final LinkedBlockingQueue<Boolean> idleThread;
 
-    private FlowExecutionLoader(@NonNull ProcessEngineStorage processEngineStorage) {
+    private FlowExecutionLoader(@NonNull ProcessEngineStorage processEngineStorage) throws InterruptedException {
         this.flowExecutionWaitingQueue = processEngineStorage.flowExecutionWaitingQueue;
         this.flowExecutionThreadPool = processEngineStorage.flowExecutionThreadPool;
         this.flowDao = processEngineStorage.flowDao;
         this.processEngineStorage = processEngineStorage;
+        this.idleThread = new LinkedBlockingQueue<>();
+        for (int i = 0; i < flowExecutionThreadPool.corePoolSize(); i++) {
+            idleThread.put(true);
+        }
         ThainThreadPool.DEFAULT_THREAD_POOL.execute(this::loopLoader);
     }
 
-    public static FlowExecutionLoader getInstance(@NonNull ProcessEngineStorage processEngineStorage) {
+    public static FlowExecutionLoader getInstance(@NonNull ProcessEngineStorage processEngineStorage) throws InterruptedException {
         return new FlowExecutionLoader(processEngineStorage);
     }
 
     private void loopLoader() {
         while (true) {
             try {
-                //todo 执行队列是否满, 如果没满的话：
+                idleThread.take();
                 val addFlowExecutionDp = flowExecutionWaitingQueue.take();
                 checkFlowRunStatus(addFlowExecutionDp);
-                flowExecutionThreadPool.execute(() -> runFlowExecution(addFlowExecutionDp));
+                CompletableFuture.runAsync(() -> runFlowExecution(addFlowExecutionDp), flowExecutionThreadPool)
+                        .whenComplete((t, e) -> {
+                            try {
+                                idleThread.put(true);
+                            } catch (Exception te) {
+                                processEngineStorage.mailService.sendSeriousError(ExceptionUtils.getStackTrace(te));
+                            }
+                        });
             } catch (ThainRepeatExecutionException e) {
                 log.warn(e.getMessage());
             } catch (Exception e) {
@@ -75,8 +88,6 @@ public class FlowExecutionLoader {
     private void runFlowExecution(@NonNull FlowExecutionDr flowExecutionDr) {
         try {
             runningFlowExecution.add(flowExecutionDr);
-            //test todo
-            TimeUnit.SECONDS.sleep(60);
             FlowExecutor.startProcess(flowExecutionDr, processEngineStorage);
         } catch (Exception e) {
             log.error("runFlowExecution: ", e);

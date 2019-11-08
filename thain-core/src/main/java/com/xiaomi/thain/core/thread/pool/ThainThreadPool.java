@@ -39,4 +39,8 @@ public class ThainThreadPool implements Executor {
     public void execute(@Nonnull Runnable command) {
         threadPoolExecutor.execute(command);
     }
+
+    public int corePoolSize() {
+        return threadPoolExecutor.getCorePoolSize();
+    }
 }

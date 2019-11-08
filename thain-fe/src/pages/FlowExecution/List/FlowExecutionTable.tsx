@@ -52,6 +52,8 @@ function FlowExecutionTable({ dispatch, loading, flowExecutionList }: Props) {
 
   const renderRowClass = (record: FlowExecutionModel, index: number) => {
     switch (record.status) {
+      case FlowExecutionStatus.WAITING:
+        return styles.waitingRow;
       case FlowExecutionStatus.SUCCESS:
         return styles.successRow;
       case FlowExecutionStatus.ERROR:
@@ -60,6 +62,8 @@ function FlowExecutionTable({ dispatch, loading, flowExecutionList }: Props) {
         return styles.runningRow;
       case FlowExecutionStatus.KILLED:
         return styles.killedRow;
+      case FlowExecutionStatus.DO_NOT_RUN_SAME_TIME:
+        return styles.doNotRunSameTimeRow;
       default:
         return styles.successRow;
     }

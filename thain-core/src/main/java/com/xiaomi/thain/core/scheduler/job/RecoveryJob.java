@@ -7,6 +7,7 @@
 package com.xiaomi.thain.core.scheduler.job;
 
 import com.alibaba.fastjson.JSON;
+import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -50,7 +51,14 @@ public class RecoveryJob implements Job {
         }
         val ids = flowExecutionDrList.stream().map(t -> t.id).collect(Collectors.toList());
         flowExecutionDao.reWaiting(ids);
-        log.info("Scanned some dead flows: " + JSON.toJSONString(flowExecutionDrList));
+        log.info("Scanned some dead flows: \n" + JSON.toJSONString(flowExecutionDrList));
+
+        flowExecutionDrList.stream()
+                .filter(t -> t.status == FlowExecutionStatus.RUNNING.code)
+                .map(t -> t.flowId)
+                .distinct()
+                .forEach(processEngine.processEngineStorage.flowDao::killFlow);
+
         processEngine.processEngineStorage.flowExecutionWaitingQueue.addAll(flowExecutionDrList);
         val hostInfo = getHostInfo();
         flowExecutionDrList.forEach(t -> flowExecutionDao.updateHostInfo(t.id, hostInfo));

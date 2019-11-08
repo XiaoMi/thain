@@ -50,7 +50,7 @@ public class ThainFacade {
 
     private ThainFacade(@NonNull ProcessEngineConfiguration processEngineConfiguration,
                         @NonNull SchedulerEngineConfiguration schedulerEngineConfiguration)
-            throws ThainSchedulerException, ThainMissRequiredArgumentsException, IOException, SQLException {
+            throws ThainSchedulerException, ThainMissRequiredArgumentsException, IOException, SQLException, InterruptedException {
         processEngine = ProcessEngine.newInstance(processEngineConfiguration, this);
         schedulerEngine = SchedulerEngine.getInstance(schedulerEngineConfiguration, processEngine);
         schedulerEngine.start();
@@ -58,7 +58,7 @@ public class ThainFacade {
 
     public static ThainFacade getInstance(@NonNull ProcessEngineConfiguration processEngineConfiguration,
                                           @NonNull SchedulerEngineConfiguration schedulerEngineConfiguration)
-            throws ThainSchedulerException, ThainMissRequiredArgumentsException, IOException, SQLException {
+            throws ThainSchedulerException, ThainMissRequiredArgumentsException, IOException, SQLException, InterruptedException {
         return new ThainFacade(processEngineConfiguration, schedulerEngineConfiguration);
     }
 
@@ -111,8 +111,8 @@ public class ThainFacade {
     /**
      * 触发某个Flow
      */
-    public void startFlow(long flowId) throws ThainException {
-        processEngine.startProcess(flowId);
+    public long startFlow(long flowId) throws ThainException {
+        return processEngine.startProcess(flowId);
     }
 
     public Map<String, String> getComponentDefineJsonList() {

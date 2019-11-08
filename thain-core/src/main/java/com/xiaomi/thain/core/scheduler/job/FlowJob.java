@@ -67,12 +67,6 @@ public class FlowJob implements Job {
             val flowExecutionDr = processEngine.processEngineStorage.flowExecutionDao
                     .getFlowExecution(addFlowExecutionDp.id).orElseThrow(ThainRuntimeException::new);
             processEngine.processEngineStorage.flowExecutionWaitingQueue.put(flowExecutionDr);
-
-//
-//            log.info("auto execution: " + flowId);
-//            processEngine.schedulerStartProcess(flowId);
-//        } catch (ThainFlowRunningException e) {
-//            log.warn(ExceptionUtils.getRootCauseMessage(e));
         } catch (Exception e) {
             log.error("Failed to auto trigger flow：", e);
         }

@@ -36,7 +36,7 @@ public class AppConfig {
 
     @Bean("thainFacade")
     public ThainFacade createProcessEngineFacade(@NonNull @Qualifier("mysqlDataSource") DataSource dataSource)
-            throws ThainException, IOException, SQLException {
+            throws ThainException, IOException, SQLException, InterruptedException {
 
         val processEngineConfiguration = ProcessEngineConfiguration.builder()
                 .mailHost(env.getProperty("mail.host", ""))

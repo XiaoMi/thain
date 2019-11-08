@@ -42,7 +42,10 @@ public interface FlowService {
      */
     boolean delete(long flowId) throws SchedulerException;
 
-    boolean start(long flowId) throws ThainException;
+    /**
+     * 立即执行一次, 返回flow execution id
+     */
+    long start(long flowId) throws ThainException;
 
     FlowModel getFlow(long flowId);
 

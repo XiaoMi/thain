@@ -46,7 +46,6 @@ public class DatabaseHandler {
             configuration.addMapper(JobMapper.class);
             configuration.addMapper(FlowExecutionMapper.class);
             configuration.addMapper(JobExecutionMapper.class);
-            configuration.addMapper(HeartbeatMapper.class);
             configuration.setMapUnderscoreToCamelCase(true);
             return new SqlSessionFactoryBuilder().build(configuration);
         } catch (Exception e) {

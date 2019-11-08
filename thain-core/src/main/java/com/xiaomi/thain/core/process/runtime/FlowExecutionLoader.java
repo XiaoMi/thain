@@ -2,9 +2,13 @@ package com.xiaomi.thain.core.process.runtime;
 
 import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.constant.FlowLastRunStatus;
+import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
+import com.xiaomi.thain.common.exception.ThainRuntimeException;
+import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
+import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.dao.FlowDao;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import com.xiaomi.thain.core.process.runtime.executor.FlowExecutor;
@@ -18,6 +22,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
 
 /**
  * @author liangyongrui
@@ -57,9 +63,9 @@ public class FlowExecutionLoader {
         while (true) {
             try {
                 idleThread.take();
-                val addFlowExecutionDp = flowExecutionWaitingQueue.take();
-                checkFlowRunStatus(addFlowExecutionDp);
-                CompletableFuture.runAsync(() -> runFlowExecution(addFlowExecutionDp), flowExecutionThreadPool)
+                val flowExecutionDr = flowExecutionWaitingQueue.take();
+                checkFlowRunStatus(flowExecutionDr);
+                CompletableFuture.runAsync(() -> runFlowExecution(flowExecutionDr), flowExecutionThreadPool)
                         .whenComplete((t, e) -> {
                             try {
                                 idleThread.put(true);
@@ -97,4 +103,22 @@ public class FlowExecutionLoader {
     }
 
 
+    public long startAsync(long flowId) throws ThainException, ThainRepeatExecutionException {
+        val addFlowExecutionDp = AddFlowExecutionDp.builder()
+                .flowId(flowId)
+                .hostInfo(getHostInfo())
+                .status(FlowExecutionStatus.WAITING.code)
+                .triggerType(FlowExecutionTriggerType.MANUAL.code)
+                .build();
+        processEngineStorage.flowExecutionDao.addFlowExecution(addFlowExecutionDp);
+        if (addFlowExecutionDp.id == null) {
+            throw new ThainCreateFlowExecutionException();
+        }
+        val flowExecutionDr = processEngineStorage.flowExecutionDao
+                .getFlowExecution(addFlowExecutionDp.id).orElseThrow(ThainRuntimeException::new);
+        checkFlowRunStatus(flowExecutionDr);
+        checkFlowRunStatus(flowExecutionDr);
+        CompletableFuture.runAsync(() -> runFlowExecution(flowExecutionDr), ThainThreadPool.MANUAL_TRIGGER_THREAD_POOL);
+        return addFlowExecutionDp.id;
+    }
 }

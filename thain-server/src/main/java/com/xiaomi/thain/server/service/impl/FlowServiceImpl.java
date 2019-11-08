@@ -83,9 +83,8 @@ public class FlowServiceImpl implements FlowService {
     }
 
     @Override
-    public boolean start(long flowId) throws ThainException {
-        thainFacade.startFlow(flowId);
-        return true;
+    public long start(long flowId) throws ThainException {
+        return thainFacade.startFlow(flowId);
     }
 
     @Override

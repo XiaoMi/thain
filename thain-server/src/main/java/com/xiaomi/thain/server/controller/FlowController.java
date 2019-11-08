@@ -103,10 +103,10 @@ public class FlowController {
     public ApiResult add(@NonNull @RequestBody String json) {
         try {
             Gson gson = new Gson();
-            val flowDefinition = gson.fromJson(json, AddRq.class);
-            return add(flowDefinition
+            val addRq = gson.fromJson(json, AddRq.class);
+            return add(addRq
                     .toBuilder()
-                    .addFlowRq(flowDefinition.addFlowRq
+                    .flowModel(addRq.flowModel
                             .toBuilder()
                             .createUser(getUsername())
                             .build())
@@ -118,7 +118,7 @@ public class FlowController {
     }
 
     public ApiResult add(@NonNull AddRq addRq, @NonNull String appId) {
-        val addFlowRq = addRq.addFlowRq;
+        val addFlowRq = addRq.flowModel;
         val jobModelList = addRq.jobModelList;
         try {
             checkService.checkFlowModel(addFlowRq);

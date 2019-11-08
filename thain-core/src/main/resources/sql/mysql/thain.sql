@@ -36,7 +36,7 @@ create table thain_flow_execution
 (
     id           int unsigned auto_increment primary key comment '自增id',
     flow_id      int unsigned     default 0                     not null comment '所属flow id',
-    status       tinyint unsigned default 0                     not null comment '流程执行状态，0 排队中，1 执行中，2 执行结束，3执行异常,4 手动kill',
+    status       tinyint unsigned default 0                     not null comment '流程执行状态，0 排队中，1 执行中，2 执行结束，3执行异常,4 手动kill, 5 禁止同时运行',
     host_info    varchar(128)     default ''                    not null comment '机器信息',
     trigger_type tinyint unsigned default 1                     not null comment '触发类型 1手动 2自动',
     logs         mediumtext                                     null comment '日志',

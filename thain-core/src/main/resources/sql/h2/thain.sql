@@ -60,7 +60,7 @@ create table thain_job_execution
     id                int auto_increment primary key,
     flow_execution_id int       default 0                     not null comment '关联的flow_execution',
     job_id            int       default 0                     not null comment 'job id',
-    status            int       default 0                     not null comment '节点执行状态：1未执行，2执行中，3执行结束，4执行异常',
+    status            int       default 0                     not null comment '流程执行状态，0 排队中，1 执行中，2 执行结束，3执行异常,4 手动kill, 5 禁止同时运行',
     logs              mediumtext                              null comment 'job running logs',
     create_time       timestamp default '2019-01-01 00:00:00' not null comment 'create time',
     update_time       timestamp default '2019-01-01 00:00:00' not null comment 'update time'
@@ -104,5 +104,5 @@ create table thain_runtime_status
 );
 
 insert into thain_runtime_status (runtime_key, runtime_status, `status_comment`)
-    values ('check_dead_flow', 0,
-           'Mark if there is a task that is checking the dead flow. If it is 0, there is no task to check, and if it is 1, there is a task to check.');
+values ('check_dead_flow', 0,
+        'Mark if there is a task that is checking the dead flow. If it is 0, there is no task to check, and if it is 1, there is a task to check.');

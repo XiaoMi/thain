@@ -33,7 +33,13 @@ public enum FlowExecutionStatus {
     /**
      * 4 手动kill
      */
-    KILLED(4);
+    KILLED(4),
+
+    /**
+     * 5 禁止同时运行一个flow
+     */
+    DO_NOT_RUN_SAME_TIME(5);
+
 
     public final int code;
 

@@ -65,7 +65,7 @@ public class FlowServiceImpl implements FlowService {
         if (!addFlowRq.slaKill || addFlowRq.slaDuration == 0) {
             addFlowRq.toBuilder().slaKill(true).slaDuration(3L * 60 * 60).build();
         }
-        val addDto = AddRq.builder().addFlowRq(addFlowRq).jobModelList(jobModelList).build();
+        val addDto = AddRq.builder().flowModel(addFlowRq).jobModelList(jobModelList).build();
         if (addFlowRq.id != null && flowDao.flowExist(addFlowRq.id)) {
             val updateFlowRq = UpdateFlowRq.getInstance(addFlowRq, addFlowRq.id);
             thainFacade.updateFlow(updateFlowRq, jobModelList);

@@ -66,13 +66,13 @@ public class ThainFacade {
      * 新建任务, cron为空的则只部署，不调度, 这个flowJson是不含id的，如果含id也没用
      */
     public long addFlow(@NonNull AddRq addRq) throws ThainException {
-        val flowId = processEngine.addFlow(addRq.addFlowRq, addRq.jobModelList).orElseThrow(() -> new ThainException("failed to insert flow"));
-        if (StringUtils.isBlank(addRq.addFlowRq.cron)) {
+        val flowId = processEngine.addFlow(addRq.flowModel, addRq.jobModelList).orElseThrow(() -> new ThainException("failed to insert flow"));
+        if (StringUtils.isBlank(addRq.flowModel.cron)) {
             return flowId;
         }
         try {
-            CronExpression.validateExpression(addRq.addFlowRq.cron);
-            schedulerEngine.addFlow(flowId, addRq.addFlowRq.cron);
+            CronExpression.validateExpression(addRq.flowModel.cron);
+            schedulerEngine.addFlow(flowId, addRq.flowModel.cron);
         } catch (Exception e) {
             processEngine.deleteFlow(flowId);
             throw new ThainException(e);

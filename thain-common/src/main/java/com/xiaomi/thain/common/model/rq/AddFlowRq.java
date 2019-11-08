@@ -32,11 +32,13 @@ public class AddFlowRq {
     public final String cron;
     @Nullable
     public final String modifyCallbackUrl;
-    @Nullable
-    public final Long pauseContinuousFailure;
+    /**
+     * 0 则不暂停
+     */
+    public final long pauseContinuousFailure;
     @Nullable
     public final String emailContinuousFailure;
-    @NonNull
+    @Nullable
     public final String createUser;
     @Nullable
     public final String callbackUrl;
@@ -45,7 +47,7 @@ public class AddFlowRq {
     /**
      * 创建的appId,"thain" 为网页创建
      */
-    @NonNull
+    @Nullable
     public final String createAppId;
 
     /**

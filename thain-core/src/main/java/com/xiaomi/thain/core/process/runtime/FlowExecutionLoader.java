@@ -1,5 +1,6 @@
 package com.xiaomi.thain.core.process.runtime;
 
+import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.constant.FlowLastRunStatus;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author liangyongrui
@@ -50,7 +52,7 @@ public class FlowExecutionLoader {
             try {
                 //todo 执行队列是否满, 如果没满的话：
                 val addFlowExecutionDp = flowExecutionWaitingQueue.take();
-                checkFlowRunStatus(addFlowExecutionDp.flowId);
+                checkFlowRunStatus(addFlowExecutionDp);
                 flowExecutionThreadPool.execute(() -> runFlowExecution(addFlowExecutionDp));
             } catch (ThainRepeatExecutionException e) {
                 log.warn(e.getMessage());
@@ -61,10 +63,11 @@ public class FlowExecutionLoader {
         }
     }
 
-    private void checkFlowRunStatus(long flowId) throws ThainException, ThainRepeatExecutionException {
-        val flowModel = flowDao.getFlow(flowId).orElseThrow(() -> new ThainException("flow does not exist"));
+    private void checkFlowRunStatus(FlowExecutionDr flowExecutionDr) throws ThainException, ThainRepeatExecutionException {
+        val flowModel = flowDao.getFlow(flowExecutionDr.flowId).orElseThrow(() -> new ThainException("flow does not exist"));
         val flowLastRunStatus = FlowLastRunStatus.getInstance(flowModel.lastRunStatus);
         if (flowLastRunStatus == FlowLastRunStatus.RUNNING) {
+            processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.DO_NOT_RUN_SAME_TIME.code);
             throw new ThainRepeatExecutionException("flow is running");
         }
     }
@@ -72,10 +75,13 @@ public class FlowExecutionLoader {
     private void runFlowExecution(@NonNull FlowExecutionDr flowExecutionDr) {
         try {
             runningFlowExecution.add(flowExecutionDr);
+            //test todo
+            TimeUnit.SECONDS.sleep(60);
             FlowExecutor.startProcess(flowExecutionDr, processEngineStorage);
-            runningFlowExecution.remove(flowExecutionDr);
-        } catch (ThainException e) {
+        } catch (Exception e) {
             log.error("runFlowExecution: ", e);
+        } finally {
+            runningFlowExecution.remove(flowExecutionDr);
         }
     }
 

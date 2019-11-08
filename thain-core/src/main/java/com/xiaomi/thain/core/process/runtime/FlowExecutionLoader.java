@@ -65,7 +65,11 @@ public class FlowExecutionLoader {
             try {
                 idleThread.take();
                 val flowExecutionDr = flowExecutionWaitingQueue.take();
-                checkFlowRunStatus(flowExecutionDr);
+                try {
+                    checkFlowRunStatus(flowExecutionDr);
+                } catch (Exception e) {
+                    log.warn(e.getMessage());
+                }
                 CompletableFuture.runAsync(() -> runFlowExecution(flowExecutionDr), flowExecutionThreadPool)
                         .whenComplete((t, e) -> {
                             try {
@@ -74,8 +78,6 @@ public class FlowExecutionLoader {
                                 processEngineStorage.mailService.sendSeriousError(ExceptionUtils.getStackTrace(te));
                             }
                         });
-            } catch (ThainRepeatExecutionException e) {
-                log.warn(e.getMessage());
             } catch (Exception e) {
                 log.error("", e);
                 processEngineStorage.mailService.sendSeriousError(ExceptionUtils.getStackTrace(e));
@@ -84,7 +86,10 @@ public class FlowExecutionLoader {
     }
 
     private void checkFlowRunStatus(FlowExecutionDr flowExecutionDr) throws ThainException, ThainRepeatExecutionException {
-        val flowModel = flowDao.getFlow(flowExecutionDr.flowId).orElseThrow(() -> new ThainException("flow does not exist"));
+        val flowModel = flowDao.getFlow(flowExecutionDr.flowId).orElseThrow(() -> {
+            processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.KILLED.code);
+            return new ThainException("flow does not exist");
+        });
         val flowLastRunStatus = FlowLastRunStatus.getInstance(flowModel.lastRunStatus);
         if (flowLastRunStatus == FlowLastRunStatus.RUNNING) {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.DO_NOT_RUN_SAME_TIME.code);

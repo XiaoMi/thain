@@ -120,6 +120,8 @@ public class FlowExecutor {
      */
     public static void startProcess(@NonNull FlowExecutionDr flowExecutionDr,
                                     @NonNull ProcessEngineStorage processEngineStorage) throws ThainException {
+        processEngineStorage.flowExecutionDao
+                .updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.RUNNING.code);
         val flowExecutionService = new FlowExecutor(flowExecutionDr, processEngineStorage);
         flowExecutionService.start();
     }

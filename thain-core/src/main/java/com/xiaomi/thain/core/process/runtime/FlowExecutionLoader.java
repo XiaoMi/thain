@@ -69,6 +69,7 @@ public class FlowExecutionLoader {
                     checkFlowRunStatus(flowExecutionDr);
                 } catch (Exception e) {
                     log.warn(e.getMessage());
+                    continue;
                 }
                 CompletableFuture.runAsync(() -> runFlowExecution(flowExecutionDr), flowExecutionThreadPool)
                         .whenComplete((t, e) -> {

@@ -31,7 +31,6 @@ create table thain_flow
     ENGINE = InnoDB
     comment 'flow表';
 
-
 create table thain_flow_execution
 (
     id           int unsigned auto_increment primary key comment '自增id',
@@ -45,6 +44,9 @@ create table thain_flow_execution
     heartbeat    timestamp        default '2019-01-01 00:00:00' not null comment '最近一次心跳时间'
 )
     ENGINE = InnoDB;
+
+alter table thain_flow_execution
+    add index thain_flow_execution_heartbeat_index (heartbeat);
 
 create table thain_job
 (
@@ -104,20 +106,3 @@ create table thain_x5_config
         unique (app_id)
 )
     ENGINE = InnoDB;
-
--- thain 运行状态表
-create table thain_runtime_status
-(
-    id             int unsigned auto_increment primary key,
-    runtime_key    varchar(50)  default '' not null,
-    runtime_status int unsigned default 0  not null,
-    status_comment        text                    null comment 'runtime_key 的说明',
-    constraint thain_runtime_status_runtime_key_uindex
-        unique (runtime_key)
-) ENGINE = InnoDB;
-
-insert into thain_runtime_status (runtime_key, runtime_status, `status_comment`)
-    value (
-           'check_dead_flow', 0,
-           'Mark if there is a task that is checking the dead flow. If it is 0, there is no task to check, and if it is 1, there is a task to check.'
-    );

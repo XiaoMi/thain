@@ -12,6 +12,7 @@ import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import com.xiaomi.thain.core.scheduler.job.CleanJob;
 import com.xiaomi.thain.core.scheduler.job.FlowJob;
+import com.xiaomi.thain.core.scheduler.job.RecoveryJob;
 import com.xiaomi.thain.core.scheduler.job.SlaJob;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -54,12 +55,25 @@ public class SchedulerEngine {
                     throw new ThainRuntimeException(e);
                 }
             });
-
             initCleanUp();
+            initRecovery();
         } catch (Exception e) {
             log.error("thain init failed", e);
             throw new ThainSchedulerInitException(e.getMessage());
         }
+    }
+
+    private void initRecovery() throws SchedulerException {
+        JobDetail jobDetail = newJob(RecoveryJob.class)
+                .withIdentity("job_recovery", "system")
+                .build();
+        Trigger trigger = newTrigger()
+                .withIdentity("trigger_recovery", "system")
+                .withSchedule(cronSchedule("0 * * * * ?").withMisfireHandlingInstructionDoNothing())
+                .build();
+        scheduler.unscheduleJob(trigger.getKey());
+        scheduler.deleteJob(jobDetail.getKey());
+        scheduler.scheduleJob(jobDetail, trigger);
     }
 
     private void initCleanUp() throws SchedulerException {
@@ -70,6 +84,7 @@ public class SchedulerEngine {
                 .withIdentity("trigger_clean_up", "system")
                 .withSchedule(cronSchedule("0 0 * * * ?"))
                 .build();
+        scheduler.unscheduleJob(trigger.getKey());
         scheduler.deleteJob(jobDetail.getKey());
         scheduler.scheduleJob(jobDetail, trigger);
     }
@@ -116,7 +131,7 @@ public class SchedulerEngine {
      * 添加指定任务，加入调度
      *
      * @param flowId flow id
-     * @param cron cron
+     * @param cron   cron
      */
     public void addFlow(long flowId, @NonNull String cron) throws SchedulerException {
         JobDetail jobDetail = newJob(FlowJob.class)

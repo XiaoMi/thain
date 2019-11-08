@@ -23,8 +23,6 @@ public interface FlowExecutionMapper {
 
     int updateLogs(@Param("flowExecutionId") long flowExecutionId, @NonNull @Param("content") String content);
 
-    int addFlowExecution_(@NonNull FlowExecutionModel flowExecutionModel);
-
     int updateFlowExecutionStatus(@Param("flowExecutionId") long flowExecutionId, @Param("status") int status);
 
     int clearFlowExecution(int dataReserveDays);
@@ -66,4 +64,8 @@ public interface FlowExecutionMapper {
      * 设置flowExecution的心跳为当前时间
      */
     int setFlowExecutionHeartbeat(@NonNull List<Long> flowExecutionIds);
+
+    List<FlowExecutionDr> getDead();
+
+    int reWaiting(@NonNull List<Long> flowExecutionIds);
 }

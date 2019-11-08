@@ -63,13 +63,6 @@ public class FlowExecutionDao {
     /**
      * 数据库插入flowExecution
      */
-    public void addFlowExecution_(@NonNull FlowExecutionModel flowExecutionModel) {
-        execute(t -> t.addFlowExecution_(flowExecutionModel));
-    }
-
-    /**
-     * 数据库插入flowExecution
-     */
     public void addFlowExecution(@NonNull AddFlowExecutionDp addFlowExecutionDp) {
         execute(t -> t.addFlowExecution(addFlowExecutionDp));
     }
@@ -131,5 +124,19 @@ public class FlowExecutionDao {
             return;
         }
         execute(t -> t.setFlowExecutionHeartbeat(flowExecutionIds));
+    }
+
+    /**
+     * 获取超过1min没心跳的任务
+     */
+    public List<FlowExecutionDr> getDead() {
+        return execute(FlowExecutionMapper::getDead).orElseGet(Collections::emptyList);
+    }
+
+    /**
+     * 重新排队
+     */
+    public void reWaiting(List<Long> flowExecutionIds) {
+        execute(t -> t.reWaiting(flowExecutionIds));
     }
 }

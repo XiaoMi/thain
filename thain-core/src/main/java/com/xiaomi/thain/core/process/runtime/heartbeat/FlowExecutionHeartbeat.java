@@ -42,6 +42,7 @@ public class FlowExecutionHeartbeat {
     private FlowExecutionHeartbeat(@NonNull FlowExecutionDao flowExecutionDao, @NonNull MailService mailService) {
         this.flowExecutionDao = flowExecutionDao;
         this.mailService = mailService;
+        log.info("init FlowExecutionHeartbeat");
         ThainThreadPool.DEFAULT_THREAD_POOL.execute(this::sendHeartbeat);
     }
 

@@ -65,7 +65,12 @@ public interface FlowExecutionMapper {
      */
     int setFlowExecutionHeartbeat(@NonNull List<Long> flowExecutionIds);
 
+    /**
+     * 获取超过1min没心跳的任务
+     */
     List<FlowExecutionDr> getDead();
 
     int reWaiting(@NonNull List<Long> flowExecutionIds);
+
+    int updateHostInfo(@Param("id") long id, @Param("hostInfo") String hostInfo);
 }

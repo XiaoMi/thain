@@ -52,6 +52,7 @@ public class FlowExecutionLoader {
         for (int i = 0; i < flowExecutionThreadPool.corePoolSize(); i++) {
             idleThread.put(true);
         }
+        log.info("init FlowExecutionLoader");
         ThainThreadPool.DEFAULT_THREAD_POOL.execute(this::loopLoader);
     }
 

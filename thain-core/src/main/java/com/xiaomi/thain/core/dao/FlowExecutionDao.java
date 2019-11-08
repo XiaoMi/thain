@@ -136,7 +136,11 @@ public class FlowExecutionDao {
     /**
      * 重新排队
      */
-    public void reWaiting(List<Long> flowExecutionIds) {
+    public void reWaiting(@NonNull List<Long> flowExecutionIds) {
         execute(t -> t.reWaiting(flowExecutionIds));
+    }
+
+    public void updateHostInfo(long id, @NonNull String hostInfo) {
+        execute(t -> t.updateHostInfo(id, hostInfo));
     }
 }

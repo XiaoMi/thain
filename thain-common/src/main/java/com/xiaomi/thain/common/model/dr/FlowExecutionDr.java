@@ -19,7 +19,7 @@ import java.sql.Timestamp;
  * @author liangyongrui@xiaomi.com
  */
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @EqualsAndHashCode
 public class FlowExecutionDr {
     /**

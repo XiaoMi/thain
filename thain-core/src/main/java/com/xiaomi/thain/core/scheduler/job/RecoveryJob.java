@@ -6,6 +6,7 @@
 
 package com.xiaomi.thain.core.scheduler.job;
 
+import com.alibaba.fastjson.JSON;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -16,6 +17,8 @@ import org.quartz.JobExecutionContext;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
 
 /**
  * 恢复失败任务
@@ -45,8 +48,12 @@ public class RecoveryJob implements Job {
         if (flowExecutionDrList.isEmpty()) {
             return;
         }
-        flowExecutionDao.reWaiting(flowExecutionDrList.stream().map(t -> t.id).collect(Collectors.toList()));
+        val ids = flowExecutionDrList.stream().map(t -> t.id).collect(Collectors.toList());
+        flowExecutionDao.reWaiting(ids);
+        log.info("Scanned some dead flows: " + JSON.toJSONString(flowExecutionDrList));
         processEngine.processEngineStorage.flowExecutionWaitingQueue.addAll(flowExecutionDrList);
+        val hostInfo = getHostInfo();
+        flowExecutionDrList.forEach(t -> flowExecutionDao.updateHostInfo(t.id, hostInfo));
     }
 
 }

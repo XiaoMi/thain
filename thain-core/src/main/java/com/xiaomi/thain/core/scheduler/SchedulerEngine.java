@@ -71,7 +71,6 @@ public class SchedulerEngine {
                 .withIdentity("trigger_recovery", "system")
                 .withSchedule(cronSchedule("0 * * * * ?").withMisfireHandlingInstructionDoNothing())
                 .build();
-        scheduler.unscheduleJob(trigger.getKey());
         scheduler.deleteJob(jobDetail.getKey());
         scheduler.scheduleJob(jobDetail, trigger);
     }
@@ -84,7 +83,6 @@ public class SchedulerEngine {
                 .withIdentity("trigger_clean_up", "system")
                 .withSchedule(cronSchedule("0 0 * * * ?"))
                 .build();
-        scheduler.unscheduleJob(trigger.getKey());
         scheduler.deleteJob(jobDetail.getKey());
         scheduler.scheduleJob(jobDetail, trigger);
     }
@@ -93,15 +91,6 @@ public class SchedulerEngine {
                                               @NonNull ProcessEngine processEngine)
             throws ThainSchedulerInitException {
         return new SchedulerEngine(schedulerEngineConfiguration, processEngine);
-    }
-
-    public void startDelayed(int second) throws ThainSchedulerStartException {
-        try {
-            this.scheduler.startDelayed(second);
-        } catch (SchedulerException e) {
-            log.error("startDelayed， ", e);
-            throw new ThainSchedulerStartException(e.getMessage());
-        }
     }
 
     public void addSla(long flowExecutionId, @NonNull FlowDr flowDr) throws SchedulerException {

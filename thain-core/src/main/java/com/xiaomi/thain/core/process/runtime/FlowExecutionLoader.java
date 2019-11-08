@@ -68,6 +68,7 @@ public class FlowExecutionLoader {
                 try {
                     checkFlowRunStatus(flowExecutionDr);
                 } catch (Exception e) {
+                    idleThread.put(true);
                     log.warn(e.getMessage());
                     continue;
                 }

@@ -5,6 +5,7 @@
  */
 package com.xiaomi.thain.component.std;
 
+import com.xiaomi.thain.common.exception.JobExecuteException;
 import com.xiaomi.thain.component.annotation.ThainComponent;
 import com.xiaomi.thain.component.tools.ComponentTools;
 import lombok.val;
@@ -35,7 +36,7 @@ public class ShellComponent {
 
     private String environmentVariable;
 
-    private void run() throws IOException {
+    private void run() throws IOException, JobExecuteException {
         File file = new File("shell/job_execution_" + tools.getJobExecutionId());
         file.mkdirs();
         String filePath = file.getAbsolutePath() + "/thain_shell.sh";
@@ -62,13 +63,18 @@ public class ShellComponent {
                 }
             }
         }
+        val sb = new StringBuilder();
         try (val in = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
             String inline;
             while ((inline = in.readLine()) != null) {
                 if (StringUtils.isNotBlank(inline)) {
                     tools.addErrorLog(inline);
+                    sb.append(inline).append("\n");
                 }
             }
+        }
+        if (sb.length() > 0) {
+            throw new JobExecuteException(sb.toString());
         }
 
     }

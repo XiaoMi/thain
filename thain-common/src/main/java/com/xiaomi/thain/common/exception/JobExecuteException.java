@@ -17,6 +17,10 @@ public class JobExecuteException extends ThainException {
     public JobExecuteException() {
     }
 
+    public JobExecuteException(@NonNull String message) {
+        super(message);
+    }
+
     public JobExecuteException(@NonNull String message, @NonNull Throwable cause) {
         super(message, cause);
     }

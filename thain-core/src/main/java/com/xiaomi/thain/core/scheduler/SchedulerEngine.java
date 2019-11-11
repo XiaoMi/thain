@@ -8,10 +8,11 @@ package com.xiaomi.thain.core.scheduler;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerInitException;
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerStartException;
-import com.xiaomi.thain.common.model.FlowModel;
+import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import com.xiaomi.thain.core.scheduler.job.CleanJob;
 import com.xiaomi.thain.core.scheduler.job.FlowJob;
+import com.xiaomi.thain.core.scheduler.job.RecoveryJob;
 import com.xiaomi.thain.core.scheduler.job.SlaJob;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -54,12 +55,24 @@ public class SchedulerEngine {
                     throw new ThainRuntimeException(e);
                 }
             });
-
             initCleanUp();
+            initRecovery();
         } catch (Exception e) {
             log.error("thain init failed", e);
             throw new ThainSchedulerInitException(e.getMessage());
         }
+    }
+
+    private void initRecovery() throws SchedulerException {
+        JobDetail jobDetail = newJob(RecoveryJob.class)
+                .withIdentity("job_recovery", "system")
+                .build();
+        Trigger trigger = newTrigger()
+                .withIdentity("trigger_recovery", "system")
+                .withSchedule(cronSchedule("0 * * * * ?").withMisfireHandlingInstructionDoNothing())
+                .build();
+        scheduler.deleteJob(jobDetail.getKey());
+        scheduler.scheduleJob(jobDetail, trigger);
     }
 
     private void initCleanUp() throws SchedulerException {
@@ -80,24 +93,15 @@ public class SchedulerEngine {
         return new SchedulerEngine(schedulerEngineConfiguration, processEngine);
     }
 
-    public void startDelayed(int second) throws ThainSchedulerStartException {
-        try {
-            this.scheduler.startDelayed(second);
-        } catch (SchedulerException e) {
-            log.error("startDelayed， ", e);
-            throw new ThainSchedulerStartException(e.getMessage());
-        }
-    }
-
-    public void addSla(long flowExecutionId, @NonNull FlowModel flowModel) throws SchedulerException {
+    public void addSla(long flowExecutionId, @NonNull FlowDr flowDr) throws SchedulerException {
         JobDetail jobDetail = newJob(SlaJob.class)
                 .withIdentity("flowExecution_" + flowExecutionId, "flowExecution")
                 .usingJobData("flowExecutionId", flowExecutionId)
-                .usingJobData("flowId", flowModel.id)
+                .usingJobData("flowId", flowDr.id)
                 .build();
         Trigger trigger = newTrigger()
                 .withIdentity("trigger_" + flowExecutionId, "flowExecution")
-                .startAt(Date.from(Instant.now().plusSeconds(flowModel.slaDuration)))
+                .startAt(Date.from(Instant.now().plusSeconds(flowDr.slaDuration)))
                 .build();
         scheduler.deleteJob(jobDetail.getKey());
         scheduler.scheduleJob(jobDetail, trigger);
@@ -116,7 +120,7 @@ public class SchedulerEngine {
      * 添加指定任务，加入调度
      *
      * @param flowId flow id
-     * @param cron cron
+     * @param cron   cron
      */
     public void addFlow(long flowId, @NonNull String cron) throws SchedulerException {
         JobDetail jobDetail = newJob(FlowJob.class)

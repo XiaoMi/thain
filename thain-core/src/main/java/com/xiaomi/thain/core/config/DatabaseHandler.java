@@ -6,11 +6,7 @@
 package com.xiaomi.thain.core.config;
 
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
-import com.xiaomi.thain.core.mapper.FlowExecutionMapper;
-import com.xiaomi.thain.core.mapper.FlowMapper;
-import com.xiaomi.thain.core.mapper.JobExecutionMapper;
-import com.xiaomi.thain.core.mapper.JobMapper;
-import com.xiaomi.thain.core.mapper.UserMapper;
+import com.xiaomi.thain.core.mapper.*;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;

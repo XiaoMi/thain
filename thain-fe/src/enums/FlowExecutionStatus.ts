@@ -12,6 +12,10 @@ import { formatMessage } from 'umi-plugin-react/locale';
  */
 export enum FlowExecutionStatus {
   /**
+   * 0 等待运行
+   */
+  WAITING = 0,
+  /**
    * 1 正在运行
    */
   RUNNING = 1,
@@ -28,12 +32,20 @@ export enum FlowExecutionStatus {
    * 4 KILLED
    */
   KILLED = 4,
+  /**
+   * 5 禁止同时运行一个flow
+   */
+  DO_NOT_RUN_SAME_TIME = 5,
 }
 const map = {
+  [FlowExecutionStatus.WAITING]: formatMessage({ id: 'flow.execution.waiting' }),
   [FlowExecutionStatus.RUNNING]: formatMessage({ id: 'flow.execution.running' }),
   [FlowExecutionStatus.SUCCESS]: formatMessage({ id: 'flow.execution.success' }),
   [FlowExecutionStatus.ERROR]: formatMessage({ id: 'flow.execution.error' }),
   [FlowExecutionStatus.KILLED]: formatMessage({ id: 'flow.execution.killed' }),
+  [FlowExecutionStatus.DO_NOT_RUN_SAME_TIME]: formatMessage({
+    id: 'flow.execution.do.not.run.same.time',
+  }),
 };
 
 export function getScheduleStatusDesc(enumStatus: FlowExecutionStatus) {

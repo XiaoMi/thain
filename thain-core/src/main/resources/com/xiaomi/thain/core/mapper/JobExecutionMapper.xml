@@ -29,6 +29,12 @@
         set create_time = now()
         where id = #{jobExecutionId}
     </update>
+    <update id="killJobExecution">
+        update thain_job_execution
+        set status = 4
+        where flow_execution_id = #{flowExecutionId}
+          and status = 2
+    </update>
     <delete id="deleteJobExecutionByIds">
         delete
         from thain_job_execution

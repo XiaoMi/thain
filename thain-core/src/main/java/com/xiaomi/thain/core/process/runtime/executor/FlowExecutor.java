@@ -94,7 +94,8 @@ public class FlowExecutor {
         this.jobFutureQueue = new ConcurrentLinkedQueue<>();
         try {
             this.flowExecutionId = flowExecutionDr.id;
-            val jobModelList = processEngineStorage.jobDao.getJobs(flowDr.id).orElseThrow(ThainFlowRunningException::new);
+            val jobModelList = processEngineStorage.jobDao.getJobs(flowDr.id)
+                    .orElseThrow(ThainFlowRunningException::new);
             this.flowExecutionService = FlowExecutionService.getInstance(flowExecutionId, flowDr, processEngineStorage);
             this.notExecutedJobsPool = ImmutableList.copyOf(jobModelList);
             this.jobConditionChecker = JobConditionChecker.getInstance(flowExecutionId);
@@ -168,8 +169,9 @@ public class FlowExecutor {
      * 执行可以执行的节点
      */
     private synchronized void runExecutableJobs() {
-        val flowExecutionModel = processEngineStorage.flowExecutionDao.getFlowExecution(flowExecutionId).orElseThrow(
-                () -> new ThainRuntimeException("Failed to read FlowExecution information, flowExecutionId: " + flowExecutionId));
+        val flowExecutionModel = processEngineStorage.flowExecutionDao.getFlowExecution(flowExecutionId)
+                .orElseThrow(() -> new ThainRuntimeException(
+                        "Failed to read FlowExecution information, flowExecutionId: " + flowExecutionId));
         val flowExecutionStatus = FlowExecutionStatus.getInstance(flowExecutionModel.status);
         if (flowExecutionStatus == FlowExecutionStatus.KILLED) {
             flowExecutionService.killed();
@@ -182,7 +184,8 @@ public class FlowExecutor {
                 try {
                     JobExecutor.start(flowExecutionId, job, jobExecutionModelMap.get(job.id), processEngineStorage);
                 } catch (Exception e) {
-                    flowExecutionService.addError("Job[" + job.name + "] exception: " + ExceptionUtils.getRootCauseMessage(e));
+                    flowExecutionService.addError("Job[" + job.name + "] exception: "
+                            + ExceptionUtils.getRootCauseMessage(e));
                     return;
                 }
                 flowExecutionService.addInfo("Execute job[" + job.name + "] complete");

@@ -33,5 +33,7 @@ public interface JobExecutionMapper {
      */
     List<Long> getNeedDeleteJobExecutionIds(@NonNull List<Long> flowExecutionIds);
 
-    void deleteJobExecutionByIds(@NonNull List<Long> needDeleteJobExecutionIds);
+    int deleteJobExecutionByIds(@NonNull List<Long> needDeleteJobExecutionIds);
+
+    int killJobExecution(long flowExecutionId);
 }

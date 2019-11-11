@@ -8,6 +8,7 @@ package com.xiaomi.thain.server.service;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.rq.AddFlowRq;
 import lombok.NonNull;
 
 import java.util.List;
@@ -22,10 +23,10 @@ public interface CheckService {
     /**
      * 检查flowModel是否合法，不合法则抛出异常
      *
-     * @param flowModel flowModel
+     * @param addFlowRq addFlowRq
      * @throws ThainException 不合法的异常
      */
-    void checkFlowModel(@NonNull FlowModel flowModel) throws ThainException;
+    void checkFlowModel(@NonNull AddFlowRq addFlowRq) throws ThainException;
 
     void checkJobModelList(@NonNull List<JobModel> jobModelList) throws ThainException;
 }

@@ -7,8 +7,10 @@
 package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.common.exception.ThainException;
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.rq.AddFlowRq;
 import com.xiaomi.thain.server.model.sp.FlowListSp;
 import lombok.NonNull;
 import org.quartz.SchedulerException;
@@ -32,11 +34,8 @@ public interface FlowService {
 
     /**
      * 创建或更新任务
-     *
-     * @param appId app id
-     * @return flow id
      */
-    long add(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList, @NonNull String appId)
+    long add(@NonNull AddFlowRq addFlowRq, @NonNull List<JobModel> jobModelList, @NonNull String appId)
             throws ThainException, ParseException, SchedulerException;
 
     /**
@@ -44,7 +43,10 @@ public interface FlowService {
      */
     boolean delete(long flowId) throws SchedulerException;
 
-    boolean start(long flowId) throws ThainException;
+    /**
+     * 立即执行一次, 返回flow execution id
+     */
+    long start(long flowId) throws ThainException, ThainRepeatExecutionException;
 
     FlowModel getFlow(long flowId);
 

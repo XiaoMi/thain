@@ -31,11 +31,17 @@ Thain has completed backend management system which supports depending, re-run, 
 
 ## Maintainers
 
-- @liangyongrui
-- @holiday12138
+- @ liangyongrui
+- @ holiday12138
+
+## committer
+
+- @ liangyongrui
+- @ holiday12138
+- @ SingleMeen
 
 ## WeChat user group
-![WeChat](http://cnbj1.fds.api.xiaomi.com/xdata-mail/WechatIMG.png)
+![WeChat](http://cdn.cnbj1.fds.api.mi-img.com/thain/WechatIMG.png)
 
 ## Help Us Do Better
 

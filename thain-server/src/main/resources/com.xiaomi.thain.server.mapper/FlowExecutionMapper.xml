@@ -82,4 +82,9 @@
                 and tf.create_app_id = #{appId}
 
     </select>
+    <select id="getRunningExecutionIdsByFlowId" resultType="java.lang.Long">
+        select id
+        from thain_flow_execution
+        where flow_id=#{flowId} and status=#{status}
+    </select>
 </mapper>

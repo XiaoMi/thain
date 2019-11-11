@@ -30,7 +30,7 @@ export class LogEntity {
   }
 
   public toDom() {
-    let color = '0,0,0';
+    let color;
     switch (this.level) {
       case 'DEBUG':
         color = '0,0,100';

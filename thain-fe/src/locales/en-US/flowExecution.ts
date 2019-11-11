@@ -4,10 +4,12 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 export default {
+  'flow.execution.waiting': 'Waiting',
   'flow.execution.running': 'Running',
   'flow.execution.success': 'Success',
   'flow.execution.error': 'Error',
   'flow.execution.killed': 'Killed',
+  'flow.execution.do.not.run.same.time': 'Do not run same time',
   'flow.execution.consuming': 'Time consuming',
   'flow.execution.view.log': 'View log',
   'flow.execution.trigger.type': 'Trigger type',

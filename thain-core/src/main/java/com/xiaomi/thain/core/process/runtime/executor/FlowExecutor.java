@@ -179,12 +179,14 @@ public class FlowExecutor {
         executableJobs.forEach(job -> {
             val future = CompletableFuture.runAsync(() -> {
                 flowExecutionService.addInfo("Start executing the job [" + job.name + "]");
-                if (JobExecutor.start(flowExecutionId, job, jobExecutionModelMap.get(job.id), processEngineStorage)) {
-                    flowExecutionService.addInfo("Execute job[" + job.name + "] complete");
-                    flowExecutionStorage.addFinishJob(job.name);
-                } else {
-                    flowExecutionService.addError("Job[" + job.name + "] exception");
+                try {
+                    JobExecutor.start(flowExecutionId, job, jobExecutionModelMap.get(job.id), processEngineStorage);
+                } catch (Exception e) {
+                    flowExecutionService.addError("Job[" + job.name + "] exception: " + ExceptionUtils.getRootCauseMessage(e));
+                    return;
                 }
+                flowExecutionService.addInfo("Execute job[" + job.name + "] complete");
+                flowExecutionStorage.addFinishJob(job.name);
                 runExecutableJobs();
             }, flowExecutionJobThreadPool);
             jobFutureMap.put(job.name, future);

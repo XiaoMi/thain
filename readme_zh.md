@@ -31,8 +31,15 @@ Thain提供了任务调度与执行的一整套解决方案，在小米集团内
     - [自定义组件](./docs/zh/3.组件说明/2.自定义组件.md)
 
 ## Maintainers
-- @liangyongrui
-- @holiday12138
+
+- @ liangyongrui
+- @ holiday12138
+
+## committer
+
+- @ liangyongrui
+- @ holiday12138
+- @ SingleMeen
 
 ## 微信用户群
 ![WeChat](http://cnbj1.fds.api.xiaomi.com/xdata-mail/WechatIMG.png)

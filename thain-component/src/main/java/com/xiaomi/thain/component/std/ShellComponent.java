@@ -36,11 +36,6 @@ public class ShellComponent {
     private String environmentVariable;
 
     private void run() throws IOException {
-        {
-            //测试使用
-            tools.addDebugLog("script content:" + shellBase64);
-            tools.addDebugLog("variable content:" + environmentVariable);
-        }
         File file = new File("shell/job_execution_" + tools.getJobExecutionId());
         file.mkdirs();
         String filePath = file.getAbsolutePath() + "/thain_shell.sh";

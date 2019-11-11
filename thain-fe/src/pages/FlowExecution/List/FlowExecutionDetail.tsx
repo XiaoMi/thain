@@ -5,9 +5,8 @@
  */
 import React, { useCallback, useState, useEffect } from 'react';
 import { Row, Col, Button, Table, Icon } from 'antd';
-import ConnectState, { ConnectProps } from '@/models/connect';
-import { connect } from 'dva';
-import { FlowExecutionDetailModelState } from '@/pages/FlowExecution/List/models/flowExecutionDetail';
+import ConnectState from '@/models/connect';
+import { useSelector, useDispatch } from 'dva';
 import Editor from '@/pages/FlowEditor/editor';
 import Logs from './Logs';
 import { JobExecutionModel } from '@/commonModels/JobExecutionModel';
@@ -23,18 +22,14 @@ function createPage(container: any): any {
   });
 }
 
-interface Props extends ConnectProps<{ flowId: number }> {
-  flowExecutionDetail: FlowExecutionDetailModelState;
-  loading: boolean;
-  flowExecutionId: number;
+interface Props {
+  flowExecutionId?: number;
 }
 
-const FlowExecutionDetail: React.FC<Props> = ({
-  dispatch,
-  flowExecutionDetail,
-  flowExecutionId,
-  loading,
-}) => {
+const FlowExecutionDetail: React.FC<Props> = ({ flowExecutionId }) => {
+  const dispatch = useDispatch();
+  const flowExecutionDetail = useSelector((state: ConnectState) => state.flowExecutionDetail);
+  const loading = useSelector((state: ConnectState) => state.loading.models.flowExecutionDetail);
   const { flowExecutionModel, jobExecutionModelList } = flowExecutionDetail;
   const [showLogs, setShowLogs] = useState(flowExecutionModel.logs);
   const [graph, setGraph] = useState();
@@ -61,15 +56,13 @@ const FlowExecutionDetail: React.FC<Props> = ({
           setShowLogs(model.logs);
         }
       });
-      if (dispatch) {
-        dispatch({
-          type: 'flowExecutionDetail/getGraph',
-          payload: {
-            flowExecutionId,
-            graph,
-          },
-        });
-      }
+      dispatch({
+        type: 'flowExecutionDetail/getGraph',
+        payload: {
+          flowExecutionId,
+          graph,
+        },
+      });
     }
   }, [graph, flowExecutionId, refresh]);
 
@@ -167,7 +160,7 @@ const FlowExecutionDetail: React.FC<Props> = ({
         <Table
           size="small"
           columns={columns}
-          rowKey={(record: any) => `rowKey${record.id}`}
+          rowKey={record => `rowKey${record.id}`}
           dataSource={jobExecutionModelList.sort((o1, o2) => o1.createTime - o2.createTime)}
           loading={loading}
           pagination={{ pageSize: 3 }}
@@ -177,7 +170,4 @@ const FlowExecutionDetail: React.FC<Props> = ({
   );
 };
 
-export default connect(({ flowExecutionDetail, loading }: ConnectState) => ({
-  flowExecutionDetail,
-  loading: loading.models.flowExecutionDetail,
-}))(FlowExecutionDetail);
+export default FlowExecutionDetail;

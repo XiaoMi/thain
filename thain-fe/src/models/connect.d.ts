@@ -13,7 +13,7 @@ import { MenuDataItem } from '@ant-design/pro-layout';
 import { FlowExecutionListModelState } from '../pages/FlowExecution/List/models/flowExecutionList';
 import { FlowEditorModelState } from '../pages/FlowEditor/model';
 import { FlowListModelState } from '@/pages/Flow/List/model';
-import { FlowExecutionDetailModelState } from '@/pages/FlowExecution/Detail/model';
+import { FlowExecutionDetailModelState } from '@/pages/FlowExecution/List/models/flowExecutionDetail';
 import { DashboardState } from '@/pages/Dashboard/model';
 import { AdminUserModel } from '@/pages/admin/models/UserAdminModel';
 import { X5TableModel } from '@/pages/admin/models/X5ConfigModel';

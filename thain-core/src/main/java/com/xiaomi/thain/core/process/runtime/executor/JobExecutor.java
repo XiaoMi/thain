@@ -8,6 +8,7 @@ package com.xiaomi.thain.core.process.runtime.executor;
 
 import com.xiaomi.thain.common.exception.JobExecuteException;
 import com.xiaomi.thain.common.exception.ThainException;
+import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.component.tools.ComponentTools;
@@ -57,47 +58,42 @@ public class JobExecutor {
     /**
      * 执行job, 返回是否执行完成
      */
-    public static boolean start(long flowExecutionId,
-                                @NonNull JobModel jobModel,
-                                @NonNull JobExecutionModel jobExecutionModel,
-                                @NonNull ProcessEngineStorage processEngineStorage) {
-        try {
-            val jobExecutor = new JobExecutor(flowExecutionId, jobModel, jobExecutionModel, processEngineStorage);
-            return jobExecutor.run();
-        } catch (Exception e) {
-            log.error("", e);
-        }
-        return false;
+    public static void start(long flowExecutionId,
+                             @NonNull JobModel jobModel,
+                             @NonNull JobExecutionModel jobExecutionModel,
+                             @NonNull ProcessEngineStorage processEngineStorage) throws JobExecuteException {
+        val jobExecutor = new JobExecutor(flowExecutionId, jobModel, jobExecutionModel, processEngineStorage);
+        jobExecutor.run();
     }
 
-    private boolean run() {
+    private void run() throws JobExecuteException {
         try {
             jobExecutionService.startJobExecution();
             httpNotice.sendStart();
             execute();
             httpNotice.sendSuccess();
-            return true;
         } catch (JobExecuteException e) {
             jobExecutionService.addError("Abort with: " + ExceptionUtils.getRootCauseMessage(e));
             httpNotice.sendError(ExceptionUtils.getRootCauseMessage(e));
             log.warn(ExceptionUtils.getRootCauseMessage(e));
+            throw new JobExecuteException(e);
         } catch (Exception e) {
             jobExecutionService.addError("Abort with: " + ExceptionUtils.getRootCauseMessage(e));
             httpNotice.sendError(ExceptionUtils.getRootCauseMessage(e));
             log.error("", e);
+            throw new ThainRuntimeException(e);
         } finally {
             try {
                 jobExecutionService.endJobExecution();
             } catch (Exception e) {
                 try {
                     processEngineStorage.mailService.sendSeriousError(
-                            "Failed to modify job status,detail message：" + ExceptionUtils.getStackTrace(e));
+                            "Failed to modify job status, detail message：" + ExceptionUtils.getStackTrace(e));
                 } catch (Exception ex) {
                     log.error("", ex);
                 }
             }
         }
-        return false;
     }
 
     /**

@@ -51,7 +51,7 @@ public interface FlowExecutionMapper {
     /**
      * 通过id 删除 flow execution
      */
-    void deleteFlowExecutionByIds(@NonNull List<Long> needDeleteFlowExecutionIds);
+    int deleteFlowExecutionByIds(@NonNull List<Long> needDeleteFlowExecutionIds);
 
     /**
      * 获取全部的flow execution ids

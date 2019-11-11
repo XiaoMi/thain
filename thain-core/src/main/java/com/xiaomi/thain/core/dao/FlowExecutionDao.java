@@ -109,10 +109,7 @@ public class FlowExecutionDao {
         if (needDeleteFlowExecutionIds.isEmpty()) {
             return;
         }
-        execute(t -> {
-            t.deleteFlowExecutionByIds(needDeleteFlowExecutionIds);
-            return null;
-        });
+        execute(t -> t.deleteFlowExecutionByIds(needDeleteFlowExecutionIds));
     }
 
     public List<Long> getAllFlowExecutionIds() {

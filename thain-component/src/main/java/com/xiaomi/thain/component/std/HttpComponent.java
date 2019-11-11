@@ -14,7 +14,6 @@ import com.xiaomi.thain.component.tools.ComponentTools;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;

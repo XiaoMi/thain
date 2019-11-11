@@ -163,6 +163,7 @@ public class ThainFacade {
             throw new ThainException("flowExecution does not running: " + flowExecutionId);
         }
         processEngine.processEngineStorage.flowExecutionDao.killFlowExecution(flowExecutionId);
+        processEngine.processEngineStorage.jobExecutionDao.killJobExecution(flowExecutionId);
         processEngine.processEngineStorage.flowDao.killFlow(flowExecutionModel.flowId);
     }
 

@@ -19,8 +19,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and test
       run: |
+        cd thain-fe
         npm ci
         npm run build --if-present
         npm test
+        cd ..
       env:
         CI: true

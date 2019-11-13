@@ -9,9 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NonNull;
 
-import javax.annotation.Nullable;
 import java.sql.Timestamp;
-import java.util.Optional;
 
 /**
  * Date 19-5-17 下午12:07

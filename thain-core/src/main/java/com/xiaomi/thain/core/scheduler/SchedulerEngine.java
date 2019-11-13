@@ -39,6 +39,8 @@ public class SchedulerEngine {
     @NonNull
     private final Scheduler scheduler;
 
+    private static final String SYSTEM_GROUP = "system";
+
     private SchedulerEngine(@NonNull SchedulerEngineConfiguration schedulerEngineConfiguration,
                             @NonNull ProcessEngine processEngine)
             throws ThainSchedulerInitException {
@@ -65,10 +67,10 @@ public class SchedulerEngine {
 
     private void initRecovery() throws SchedulerException {
         JobDetail jobDetail = newJob(RecoveryJob.class)
-                .withIdentity("job_recovery", "system")
+                .withIdentity("job_recovery", SYSTEM_GROUP)
                 .build();
         Trigger trigger = newTrigger()
-                .withIdentity("trigger_recovery", "system")
+                .withIdentity("trigger_recovery", SYSTEM_GROUP)
                 .withSchedule(cronSchedule("0 * * * * ?").withMisfireHandlingInstructionDoNothing())
                 .build();
         scheduler.deleteJob(jobDetail.getKey());
@@ -77,10 +79,10 @@ public class SchedulerEngine {
 
     private void initCleanUp() throws SchedulerException {
         JobDetail jobDetail = newJob(CleanJob.class)
-                .withIdentity("job_clean_up", "system")
+                .withIdentity("job_clean_up", SYSTEM_GROUP)
                 .build();
         Trigger trigger = newTrigger()
-                .withIdentity("trigger_clean_up", "system")
+                .withIdentity("trigger_clean_up", SYSTEM_GROUP)
                 .withSchedule(cronSchedule("0 0 * * * ?"))
                 .build();
         scheduler.deleteJob(jobDetail.getKey());

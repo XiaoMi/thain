@@ -6,14 +6,11 @@
 package com.xiaomi.thain.core.process;
 
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
-import com.xiaomi.thain.common.model.FlowExecutionModel;
-import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.core.dao.FlowDao;
 import com.xiaomi.thain.core.dao.FlowExecutionDao;
 import com.xiaomi.thain.core.dao.JobDao;
 import com.xiaomi.thain.core.dao.JobExecutionDao;
-import com.xiaomi.thain.core.process.runtime.heartbeat.FlowExecutionHeartbeat;
 import com.xiaomi.thain.core.process.runtime.notice.MailNotice;
 import com.xiaomi.thain.core.process.service.ComponentService;
 import com.xiaomi.thain.core.process.service.MailService;
@@ -22,9 +19,6 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.ToString;
 
-import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.LongFunction;
 

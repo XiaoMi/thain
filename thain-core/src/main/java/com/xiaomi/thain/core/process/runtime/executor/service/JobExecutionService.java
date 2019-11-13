@@ -67,6 +67,7 @@ public class JobExecutionService {
             case ERROR:
                 jobExecutionLogHandler.add("executed abort with：" + errorMessage, LogLevel.ERROR);
                 break;
+            case SUCCESS:
             default:
                 jobExecutionLogHandler.add("executed completed", LogLevel.INFO);
         }

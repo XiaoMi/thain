@@ -36,6 +36,7 @@ public class ShellComponent {
 
     private String environmentVariable;
 
+    @SuppressWarnings("unused")
     private void run() throws IOException, JobExecuteException {
         File file = new File("shell/job_execution_" + tools.getJobExecutionId());
         file.mkdirs();

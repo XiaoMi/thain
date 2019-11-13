@@ -128,6 +128,7 @@ public class FlowExecutionService {
                 case SUCCESS:
                     flowExecutionLogHandler.endSuccess();
                     break;
+                case ERROR:
                 default:
                     flowExecutionLogHandler.endError(errorMessage);
                     mailNotice.sendError(errorMessage);

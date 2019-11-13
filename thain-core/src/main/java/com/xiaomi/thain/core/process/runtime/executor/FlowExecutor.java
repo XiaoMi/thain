@@ -158,6 +158,7 @@ public class FlowExecutor {
                 case SUCCESS:
                     httpNotice.sendSuccess();
                     break;
+                case ERROR:
                 default:
                     httpNotice.sendError(flowExecutionService.getErrorMessage());
             }

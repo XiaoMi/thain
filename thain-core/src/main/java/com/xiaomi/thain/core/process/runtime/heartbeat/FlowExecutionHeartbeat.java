@@ -1,6 +1,5 @@
 package com.xiaomi.thain.core.process.runtime.heartbeat;
 
-import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.core.dao.FlowExecutionDao;
 import com.xiaomi.thain.core.process.service.MailService;

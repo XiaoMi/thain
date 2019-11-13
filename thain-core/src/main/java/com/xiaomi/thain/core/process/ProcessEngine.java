@@ -120,11 +120,10 @@ public class ProcessEngine {
                 .flowExecutionWaitingQueue(flowExecutionWaitingQueue)
                 .build();
 
-        val flowExecutionLoader = FlowExecutionLoader.getInstance(processEngineStorage);
+        this.flowExecutionLoader = FlowExecutionLoader.getInstance(processEngineStorage);
         val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService);
         flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
         flowExecutionHeartbeat.addCollections(flowExecutionLoader.runningFlowExecution);
-        this.flowExecutionLoader = flowExecutionLoader;
 
     }
 

@@ -6,7 +6,6 @@
 import { Button, Col, DatePicker, Form, Icon, Input, Row, Select } from 'antd';
 import React, { ChangeEvent, useState } from 'react';
 import styles from './TableList.less';
-import { connect } from 'dva';
 import { ConnectProps } from '@/models/connect';
 import { FlowSearch } from './model';
 import { FlowLastRunStatusGetEntries } from '@/enums/FlowLastRunStatus';
@@ -168,13 +167,11 @@ const SearchForm: React.FC<Props> = ({ condition, setCondition }) => {
                 defaultValue={model.scheduleStatus}
                 onChange={changeFormScheduleStatus}
               >
-                {FlowSchedulingStatusGetEntries().map(([key, value]) => {
-                  return (
-                    <Option key={key} value={value}>
-                      {key}
-                    </Option>
-                  );
-                })}
+                {FlowSchedulingStatusGetEntries().map(([key, value]) => (
+                  <Option key={key} value={value}>
+                    {key}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -205,4 +202,4 @@ const SearchForm: React.FC<Props> = ({ condition, setCondition }) => {
   );
 };
 
-export default connect()(SearchForm);
+export default SearchForm;

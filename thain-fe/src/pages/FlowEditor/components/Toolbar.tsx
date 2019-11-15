@@ -11,14 +11,13 @@
 import React, { useRef, useEffect } from 'react';
 import Editor from '../editor';
 import '../style/toolbar.less';
-import { connect } from 'dva';
-import ConnectState, { ConnectProps } from '@/models/connect';
+import { useSelector } from 'dva';
+import ConnectState from '@/models/connect';
 import { formatMessage } from 'umi-plugin-react/locale';
 
-interface Props extends ConnectProps<{ flowId: number }> {
-  readonly editor?: Editor;
-}
-const Toolbar: React.FC<Props> = ({ editor }) => {
+const Toolbar: React.FC<{}> = () => {
+  const flowEditor = useSelector((s: ConnectState) => s.flowEditor);
+  const { editor } = flowEditor;
   const toolbarContainer = useRef(null);
 
   useEffect(() => {
@@ -98,6 +97,4 @@ const Toolbar: React.FC<Props> = ({ editor }) => {
   );
 };
 
-export default connect(({ flowEditor }: ConnectState) => ({
-  ...flowEditor,
-}))(Toolbar);
+export default Toolbar;

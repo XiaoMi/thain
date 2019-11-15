@@ -94,7 +94,7 @@ const Page: React.FC<Props> = ({ editor, flowId, dispatch }) => {
         onCancel={() => setJobVisible(false)}
         footer={false}
       >
-        <NodeDetail key={jobVisible} />
+        <NodeDetail key={jobVisible + ''} />
       </Modal>
     </div>
   );

@@ -6,9 +6,8 @@
  * @author liangyongrui@xiaomi.com
  */
 import React from 'react';
-import ConnectState, { ConnectProps } from '@/models/connect';
-import { ComponentDefineJsons } from '@/typings/entity/ComponentDefineJsons';
-import { connect } from 'dva';
+import ConnectState from '@/models/connect';
+import { useSelector } from 'dva';
 import LineInput from './input/LineInput';
 import TextareaInput from './input/TextareaInput';
 import { Form } from 'antd';
@@ -16,19 +15,8 @@ import RichTextInput from './input/RichTextInput';
 import SelectInput from './input/SelectInput';
 import SqlInput from './input/SqlInput';
 import ShellInput from './input/ShellInput';
-import { SelectedModel } from '../model';
 import UploadBase64Input from './input/UploadBase64Input';
 import { formatMessage } from 'umi-plugin-react/locale';
-
-/**
- *
- * 点击节点展示的信息
- */
-interface Props extends ConnectProps<{ flowId: number }> {
-  updateGraph: (key: string, value: string, updateAttributes?: boolean) => void;
-  componentDefines: ComponentDefineJsons;
-  selectedModel: SelectedModel;
-}
 
 const getInput = (inputName: string) => {
   switch (inputName) {
@@ -51,10 +39,12 @@ const getInput = (inputName: string) => {
   }
 };
 
-const NodeDetail: React.FC<Props> = ({ selectedModel, componentDefines, updateGraph }) => {
+const NodeDetail: React.FC<{}> = () => {
+  const flowEditor = useSelector((s: ConnectState) => s.flowEditor);
+  const { selectedModel, componentDefines, updateGraph } = flowEditor;
   const { category, id } = selectedModel;
   const componentDefine = componentDefines[category];
-  if (!category) {
+  if (!category || updateGraph === undefined) {
     return <div />;
   }
 
@@ -126,6 +116,4 @@ const NodeDetail: React.FC<Props> = ({ selectedModel, componentDefines, updateGr
     </Form>
   );
 };
-export default connect(({ flowEditor }: ConnectState) => ({
-  ...flowEditor,
-}))(NodeDetail);
+export default NodeDetail;

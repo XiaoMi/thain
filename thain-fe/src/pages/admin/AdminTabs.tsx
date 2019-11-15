@@ -4,30 +4,28 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 import { Tabs } from 'antd';
-import { connect } from 'dva';
 import React, { useEffect } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
 import UserAdminTable from './UserAdminTable';
 import X5ConfigTable from './X5ConfigTable';
-import { ConnectProps } from '@/models/connect';
 import { router } from 'umi';
-interface Props extends ConnectProps {
+import { useDispatch } from 'dva';
+interface Props {
   type: string;
 }
-const AdminTabs: React.FC<Props> = ({ dispatch, type }) => {
+const AdminTabs: React.FC<Props> = ({ type }) => {
+  const dispatch = useDispatch();
   const { TabPane } = Tabs;
 
   useEffect(() => {
-    if (dispatch) {
-      if (type === 'user') {
-        dispatch({
-          type: 'admin/fetchTable',
-        });
-      } else if (type === 'client') {
-        dispatch({
-          type: 'x5config/fetchTable',
-        });
-      }
+    if (type === 'user') {
+      dispatch({
+        type: 'admin/fetchTable',
+      });
+    } else if (type === 'client') {
+      dispatch({
+        type: 'x5config/fetchTable',
+      });
     }
   }, [type]);
 
@@ -55,4 +53,4 @@ const AdminTabs: React.FC<Props> = ({ dispatch, type }) => {
   );
 };
 
-export default connect(() => ({}))(AdminTabs);
+export default AdminTabs;

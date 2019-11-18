@@ -8,10 +8,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaomi.thain.core.mapper.FlowExecutionMapper">
 
-    <insert id="addFlowExecution" parameterType="com.xiaomi.thain.common.model.FlowExecutionModel"
+    <insert id="addFlowExecution" parameterType="com.xiaomi.thain.common.model.dp.AddFlowExecutionDp"
             useGeneratedKeys="true" keyProperty="id">
-        insert into thain_flow_execution (flow_id, `status`, host_info, trigger_type, `logs`, create_time, update_time)
-        values (#{flowId}, #{status}, #{hostInfo}, #{triggerType}, #{logs}, now(), now())
+        insert into thain_flow_execution (flow_id, status, host_info, trigger_type,
+                                          create_time, update_time, heartbeat)
+        values (#{flowId}, #{status}, #{hostInfo}, #{triggerType},
+                now(), now(), now())
     </insert>
 
     <update id="updateLogs">
@@ -19,21 +21,49 @@
         set logs = #{content}
         where id = #{flowExecutionId}
     </update>
+
     <update id="updateFlowExecutionStatus">
         update thain_flow_execution
         set status = #{status}
         where id = #{flowExecutionId}
     </update>
+
     <update id="killFlowExecution">
         update thain_flow_execution
         set status = 4
         where id = #{flowExecutionId}
     </update>
+
+    <update id="setFlowExecutionHeartbeat">
+        update thain_flow_execution set heartbeat = now()
+        where id in (
+        <foreach collection="collection" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <update id="reWaiting">
+        update thain_flow_execution set heartbeat = now(), status = 0
+        where id in (
+        <foreach collection="collection" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </update>
+
+    <update id="updateHostInfo">
+        update thain_flow_execution
+        set host_info = #{hostInfo}
+        where id = #{id}
+    </update>
+
     <delete id="clearFlowExecution">
         delete
         from thain_flow_execution
         where (unix_timestamp(now()) - unix_timestamp(update_time)) > #{dataReserveDays} * 24 * 60 * 60
     </delete>
+
     <delete id="deleteFlowExecutionByIds">
         delete
         from thain_flow_execution
@@ -43,7 +73,8 @@
         </foreach>
         )
     </delete>
-    <select id="getFlowExecution" resultType="com.xiaomi.thain.common.model.FlowExecutionModel">
+
+    <select id="getFlowExecution" resultType="com.xiaomi.thain.common.model.dr.FlowExecutionDr">
         select id,
                flow_id,
                status,
@@ -51,10 +82,12 @@
                trigger_type,
                logs,
                create_time,
-               update_time
+               update_time,
+               heartbeat
         from thain_flow_execution
         where id = #{flowExecutionId}
     </select>
+
     <select id="getLatest" resultType="com.xiaomi.thain.common.model.FlowExecutionModel">
         select id,
                flow_id,
@@ -69,6 +102,7 @@
         order by id desc
         limit #{numbers}
     </select>
+
     <select id="getNeedDeleteFlowExecutionId" resultType="java.lang.Long">
         select id
         from thain_flow_execution
@@ -78,9 +112,25 @@
         </foreach>
         ) and (unix_timestamp(now()) - unix_timestamp(update_time)) > 60 * 60
     </select>
+
     <select id="getAllFlowExecutionIds" resultType="java.lang.Long">
         select id
         from thain_flow_execution;
+    </select>
+
+    <select id="getDead" resultType="com.xiaomi.thain.common.model.dr.FlowExecutionDr">
+        select id,
+               flow_id,
+               status,
+               host_info,
+               trigger_type,
+               logs,
+               create_time,
+               update_time,
+               heartbeat
+        from thain_flow_execution
+        where (unix_timestamp(now()) - unix_timestamp(heartbeat)) > 60
+          and (status = 0 or status = 1)
     </select>
 
 </mapper>

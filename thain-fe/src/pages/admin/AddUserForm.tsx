@@ -3,19 +3,19 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-import { connect } from 'dva';
+import { useDispatch } from 'dva';
 import React, { useState } from 'react';
 import { Button, Form, Icon, Input, Modal, notification, Select } from 'antd';
 import { UserModel } from './models/UserAdminModel';
-import { ConnectProps } from '@/models/connect';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
-interface Props extends ConnectProps {
+interface Props {
   readonly form: WrappedFormUtils<UserModel>;
 }
 
-const addUserForm: React.FC<Props> = ({ form, dispatch }) => {
+const addUserForm: React.FC<Props> = ({ form }) => {
+  const dispatch = useDispatch();
   const [isVisiable, setIsvisiable] = useState(false);
   const { Item } = Form;
   const { Option } = Select;
@@ -39,13 +39,11 @@ const addUserForm: React.FC<Props> = ({ form, dispatch }) => {
       if (errors[error] !== undefined) return;
     }
     addUserModel.admin = isAdmin;
-    if (dispatch) {
-      dispatch({
-        payload: addUserModel,
-        type: 'admin/add',
-        callBack: () => setIsvisiable(false),
-      });
-    }
+    dispatch({
+      payload: addUserModel,
+      type: 'admin/add',
+      callBack: () => setIsvisiable(false),
+    });
   };
   return (
     <div>
@@ -131,4 +129,4 @@ const addUserForm: React.FC<Props> = ({ form, dispatch }) => {
 };
 
 const AddUserFrom = Form.create()(addUserForm);
-export default connect()(AddUserFrom);
+export default AddUserFrom;

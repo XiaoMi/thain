@@ -31,19 +31,22 @@ create table thain_flow
     ENGINE = InnoDB
     comment 'flow表';
 
-
-
 create table thain_flow_execution
 (
     id           int unsigned auto_increment primary key comment '自增id',
     flow_id      int unsigned     default 0                     not null comment '所属flow id',
-    status       tinyint unsigned default 1                     not null comment '流程执行状态，1 执行中，2 执行结束，3执行异常,4 手动kill',
+    status       tinyint unsigned default 0                     not null comment '流程执行状态，0 排队中，1 执行中，2 执行结束，3执行异常,4 手动kill, 5 禁止同时运行',
     host_info    varchar(128)     default ''                    not null comment '机器信息',
     trigger_type tinyint unsigned default 1                     not null comment '触发类型 1手动 2自动',
     logs         mediumtext                                     null comment '日志',
     create_time  timestamp        default '2019-01-01 00:00:00' not null comment '创建时间',
-    update_time  timestamp        default '2019-01-01 00:00:00' not null on update CURRENT_TIMESTAMP comment '更新时间'
-) ENGINE = InnoDB;
+    update_time  timestamp        default '2019-01-01 00:00:00' not null on update CURRENT_TIMESTAMP comment '更新时间',
+    heartbeat    timestamp        default '2019-01-01 00:00:00' not null comment '最近一次心跳时间'
+)
+    ENGINE = InnoDB;
+
+alter table thain_flow_execution
+    add index thain_flow_execution_heartbeat_index (heartbeat);
 
 create table thain_job
 (
@@ -103,4 +106,3 @@ create table thain_x5_config
         unique (app_id)
 )
     ENGINE = InnoDB;
-

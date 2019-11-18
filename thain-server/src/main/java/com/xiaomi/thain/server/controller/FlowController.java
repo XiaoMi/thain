@@ -103,10 +103,10 @@ public class FlowController {
     public ApiResult add(@NonNull @RequestBody String json) {
         try {
             Gson gson = new Gson();
-            val flowDefinition = gson.fromJson(json, AddRq.class);
-            return add(flowDefinition
+            val addRq = gson.fromJson(json, AddRq.class);
+            return add(addRq
                     .toBuilder()
-                    .flowModel(flowDefinition.flowModel
+                    .flowModel(addRq.flowModel
                             .toBuilder()
                             .createUser(getUsername())
                             .build())
@@ -118,16 +118,16 @@ public class FlowController {
     }
 
     public ApiResult add(@NonNull AddRq addRq, @NonNull String appId) {
-        val flowModel = addRq.flowModel;
+        val addFlowRq = addRq.flowModel;
         val jobModelList = addRq.jobModelList;
         try {
-            checkService.checkFlowModel(flowModel);
+            checkService.checkFlowModel(addFlowRq);
             checkService.checkJobModelList(jobModelList);
         } catch (Exception e) {
             return ApiResult.fail(e.getMessage());
         }
         try {
-            return ApiResult.success(flowService.add(flowModel, jobModelList, appId));
+            return ApiResult.success(flowService.add(addFlowRq, jobModelList, appId));
         } catch (Exception e) {
             log.error("add", e);
             return ApiResult.fail(e.getMessage());
@@ -154,7 +154,7 @@ public class FlowController {
             if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowService.start(flowId);
+            return ApiResult.success(flowService.start(flowId));
         } catch (ThainFlowRunningException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
             return ApiResult.fail(e.getMessage());
@@ -162,7 +162,6 @@ public class FlowController {
             log.error("start:", e);
             return ApiResult.fail(e.getMessage());
         }
-        return ApiResult.success();
     }
 
     @PatchMapping("/scheduling/{flowId}")

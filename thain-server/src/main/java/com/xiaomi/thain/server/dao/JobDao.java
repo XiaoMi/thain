@@ -3,7 +3,6 @@ package com.xiaomi.thain.server.dao;
 import com.xiaomi.thain.server.mapper.JobMapper;
 import com.xiaomi.thain.server.model.dr.JobDr;
 import lombok.NonNull;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

@@ -14,7 +14,6 @@ import com.xiaomi.thain.component.tools.ComponentTools;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
@@ -59,7 +58,7 @@ public class HttpComponent {
     private String forwardData;
 
     @SuppressWarnings("unused")
-    private void run() throws IOException, ThainException {
+    private void run() throws ThainException {
 
         val data = new HashMap<String, String>(16);
         if (Objects.nonNull(forwardData)) {
@@ -96,8 +95,7 @@ public class HttpComponent {
                     throw new ThainException("can not support this method:" + method);
             }
         } catch (Exception e) {
-            tools.addErrorLog(e.getMessage());
-            throw new ThainException(e.getMessage());
+            throw new ThainException(e);
         }
         tools.putStorage("result", result);
         tools.addInfoLog(result);

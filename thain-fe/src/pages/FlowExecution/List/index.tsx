@@ -8,19 +8,16 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Card, Form, Row, Col, Input } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 import ConnectState, { ConnectProps } from '@/models/connect';
-import { connect } from 'dva';
-import { FlowExecutionListModelState } from '@/pages/FlowExecution/List/models/flowExecutionList';
+import { connect, useSelector, useDispatch } from 'dva';
 import FlowExecutionTable from './FlowExecutionTable';
 import { router } from 'umi';
 import { LineChart } from './LineChart';
 import { delay } from '@/utils/delay';
 import { formatMessage } from 'umi-plugin-react/locale';
 
-interface Props extends ConnectProps<{ flowId: number }> {
-  flowExecutionList: FlowExecutionListModelState;
-}
-
-const FlowExecutionList: React.FC<Props> = ({ computedMatch, dispatch, flowExecutionList }) => {
+const FlowExecutionList: React.FC<ConnectProps<{ flowId: number }>> = ({ computedMatch }) => {
+  const dispatch = useDispatch();
+  const flowExecutionList = useSelector((state: ConnectState) => state.flowExecutionList);
   const flowId = computedMatch ? computedMatch.params.flowId : 0;
   const [inputFlowId, setInputFlowId] = useState(flowId);
   const { data } = flowExecutionList;
@@ -37,15 +34,13 @@ const FlowExecutionList: React.FC<Props> = ({ computedMatch, dispatch, flowExecu
     if (!flowId || flowId <= 0) {
       return;
     }
-    if (dispatch) {
-      dispatch({
-        type: 'flowExecutionList/fetchTable',
-        payload: {
-          ...flowExecutionList,
-          flowId,
-        },
-      });
-    }
+    dispatch({
+      type: 'flowExecutionList/fetchTable',
+      payload: {
+        ...flowExecutionList,
+        flowId,
+      },
+    });
   }, [flowId]);
 
   return (
@@ -83,6 +78,4 @@ const FlowExecutionList: React.FC<Props> = ({ computedMatch, dispatch, flowExecu
   );
 };
 
-export default connect(({ flowExecutionList }: ConnectState) => ({
-  flowExecutionList,
-}))(FlowExecutionList);
+export default connect()(FlowExecutionList);

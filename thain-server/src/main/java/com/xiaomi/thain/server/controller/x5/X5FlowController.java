@@ -82,7 +82,7 @@ public class X5FlowController {
             if (!permissionService.getFlowAccessible(flowId, appId)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowService.start(flowId);
+            return ApiResult.success(flowService.start(flowId));
         } catch (ThainFlowRunningException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
             return ApiResult.fail(e.getMessage());
@@ -90,7 +90,6 @@ public class X5FlowController {
             log.error("start:", e);
             return ApiResult.fail(e.getMessage());
         }
-        return ApiResult.success();
     }
 
     @PostMapping("pause")

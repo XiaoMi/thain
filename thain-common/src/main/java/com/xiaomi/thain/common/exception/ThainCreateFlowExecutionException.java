@@ -14,26 +14,26 @@ import javax.annotation.Nullable;
  *
  * @author liangyongrui@xiaomi.com
  */
-public class CreateFlowExecutionException extends ThainException {
+public class ThainCreateFlowExecutionException extends ThainException {
 
-    public CreateFlowExecutionException(long flowId, @Nullable String message) {
+    public ThainCreateFlowExecutionException(long flowId, @Nullable String message) {
         super("Failed to create flow, flowId:" + flowId + ", message:" + message);
     }
 
-    public CreateFlowExecutionException() {
+    public ThainCreateFlowExecutionException() {
         super("Failed to create flow");
     }
 
-    public CreateFlowExecutionException(@NonNull String message, @NonNull Throwable cause) {
+    public ThainCreateFlowExecutionException(@NonNull String message, @NonNull Throwable cause) {
         super(message, cause);
     }
 
-    public CreateFlowExecutionException(@NonNull Throwable cause) {
+    public ThainCreateFlowExecutionException(@NonNull Throwable cause) {
         super(cause);
     }
 
-    public CreateFlowExecutionException(@NonNull String message, @NonNull Throwable cause,
-                                        boolean enableSuppression, boolean writableStackTrace) {
+    public ThainCreateFlowExecutionException(@NonNull String message, @NonNull Throwable cause,
+                                             boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

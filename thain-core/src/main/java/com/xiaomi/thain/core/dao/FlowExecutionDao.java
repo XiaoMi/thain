@@ -6,6 +6,8 @@
 package com.xiaomi.thain.core.dao;
 
 import com.xiaomi.thain.common.model.FlowExecutionModel;
+import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.core.mapper.FlowExecutionMapper;
 import com.xiaomi.thain.core.process.service.MailService;
 import lombok.AccessLevel;
@@ -61,9 +63,10 @@ public class FlowExecutionDao {
     /**
      * 数据库插入flowExecution
      */
-    public void addFlowExecution(@NonNull FlowExecutionModel flowExecutionModel) {
-        execute(t -> t.addFlowExecution(flowExecutionModel));
+    public void addFlowExecution(@NonNull AddFlowExecutionDp addFlowExecutionDp) {
+        execute(t -> t.addFlowExecution(addFlowExecutionDp));
     }
+
 
     /**
      * 更新flowExecution日志
@@ -83,7 +86,7 @@ public class FlowExecutionDao {
         execute(t -> t.clearFlowExecution(dataReserveDays));
     }
 
-    public Optional<FlowExecutionModel> getFlowExecution(long flowExecutionId) {
+    public Optional<FlowExecutionDr> getFlowExecution(long flowExecutionId) {
         return execute(t -> t.getFlowExecution(flowExecutionId));
     }
 
@@ -106,13 +109,35 @@ public class FlowExecutionDao {
         if (needDeleteFlowExecutionIds.isEmpty()) {
             return;
         }
-        execute(t -> {
-            t.deleteFlowExecutionByIds(needDeleteFlowExecutionIds);
-            return null;
-        });
+        execute(t -> t.deleteFlowExecutionByIds(needDeleteFlowExecutionIds));
     }
 
     public List<Long> getAllFlowExecutionIds() {
         return execute(FlowExecutionMapper::getAllFlowExecutionIds).orElseGet(Collections::emptyList);
+    }
+
+    public void setFlowExecutionHeartbeat(@NonNull List<Long> flowExecutionIds) {
+        if (flowExecutionIds.isEmpty()) {
+            return;
+        }
+        execute(t -> t.setFlowExecutionHeartbeat(flowExecutionIds));
+    }
+
+    /**
+     * 获取超过1min没心跳的任务
+     */
+    public List<FlowExecutionDr> getDead() {
+        return execute(FlowExecutionMapper::getDead).orElseGet(Collections::emptyList);
+    }
+
+    /**
+     * 重新排队
+     */
+    public void reWaiting(@NonNull List<Long> flowExecutionIds) {
+        execute(t -> t.reWaiting(flowExecutionIds));
+    }
+
+    public void updateHostInfo(long id, @NonNull String hostInfo) {
+        execute(t -> t.updateHostInfo(id, hostInfo));
     }
 }

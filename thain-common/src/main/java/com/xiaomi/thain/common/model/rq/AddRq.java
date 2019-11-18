@@ -6,7 +6,6 @@
 package com.xiaomi.thain.common.model.rq;
 
 import com.google.common.collect.ImmutableList;
-import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
 import lombok.Builder;
 import lombok.NonNull;
@@ -20,12 +19,16 @@ import java.util.List;
  */
 @Builder(toBuilder = true)
 public class AddRq {
+    /**
+     * 为了兼容前端和旧的sdk 所以叫flowModel
+     */
     @NonNull
-    public final FlowModel flowModel;
+    public final AddFlowRq flowModel;
     @NonNull
     public final List<JobModel> jobModelList;
 
-    public AddRq(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList) {
+
+    public AddRq(@NonNull AddFlowRq flowModel, @NonNull List<JobModel> jobModelList) {
         this.flowModel = flowModel;
         this.jobModelList = ImmutableList.copyOf(jobModelList);
     }

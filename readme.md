@@ -5,6 +5,9 @@
 -->
 # Thain
 
+![Java CI badge](https://github.com/XiaoMi/Thain/workflows/Java%20CI/badge.svg)
+![Node CI badge](https://github.com/XiaoMi/Thain/workflows/Node%20CI/badge.svg)
+
 ![Thain Logo](https://raw.githubusercontent.com/XiaoMi/Thain/master/docs/images/logo.png)
 
 ## Other language versions
@@ -31,11 +34,17 @@ Thain has completed backend management system which supports depending, re-run, 
 
 ## Maintainers
 
-- @liangyongrui
-- @holiday12138
+- @ liangyongrui
+- @ holiday12138
+
+## committer
+
+- @ liangyongrui
+- @ holiday12138
+- @ SingleMeen
 
 ## WeChat user group
-![WeChat](http://cnbj1.fds.api.xiaomi.com/xdata-mail/WechatIMG.png)
+![WeChat](http://cdn.cnbj1.fds.api.mi-img.com/thain/WechatIMG.png)
 
 ## Help Us Do Better
 

@@ -8,7 +8,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaomi.thain.core.mapper.FlowMapper">
 
-    <insert id="addFlow" parameterType="com.xiaomi.thain.common.model.FlowModel" useGeneratedKeys="true"
+    <insert id="addFlow" parameterType="com.xiaomi.thain.common.model.rq.AddFlowRq" useGeneratedKeys="true"
             keyProperty="id">
         insert into thain_flow (name,
         <if test="cron != null">
@@ -118,7 +118,7 @@
         </foreach>
     </insert>
 
-    <update id="updateFlow" parameterType="com.xiaomi.thain.common.model.FlowModel">
+    <update id="updateFlow" parameterType="com.xiaomi.thain.common.model.rq.UpdateFlowRq">
         update thain_flow
         set `id`= #{id},
         <if test="name != null and name != ''">
@@ -151,8 +151,10 @@
         <if test="slaKill != null">
             `sla_kill` = #{slaKill},
         </if>
-        `update_time` = now(),
-        `scheduling_status` = #{schedulingStatus}
+        <if test="schedulingStatus != null">
+            `scheduling_status` = #{schedulingStatus},
+        </if>
+        `update_time` = now()
         where id = #{id}
     </update>
 
@@ -183,7 +185,7 @@
             update_time       = now()
         where id = #{flowId}
     </update>
-    <select id="getFlow" resultType="com.xiaomi.thain.common.model.FlowModel">
+    <select id="getFlow" resultType="com.xiaomi.thain.common.model.dr.FlowDr">
         select id,
                name,
                cron,

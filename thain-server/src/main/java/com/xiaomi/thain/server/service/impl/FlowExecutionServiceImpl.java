@@ -48,7 +48,7 @@ public class FlowExecutionServiceImpl implements FlowExecutionService {
 
     @Override
     public void killFlowExecution(long flowExecutionId) throws ThainException {
-        thainFacade.killFlowExecution(flowExecutionId);
+        thainFacade.killFlowExecution(flowExecutionId, false);
     }
 
     @Override

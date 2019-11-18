@@ -36,4 +36,12 @@ public interface JobExecutionMapper {
     int deleteJobExecutionByIds(@NonNull List<Long> needDeleteJobExecutionIds);
 
     int killJobExecution(long flowExecutionId);
+
+    /**
+     * 根据flowExecutionId 删除 job execution
+     *
+     * @param flowExecutionIds flowExecutionIds
+     * @return ignore
+     */
+    int deleteJobExecutionByFlowExecutionIds(@NonNull List<Long> flowExecutionIds);
 }

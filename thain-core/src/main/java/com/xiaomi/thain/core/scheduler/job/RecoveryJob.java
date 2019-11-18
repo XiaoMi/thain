@@ -45,6 +45,7 @@ public class RecoveryJob implements Job {
     @Override
     public void execute(@NonNull JobExecutionContext context) {
         val flowExecutionDao = processEngine.processEngineStorage.flowExecutionDao;
+        val jobExecutionDao = processEngine.processEngineStorage.jobExecutionDao;
         val flowExecutionDrList = flowExecutionDao.getDead();
         if (flowExecutionDrList.isEmpty()) {
             return;
@@ -57,6 +58,8 @@ public class RecoveryJob implements Job {
                 .map(t -> t.flowId)
                 .distinct()
                 .forEach(processEngine.processEngineStorage.flowDao::killFlow);
+
+        jobExecutionDao.deleteJobExecutionByFlowExecutionIds(ids);
 
         log.info("Scanned some dead flows: \n" + JSON.toJSONString(flowExecutionDrList));
         processEngine.processEngineStorage.flowExecutionWaitingQueue.addAll(flowExecutionDrList);

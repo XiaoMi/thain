@@ -39,8 +39,6 @@ public interface FlowExecutionMapper {
      */
     List<FlowExecutionModel> getLatest(@Param("flowId") long flowId, @Param("numbers") long numbers);
 
-    int killFlowExecution(long flowExecutionId);
-
     /**
      * 获取所有需要删除的flow execution id
      * <p>

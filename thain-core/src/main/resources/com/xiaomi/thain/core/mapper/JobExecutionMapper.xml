@@ -44,6 +44,15 @@
         </foreach>
         )
     </delete>
+    <delete id="deleteJobExecutionByFlowExecutionIds">
+        delete
+        from thain_job_execution
+        where flow_execution_id in (
+        <foreach collection="collection" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </delete>
     <select id="getNeedDeleteJobExecutionIds" resultType="java.lang.Long">
         select id
         from thain_job_execution

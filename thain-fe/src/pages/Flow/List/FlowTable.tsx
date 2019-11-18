@@ -34,6 +34,7 @@ interface Props extends ConnectProps<{ flowId: number }> {
   condition: FlowSearch;
   loading: boolean;
   setCondition: Function;
+  modelChange: Function;
 }
 
 const FlowTable: React.FC<Props> = ({
@@ -42,6 +43,7 @@ const FlowTable: React.FC<Props> = ({
   dispatch,
   condition,
   setCondition,
+  modelChange,
 }) => {
   if (tableResult === undefined) {
     tableResult = new TableResult();
@@ -73,6 +75,7 @@ const FlowTable: React.FC<Props> = ({
           pageSize: pagination.pageSize,
         };
     setCondition(requestParam);
+    modelChange({ ...requestParam });
   }
   function initSorterIndex(): [string, string] {
     if (condition.sortKey) {

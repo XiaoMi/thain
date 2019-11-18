@@ -14,6 +14,7 @@ import { FlowSchedulingStatusGetEntries } from '@/enums/FlowSchedulingStatus';
 import { RangePickerPresetRange } from 'antd/lib/date-picker/interface';
 import { formatMessage } from 'umi-plugin-react/locale';
 import moment from 'moment';
+import FlowTable from './FlowTable';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 interface Props extends ConnectProps<{ flowId: number }> {
@@ -71,104 +72,30 @@ const SearchForm: React.FC<Props> = ({ condition, setCondition }) => {
     setCondition({ ...model });
   }
   return (
-    <Form layout="inline">
-      <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-        <Col md={8} sm={24}>
-          <Form.Item label="Flow ID">
-            <Input
-              allowClear
-              placeholder={formatMessage({ id: 'global.input.placeholder' })}
-              type="number"
-              value={model.flowId}
-              onChange={changeFormFlowId}
-            />
-          </Form.Item>
-        </Col>
-        <Col md={8} sm={24}>
-          <Form.Item label={formatMessage({ id: 'flow.last.running.status' })}>
-            <Select
-              placeholder={formatMessage({ id: 'global.select.placeholder' })}
-              allowClear
-              style={{ width: 150 }}
-              onChange={changeFormLastRunStatus}
-              value={model.lastRunStatus}
-            >
-              {FlowLastRunStatusGetEntries().map(([key, value]) => {
-                return (
-                  <Option key={key} value={value}>
-                    {key}
-                  </Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
-        </Col>
-        <Col md={8} sm={24}>
-          <Form.Item>
-            <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit" onClick={searchSubmit}>
-                {formatMessage({ id: 'flow.retrieve' })}
-              </Button>
-              <a
-                style={{ marginLeft: 10 }}
-                onClick={() => {
-                  setShowMore(!showMore);
-                }}
-              >
-                {showMore
-                  ? formatMessage({ id: 'global.tagSelect.collapse' })
-                  : formatMessage({ id: 'global.tagSelect.expand' })}
-                <Icon type="down" />
-              </a>
-            </span>
-          </Form.Item>
-        </Col>
-      </Row>
-      {showMore ? (
+    <div>
+      <Form layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <Form.Item label={formatMessage({ id: 'flow.name' })}>
+            <Form.Item label="Flow ID">
               <Input
                 allowClear
                 placeholder={formatMessage({ id: 'global.input.placeholder' })}
-                type="string"
-                value={model.flowName}
-                onChange={changeFormFlowName}
+                type="number"
+                value={model.flowId}
+                onChange={changeFormFlowId}
               />
             </Form.Item>
           </Col>
           <Col md={8} sm={24}>
-            <Form.Item label={formatMessage({ id: 'flow.app' })}>
-              <Input
-                allowClear
-                placeholder={formatMessage({ id: 'global.input.placeholder' })}
-                type="string"
-                value={model.searchApp}
-                onChange={changeFormSearchApp}
-              />
-            </Form.Item>
-          </Col>
-          <Col md={8} sm={24}>
-            <Form.Item label={formatMessage({ id: 'flow.create.user' })}>
-              <Input
-                allowClear
-                placeholder={formatMessage({ id: 'global.input.placeholder' })}
-                type="string"
-                value={model.createUser}
-                onChange={changeFormCreateUser}
-              />
-            </Form.Item>
-          </Col>
-          <Col md={8} sm={24}>
-            <Form.Item label={formatMessage({ id: 'flow.schedule.status' })}>
+            <Form.Item label={formatMessage({ id: 'flow.last.running.status' })}>
               <Select
                 placeholder={formatMessage({ id: 'global.select.placeholder' })}
                 allowClear
                 style={{ width: 150 }}
-                defaultValue={model.scheduleStatus}
-                onChange={changeFormScheduleStatus}
+                onChange={changeFormLastRunStatus}
+                value={model.lastRunStatus}
               >
-                {FlowSchedulingStatusGetEntries().map(([key, value]) => {
+                {FlowLastRunStatusGetEntries().map(([key, value]) => {
                   return (
                     <Option key={key} value={value}>
                       {key}
@@ -179,29 +106,108 @@ const SearchForm: React.FC<Props> = ({ condition, setCondition }) => {
             </Form.Item>
           </Col>
           <Col md={8} sm={24}>
-            <Form.Item label={formatMessage({ id: 'flow.status.update.time' })}>
-              <RangePicker
-                showTime={{ format: 'HH:mm' }}
-                format={format}
-                placeholder={['Start Time', 'End Time']}
-                onOk={changeFormUpdateTime}
-                value={searchDate}
-                onChange={date => {
-                  if (date.length < 2 || date[0] === undefined || date[1] === undefined) {
-                    setModel({ ...model, updateTime: [] });
-                    setSearchDate(undefined);
-                    return;
-                  }
-                  setSearchDate([date[0], date[1]]);
-                }}
-              />
+            <Form.Item>
+              <span className={styles.submitButtons}>
+                <Button type="primary" htmlType="submit" onClick={searchSubmit}>
+                  {formatMessage({ id: 'flow.retrieve' })}
+                </Button>
+                <a
+                  style={{ marginLeft: 10 }}
+                  onClick={() => {
+                    setShowMore(!showMore);
+                  }}
+                >
+                  {showMore
+                    ? formatMessage({ id: 'global.tagSelect.collapse' })
+                    : formatMessage({ id: 'global.tagSelect.expand' })}
+                  <Icon type="down" />
+                </a>
+              </span>
             </Form.Item>
           </Col>
         </Row>
-      ) : (
-        ''
-      )}
-    </Form>
+        {showMore ? (
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={8} sm={24}>
+              <Form.Item label={formatMessage({ id: 'flow.name' })}>
+                <Input
+                  allowClear
+                  placeholder={formatMessage({ id: 'global.input.placeholder' })}
+                  type="string"
+                  value={model.flowName}
+                  onChange={changeFormFlowName}
+                />
+              </Form.Item>
+            </Col>
+            <Col md={8} sm={24}>
+              <Form.Item label={formatMessage({ id: 'flow.app' })}>
+                <Input
+                  allowClear
+                  placeholder={formatMessage({ id: 'global.input.placeholder' })}
+                  type="string"
+                  value={model.searchApp}
+                  onChange={changeFormSearchApp}
+                />
+              </Form.Item>
+            </Col>
+            <Col md={8} sm={24}>
+              <Form.Item label={formatMessage({ id: 'flow.create.user' })}>
+                <Input
+                  allowClear
+                  placeholder={formatMessage({ id: 'global.input.placeholder' })}
+                  type="string"
+                  value={model.createUser}
+                  onChange={changeFormCreateUser}
+                />
+              </Form.Item>
+            </Col>
+            <Col md={8} sm={24}>
+              <Form.Item label={formatMessage({ id: 'flow.schedule.status' })}>
+                <Select
+                  placeholder={formatMessage({ id: 'global.select.placeholder' })}
+                  allowClear
+                  style={{ width: 150 }}
+                  defaultValue={model.scheduleStatus}
+                  onChange={changeFormScheduleStatus}
+                >
+                  {FlowSchedulingStatusGetEntries().map(([key, value]) => {
+                    return (
+                      <Option key={key} value={value}>
+                        {key}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col md={8} sm={24}>
+              <Form.Item label={formatMessage({ id: 'flow.status.update.time' })}>
+                <RangePicker
+                  showTime={{ format: 'HH:mm' }}
+                  format={format}
+                  placeholder={['Start Time', 'End Time']}
+                  onOk={changeFormUpdateTime}
+                  value={searchDate}
+                  onChange={date => {
+                    if (date.length < 2 || date[0] === undefined || date[1] === undefined) {
+                      setModel({ ...model, updateTime: [] });
+                      setSearchDate(undefined);
+                      return;
+                    }
+                    setSearchDate([date[0], date[1]]);
+                  }}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+        ) : (
+          ''
+        )}
+      </Form>
+      <div style={{ marginTop: '20px', overflow: '320px' }}>
+        <FlowTable condition={condition} setCondition={setCondition} modelChange={setModel} />
+      </div>
+    </div>
   );
 };
 

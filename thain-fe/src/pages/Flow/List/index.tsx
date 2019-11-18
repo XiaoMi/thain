@@ -6,7 +6,6 @@
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Card } from 'antd';
 import React, { useState, useEffect } from 'react';
-import FlowTable from './FlowTable';
 import SearchForm from './SearchForm';
 import { connect } from 'dva';
 import { ConnectProps } from '@/models/connect';
@@ -115,9 +114,6 @@ const FlowList: React.FC<Props> = ({ dispatch }) => {
     <PageHeaderWrapper title={formatMessage({ id: 'flow.management' })}>
       <Card bordered={false}>
         <SearchForm condition={conditon} setCondition={setCondition} />
-        <div style={{ marginTop: '20px', overflow: '320px' }}>
-          <FlowTable condition={conditon} setCondition={setCondition} />
-        </div>
       </Card>
     </PageHeaderWrapper>
   );

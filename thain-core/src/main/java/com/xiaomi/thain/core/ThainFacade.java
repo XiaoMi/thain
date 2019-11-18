@@ -36,6 +36,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.xiaomi.thain.common.constant.FlowExecutionStatus.AUTO_KILLED;
+import static com.xiaomi.thain.common.constant.FlowExecutionStatus.KILLED;
+
 /**
  * @author liangyongrui@xiaomi.com
  * @date 19-5-16 下午8:38
@@ -155,14 +158,18 @@ public class ThainFacade {
         }
     }
 
-    public void killFlowExecution(long flowExecutionId) throws ThainException {
+    public void killFlowExecution(long flowExecutionId, boolean auto) throws ThainException {
         val flowExecutionModel = processEngine.processEngineStorage.flowExecutionDao
                 .getFlowExecution(flowExecutionId)
                 .orElseThrow(() -> new ThainException("flowExecution id does not exist：" + flowExecutionId));
         if (FlowExecutionStatus.getInstance(flowExecutionModel.status) != FlowExecutionStatus.RUNNING) {
             throw new ThainException("flowExecution does not running: " + flowExecutionId);
         }
-        processEngine.processEngineStorage.flowExecutionDao.killFlowExecution(flowExecutionId);
+        if (auto) {
+            processEngine.processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, AUTO_KILLED.code);
+        } else {
+            processEngine.processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, KILLED.code);
+        }
         processEngine.processEngineStorage.jobExecutionDao.killJobExecution(flowExecutionId);
         processEngine.processEngineStorage.flowDao.killFlow(flowExecutionModel.flowId);
     }
@@ -181,4 +188,5 @@ public class ThainFacade {
             SendModifyUtils.sendScheduling(flowId, flowDr.modifyCallbackUrl);
         }
     }
+
 }

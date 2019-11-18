@@ -94,10 +94,6 @@ public class FlowExecutionDao {
         return execute(t -> t.getLatest(flowId, numbers));
     }
 
-    public void killFlowExecution(long flowExecutionId) {
-        execute(t -> t.killFlowExecution(flowExecutionId));
-    }
-
     public List<Long> getNeedDeleteFlowExecutionId(@NonNull List<Long> flowIds) {
         if (flowIds.isEmpty()) {
             return Collections.emptyList();

@@ -92,7 +92,7 @@ const FlowExecutionStatusCountChart: React.FC<Props> = ({
         tooltip={[
           'status*percent',
           (status, percent) => {
-            percent = total * percent;
+            percent = `${total * percent}(${(percent * 100).toFixed(2)})%`;
             return {
               name: status,
               value: percent,

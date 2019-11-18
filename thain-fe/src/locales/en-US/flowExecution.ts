@@ -10,6 +10,7 @@ export default {
   'flow.execution.error': 'Error',
   'flow.execution.killed': 'Killed',
   'flow.execution.do.not.run.same.time': 'Do not run same time',
+  'flow.execution.timeout.auto.killed': 'Auto killed',
   'flow.execution.consuming': 'Time consuming',
   'flow.execution.view.log': 'View log',
   'flow.execution.trigger.type': 'Trigger type',

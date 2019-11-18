@@ -10,6 +10,7 @@ export default {
   'flow.execution.error': '执行异常',
   'flow.execution.killed': '手动杀死',
   'flow.execution.do.not.run.same.time': '禁止同一时间运行',
+  'flow.execution.timeout.auto.killed': '自动杀死',
   'flow.execution.consuming': '耗时',
   'flow.execution.view.log': '查看日志',
   'flow.execution.trigger.type': '触发类型',

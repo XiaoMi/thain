@@ -36,6 +36,10 @@ export enum FlowExecutionStatus {
    * 5 禁止同时运行一个flow
    */
   DO_NOT_RUN_SAME_TIME = 5,
+  /**
+   * 超时自动kill
+   */
+  AUTO_KILLED = 6,
 }
 const map = {
   [FlowExecutionStatus.WAITING]: formatMessage({ id: 'flow.execution.waiting' }),
@@ -45,6 +49,9 @@ const map = {
   [FlowExecutionStatus.KILLED]: formatMessage({ id: 'flow.execution.killed' }),
   [FlowExecutionStatus.DO_NOT_RUN_SAME_TIME]: formatMessage({
     id: 'flow.execution.do.not.run.same.time',
+  }),
+  [FlowExecutionStatus.AUTO_KILLED]: formatMessage({
+    id: 'flow.execution.timeout.auto.killed',
   }),
 };
 

@@ -14,6 +14,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.http.conn.HttpHostConnectException;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 /**
  * Date 19-7-10 下午2:07
@@ -41,7 +42,7 @@ public class SendModifyUtils {
     public static void sendScheduling(long flowId, @NonNull String modifyCallbackUrl) throws IOException {
         try {
             HttpUtils.post(modifyCallbackUrl, ImmutableMap.of("flowId", flowId, "status", SCHEDULING));
-        } catch (HttpHostConnectException e) {
+        } catch (HttpHostConnectException | UnknownHostException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
         }
     }

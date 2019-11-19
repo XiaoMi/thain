@@ -19,6 +19,7 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -137,7 +138,7 @@ public class FlowExecutionService {
             }
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, flowExecutionEndStatus.code);
         } catch (Exception e) {
-            log.error("", e);
+            log.warn(ExceptionUtils.getRootCauseMessage(e));
         } finally {
             flowService.endFlow(flowEndStatus);
             close();

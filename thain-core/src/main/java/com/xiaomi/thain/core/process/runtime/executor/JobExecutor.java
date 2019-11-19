@@ -72,16 +72,11 @@ public class JobExecutor {
             httpNotice.sendStart();
             execute();
             httpNotice.sendSuccess();
-        } catch (JobExecuteException e) {
+        } catch (Exception e) {
             jobExecutionService.addError("Abort with: " + ExceptionUtils.getRootCauseMessage(e));
             httpNotice.sendError(ExceptionUtils.getRootCauseMessage(e));
             log.warn(ExceptionUtils.getRootCauseMessage(e));
             throw new JobExecuteException(e);
-        } catch (Exception e) {
-            jobExecutionService.addError("Abort with: " + ExceptionUtils.getRootCauseMessage(e));
-            httpNotice.sendError(ExceptionUtils.getRootCauseMessage(e));
-            log.error("", e);
-            throw new ThainRuntimeException(e);
         } finally {
             try {
                 jobExecutionService.endJobExecution();

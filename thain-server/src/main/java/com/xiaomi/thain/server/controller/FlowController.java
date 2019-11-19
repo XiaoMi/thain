@@ -9,6 +9,7 @@ package com.xiaomi.thain.server.controller;
 import com.google.gson.Gson;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.model.rq.AddRq;
 import com.xiaomi.thain.server.model.rp.FlowAllInfoRp;
 import com.xiaomi.thain.server.model.sp.FlowListSp;
@@ -155,7 +156,7 @@ public class FlowController {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
             return ApiResult.success(flowService.start(flowId));
-        } catch (ThainFlowRunningException e) {
+        } catch (ThainRepeatExecutionException | ThainFlowRunningException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
             return ApiResult.fail(e.getMessage());
         } catch (Exception e) {

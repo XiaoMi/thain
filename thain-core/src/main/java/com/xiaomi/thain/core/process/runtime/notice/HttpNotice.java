@@ -93,7 +93,7 @@ public class HttpNotice {
         }
         try {
             HttpUtils.post(url, data);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.warn(e.getMessage());
         }
     }

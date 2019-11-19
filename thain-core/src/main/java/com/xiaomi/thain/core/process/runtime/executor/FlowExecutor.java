@@ -153,16 +153,19 @@ public class FlowExecutor {
             log.error("", e);
             flowExecutionService.addError(ExceptionUtils.getStackTrace(e));
         } finally {
-            flowExecutionService.endFlowExecution();
-            switch (flowExecutionService.getFlowEndStatus()) {
-                case SUCCESS:
-                    httpNotice.sendSuccess();
-                    break;
-                case ERROR:
-                default:
-                    httpNotice.sendError(flowExecutionService.getErrorMessage());
+            try {
+                flowExecutionService.endFlowExecution();
+                switch (flowExecutionService.getFlowEndStatus()) {
+                    case SUCCESS:
+                        httpNotice.sendSuccess();
+                        break;
+                    case ERROR:
+                    default:
+                        httpNotice.sendError(flowExecutionService.getErrorMessage());
+                }
+            } finally {
+                FlowExecutionStorage.drop(flowExecutionId);
             }
-            FlowExecutionStorage.drop(flowExecutionId);
         }
     }
 

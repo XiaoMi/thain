@@ -136,10 +136,11 @@ public class FlowExecutionService {
 
             }
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, flowExecutionEndStatus.code);
-            flowService.endFlow(flowEndStatus);
-            close();
         } catch (Exception e) {
             log.error("", e);
+        } finally {
+            flowService.endFlow(flowEndStatus);
+            close();
         }
     }
 

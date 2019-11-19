@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.model.rq.AddRq;
 import com.xiaomi.thain.server.controller.FlowController;
 import com.xiaomi.thain.server.service.FlowService;
@@ -83,7 +84,7 @@ public class X5FlowController {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
             return ApiResult.success(flowService.start(flowId));
-        } catch (ThainFlowRunningException e) {
+        } catch (ThainRepeatExecutionException | ThainFlowRunningException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
             return ApiResult.fail(e.getMessage());
         } catch (Exception e) {

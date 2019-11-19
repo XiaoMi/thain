@@ -136,10 +136,10 @@ public class FlowExecutionService {
                     checkContinuousFailure();
 
             }
-            processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, flowExecutionEndStatus.code);
         } catch (Exception e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
         } finally {
+            processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, flowExecutionEndStatus.code);
             flowService.endFlow(flowEndStatus);
             close();
         }

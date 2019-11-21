@@ -111,6 +111,16 @@ public class FlowExecutionService {
         flowExecutionEndStatus = FlowExecutionStatus.ERROR;
     }
 
+
+    /**
+     * 添加错误
+     */
+    public void autoKilled() {
+        this.errorMessage = "auto kill";
+        flowEndStatus = FlowLastRunStatus.AUTO_KILLED;
+        flowExecutionEndStatus = FlowExecutionStatus.AUTO_KILLED;
+    }
+
     /**
      * 添加错误
      */

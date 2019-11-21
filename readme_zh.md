@@ -8,7 +8,7 @@
 ![Java CI badge](https://github.com/XiaoMi/Thain/workflows/Java%20CI/badge.svg)
 ![Node CI badge](https://github.com/XiaoMi/Thain/workflows/Node%20CI/badge.svg)
 
-![Thain Logo](https://raw.githubusercontent.com/XiaoMi/Thain/master/docs/images/logo.png)
+![Thain Logo](https://raw.githubusercontent.com/XiaoMi/Thain/master/old/docs/images/logo.png)
 
 ## Other language versions
 
@@ -24,14 +24,14 @@ Thain提供了任务调度与执行的一整套解决方案，在小米集团内
 
 1. 产品简介
 1. 部署启动
-    - [部署流程](./docs/zh/1.部署启动/1.部署流程.md)
-    - [数据库配置](./docs/zh/1.部署启动/2.数据库配置.md)
-    - [用户管理](./docs/zh/1.部署启动/3.用户管理.md)
+    - [部署流程](./old/docs/zh/1.部署启动/1.部署流程.md)
+    - [数据库配置](./old/docs/zh/1.部署启动/2.数据库配置.md)
+    - [用户管理](./old/docs/zh/1.部署启动/3.用户管理.md)
 1. 使用教程
-    - [创建任务](./docs/zh/2.使用教程/创建任务.md)
+    - [创建任务](./old/docs/zh/2.使用教程/创建任务.md)
 1. 组件说明
-    - [已有组件](./docs/zh/3.组件说明/1.已有组件.md)
-    - [自定义组件](./docs/zh/3.组件说明/2.自定义组件.md)
+    - [已有组件](./old/docs/zh/3.组件说明/1.已有组件.md)
+    - [自定义组件](./old/docs/zh/3.组件说明/2.自定义组件.md)
 
 ## Maintainers
 

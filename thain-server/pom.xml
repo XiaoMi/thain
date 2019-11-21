@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.0.RELEASE</version>
+        <version>2.2.1.RELEASE</version>
         <relativePath/>
     </parent>
     <groupId>com.xiaomi.thain</groupId>
@@ -18,10 +18,10 @@
         <java.version>1.8</java.version>
         <disruptor.version>3.4.2</disruptor.version>
         <core.version>1.1.5</core.version>
-        <common.version>1.1.5</common.version>
-        <mybatis.version>2.1.0</mybatis.version>
+        <mybatis.version>2.1.1</mybatis.version>
         <org.everit.json.schema.version>1.5.1</org.everit.json.schema.version>
-        <druid.version>1.1.20</druid.version>
+        <druid.version>1.1.21</druid.version>
+        <pagehelper-spring-boot-starter.version>1.2.12</pagehelper-spring-boot-starter.version>
         <caffeine.version>2.8.0</caffeine.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     </properties>
@@ -61,27 +61,6 @@
             <groupId>com.xiaomi.thain</groupId>
             <artifactId>thain-core</artifactId>
             <version>${core.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-collections4</artifactId>
-                    <groupId>org.apache.commons</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.xiaomi.thain</groupId>
-            <artifactId>thain-common</artifactId>
-            <version>${common.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-beanutils</artifactId>
-                    <groupId>commons-beanutils</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <!--LDAP支持-->
         <dependency>
@@ -118,6 +97,14 @@
                     <artifactId>nimbus-jose-jwt</artifactId>
                     <groupId>com.nimbusds</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>javax.mail</artifactId>
+                    <groupId>com.sun.mail</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>json-smart</artifactId>
+                    <groupId>net.minidev</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -144,10 +131,6 @@
                     <artifactId>commons-beanutils</artifactId>
                     <groupId>commons-beanutils</groupId>
                 </exclusion>
-                <exclusion>
-                    <artifactId>json</artifactId>
-                    <groupId>org.json</groupId>
-                </exclusion>
             </exclusions>
         </dependency>
         <!--druid 数据库连接池-->
@@ -157,30 +140,20 @@
             <version>${druid.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-            <version>${caffeine.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>5.1.10</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-autoconfigure</artifactId>
-            <version>1.2.12</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.12</version>
+            <version>${pagehelper-spring-boot-starter.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>mybatis-spring-boot-starter</artifactId>
                     <groupId>org.mybatis.spring.boot</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
         </dependency>
     </dependencies>
 

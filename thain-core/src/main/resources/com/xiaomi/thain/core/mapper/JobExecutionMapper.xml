@@ -60,6 +60,6 @@
         <foreach collection="collection" item="id" separator=",">
             #{id}
         </foreach>
-        ) and (unix_timestamp(now()) - unix_timestamp(update_time)) > 60 * 60
+        ) and update_time &lt; from_unixtime(unix_timestamp(now()) - 60 * 60)
     </select>
 </mapper>

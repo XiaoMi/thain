@@ -8,14 +8,13 @@ package com.xiaomi.thain.core.process.runtime.executor;
 
 import com.xiaomi.thain.common.exception.JobExecuteException;
 import com.xiaomi.thain.common.exception.ThainException;
-import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.component.tools.ComponentTools;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import com.xiaomi.thain.core.process.component.tools.impl.ComponentToolsImpl;
 import com.xiaomi.thain.core.process.runtime.executor.service.JobExecutionService;
-import com.xiaomi.thain.core.process.runtime.notice.HttpNotice;
+import com.xiaomi.thain.core.process.runtime.notice.JobHttpNotice;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
@@ -41,7 +40,7 @@ public class JobExecutor {
     @NonNull
     private final JobExecutionService jobExecutionService;
     @NonNull
-    private final HttpNotice httpNotice;
+    private final JobHttpNotice jobHttpNotice;
 
     private JobExecutor(long flowExecutionId,
                         @NonNull JobModel jobModel,
@@ -52,7 +51,7 @@ public class JobExecutor {
         this.processEngineStorage = processEngineStorage;
         this.jobExecutionModelId = jobExecutionModel.id;
         this.jobExecutionService = JobExecutionService.getInstance(jobExecutionModelId, jobModel.name, processEngineStorage);
-        this.httpNotice = HttpNotice.getInstance(jobModel.callbackUrl, jobModel.flowId, flowExecutionId);
+        this.jobHttpNotice = JobHttpNotice.getInstance(jobModel.callbackUrl, jobModel.flowId, flowExecutionId);
     }
 
     /**
@@ -69,12 +68,12 @@ public class JobExecutor {
     private void run() throws JobExecuteException {
         try {
             jobExecutionService.startJobExecution();
-            httpNotice.sendStart();
+            jobHttpNotice.sendStart();
             execute();
-            httpNotice.sendSuccess();
+            jobHttpNotice.sendSuccess();
         } catch (Exception e) {
             jobExecutionService.addError("Abort with: " + ExceptionUtils.getRootCauseMessage(e));
-            httpNotice.sendError(ExceptionUtils.getRootCauseMessage(e));
+            jobHttpNotice.sendError(ExceptionUtils.getRootCauseMessage(e));
             log.warn(ExceptionUtils.getRootCauseMessage(e));
             throw new JobExecuteException(e);
         } finally {
@@ -107,7 +106,7 @@ public class JobExecutor {
                     continue;
                 }
                 if (field.getType().isAssignableFrom(String.class)) {
-                    val v = Optional.ofNullable(jobModel.properties.get(field.getName()));
+                    val v = Optional.ofNullable(jobModel.properties).map(t -> t.get(field.getName()));
                     if (v.isPresent()) {
                         field.set(instance, v.get());
                     }

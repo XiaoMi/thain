@@ -22,7 +22,7 @@ import com.xiaomi.thain.core.process.ProcessEngine;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import com.xiaomi.thain.core.process.runtime.checker.JobConditionChecker;
 import com.xiaomi.thain.core.process.runtime.executor.service.FlowExecutionService;
-import com.xiaomi.thain.core.process.runtime.notice.HttpNotice;
+import com.xiaomi.thain.core.process.runtime.notice.FlowHttpNotice;
 import com.xiaomi.thain.core.process.runtime.storage.FlowExecutionStorage;
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool;
 import lombok.NonNull;
@@ -59,7 +59,7 @@ public class FlowExecutor {
     @NonNull
     private final FlowExecutionService flowExecutionService;
     @NonNull
-    private final HttpNotice httpNotice;
+    private final FlowHttpNotice flowHttpNotice;
     @NonNull
     private final ThainThreadPool flowExecutionJobThreadPool;
     @NonNull
@@ -100,7 +100,7 @@ public class FlowExecutor {
             this.notExecutedJobsPool = ImmutableList.copyOf(jobModelList);
             this.jobConditionChecker = JobConditionChecker.getInstance(flowExecutionId);
             this.flowExecutionStorage = FlowExecutionStorage.getInstance(flowExecutionId);
-            this.httpNotice = HttpNotice.getInstance(flowDr.callbackUrl, flowDr.id, flowExecutionId);
+            this.flowHttpNotice = FlowHttpNotice.getInstance(flowDr.callbackUrl, flowDr.id, flowExecutionId);
             this.flowExecutionJobThreadPool = processEngineStorage.flowExecutionJobThreadPool(flowExecutionId);
             this.jobExecutionModelMap = jobModelList.stream().collect(toMap(t -> t.id, t -> {
                 val jobExecutionModel = JobExecutionModel.builder()
@@ -138,7 +138,7 @@ public class FlowExecutor {
     private void start() {
         try {
             flowExecutionService.startFlowExecution();
-            httpNotice.sendStart();
+            flowHttpNotice.sendStart();
             if (flowDr.slaDuration > 0) {
                 ProcessEngine.getInstance(processEngineStorage.processEngineId)
                         .thainFacade
@@ -157,11 +157,17 @@ public class FlowExecutor {
                 flowExecutionService.endFlowExecution();
                 switch (flowExecutionService.getFlowEndStatus()) {
                     case SUCCESS:
-                        httpNotice.sendSuccess();
+                        flowHttpNotice.sendSuccess();
+                        break;
+                    case KILLED:
+                        flowHttpNotice.sendKilled();
+                        break;
+                    case AUTO_KILLED:
+                        flowHttpNotice.sendAutoKilled();
                         break;
                     case ERROR:
                     default:
-                        httpNotice.sendError(flowExecutionService.getErrorMessage());
+                        flowHttpNotice.sendError(flowExecutionService.getErrorMessage());
                 }
             } finally {
                 FlowExecutionStorage.drop(flowExecutionId);
@@ -177,9 +183,14 @@ public class FlowExecutor {
                 .orElseThrow(() -> new ThainRuntimeException(
                         "Failed to read FlowExecution information, flowExecutionId: " + flowExecutionId));
         val flowExecutionStatus = FlowExecutionStatus.getInstance(flowExecutionModel.status);
-        if (flowExecutionStatus == FlowExecutionStatus.KILLED) {
-            flowExecutionService.killed();
-            return;
+        switch (flowExecutionStatus) {
+            case KILLED:
+                flowExecutionService.killed();
+                return;
+            case AUTO_KILLED:
+                flowExecutionService.autoKilled();
+                return;
+            default:
         }
         val executableJobs = getExecutableJobs();
         executableJobs.forEach(job -> {

@@ -8,7 +8,7 @@
 ![Java CI badge](https://github.com/XiaoMi/Thain/workflows/Java%20CI/badge.svg)
 ![Node CI badge](https://github.com/XiaoMi/Thain/workflows/Node%20CI/badge.svg)
 
-![Thain Logo](https://raw.githubusercontent.com/XiaoMi/Thain/master/old/docs/images/logo.png)
+![Thain Logo](https://raw.githubusercontent.com/XiaoMi/Thain/master/docs/old/images/logo.png)
 
 ## Other language versions
 
@@ -23,14 +23,14 @@ Thain has completed backend management system which supports depending, re-run, 
 
 1. Product Introduction
 1. Deployment
-    - [deployment process](./old/docs/en/1.部署启动/1.部署流程.md)
-    - [database configuration](./old/docs/en/1.部署启动/2.数据库配置.md)
-    - [user management](./old/docs/en/1.部署启动/3.用户管理.md)
+    - [deployment process](./docs/old/en/1.部署启动/1.部署流程.md)
+    - [database configuration](./docs/old/en/1.部署启动/2.数据库配置.md)
+    - [user management](./docs/old/en/1.部署启动/3.用户管理.md)
 1. Use Tutorial
-    - [Create Flow](./old/docs/en/2.使用教程/创建任务.md)
+    - [Create Flow](./docs/old/en/2.使用教程/创建任务.md)
 1. Component
-    - [Existing component](./old/docs/en/3.组件说明/1.已有组件.md)
-    - [Custom component](./old/docs/en/3.组件说明/2.自定义组件.md)
+    - [Existing component](./docs/old/en/3.组件说明/1.已有组件.md)
+    - [Custom component](./docs/old/en/3.组件说明/2.自定义组件.md)
 
 ## Maintainers
 

@@ -46,7 +46,7 @@
             and scheduling_status = #{scheduleStatus}
         </if>
         <if test="updateTime != null and updateTime.size == 2">
-            and unix_timestamp(status_update_time) between #{updateTime[0]} and #{updateTime[1]}
+            and status_update_time between from_unixtime(#{updateTime[0]}) and from_unixtime(#{updateTime[1]})
         </if>
         <if test="sortKey != null">
             order by ${sortKey}
@@ -89,7 +89,7 @@
             and scheduling_status = #{scheduleStatus}
         </if>
         <if test="updateTime != null and updateTime.size == 2">
-            and unix_timestamp(status_update_time) between #{updateTime[0]} and #{updateTime[1]}
+            and status_update_time between from_unixtime(#{updateTime[0]}) and from_unixtime(#{updateTime[1]})
         </if>
     </select>
 

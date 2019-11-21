@@ -30,16 +30,16 @@
     <select id="getFlowExecutionStatusCount" resultType="com.xiaomi.thain.server.model.dr.StatusAndCountDr">
         select `status`,count(1) as `count` from thain_flow_execution
         <where>
-            unix_timestamp(create_time) >= #{period[0]}
-            and unix_timestamp(create_time) &lt;= #{period[1]}
+            create_time >= from_unixtime(#{period[0]})
+            and create_time &lt;= from_unixtime(#{period[1]})
         </where>
         group by `status`
     </select>
     <select id="getJobExecutionStatusCount" resultType="com.xiaomi.thain.server.model.dr.StatusAndCountDr">
         select `status`, count(1) as `count`
         from thain_job_execution
-        where unix_timestamp(create_time) >= #{period[0]}
-          and unix_timestamp(create_time) &lt;= #{period[1]}
+        where create_time >= from_unixtime(#{period[0]})
+          and create_time &lt;= from_unixtime(#{period[1]})
         group by `status`
     </select>
     <select id="getRunningFlowCount" resultType="java.lang.Integer">
@@ -88,20 +88,20 @@
     <select id="getIncreaseFlowCount" resultType="java.lang.Integer">
         select count(1) as `count`
         from thain_flow
-        where unix_timestamp(create_time) >= #{period[0]}
-          and unix_timestamp(create_time) &lt;= #{period[1]}
+        where create_time >= from_unixtime(#{period[0]})
+          and create_time &lt;= from_unixtime(#{period[1]})
     </select>
     <select id="getIncreaseJobCount" resultType="java.lang.Integer">
         select count(1) as `count`
         from thain_job
-        where unix_timestamp(create_time) >= #{period[0]}
-          and unix_timestamp(create_time) &lt;= #{period[1]}
+        where create_time >= from_unixtime(#{period[0]})
+          and create_time &lt;= from_unixtime(#{period[1]})
     </select>
     <select id="getStatusHistoryCount" resultType="com.xiaomi.thain.server.model.dr.StatusAndCountAndTimeDr">
         select status, count(1) as `count`, unix_timestamp(create_time) as `time`
         from thain_flow_execution
-        where unix_timestamp(create_time) >= #{period[0]}
-          and unix_timestamp(create_time) &lt; #{period[1]}
+        where create_time >= from_unixtime(#{period[0]})
+          and create_time &lt; from_unixtime(#{period[1]})
           and (`status` = 2 or `status` = 3)
         group by `status`, create_time
     </select>

@@ -55,7 +55,7 @@
     <delete id="clearFlowExecution">
         delete
         from thain_flow_execution
-        where (unix_timestamp(now()) - unix_timestamp(update_time)) > #{dataReserveDays} * 24 * 60 * 60
+        where update_time &lt; from_unixtime(unix_timestamp(now()) - #{dataReserveDays} * 24 * 60 * 60)
     </delete>
 
     <delete id="deleteFlowExecutionByIds">
@@ -104,7 +104,7 @@
         <foreach collection="collection" item="id" separator=",">
             #{id}
         </foreach>
-        ) and (unix_timestamp(now()) - unix_timestamp(update_time)) > 60 * 60
+        ) and update_time &lt; from_unixtime(unix_timestamp(now()) - 60 * 60)
     </select>
 
     <select id="getAllFlowExecutionIds" resultType="java.lang.Long">
@@ -123,7 +123,7 @@
                update_time,
                heartbeat
         from thain_flow_execution
-        where (unix_timestamp(now()) - unix_timestamp(heartbeat)) > 60
+        where heartbeat &lt; from_unixtime(unix_timestamp(now()) - 60)
           and (status = 0 or status = 1)
     </select>
 

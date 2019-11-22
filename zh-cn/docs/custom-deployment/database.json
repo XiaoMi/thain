@@ -1,0 +1,6 @@
+{
+  "filename": "database.md",
+  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>自定义数据库配置</h1>\n<ol>\n<li>\n<p>Thain支持的数据库版本</p>\n<ul>\n<li>H2</li>\n<li>MySql 5.7</li>\n<li>其他数据库以及版本没有测试过，如果你在使用可以反馈给我们</li>\n</ul>\n</li>\n<li>\n<p>如果不修改代码的话，项目中内置了H2数据库，可以直接运行</p>\n</li>\n<li>\n<p>自定义数据库需要修改以下配置</p>\n<p>修改 thain-server/src/main/resources/application.properties</p>\n<p>下面三项为数据库设置</p>\n<pre><code class=\"language-properties\"><span class=\"hljs-meta\">spring.datasource.url</span>=<span class=\"hljs-string\"></span>\n<span class=\"hljs-meta\">spring.datasource.username</span>=<span class=\"hljs-string\"></span>\n<span class=\"hljs-meta\">spring.datasource.password</span>=<span class=\"hljs-string\"></span>\n</code></pre>\n<p>数据库初始化 (1 建表并初始化数据， 2 初始化数据， 其他 不做初始化）</p>\n<pre><code class=\"language-properties\"><span class=\"hljs-meta\">datasource.initialization.level</span>=<span class=\"hljs-string\">1</span>\n</code></pre>\n</li>\n<li>\n<p>建表 sql <code>/thain-core/src/main/resources/sql</code></p>\n</li>\n</ol>\n",
+  "link": "/zh-cn/docs/custom-deployment/database.html",
+  "meta": {}
+}

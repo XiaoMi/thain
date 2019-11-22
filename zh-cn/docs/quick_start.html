@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="quick_start" />
+	<meta name="description" content="quick_start" />
+	<!-- 网页标签标题 -->
+	<title>quick_start</title>
+	<link rel="shortcut icon" href="/thain/img/docsite.ico"/>
+	<link rel="stylesheet" href="/thain/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/thain/zh-cn/index.html"><img class="logo" src="/thain/img/thain-logo.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/thain/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/thain/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/thain/zh-cn/docs/demo1.html" target="_self">文档</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/thain/img/system/docs.png" class="front-img"/><span>文档</span><img src="/thain/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>文档</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/thain/zh-cn/docs/quick_start.html" target="_self">快速启动</a></li></ul></li></ul></div><div class="doc-content markdown-body"><!--
+ Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ This source code is licensed under the Apache License Version 2.0, which
+ can be found in the LICENSE file in the root directory of this source tree.
+-->
+<h1>快速启动</h1>
+<ol>
+<li>
+<p>下载完整代码</p>
+<pre><code class="language-shell">git clone https://github.com/XiaoMi/thain.git
+</code></pre>
+</li>
+<li>
+<p>运行环境需要 jdk 8 以上， maven3, node 8 以上</p>
+</li>
+<li>
+<p>在项目根目录下依次执行</p>
+<pre><code class="language-shell">  cd thain-fe
+  npm install
+  npm run build
+  cd ..
+  mvn -U clean package
+</code></pre>
+</li>
+<li>
+<p>打包完成后，即可运行</p>
+<pre><code class="language-shell">java -jar thain-server/target/thain-server-1.1.5.jar
+</code></pre>
+</li>
+<li>
+<p>打开 localhost:9900 就可以看到效果了</p>
+</li>
+<li>
+<p>初始账号密码：admin, admin</p>
+</li>
+</ol>
+</div></section><footer class="footer-container"><div class="footer-body"><div class="copyright"><span>Copyright © 2020 XIAOMI </span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '/thain';
+  </script>
+	<script src="/thain/build/documentation.js"></script>
+</body>
+</html>

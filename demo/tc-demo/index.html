@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+
+    
+      <link rel="icon" href="/thain/favicon.ico" />
+    
+
+    <title>
+        
+          繁體中文测试 - Thain
+        
+    </title>
+
+    <!-- Spectre.css framework -->
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+
+    <!-- Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <!-- Noto Sans SC -->
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+SC" rel="stylesheet">
+    <!-- Noto Sans -->
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+
+    <!-- theme css & js -->
+    <link rel="stylesheet" href="/thain/css/book.css">
+    <script src="/thain/js/book.js"></script>
+
+    <!-- tocbot -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+    
+    <!-- katex -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zooming/2.1.1/zooming.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const zooming = new Zooming()
+    zooming.listen('img')
+})
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+  <div class="book-container">
+    <div class="columns">
+      <div class="column col-2 hide-lg">
+        <div class="book-sidebar">
+  <h4 class="site-meta">
+    <a href="/thain/">Thain</a>
+  </h4>
+  <div class="sidebar-content">
+    <ul>
+<li><a href="/hexo-theme-book-demo">Home</a></li>
+<li>Test
+<ul>
+<li><a href="https://github.com/hexojs/hexo-theme-unit-test" target="_blank" rel="noopener">hexo-unit-test</a>
+<ul>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/categories">Categories</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/elements">Elements</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/excerpts">Excerpts</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/gallery-post">Gallery Post</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/hello-world">Hello World</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/images">Images</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/link-post-without-title">Untitled</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/link-post">Link Post</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/long-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam justo turpis, tincidunt ac convallis id.</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/no-title">Untitled</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/tag-plugins">Tag Plugins</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/tags">Tags</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/videos">Videos</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6">中文測試</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88">日本語テスト</a></li>
+</ul>
+</li>
+<li><a href="/hexo-theme-book-demo/test/list-test">list test</a></li>
+</ul>
+</li>
+<li>Demo
+<ul>
+<li><a href="/hexo-theme-book-demo/demo/markdown-it-demo">markdown-it demo</a></li>
+<li><a href="/hexo-theme-book-demo/demo/katex-demo">katex demo</a></li>
+<li><a href="/hexo-theme-book-demo/demo/footnotes-demo">footnotes demo</a></li>
+<li><a href="/hexo-theme-book-demo/demo/tc-demo">繁體中文測試</a></li>
+<li><a href="/hexo-theme-book-demo/demo/sc-demo">简体中文测试</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script src="/thain/js/book-sidebar.js"></script>
+
+<script>
+collapse_sidebar(2)
+highlight_tab()
+show_sidebar()
+</script>
+      </div>
+
+      <div class="column col-8 col-lg-12">
+        <div class="book-content">
+          <div class="book-navbar">
+  <header class="navbar">
+  <section class="navbar-section">
+    <img class="navbar-icon" src="/thain/favicon.ico">
+  </section>
+  <section class="navbar-center">
+    Thain
+  </section>
+  <section class="navbar-section">
+    <label class="accordion-header c-hand" for="accordion-sidebar">
+      <i class="icon icon-menu"></i>
+    </label>
+  </section>
+</header>
+
+<div class="accordion">
+  <input type="checkbox" id="accordion-sidebar" name="accordion-checkbox" hidden>
+  <div class="accordion-body">
+    <ul>
+<li><a href="/hexo-theme-book-demo">Home</a></li>
+<li>Test
+<ul>
+<li><a href="https://github.com/hexojs/hexo-theme-unit-test" target="_blank" rel="noopener">hexo-unit-test</a>
+<ul>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/categories">Categories</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/elements">Elements</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/excerpts">Excerpts</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/gallery-post">Gallery Post</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/hello-world">Hello World</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/images">Images</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/link-post-without-title">Untitled</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/link-post">Link Post</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/long-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam justo turpis, tincidunt ac convallis id.</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/no-title">Untitled</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/tag-plugins">Tag Plugins</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/tags">Tags</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/videos">Videos</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6">中文測試</a></li>
+<li><a href="/hexo-theme-book-demo/test/hexo-unit-test/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88">日本語テスト</a></li>
+</ul>
+</li>
+<li><a href="/hexo-theme-book-demo/test/list-test">list test</a></li>
+</ul>
+</li>
+<li>Demo
+<ul>
+<li><a href="/hexo-theme-book-demo/demo/markdown-it-demo">markdown-it demo</a></li>
+<li><a href="/hexo-theme-book-demo/demo/katex-demo">katex demo</a></li>
+<li><a href="/hexo-theme-book-demo/demo/footnotes-demo">footnotes demo</a></li>
+<li><a href="/hexo-theme-book-demo/demo/tc-demo">繁體中文測試</a></li>
+<li><a href="/hexo-theme-book-demo/demo/sc-demo">简体中文测试</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+</div>
+
+<div class="book-post">
+  <p>安原評們龍百唱到見手但時</p>
+<p>立的能成何高改務一戲原上影也二再計們期這心新地合前讀費接，有快口他讓眼弟。</p>
+<p>一他政中單洋民們發懷、算言一不時的，個這體指或不頭。直牛美亞器當的，會下雖點之還。</p>
+<p>而好一當驚，家同文二那動達特自、生定合重。都是可題孩器；觀院帶的？目學連成公義和於的：史處舉盡做不好分青遊落，來說人人灣下著著他辦福交然跑從法回生營三問清醫子，了間防：同是黃做實生以天，之連燈做的，沒處我輪這收成有：的當化候死長壓同都有計語父政正，行理工一統以地保底且元了國前在職問，陸前開過單照，小女觀利進怎卻省裡那別，調品度打面和而運關們可演要美，候美求何程化見園絕：治友大好要沒一似人天上？者更心話通別面一局成不於麼身與容花過失；源在邊而行，樂了導的都大樂治他；經熱人手主很……了吃少法直熱我，物者斯自光臺工更取式自，女回對到男是。</p>
+<p>容他治腦如那！是後投也區金該生住事歡大想家。</p>
+<p>成景灣怎如法告如斷岸爭驗形了每電不唱登手書就腦現樂話；公在已和力計全實開灣痛可財其有聽。地什懷？回以我山感了因大在下車灣手精成前興不，中處笑用大工出提須常的人讓就高不報知名然學不連；候病中……無城多、廣我地計來色兩來子這國到，實石自學亞兩，來童首話在通清系工物造，王找願：紀是的白！間就式八，則見自廠辦資那日，作一須，聲指才手的山入上界的叫害清止光必。</p>
+<p>此資保葉北處經到我通沒師後的歡入學任好再十沒優覺增推格！態己就，紀放起？了富象議策知生精起生式，卻打趣為，外中不西同列響到具眼。對眼選學率那最？人運後程低，的過無展一身許視……節面開舉有過切賽受提！里後而先子素、自想古用果作不成小、速天不賽難現度考在程帶力施加看分我不路前一麼修畫門點和前不題真下長不算器這力人選是，改樂做回就，己國公客去！</p>
+<p>一也來的校是水的，不費內由的天不落的有勢布沒定際絕心山，不般立來性型道，不終狀臺們面……來白低東藝府，人能接吃飛福公的給基較花願金手候素大。像新中客上是應些不局非引始。響不子差孩起在長流終向電們說門遠色布庭說候行假見眾亮也交參是舉樹得大老人單在不條音代好，上過性，些突況家轉要，究裡時增面裡人法的銀邊這；小育書在中；做作兒來，著職代讀當聯成快題國自引紙。看這究幾加建本位三素升的：大開花輕了國球口，臺回心院男，成定真，流期友部，愛制間不用奇使風為自件非死社供是最西話隊分，高客往時、他電會平顯苦人了教起洋子後外熱度大一種不答我及地裡起山動問然音元她人廣代們青唱臺物各雖來一法爸；傷一學然參歌經文專的？</p>
+<p>於到農神影們當親質福卻，者打代成這呢比樣賽解。靜外感，合商容列的，花心麼算喜心發沒。電戰失出東式然它長使們能……興興果一久提賣得認產大打，上買見。準應德？由關際標司能阿放、氣別房速知上求太整星氣公意條為，文保國快為面。兒力政後發西物民所車成管、媽始開大去成光的。臺他是班地性跟如班器利在院叫養？以吃文想，旅有說步有過望他問所再他苦家性於發感正。</p>
+
+</div>
+
+
+  <div class="book-comments">
+    
+
+
+
+
+  </div>
+
+
+<script src="/thain/js/book-post.js"></script>
+        </div>
+      </div>
+
+      <div class="column col-2 hide-lg">
+        <div class="book-toc">
+  <div class="book-tocbot">
+  </div>
+  <div class="book-tocbot-menu">
+    <a class="book-toc-expand" onclick="expand_toc()">Expand all</a>
+    <a onclick="go_top()">Back to top</a>
+    <a onclick="go_bottom()">Go to bottom</a>
+  </div>
+</div>
+
+<script>
+tocbot.init({
+  tocSelector: '.book-tocbot',
+  contentSelector: '.book-post',
+  headingSelector: 'h1, h2, h3, h4, h5',
+  collapseDepth: 2,
+  orderedList: false,
+  scrollSmooth: false,
+});
+
+function expand_toc(){
+  var b = document.querySelector(".book-toc-expand");
+  tocbot.init({
+    tocSelector: '.book-tocbot',
+    contentSelector: '.book-post',
+    headingSelector: 'h1, h2, h3, h4, h5',
+    collapseDepth: 6,
+    orderedList: false,
+    scrollSmooth: false,
+  });
+  b.setAttribute("onclick", "collapse_toc()");
+  b.innerHTML = "Collapse all"
+}
+
+function collapse_toc(){
+  var b = document.querySelector(".book-toc-expand");
+  tocbot.init({
+    tocSelector: '.book-tocbot',
+    contentSelector: '.book-post',
+    headingSelector: 'h1, h2, h3, h4, h5',
+    collapseDepth: 2,
+    orderedList: false,
+    scrollSmooth: false,
+  });
+  b.setAttribute("onclick", "expand_toc()");
+  b.innerHTML = "Expand all"
+}
+
+function go_top() {
+  window.scrollTo(0, 0);
+}
+
+function go_bottom() {
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+</script>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

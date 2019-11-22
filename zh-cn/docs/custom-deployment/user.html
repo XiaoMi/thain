@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="keywords" content="user" />
+	<meta name="description" content="user" />
+	<!-- 网页标签标题 -->
+	<title>user</title>
+	<link rel="shortcut icon" href="/thain/img/docsite.ico"/>
+	<link rel="stylesheet" href="/thain/build/documentation.css" />
+</head>
+<body>
+	<div id="root"><div class="documentation-page" data-reactroot=""><header class="header-container header-container-normal"><div class="header-body"><a href="/thain/zh-cn/index.html"><img class="logo" src="/thain/img/thain-logo.png"/></a><div class="search search-normal"><span class="icon-search"></span></div><span class="language-switch language-switch-normal">En</span><div class="header-menu"><img class="header-menu-toggle" src="/thain/img/system/menu_gray.png"/><ul><li class="menu-item menu-item-normal"><a href="/thain/zh-cn/index.html" target="_self">首页</a></li><li class="menu-item menu-item-normal menu-item-normal-active"><a href="/thain/zh-cn/docs/quick_start.html" target="_self">文档</a></li></ul></div></div></header><div class="bar"><div class="bar-body"><img src="/thain/img/system/docs.png" class="front-img"/><span>文档</span><img src="/thain/img/system/docs.png" class="back-img"/></div></div><section class="content-section"><div class="sidemenu"><div class="sidemenu-toggle"><img src="https://img.alicdn.com/tfs/TB1E6apXHGYBuNjy0FoXXciBFXa-200-200.png"/></div><ul><li class="menu-item menu-item-level-1"><span>文档</span><ul><li style="height:36px;overflow:hidden" class="menu-item menu-item-level-2"><a href="/thain/zh-cn/docs/quick_start.html" target="_self">快速启动</a></li><li style="height:72px;overflow:hidden" class="menu-item menu-item-level-2"><span>定制部署<img style="transform:rotate(0deg)" class="menu-toggle" src="/thain/img/system/arrow_down.png"/></span><ul><li class="menu-item menu-item-level-3"><a href="/thain/zh-cn/docs/custom-deployment/database.html" target="_self">数据库定制</a></li></ul></li></ul></li></ul></div><div class="doc-content markdown-body"><!--
+ Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ This source code is licensed under the Apache License Version 2.0, which
+ can be found in the LICENSE file in the root directory of this source tree.
+-->
+<h1>用户管理</h1>
+<h2>默认用的是数据库管理</h2>
+<h2>DB 用户管理</h2>
+<ol>
+<li>
+<p>配置数据库连接并设置验证方式为 DB</p>
+<p>通过<a href="./2.%E6%95%B0%E6%8D%AE%E5%BA%93%E9%85%8D%E7%BD%AE.md">数据库配置</a>正确配置数据库连接之后</p>
+<p>修改 thain-server/src/main/resources/application.properties 中</p>
+<pre><code class="language-properties"><span class="hljs-comment">#通过数据库进行用户验证</span>
+<span class="hljs-meta">thain.login.source</span>=<span class="hljs-string">DBAuthentication</span>
+</code></pre>
+</li>
+<li>
+<p>添加用户</p>
+<p>管理员登录后，可以进入/admin/user页面添加用户</p>
+</li>
+</ol>
+<h2>Ldap 用户管理</h2>
+<ol>
+<li>
+<p>配置 Ldap 并启动服务<a href="http://www.openldap.org/doc">参考 openLdap</a></p>
+<p>LDIF 定义如下(定义了基本的用户 admin:admin)</p>
+<pre><code class="language-ldif"><span class="hljs-attribute">dn</span>: {your base DN}
+<span class="hljs-attribute">objectClass</span>: dcObject
+<span class="hljs-attribute">objectClass</span>: organization
+<span class="hljs-attribute">objectClass</span>: top
+<span class="hljs-attribute">dc</span>: {your DC}
+<span class="hljs-attribute">o</span>: {your organization}
+
+<span class="hljs-attribute">dn</span>: ou=people,{your base DN}
+<span class="hljs-attribute">objectClass</span>: organizationalUnit
+<span class="hljs-attribute">objectClass</span>: top
+<span class="hljs-attribute">ou</span>: people
+
+<span class="hljs-attribute">dn</span>: uid=admin,ou=people,{your base DN}
+<span class="hljs-attribute">objectClass</span>: inetOrgPerson
+<span class="hljs-attribute">objectClass</span>: organizationalPerson
+<span class="hljs-attribute">objectClass</span>: person
+<span class="hljs-attribute">objectClass</span>: top
+<span class="hljs-attribute">cn</span>: admin
+<span class="hljs-attribute">sn</span>: admin
+<span class="hljs-attribute">uid</span>: admin
+<span class="hljs-attribute">userPassword:</span>: e0NSWVBUfVo2VGdhNGVkQkFjekU=
+</code></pre>
+</li>
+<li>
+<p>配置 Ldap 连接并设置验证方式为 Ldap</p>
+<p>thain-server/src/main/resources/application.properties 中添加</p>
+<pre><code class="language-properties"><span class="hljs-meta">spring.ldap.urls</span>=<span class="hljs-string">ldap:{ldap-url}</span>
+<span class="hljs-meta">spring.ldap.username</span>=<span class="hljs-string">{ldap-username}</span>
+<span class="hljs-meta">spring.ldap.password</span>=<span class="hljs-string">{ldap-password}</span>
+<span class="hljs-meta">spring.ldap.base</span>=<span class="hljs-string">{ldap-baseDn}</span>
+</code></pre>
+<p>并修改</p>
+<pre><code class="language-properties"><span class="hljs-comment">#通过Ldap进行用户验证</span>
+<span class="hljs-meta">thain.login.source</span>=<span class="hljs-string">LdapAuthentication</span>
+</code></pre>
+</li>
+<li>
+<p>添加用户</p>
+<p>添加用户可以通过此方法<code>com.xiaomi.thain.server.dao.LdapUserDao.save(LdapUser user)</code></p>
+</li>
+</ol>
+<h2>第三方授权登录</h2>
+<ol>
+<li>
+<p>申请需要登录的第三方应用的 client-id 和 client-secret 并添加两条基本配置：</p>
+<p>spring.security.oauth2.client.registration.{clientName}.client-id=<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi>c</mi><mi>l</mi><mi>i</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>I</mi><mi>d</mi></mrow><mi>s</mi><mi>p</mi><mi>r</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi mathvariant="normal">.</mi><mi>s</mi><mi>e</mi><mi>c</mi><mi>u</mi><mi>r</mi><mi>i</mi><mi>t</mi><mi>y</mi><mi mathvariant="normal">.</mi><mi>o</mi><mi>a</mi><mi>u</mi><mi>t</mi><mi>h</mi><mn>2</mn><mi mathvariant="normal">.</mi><mi>c</mi><mi>l</mi><mi>i</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi mathvariant="normal">.</mi><mi>r</mi><mi>e</mi><mi>g</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>r</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi mathvariant="normal">.</mi><mrow><mi>c</mi><mi>l</mi><mi>i</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>N</mi><mi>a</mi><mi>m</mi><mi>e</mi></mrow><mi mathvariant="normal">.</mi><mi>c</mi><mi>l</mi><mi>i</mi><mi>e</mi><mi>n</mi><mi>t</mi><mo>−</mo><mi>s</mi><mi>e</mi><mi>c</mi><mi>r</mi><mi>e</mi><mi>t</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">{clientId}  
+ spring.security.oauth2.client.registration.{clientName}.client-secret=</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathit">c</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">i</span><span class="mord mathit">e</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">d</span></span><span class="mord mathit">s</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">i</span><span class="mord mathit">n</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathrm">.</span><span class="mord mathit">s</span><span class="mord mathit">e</span><span class="mord mathit">c</span><span class="mord mathit">u</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">i</span><span class="mord mathit">t</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mord mathrm">.</span><span class="mord mathit">o</span><span class="mord mathit">a</span><span class="mord mathit">u</span><span class="mord mathit">t</span><span class="mord mathit">h</span><span class="mord mathrm">2</span><span class="mord mathrm">.</span><span class="mord mathit">c</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">i</span><span class="mord mathit">e</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathrm">.</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">i</span><span class="mord mathit">s</span><span class="mord mathit">t</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">a</span><span class="mord mathit">t</span><span class="mord mathit">i</span><span class="mord mathit">o</span><span class="mord mathit">n</span><span class="mord mathrm">.</span><span class="mord textstyle uncramped"><span class="mord mathit">c</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">i</span><span class="mord mathit">e</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit" style="margin-right:0.10903em;">N</span><span class="mord mathit">a</span><span class="mord mathit">m</span><span class="mord mathit">e</span></span><span class="mord mathrm">.</span><span class="mord mathit">c</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">i</span><span class="mord mathit">e</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mbin">−</span><span class="mord mathit">s</span><span class="mord mathit">e</span><span class="mord mathit">c</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">e</span><span class="mord mathit">t</span><span class="mrel">=</span></span></span></span>{clientSecret}</p>
+<p>更具体配置可以参考 spring-security 文档</p>
+</li>
+<li>
+<p>如需手动注册 ClientRegistration,可以按照如下配置</p>
+<pre><code class="language-java"><span class="hljs-meta">@Configuration</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OAuth2LoginConfig</span> </span>{
+    <span class="hljs-comment">//添加客户端并注册bean</span>
+	<span class="hljs-meta">@Bean</span>
+ 	<span class="hljs-function"><span class="hljs-keyword">public</span> ClientRegistrationRepository <span class="hljs-title">clientRegistrationRepository</span><span class="hljs-params">()</span> </span>{
+ 		<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> InMemoryClientRegistrationRepository(<span class="hljs-keyword">this</span>.googleClientRegistration());
+ 	}
+
+ 	<span class="hljs-comment">//添加google客户端的配置</span>
+  	<span class="hljs-function"><span class="hljs-keyword">private</span> ClientRegistration <span class="hljs-title">googleClientRegistration</span><span class="hljs-params">()</span> </span>{
+  		<span class="hljs-keyword">return</span> ClientRegistration.withRegistrationId(<span class="hljs-string">"google"</span>)
+  			.clientId(<span class="hljs-string">"google-client-id"</span>)
+  			.clientSecret(<span class="hljs-string">"google-client-secret"</span>)
+  			<span class="hljs-comment">//...</span>
+  			.clientName(<span class="hljs-string">"Google"</span>)
+  			.build();
+ 	}
+}
+</code></pre>
+<p>并修改</p>
+<pre><code class="language-java"><span class="hljs-meta">@EnableWebSecurity</span>
+<span class="hljs-meta">@Log</span>4j2
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WebSecurityConfig</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">WebSecurityConfigurerAdapter</span> </span>{
+
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ClientRegistrationRepository clientRegistrationRepository;
+
+    <span class="hljs-comment">//...</span>
+           <span class="hljs-comment">/**
+     * 第三方登录配置
+     *
+     * <span class="hljs-doctag">@param</span> http HttpSecurity
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">thirdConfig</span><span class="hljs-params">(HttpSecurity http)</span> <span class="hljs-keyword">throws</span> Exception </span>{
+        http.oauth2Login()
+        .clientRegistrationRepository(clientRegistrationRepository);
+        <span class="hljs-comment">//...</span>
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>修改前端项目 thain-fe 的登录页面,添加相应第三方登录链接,系统默认提供了 google 的第三方登录</p>
+<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/api/oauth2/authorization/{clientName}"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+</code></pre>
+</li>
+<li>
+<p>如果不需要第三方登录，则删除配置</p>
+</li>
+</ol>
+<h2>更多</h2>
+<p>项目用户权限验证采用 spring security 框架,更多内容参考<a href="https://docs.spring.io/spring-security/site/docs/old/5.2.0.BUILD-SNAPSHOT/reference/htmlsingle">spring-security</a></p>
+</div></section><footer class="footer-container"><div class="footer-body"><div class="copyright"><span>Copyright © 2020 XIAOMI </span></div></div></footer></div></div>
+	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
+	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>
+	<script>
+		window.rootPath = '/thain';
+  </script>
+	<script src="/thain/build/documentation.js"></script>
+</body>
+</html>

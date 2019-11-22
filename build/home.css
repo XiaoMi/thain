@@ -2003,7 +2003,7 @@ h1, h2, h3, h4, h5, h6 {
     content: '';
     position: absolute;
     top: 0;
-    left: 50%;
+    left: 90%;
     transform: translateX(-50%);
     margin: 0 auto;
     height: 83px;
@@ -2013,7 +2013,7 @@ h1, h2, h3, h4, h5, h6 {
     content: '';
     position: absolute;
     top: 66px;
-    left: 50%;
+    left: 90%;
     transform: translateX(-50%);
     width: 3px;
     height: 17px;
@@ -2038,7 +2038,6 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center; }
     .home-page .users-section .users img {
       margin-right: 10px;
-      width: 140px;
       height: 80px;
       margin-bottom: 40px; }
 

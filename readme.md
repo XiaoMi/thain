@@ -64,6 +64,7 @@ Thain has completed backend management system which supports depending, re-run, 
 - [SingleMeen](https://github.com/SingleMeen)
 
 ## WeChat user group
+
 ![WeChat](http://cdn.cnbj1.fds.api.mi-img.com/thain/WechatIMG.png)
 
 ## Help Us Do Better

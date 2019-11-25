@@ -66,9 +66,11 @@ Thain提供了任务调度与执行的一整套解决方案，在小米集团内
 - [SingleMeen](https://github.com/SingleMeen)
 
 ## 微信用户群
+
 ![WeChat](http://cdn.cnbj1.fds.api.mi-img.com/thain/WechatIMG.png)
 
 ## 帮助我们做的更好
+
 有任何疑问都可以在issues中提出，或发送邮件到：
 - zuojianguang@xiaomi.com
 - liangyongrui@xiaomi.com

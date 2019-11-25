@@ -8,7 +8,7 @@
 ![Java CI badge](https://github.com/XiaoMi/Thain/workflows/Java%20CI/badge.svg)
 ![Node CI badge](https://github.com/XiaoMi/Thain/workflows/Node%20CI/badge.svg)
 
-![Thain Logo](https://raw.githubusercontent.com/XiaoMi/Thain/master/docs/old/images/logo.png)
+![Thain Logo](https://raw.githubusercontent.com/XiaoMi/Thain/master/images/logo.png)
 
 ## Other language versions
 

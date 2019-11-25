@@ -56,14 +56,14 @@ Thain提供了任务调度与执行的一整套解决方案，在小米集团内
 
 ## Maintainers
 
-- @ liangyongrui
-- @ holiday12138
+- [liangyongrui](https://github.com/liangyongrui)
+- [holiday12138](https://github.com/holiday12138)
 
-## committer
+## Contributors
 
-- @ liangyongrui
-- @ holiday12138
-- @ SingleMeen
+- [liangyongrui](https://github.com/liangyongrui)
+- [holiday12138](https://github.com/holiday12138)
+- [SingleMeen](https://github.com/SingleMeen)
 
 ## 微信用户群
 ![WeChat](http://cdn.cnbj1.fds.api.mi-img.com/thain/WechatIMG.png)

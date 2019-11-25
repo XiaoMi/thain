@@ -54,14 +54,14 @@ Thain has completed backend management system which supports depending, re-run, 
 
 ## Maintainers
 
-- @ liangyongrui
-- @ holiday12138
+- [liangyongrui](https://github.com/liangyongrui)
+- [holiday12138](https://github.com/holiday12138)
 
-## committer
+## Contributors
 
-- @ liangyongrui
-- @ holiday12138
-- @ SingleMeen
+- [liangyongrui](https://github.com/liangyongrui)
+- [holiday12138](https://github.com/holiday12138)
+- [SingleMeen](https://github.com/SingleMeen)
 
 ## WeChat user group
 ![WeChat](http://cdn.cnbj1.fds.api.mi-img.com/thain/WechatIMG.png)

@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<meta name="keywords" content="quick_start" />
-	<meta name="description" content="quick_start" />
+	<meta name="keywords" content="http-callback" />
+	<meta name="description" content="http-callback" />
 	<!-- 网页标签标题 -->
-	<title>quick_start</title>
+	<title>http-callback</title>
 	<link rel="shortcut icon" href="/thain/img/docsite.ico"/>
 	<link rel="stylesheet" href="/thain/build/documentation.css" />
 </head>
@@ -17,43 +17,110 @@
  This source code is licensed under the Apache License Version 2.0, which
  can be found in the LICENSE file in the root directory of this source tree.
 -->
-<h1>快速启动</h1>
-<ol>
-<li>
-<p>下载完整代码</p>
-<pre><code class="language-shell">git clone https://github.com/XiaoMi/thain.git
-</code></pre>
-</li>
-<li>
-<p>运行环境需求</p>
-<ul>
-<li>jdk &gt;= 8</li>
-<li>maven 3</li>
-<li>nodejs &gt;= 8</li>
-<li>操作系统：Linux 或 MacOS 测试通过，windows前端编译 <em>可能</em> 会有问题</li>
-</ul>
-</li>
-<li>
-<p>在项目根目录下依次执行</p>
-<pre><code class="language-shell">cd thain-fe
-npm install
-npm run build
-cd ..
-mvn -U clean package
-</code></pre>
-</li>
-<li>
-<p>打包完成后，即可运行</p>
-<pre><code class="language-shell">java -jar thain-server/target/thain-server-1.1.5.jar
-</code></pre>
-</li>
-<li>
-<p>打开 localhost:9900 就可以看到效果了</p>
-</li>
-<li>
-<p>初始账号密码：admin, admin</p>
-</li>
-</ol>
+<h1>HTTP 回调</h1>
+<p>http回调功能一般用于其他系统和接入调度。</p>
+<h2>flow修改回调</h2>
+<p>创建flow的时候可以填写<code>modify_callback_url</code>用于当flow修改时，回调指定的url</p>
+<table>
+<thead>
+<tr>
+<th>触发逻辑</th>
+<th>回调方法</th>
+<th>回调格式</th>
+<th>回调内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>暂停</td>
+<td>POST</td>
+<td>FORM</td>
+<td>{&quot;status&quot;:1}</td>
+</tr>
+<tr>
+<td>继续</td>
+<td>POST</td>
+<td>FORM</td>
+<td>{&quot;status&quot;:2}</td>
+</tr>
+</tbody>
+</table>
+<h2>flow execution执行状态发生变化回调</h2>
+<p>创建flow的时候可以填写<code>callback_url</code>用于当flow execution状态发生变化时，回调指定的url</p>
+<table>
+<thead>
+<tr>
+<th>触发逻辑</th>
+<th>回调方法</th>
+<th>回调格式</th>
+<th>回调内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>success</td>
+<td>POST</td>
+<td>FORM</td>
+<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 2}</td>
+</tr>
+<tr>
+<td>error</td>
+<td>POST</td>
+<td>FORM</td>
+<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 3, message&quot;: [失败原因]}</td>
+</tr>
+<tr>
+<td>running</td>
+<td>POST</td>
+<td>FORM</td>
+<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 4}</td>
+</tr>
+<tr>
+<td>killed</td>
+<td>POST</td>
+<td>FORM</td>
+<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 5}</td>
+</tr>
+<tr>
+<td>auto_killed</td>
+<td>POST</td>
+<td>FORM</td>
+<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 7}</td>
+</tr>
+</tbody>
+</table>
+<h2>job execution执行状态发生变化回调</h2>
+<p>创建job的时候可以填写<code>callback_url</code>用于当job execution状态发生变化时，回调指定的url\</p>
+<table>
+<thead>
+<tr>
+<th>触发逻辑</th>
+<th>回调方法</th>
+<th>回调格式</th>
+<th>回调内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>running</td>
+<td>POST</td>
+<td>FORM</td>
+<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 2}</td>
+</tr>
+<tr>
+<td>success</td>
+<td>POST</td>
+<td>FORM</td>
+<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 3}</td>
+</tr>
+<tr>
+<td>error</td>
+<td>POST</td>
+<td>FORM</td>
+<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 4, message&quot;: [失败原因]}</td>
+</tr>
+</tbody>
+</table>
 </div></section><footer class="footer-container"><div class="footer-body"><div class="copyright"><span>Copyright © 2020 XIAOMI </span></div></div></footer></div></div>
 	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
 	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>

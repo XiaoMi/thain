@@ -95,20 +95,20 @@
 <pre><code class="language-java"><span class="hljs-meta">@Configuration</span>
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OAuth2LoginConfig</span> </span>{
     <span class="hljs-comment">//添加客户端并注册bean</span>
-	<span class="hljs-meta">@Bean</span>
- 	<span class="hljs-function"><span class="hljs-keyword">public</span> ClientRegistrationRepository <span class="hljs-title">clientRegistrationRepository</span><span class="hljs-params">()</span> </span>{
- 		<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> InMemoryClientRegistrationRepository(<span class="hljs-keyword">this</span>.googleClientRegistration());
- 	}
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> ClientRegistrationRepository <span class="hljs-title">clientRegistrationRepository</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> InMemoryClientRegistrationRepository(<span class="hljs-keyword">this</span>.googleClientRegistration());
+    }
 
- 	<span class="hljs-comment">//添加google客户端的配置</span>
-  	<span class="hljs-function"><span class="hljs-keyword">private</span> ClientRegistration <span class="hljs-title">googleClientRegistration</span><span class="hljs-params">()</span> </span>{
-  		<span class="hljs-keyword">return</span> ClientRegistration.withRegistrationId(<span class="hljs-string">"google"</span>)
-  			.clientId(<span class="hljs-string">"google-client-id"</span>)
-  			.clientSecret(<span class="hljs-string">"google-client-secret"</span>)
-  			<span class="hljs-comment">//...</span>
-  			.clientName(<span class="hljs-string">"Google"</span>)
-  			.build();
- 	}
+    <span class="hljs-comment">//添加google客户端的配置</span>
+    <span class="hljs-function"><span class="hljs-keyword">private</span> ClientRegistration <span class="hljs-title">googleClientRegistration</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">return</span> ClientRegistration.withRegistrationId(<span class="hljs-string">"google"</span>)
+             .clientId(<span class="hljs-string">"google-client-id"</span>)
+             .clientSecret(<span class="hljs-string">"google-client-secret"</span>)
+             <span class="hljs-comment">//...</span>
+             .clientName(<span class="hljs-string">"Google"</span>)
+             .build();
+    }
 }
 </code></pre>
 <p>并修改</p>
@@ -120,15 +120,15 @@
     <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> ClientRegistrationRepository clientRegistrationRepository;
 
     <span class="hljs-comment">//...</span>
-           <span class="hljs-comment">/**
+    <span class="hljs-comment">/**
      * 第三方登录配置
      *
      * <span class="hljs-doctag">@param</span> http HttpSecurity
      */</span>
     <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">thirdConfig</span><span class="hljs-params">(HttpSecurity http)</span> <span class="hljs-keyword">throws</span> Exception </span>{
-        http.oauth2Login()
-        .clientRegistrationRepository(clientRegistrationRepository);
-        <span class="hljs-comment">//...</span>
+       http.oauth2Login()
+       .clientRegistrationRepository(clientRegistrationRepository);
+       <span class="hljs-comment">//...</span>
     }
 }
 </code></pre>

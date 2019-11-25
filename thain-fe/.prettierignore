@@ -7,4 +7,6 @@ package.json
 .umi
 .umi-production
 **/editor.js
+src/service-worker.js
+src/components/Authorized/PromiseRender.tsx
 /build

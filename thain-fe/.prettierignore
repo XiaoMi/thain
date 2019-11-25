@@ -2,6 +2,7 @@
 **/*.png
 **/*.eot
 **/*.ttf
+**/*.ico
 .*
 package.json
 .umi

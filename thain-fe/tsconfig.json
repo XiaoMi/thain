@@ -30,6 +30,7 @@
     "acceptance-tests",
     "webpack",
     "src/setupTests.ts",
+    "**/*.js",
     "tslint:latest",
     "tslint-config-prettier"
   ]

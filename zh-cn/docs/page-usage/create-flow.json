@@ -1,0 +1,6 @@
+{
+  "filename": "create-flow.md",
+  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>创建 Flow</h1>\n<h2>整体介绍</h2>\n<p><img src=\"./img/create-flow-introduction.jpg\" alt=\"introduction\"></p>\n<p>如图，点击 区域1 进入新建Flow页面</p>\n<p>区域2 为 已有的组件，可以通过拖动组件来创建一个job</p>\n<p>区域3 为 flow属性设置区域，可以通过相应的只来设置flow</p>\n<h2>Job介绍</h2>\n<p><img src=\"./img/create-flow-new-job.jpg\" alt=\"new-job\"></p>\n<p>如图，拖动一个组件后，你会获得一个job，点击这个job，你可以对他进行编辑。</p>\n<blockquote>\n<p>每个组件具体的说明见文档 <a href=\"https://xiaomi.github.io/thain/zh-cn/docs/component/std/shell.html\">组件</a></p>\n</blockquote>\n<p><img src=\"./img/create-flow-edit-job.png\" alt=\"new-job\"></p>\n",
+  "link": "/zh-cn/docs/page-usage/create-flow.html",
+  "meta": {}
+}

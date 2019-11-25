@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<meta name="keywords" content="http-callback" />
-	<meta name="description" content="http-callback" />
+	<meta name="keywords" content="mail" />
+	<meta name="description" content="mail" />
 	<!-- 网页标签标题 -->
-	<title>http-callback</title>
+	<title>mail</title>
 	<link rel="shortcut icon" href="/thain/img/docsite.ico"/>
 	<link rel="stylesheet" href="/thain/build/documentation.css" />
 </head>
@@ -17,110 +17,15 @@
  This source code is licensed under the Apache License Version 2.0, which
  can be found in the LICENSE file in the root directory of this source tree.
 -->
-<h1>HTTP 回调</h1>
-<p>HTTP 回调功能一般用于其他系统接入调度时使用。</p>
-<h2>flow修改回调</h2>
-<p>创建flow的时候可以填写<code>modify_callback_url</code>用于当flow修改时，回调指定的url</p>
-<table>
-<thead>
-<tr>
-<th>触发条件</th>
-<th>method</th>
-<th>content-type</th>
-<th>回调内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>暂停</td>
-<td>POST</td>
-<td>FORM</td>
-<td>{&quot;status&quot;:1}</td>
-</tr>
-<tr>
-<td>继续</td>
-<td>POST</td>
-<td>FORM</td>
-<td>{&quot;status&quot;:2}</td>
-</tr>
-</tbody>
-</table>
-<h2>flow execution执行状态发生变化回调</h2>
-<p>创建flow的时候可以填写<code>callback_url</code>用于当flow execution状态发生变化时，回调指定的url</p>
-<table>
-<thead>
-<tr>
-<th>触发条件</th>
-<th>method</th>
-<th>content-type</th>
-<th>回调内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>success</td>
-<td>POST</td>
-<td>FORM</td>
-<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 2}</td>
-</tr>
-<tr>
-<td>error</td>
-<td>POST</td>
-<td>FORM</td>
-<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 3, message&quot;: [失败原因]}</td>
-</tr>
-<tr>
-<td>running</td>
-<td>POST</td>
-<td>FORM</td>
-<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 4}</td>
-</tr>
-<tr>
-<td>killed</td>
-<td>POST</td>
-<td>FORM</td>
-<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 5}</td>
-</tr>
-<tr>
-<td>auto_killed</td>
-<td>POST</td>
-<td>FORM</td>
-<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 7}</td>
-</tr>
-</tbody>
-</table>
-<h2>job execution执行状态发生变化回调</h2>
-<p>创建job的时候可以填写<code>callback_url</code>用于当job execution状态发生变化时，回调指定的url</p>
-<table>
-<thead>
-<tr>
-<th>触发条件</th>
-<th>method</th>
-<th>content-type</th>
-<th>回调内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>running</td>
-<td>POST</td>
-<td>FORM</td>
-<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 2}</td>
-</tr>
-<tr>
-<td>success</td>
-<td>POST</td>
-<td>FORM</td>
-<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 3}</td>
-</tr>
-<tr>
-<td>error</td>
-<td>POST</td>
-<td>FORM</td>
-<td>{&quot;flowId&quot;: x, &quot;flowExecutionId&quot;: x, &quot;code&quot;: 4, message&quot;: [失败原因]}</td>
-</tr>
-</tbody>
-</table>
+<h1>邮件发送组件</h1>
+<h2>组件名称</h2>
+<p>std::mail</p>
+<h2>必填参数</h2>
+<p>title: 邮件标题</p>
+<p>contentHtml: 邮件内容</p>
+<p>recipient: 收件人（多个用逗号隔开）</p>
+<h2>其他</h2>
+<p>可以在邮件标题和内容中用{}引用别的job产生的结果, 如: `{<a href="http://a.name">a.name</a>}`</p>
 </div></section><footer class="footer-container"><div class="footer-body"><div class="copyright"><span>Copyright © 2020 XIAOMI </span></div></div></footer></div></div>
 	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
 	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>

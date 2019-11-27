@@ -11,8 +11,8 @@ import com.github.pagehelper.page.PageMethod;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.model.dr.X5ConfigDr;
-import com.xiaomi.thain.server.model.rp.UserResponse;
-import com.xiaomi.thain.server.model.rp.X5ConfigResponse;
+import com.xiaomi.thain.server.model.rp.UserRp;
+import com.xiaomi.thain.server.model.rp.X5ConfigRp;
 import com.xiaomi.thain.server.model.rq.AddUserRq;
 import com.xiaomi.thain.server.model.rq.UpdateUserRq;
 import com.xiaomi.thain.server.model.rq.X5ConfigRq;
@@ -52,7 +52,7 @@ public class AdminController {
         if (isAdmin()) {
             PageMethod.startPage(page, pageSize);
             PageInfo<ThainUser> thainUserPageInfo = new PageInfo<>(userService.getAllUsers());
-            return ApiResult.success(thainUserPageInfo.getList().stream().map(t -> UserResponse.builder()
+            return ApiResult.success(thainUserPageInfo.getList().stream().map(t -> UserRp.builder()
                             .userId(t.getUserId())
                             .userName(t.getUsername())
                             .admin(t.isAdmin())
@@ -101,10 +101,10 @@ public class AdminController {
         if (isAdmin()) {
             PageMethod.startPage(page, pageSize);
             val pageInfo = new PageInfo<X5ConfigDr>(x5Service.getAllConfigs());
-            val x5Configs = new ArrayList<X5ConfigResponse>();
+            val x5Configs = new ArrayList<X5ConfigRp>();
             pageInfo.getList().forEach(x5ConfigDr -> {
                 val principals = JSON.parseArray(x5ConfigDr.principal, String.class);
-                x5Configs.add(X5ConfigResponse.builder()
+                x5Configs.add(X5ConfigRp.builder()
                         .appId(x5ConfigDr.appId)
                         .appKey(x5ConfigDr.appKey)
                         .appName(x5ConfigDr.appName)

@@ -16,7 +16,7 @@ import java.util.List;
  * @date 2019/10/24
  */
 @Builder
-public class X5ConfigResponse {
+public class X5ConfigRp {
     @NonNull
     public final String appId;
     @NonNull

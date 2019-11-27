@@ -64,7 +64,7 @@ public class FlowServiceImpl implements FlowService {
     public long add(@NonNull AddFlowRq addFlowRq, @NonNull List<JobModel> jobModelList, String appId)
             throws ThainException, ParseException, SchedulerException {
         if (!addFlowRq.slaKill || addFlowRq.slaDuration == 0) {
-            addFlowRq.toBuilder().slaKill(true).slaDuration(3L * 60 * 60).build();
+            addFlowRq = addFlowRq.toBuilder().slaKill(true).slaDuration(3L * 60 * 60).build();
         }
         val addDto = AddRq.builder().flowModel(addFlowRq).jobModelList(jobModelList).build();
         if (addFlowRq.id != null && flowDao.flowExist(addFlowRq.id)) {

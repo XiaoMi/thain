@@ -5,7 +5,8 @@
  */
 package com.xiaomi.thain.server.model.rp;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.NonNull;
 
 
 /**
@@ -13,7 +14,7 @@ import lombok.*;
  */
 
 @Builder
-public class UserResponse   {
+public class UserRp {
    @NonNull
    public final String userId;
    public final boolean admin;

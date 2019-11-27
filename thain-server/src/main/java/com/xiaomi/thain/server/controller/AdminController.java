@@ -5,15 +5,17 @@
  */
 package com.xiaomi.thain.server.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import com.xiaomi.thain.common.entity.ApiResult;
-import com.xiaomi.thain.server.model.rq.AddUserRq;
-import com.xiaomi.thain.server.model.rq.X5ConfigRq;
+import com.xiaomi.thain.server.model.ThainUser;
+import com.xiaomi.thain.server.model.dr.X5ConfigDr;
 import com.xiaomi.thain.server.model.rp.UserResponse;
 import com.xiaomi.thain.server.model.rp.X5ConfigResponse;
+import com.xiaomi.thain.server.model.rq.AddUserRq;
 import com.xiaomi.thain.server.model.rq.UpdateUserRq;
-import com.xiaomi.thain.server.model.ThainUser;
+import com.xiaomi.thain.server.model.rq.X5ConfigRq;
 import com.xiaomi.thain.server.service.UserService;
 import com.xiaomi.thain.server.service.X5Service;
 import lombok.NonNull;
@@ -21,6 +23,7 @@ import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import static com.xiaomi.thain.server.handler.ThreadLocalUser.isAdmin;
@@ -96,8 +99,20 @@ public class AdminController {
     @GetMapping("/clients")
     public ApiResult getAllConfigs(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int pageSize) {
         if (isAdmin()) {
-            val pageInfo = new PageInfo<X5ConfigResponse>(PageMethod.startPage(page, pageSize));
-            return ApiResult.success(x5Service.getAllConfigs(), pageInfo.getTotal(), pageInfo.getPageNum(), pageInfo.getPageSize());
+            PageMethod.startPage(page, pageSize);
+            val pageInfo = new PageInfo<X5ConfigDr>(x5Service.getAllConfigs());
+            val x5Configs = new ArrayList<X5ConfigResponse>();
+            pageInfo.getList().forEach(x5ConfigDr -> {
+                val principals = JSON.parseArray(x5ConfigDr.principal, String.class);
+                x5Configs.add(X5ConfigResponse.builder()
+                        .appId(x5ConfigDr.appId)
+                        .appKey(x5ConfigDr.appKey)
+                        .appName(x5ConfigDr.appName)
+                        .description(x5ConfigDr.description)
+                        .createTime(x5ConfigDr.createTime.getTime())
+                        .principals(principals).build());
+            });
+            return ApiResult.success(x5Configs, pageInfo.getTotal(), pageInfo.getPageNum(), pageInfo.getPageSize());
         }
         return ApiResult.fail("Not Access to get clients");
     }

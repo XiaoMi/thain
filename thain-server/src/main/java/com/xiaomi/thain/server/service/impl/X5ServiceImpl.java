@@ -10,15 +10,13 @@ import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.dao.X5Dao;
 import com.xiaomi.thain.server.model.X5Config;
 import com.xiaomi.thain.server.model.dp.X5ConfigDp;
+import com.xiaomi.thain.server.model.dr.X5ConfigDr;
 import com.xiaomi.thain.server.model.rq.X5ConfigRq;
-import com.xiaomi.thain.server.model.rp.X5ConfigResponse;
 import com.xiaomi.thain.server.service.X5Service;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
-import lombok.val;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -42,20 +40,8 @@ public class X5ServiceImpl implements X5Service {
     }
 
     @Override
-    public List<X5ConfigResponse> getAllConfigs() {
-        val configs = x5Dao.getAllX5Config();
-        val x5Configs = new LinkedList<X5ConfigResponse>();
-        configs.forEach(config -> {
-            val principals = JSON.parseArray(config.principal, String.class);
-            x5Configs.add(X5ConfigResponse.builder()
-                    .appId(config.appId)
-                    .appKey(config.appKey)
-                    .appName(config.appName)
-                    .description(config.description)
-                    .createTime(config.createTime.getTime())
-                    .principals(principals).build());
-        });
-        return x5Configs;
+    public List<X5ConfigDr> getAllConfigs() {
+        return x5Dao.getAllX5Config();
     }
 
     @Override

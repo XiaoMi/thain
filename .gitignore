@@ -76,6 +76,5 @@ Temporary Items
 
 **/node_modules/
 **/node/
-**/package-lock.json
 **/junit-report
 /shell/job_execution*

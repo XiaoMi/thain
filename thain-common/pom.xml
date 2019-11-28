@@ -13,9 +13,7 @@
         <version>1.2.0-beta.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>thain-common</artifactId>
-
     <name>thain-common</name>
 
     <properties>
@@ -26,7 +24,6 @@
         <guava.version>28.1-jre</guava.version>
         <lombok.version>1.18.10</lombok.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <httpcore.version>4.4.12</httpcore.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <httpclient.version>4.5.10</httpclient.version>
         <jackson.version>2.10.1</jackson.version>
@@ -42,6 +39,7 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.api.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -57,26 +55,31 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>${commons-collections4.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>${httpclient.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>

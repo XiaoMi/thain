@@ -4,27 +4,22 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 import React, { useState, useEffect } from 'react';
-import ConnectState, { ConnectProps } from '@/models/connect';
+import ConnectState from '@/models/connect';
 import { X5ConfigModel } from './models/X5ConfigModel';
 import { formatMessage } from 'umi-plugin-locale';
 import ButtonGroup from 'antd/es/button/button-group';
 import { Button, Table, Modal, Form, Input, message } from 'antd';
-import { connect } from 'dva';
-import { TableResult } from '@/typings/ApiResult';
+import { useDispatch, useSelector } from 'dva';
 import { PaginationConfig } from 'antd/lib/table';
 import X5Tag from './X5Tag';
 
-interface Props extends ConnectProps {
-  tableResult?: TableResult<X5ConfigModel>;
-  loading?: boolean;
-}
-
 const { Item } = Form;
 
-const X5ConfigTable: React.FC<Props> = ({ tableResult, dispatch }) => {
-  if (tableResult === undefined) {
-    tableResult = new TableResult();
-  }
+const X5ConfigTable: React.FC<{}> = () => {
+  const dispatch = useDispatch();
+  const tableResult = useSelector((s: ConnectState) => s.x5config.tableResult);
+  const loading = useSelector((s: ConnectState) => s.loading.models.x5config);
+  console.log(tableResult);
   const { data, page, count, pageSize } = tableResult;
   const [appId, setAppId] = useState<string>();
   const [model, setModel] = useState<X5ConfigModel>(new X5ConfigModel());
@@ -232,6 +227,7 @@ const X5ConfigTable: React.FC<Props> = ({ tableResult, dispatch }) => {
         onChange={tableChange}
         dataSource={data}
         rowKey="appId"
+        loading={loading}
         pagination={{
           current: page,
           pageSize: pageSize,
@@ -242,7 +238,5 @@ const X5ConfigTable: React.FC<Props> = ({ tableResult, dispatch }) => {
     </>
   );
 };
-export default connect(({ x5config, loading }: ConnectState) => ({
-  tableResult: x5config.tableResult,
-  loading: loading.models.x5config,
-}))(X5ConfigTable);
+
+export default X5ConfigTable;

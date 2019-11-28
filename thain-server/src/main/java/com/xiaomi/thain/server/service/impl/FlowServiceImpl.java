@@ -19,7 +19,7 @@ import com.xiaomi.thain.server.dao.FlowDao;
 import com.xiaomi.thain.server.model.sp.FlowListSp;
 import com.xiaomi.thain.server.service.FlowService;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ import java.util.Map;
  * @author liangyongrui
  */
 @Service
-@Log4j2
+@Slf4j
 public class FlowServiceImpl implements FlowService {
 
     @NonNull

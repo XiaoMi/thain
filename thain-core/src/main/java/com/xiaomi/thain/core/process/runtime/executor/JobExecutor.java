@@ -16,7 +16,7 @@ import com.xiaomi.thain.core.process.component.tools.impl.ComponentToolsImpl;
 import com.xiaomi.thain.core.process.runtime.executor.service.JobExecutionService;
 import com.xiaomi.thain.core.process.runtime.notice.JobHttpNotice;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -27,7 +27,7 @@ import java.util.Optional;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Log4j2
+@Slf4j
 public class JobExecutor {
 
     @NonNull

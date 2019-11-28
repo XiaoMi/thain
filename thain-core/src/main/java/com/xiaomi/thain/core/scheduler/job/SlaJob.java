@@ -9,7 +9,7 @@ import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Log4j2
+@Slf4j
 public class SlaJob implements Job {
 
     @NonNull

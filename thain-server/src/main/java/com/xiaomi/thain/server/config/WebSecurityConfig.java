@@ -9,7 +9,7 @@ package com.xiaomi.thain.server.config;
 import com.alibaba.fastjson.JSON;
 import com.xiaomi.thain.common.entity.ApiResult;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -35,7 +35,7 @@ import java.io.IOException;
  */
 
 @EnableWebSecurity
-@Log4j2
+@Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final OAuth2UserService<OidcUserRequest, OidcUser> customOauth2UserServiceImpl;

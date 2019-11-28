@@ -8,11 +8,11 @@ package com.xiaomi.thain.server.service.impl;
 import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.server.dao.DashboardDao;
 import com.xiaomi.thain.server.model.dr.SourceAndCountDr;
-import com.xiaomi.thain.server.model.dr.StatusAndCountDr;
 import com.xiaomi.thain.server.model.dr.StatusAndCountAndTimeDr;
+import com.xiaomi.thain.server.model.dr.StatusAndCountDr;
 import com.xiaomi.thain.server.service.DashboardService;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ import java.util.List;
  * @author miaoyu3@xiaomi.com
  * @date 19-7-30下午4:44
  */
-@Log4j2
+@Slf4j
 @Service
 public class DashboardServiceImpl implements DashboardService {
     @NonNull

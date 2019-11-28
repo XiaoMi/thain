@@ -7,7 +7,7 @@ package com.xiaomi.thain.core.process.service;
 
 import com.xiaomi.thain.core.dao.UserDao;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,7 +30,7 @@ import java.util.Properties;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Log4j2
+@Slf4j
 public class MailService {
 
     @NonNull

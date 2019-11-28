@@ -14,7 +14,7 @@ import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import com.xiaomi.thain.core.process.runtime.executor.FlowExecutor;
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -28,7 +28,7 @@ import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
 /**
  * @author liangyongrui
  */
-@Log4j2
+@Slf4j
 public class FlowExecutionLoader {
 
     public final Set<FlowExecutionDr> runningFlowExecution = new HashSet<>();

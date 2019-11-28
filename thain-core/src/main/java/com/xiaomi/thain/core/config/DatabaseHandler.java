@@ -8,7 +8,7 @@ package com.xiaomi.thain.core.config;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.core.mapper.*;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -23,7 +23,7 @@ import javax.sql.DataSource;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Log4j2
+@Slf4j
 public class DatabaseHandler {
 
     private DatabaseHandler() {

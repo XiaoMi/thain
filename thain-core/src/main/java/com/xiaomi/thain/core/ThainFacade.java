@@ -21,7 +21,7 @@ import com.xiaomi.thain.core.scheduler.SchedulerEngine;
 import com.xiaomi.thain.core.scheduler.SchedulerEngineConfiguration;
 import com.xiaomi.thain.core.utils.SendModifyUtils;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronExpression;
@@ -43,7 +43,7 @@ import static com.xiaomi.thain.common.constant.FlowExecutionStatus.KILLED;
  * @author liangyongrui@xiaomi.com
  * @date 19-5-16 下午8:38
  */
-@Log4j2
+@Slf4j
 public class ThainFacade {
 
     private static final String NON_EXIST_FLOW = "flow does not exist:{0}";
@@ -127,6 +127,7 @@ public class ThainFacade {
         val flowDr = processEngine.processEngineStorage
                 .flowDao.getFlow(flowId)
                 .orElseThrow(() -> new ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)));
+
         try {
             processEngine.processEngineStorage.flowDao.pauseFlow(flowId);
             schedulerEngine.deleteFlow(flowId);

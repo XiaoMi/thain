@@ -13,7 +13,7 @@ import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -26,7 +26,7 @@ import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
 /**
  * @author liangyongrui
  */
-@Log4j2
+@Slf4j
 public class FlowJob implements Job {
 
     @NonNull

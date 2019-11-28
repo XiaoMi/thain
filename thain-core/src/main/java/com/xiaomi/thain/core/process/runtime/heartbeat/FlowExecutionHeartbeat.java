@@ -5,7 +5,7 @@ import com.xiaomi.thain.core.dao.FlowExecutionDao;
 import com.xiaomi.thain.core.process.service.MailService;
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  *
  * @author liangyongrui
  */
-@Log4j2
+@Slf4j
 public class FlowExecutionHeartbeat {
 
     private final Set<Collection<FlowExecutionDr>> collections = Collections.newSetFromMap(new IdentityHashMap<>());

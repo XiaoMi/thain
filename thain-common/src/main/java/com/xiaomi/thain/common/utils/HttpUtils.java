@@ -6,9 +6,8 @@
 
 package com.xiaomi.thain.common.utils;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.http.Consts;
@@ -26,17 +25,15 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * @author liangyongrui
  */
-@Log4j2
+@Slf4j
 public class HttpUtils {
 
     private HttpUtils() {

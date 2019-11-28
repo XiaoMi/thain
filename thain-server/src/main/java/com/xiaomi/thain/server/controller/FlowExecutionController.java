@@ -11,7 +11,7 @@ import com.xiaomi.thain.server.model.rp.FlowExecutionAllInfoRp;
 import com.xiaomi.thain.server.service.FlowExecutionService;
 import com.xiaomi.thain.server.service.PermissionService;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ import static com.xiaomi.thain.server.handler.ThreadLocalUser.*;
 /**
  * @author liangyongrui
  */
-@Log4j2
+@Slf4j
 @RestController
 @RequestMapping("api/flow-execution")
 public class FlowExecutionController {

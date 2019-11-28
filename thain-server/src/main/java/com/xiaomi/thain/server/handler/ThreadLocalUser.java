@@ -8,7 +8,7 @@ package com.xiaomi.thain.server.handler;
 
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.server.model.ThainUser;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -20,7 +20,7 @@ import java.util.Set;
  * @author liangyongrui@xiaomi.com
  * @date 11/8/18 3:47 PM
  */
-@Log4j2
+@Slf4j
 public class ThreadLocalUser {
 
     private ThreadLocalUser() {

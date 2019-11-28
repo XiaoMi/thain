@@ -104,7 +104,7 @@ export async function patch<T = {}>(url: string, data?: any): Promise<T | undefi
   return parseResult(res);
 }
 
-async function parseResult<T = {}>(res?: ApiResult<T>) {
+function parseResult<T = {}>(res?: ApiResult<T>) {
   if (!res || statusHandler(res.status, res.message)) {
     return undefined;
   }

@@ -19,7 +19,7 @@ export class UserModel {
 }
 
 export class AdminUserModel {
-  tableResult?: TableResult = new TableResult<UserModel>();
+  tableResult: TableResult = new TableResult<UserModel>();
 }
 
 interface AdminModel {

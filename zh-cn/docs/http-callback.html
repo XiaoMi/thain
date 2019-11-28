@@ -19,8 +19,8 @@
 -->
 <h1>HTTP 回调</h1>
 <p>HTTP 回调功能一般用于其他系统接入调度时使用。</p>
-<h2>flow修改回调</h2>
-<p>创建flow的时候可以填写<code>modify_callback_url</code>用于当flow修改时，回调指定的url</p>
+<h2>flow 修改回调</h2>
+<p>创建 flow 的时候可以填写<code>modify_callback_url</code>用于当 flow 修改时，回调指定的 url</p>
 <table>
 <thead>
 <tr>
@@ -35,18 +35,18 @@
 <td>暂停</td>
 <td>POST</td>
 <td>FORM</td>
-<td>{&quot;status&quot;:1}</td>
+<td>{&quot;status&quot;:1, &quot;flowId&quot;:x}</td>
 </tr>
 <tr>
 <td>继续</td>
 <td>POST</td>
 <td>FORM</td>
-<td>{&quot;status&quot;:2}</td>
+<td>{&quot;status&quot;:2, &quot;flowId&quot;:x}</td>
 </tr>
 </tbody>
 </table>
-<h2>flow execution执行状态发生变化回调</h2>
-<p>创建flow的时候可以填写<code>callback_url</code>用于当flow execution状态发生变化时，回调指定的url</p>
+<h2>flow execution 执行状态发生变化回调</h2>
+<p>创建 flow 的时候可以填写<code>callback_url</code>用于当 flow execution 状态发生变化时，回调指定的 url</p>
 <table>
 <thead>
 <tr>
@@ -89,8 +89,8 @@
 </tr>
 </tbody>
 </table>
-<h2>job execution执行状态发生变化回调</h2>
-<p>创建job的时候可以填写<code>callback_url</code>用于当job execution状态发生变化时，回调指定的url</p>
+<h2>job execution 执行状态发生变化回调</h2>
+<p>创建 job 的时候可以填写<code>callback_url</code>用于当 job execution 状态发生变化时，回调指定的 url</p>
 <table>
 <thead>
 <tr>

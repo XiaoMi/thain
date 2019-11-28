@@ -23,7 +23,7 @@ import com.xiaomi.thain.core.process.service.MailService;
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.io.Resources;
@@ -50,7 +50,7 @@ import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.SCHEDULING;
  * @author liangyongrui@xiaomi.com
  */
 @EqualsAndHashCode
-@Log4j2
+@Slf4j
 public class ProcessEngine {
 
     @NonNull

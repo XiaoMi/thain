@@ -16,7 +16,7 @@ import com.xiaomi.thain.server.controller.FlowController;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author miaoyu
  * @date 19-7-8 下午2:51
  */
-@Log4j2
+@Slf4j
 @RestController
 @RequestMapping("x5/flow")
 public class X5FlowController {

@@ -9,7 +9,7 @@ package com.xiaomi.thain.core.utils;
 import com.google.common.collect.ImmutableMap;
 import com.xiaomi.thain.common.utils.HttpUtils;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.http.conn.HttpHostConnectException;
 
@@ -21,7 +21,7 @@ import java.net.UnknownHostException;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Log4j2
+@Slf4j
 public class SendModifyUtils {
 
     private static final int PAUSE = 1;

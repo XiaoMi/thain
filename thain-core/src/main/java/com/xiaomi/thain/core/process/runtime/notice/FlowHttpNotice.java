@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableMap;
 import com.xiaomi.thain.common.constant.FlowLastRunStatus;
 import com.xiaomi.thain.common.utils.HttpUtils;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 import static com.xiaomi.thain.common.constant.FlowLastRunStatus.*;
 
@@ -20,7 +20,7 @@ import static com.xiaomi.thain.common.constant.FlowLastRunStatus.*;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Log4j2
+@Slf4j
 public class FlowHttpNotice {
     @NonNull
     private final String url;

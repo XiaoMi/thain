@@ -15,7 +15,7 @@ import com.xiaomi.thain.core.scheduler.job.FlowJob;
 import com.xiaomi.thain.core.scheduler.job.RecoveryJob;
 import com.xiaomi.thain.core.scheduler.job.SlaJob;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
@@ -33,7 +33,7 @@ import static org.quartz.TriggerBuilder.newTrigger;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Log4j2
+@Slf4j
 public class SchedulerEngine {
 
     @NonNull

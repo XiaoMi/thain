@@ -12,7 +12,7 @@ import com.xiaomi.thain.common.model.rq.UpdateJobPropertiesRq;
 import com.xiaomi.thain.server.dao.JobDao;
 import com.xiaomi.thain.server.service.JobService;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  * @author liangyongrui
  */
 @Service
-@Log4j2
+@Slf4j
 public class JobServiceImpl implements JobService {
 
     @NonNull

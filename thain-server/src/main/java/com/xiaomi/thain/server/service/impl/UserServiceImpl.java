@@ -5,15 +5,13 @@
  */
 package com.xiaomi.thain.server.service.impl;
 
-import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.dao.UserDao;
+import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.model.rq.AddUserRq;
 import com.xiaomi.thain.server.model.rq.UpdateUserRq;
-import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.service.UserService;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +21,7 @@ import java.util.Optional;
  * @author miaoyu3@xiaomi.com
  * @date 19-8-7下午2:03
  */
-@Log4j2
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     @NonNull

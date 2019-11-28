@@ -16,7 +16,7 @@ import com.xiaomi.thain.core.process.runtime.log.FlowExecutionLogHandler;
 import com.xiaomi.thain.core.process.runtime.notice.MailNotice;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author liangyongrui@xiaomi.com
  */
-@Log4j2
+@Slf4j
 public class FlowExecutionService {
 
     public final long flowExecutionId;

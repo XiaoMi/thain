@@ -12,14 +12,14 @@ import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.model.rq.AddRq;
 import com.xiaomi.thain.server.model.rp.FlowAllInfoRp;
-import com.xiaomi.thain.server.model.sp.FlowListSp;
 import com.xiaomi.thain.server.model.rq.FlowListRq;
+import com.xiaomi.thain.server.model.sp.FlowListSp;
 import com.xiaomi.thain.server.service.CheckService;
 import com.xiaomi.thain.server.service.FlowExecutionService;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +29,7 @@ import static com.xiaomi.thain.server.handler.ThreadLocalUser.*;
 /**
  * @author liangyongrui@xiaomi.com
  */
-@Log4j2
+@Slf4j
 @RestController
 @RequestMapping("api/flow")
 public class FlowController {

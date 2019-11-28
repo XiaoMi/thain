@@ -68,41 +68,26 @@ function statusHandler(status: number, message: string) {
 }
 
 export async function postForm<T = {}>(url: string, data?: any) {
-  const res: ApiResult<T> = await request(url, {
+  const res: ApiResult<T> | undefined = await request(url, {
     method: 'POST',
     requestType: 'form',
     data,
   });
-  if (statusHandler(res.status, res.message)) {
-    return undefined;
-  }
-  return res.data;
+  return parseResult(res);
 }
 
 export async function post<T = {}>(url: string, data?: any): Promise<T | undefined> {
-  const res: ApiResult<T> = await request(url, {
-    method: 'POST',
-    data,
-  });
-  if (statusHandler(res.status, res.message)) {
-    return undefined;
-  }
-  return res.data;
+  const res: ApiResult<T> | undefined = await request(url, { method: 'POST', data });
+  return parseResult(res);
 }
 
 export async function del<T = {}>(url: string, data?: any): Promise<T | undefined> {
-  const res: ApiResult<T> = await request(url, {
-    method: 'DELETE',
-    data,
-  });
-  if (statusHandler(res.status, res.message)) {
-    return undefined;
-  }
-  return res.data;
+  const res: ApiResult<T> | undefined = await request(url, { method: 'DELETE', data });
+  return parseResult(res);
 }
 
 export async function get<T = {}, U = {}>(url: string, data?: U): Promise<T | undefined> {
-  let res: ApiResult<T>;
+  let res: ApiResult<T> | undefined;
   if (data === undefined) {
     res = await request(url, {});
   } else {
@@ -111,18 +96,16 @@ export async function get<T = {}, U = {}>(url: string, data?: U): Promise<T | un
       .reduce((p, c) => ({ ...p, [c]: data[c] }), {});
     res = await request(`${url}?${stringify(newData)}`, {});
   }
-  if (statusHandler(res.status, res.message)) {
-    return undefined;
-  }
-  return res.data;
+  return parseResult(res);
 }
 
 export async function patch<T = {}>(url: string, data?: any): Promise<T | undefined> {
-  const res: ApiResult<T> = await request(url, {
-    method: 'PATCH',
-    data,
-  });
-  if (statusHandler(res.status, res.message)) {
+  const res: ApiResult<T> | undefined = await request(url, { method: 'PATCH', data });
+  return parseResult(res);
+}
+
+async function parseResult<T = {}>(res?: ApiResult<T>) {
+  if (!res || statusHandler(res.status, res.message)) {
     return undefined;
   }
   return res.data;

@@ -3,7 +3,10 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable import/no-mutable-exports */
 let CURRENT: string | string[] = 'NULL';
+
 type CurrentAuthorityType = string | string[] | (() => typeof CURRENT);
 /**
  * use  authority or getAuthority
@@ -11,7 +14,7 @@ type CurrentAuthorityType = string | string[] | (() => typeof CURRENT);
  */
 const renderAuthorize = <T>(Authorized: T): ((currentAuthority: CurrentAuthorityType) => T) => (
   currentAuthority: CurrentAuthorityType,
-) => {
+): T => {
   if (currentAuthority) {
     if (typeof currentAuthority === 'function') {
       CURRENT = currentAuthority();

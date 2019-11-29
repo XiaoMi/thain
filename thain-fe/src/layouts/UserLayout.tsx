@@ -3,16 +3,19 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
+
+import { MenuDataItem, getMenuData, getPageTitle } from '@ant-design/pro-layout';
+import { Helmet } from 'react-helmet';
+import Link from 'umi/link';
+import React from 'react';
+import { connect } from 'dva';
+import { formatMessage } from 'umi-plugin-react/locale';
+
 import SelectLang from '@/components/SelectLang';
 import { ConnectProps, ConnectState } from '@/models/connect';
-import { connect } from 'dva';
-import React from 'react';
-import DocumentTitle from 'react-document-title';
-import { formatMessage } from 'umi-plugin-react/locale';
-import Link from 'umi/link';
-import logo from '../assets/xdata_logo.png';
 import styles from './UserLayout.less';
-import { MenuDataItem, getPageTitle, getMenuData } from '@ant-design/pro-layout';
+
+import logo from '../assets/xdata_logo.png';
 import GlobalFooter from '@/components/GlobalFooter';
 
 export interface UserLayoutProps extends ConnectProps {
@@ -33,16 +36,19 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
     },
   } = props;
   const { breadcrumb } = getMenuData(routes);
-
+  const title = getPageTitle({
+    pathname: location.pathname,
+    breadcrumb,
+    formatMessage,
+    ...props,
+  });
   return (
-    <DocumentTitle
-      title={getPageTitle({
-        pathname: location.pathname,
-        breadcrumb,
-        formatMessage,
-        ...props,
-      })}
-    >
+    <>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={title} />
+      </Helmet>
+
       <div className={styles.container}>
         <div className={styles.lang}>
           <SelectLang />
@@ -63,7 +69,7 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
           copyright={`©${new Date().getFullYear()} ${formatMessage({ id: 'global.copyright' })}`}
         />
       </div>
-    </DocumentTitle>
+    </>
   );
 };
 

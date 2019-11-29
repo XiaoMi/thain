@@ -4,7 +4,7 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 import React, { useState, useEffect } from 'react';
-import ConnectState from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { X5ConfigModel } from './models/X5ConfigModel';
 import { formatMessage } from 'umi-plugin-locale';
 import ButtonGroup from 'antd/es/button/button-group';

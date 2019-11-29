@@ -3,14 +3,15 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-import React from 'react';
-import { Avatar, Menu, Spin, Icon } from 'antd';
+import { Avatar, Icon, Menu, Spin } from 'antd';
+import { ClickParam } from 'antd/es/menu';
 import { FormattedMessage } from 'umi-plugin-react/locale';
-import { ClickParam } from 'antd/lib/menu';
-import { ConnectProps, ConnectState } from '@/models/connect';
-import { CurrentUser } from '@/models/user';
+import React from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
+
+import { ConnectProps, ConnectState } from '@/models/connect';
+import { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 
@@ -35,19 +36,26 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     }
     router.push(`/account/${key}`);
   };
-  render() {
-    const { currentUser = {} } = this.props;
+
+  render(): React.ReactNode {
+    const { currentUser = { avatar: '', name: '' }, menu } = this.props;
+
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
-        <Menu.Item key="center">
-          <Icon type="user" />
-          <FormattedMessage id="menu.account.center" defaultMessage="account center" />
-        </Menu.Item>
-        <Menu.Item key="settings">
-          <Icon type="setting" />
-          <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
-        </Menu.Item>
-        <Menu.Divider />
+        {menu && (
+          <Menu.Item key="center">
+            <Icon type="user" />
+            <FormattedMessage id="menu.account.center" defaultMessage="account center" />
+          </Menu.Item>
+        )}
+        {menu && (
+          <Menu.Item key="settings">
+            <Icon type="setting" />
+            <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
+          </Menu.Item>
+        )}
+        {menu && <Menu.Divider />}
+
         <Menu.Item key="logout">
           <Icon type="logout" />
           <FormattedMessage id="menu.account.logout" defaultMessage="logout" />

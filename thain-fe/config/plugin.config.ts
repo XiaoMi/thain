@@ -3,10 +3,6 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-// Change theme plugin
-
-import MergeLessPlugin from 'antd-pro-merge-less';
-import AntDesignThemePlugin from 'antd-theme-webpack-plugin';
 import path from 'path';
 
 function getModulePackageName(module: { context: string }) {
@@ -29,37 +25,10 @@ function getModulePackageName(module: { context: string }) {
 }
 
 export default (config: any) => {
-  // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
-  if (
-    process.env.ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site' ||
-    process.env.NODE_ENV !== 'production'
-  ) {
-    // 将所有 less 合并为一个供 themePlugin使用
-    const outFile = path.join(__dirname, '../.temp/ant-design-pro.less');
-    const stylesDir = path.join(__dirname, '../src/');
-
-    config.plugin('merge-less').use(MergeLessPlugin, [
-      {
-        stylesDir,
-        outFile,
-      },
-    ]);
-
-    config.plugin('ant-design-theme').use(AntDesignThemePlugin, [
-      {
-        antDir: path.join(__dirname, '../node_modules/antd'),
-        stylesDir,
-        varFile: path.join(__dirname, '../node_modules/antd/lib/style/themes/default.less'),
-        mainLessFile: outFile, //     themeVariables: ['@primary-color'],
-        indexFileName: 'index.html',
-        generateOne: true,
-        lessUrl: 'https://gw.alipayobjects.com/os/lib/less.js/3.8.1/less.min.js',
-      },
-    ]);
-  }
   // optimize chunks
   config.optimization
-    .runtimeChunk(false) // share the same chunks across different modules
+    // share the same chunks across different modules
+    .runtimeChunk(false)
     .splitChunks({
       chunks: 'async',
       name: 'vendors',
@@ -68,9 +37,16 @@ export default (config: any) => {
       cacheGroups: {
         vendors: {
           test: (module: { context: string }) => {
-            const packageName = getModulePackageName(module);
+            const packageName = getModulePackageName(module) || '';
             if (packageName) {
-              return ['bizcharts', '@antv_data-set'].indexOf(packageName) >= 0;
+              return [
+                'bizcharts',
+                'gg-editor',
+                'g6',
+                '@antv',
+                'gg-editor-core',
+                'bizcharts-plugin-slider',
+              ].includes(packageName);
             }
             return false;
           },

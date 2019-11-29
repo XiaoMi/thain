@@ -36,7 +36,7 @@ class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
         >
           <a
             target="_blank"
-            href="https://wiki.n.miui.com/display/thain/Java+SDK"
+            href="https://xiaomi.github.io/thain/"
             rel="noopener noreferrer"
             className={styles.action}
           >

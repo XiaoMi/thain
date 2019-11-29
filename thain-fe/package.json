@@ -30,12 +30,12 @@
   },
   "lint-staged": {
     "**/*.less": "stylelint --syntax less",
-    "**/*.{js,jsx}": "npm run lint-staged:js",
-    "**/*.{ts,tsx}": "npm run lint-staged:ts",
     "**/*.{js,jsx,tsx,ts,less,md,json}": [
       "prettier --write",
       "git add"
-    ]
+    ],
+    "**/*.{js,jsx}": "npm run lint-staged:js",
+    "**/*.{js,ts,tsx}": "npm run lint-staged:js"
   },
   "browserslist": [
     "> 1%",
@@ -68,9 +68,11 @@
     "react-copy-to-clipboard": "^5.0.1",
     "react-document-title": "^2.0.3",
     "react-dom": "~16.12.0",
+    "react-helmet": "^5.2.1",
     "react-file-base64": "~1.0.3",
     "react-media": "~1.10.0",
     "react-media-hook2": "^1.1.2",
+    "redux": "^4.0.1",
     "umi": "~2.12.3",
     "umi-plugin-ga": "~1.1.5",
     "umi-plugin-locale": "~2.11.2",
@@ -86,7 +88,7 @@
     "@types/react": "~16.9.13",
     "@types/react-document-title": "^2.0.3",
     "@types/react-dom": "~16.9.4",
-    "antd-pro-merge-less": "^1.0.0",
+    "@types/react-helmet": "^5.0.13",
     "antd-theme-webpack-plugin": "^1.3.0",
     "babel-eslint": "~10.0.3",
     "chalk": "~3.0.0",

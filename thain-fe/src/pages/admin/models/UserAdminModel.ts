@@ -7,7 +7,7 @@ import { Effect } from 'dva';
 import { ApiResult, TableResult } from '@/typings/ApiResult';
 import { Reducer } from 'redux';
 import { addUser, deleteUser, getUsers, updateUser } from '../adminService';
-import ConnectState from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { notification } from 'antd';
 
 export class UserModel {

@@ -10,13 +10,13 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
     "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
     "allowJs": true,
-    "experimentalDecorators": true,
     "skipLibCheck": true,
+    "experimentalDecorators": true,
     "strict": true,
-    "noUnusedLocals": true, // 有未使用的变量时，抛出错误
-    "noImplicitReturns": true, // 并不是所有函数里的代码都有返回值时，抛出错误
     "noFallthroughCasesInSwitch": true, // 报告 switch 语句的 fallthrough 错误。（即，不允许 switch 的 case 语句贯穿）
 
     "paths": {
@@ -26,9 +26,11 @@
   "exclude": [
     "node_modules",
     "build",
+    "dist",
     "scripts",
     "acceptance-tests",
     "webpack",
+    "jest",
     "src/setupTests.ts",
     "**/*.js",
     "tslint:latest",

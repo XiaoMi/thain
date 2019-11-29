@@ -19,7 +19,6 @@ const X5ConfigTable: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const tableResult = useSelector((s: ConnectState) => s.x5config.tableResult);
   const loading = useSelector((s: ConnectState) => s.loading.models.x5config);
-  console.log(tableResult);
   const { data, page, count, pageSize } = tableResult;
   const [appId, setAppId] = useState<string>();
   const [model, setModel] = useState<X5ConfigModel>(new X5ConfigModel());

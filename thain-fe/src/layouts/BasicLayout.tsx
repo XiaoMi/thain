@@ -4,7 +4,7 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 
-import { ConnectProps, ConnectState } from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
@@ -15,12 +15,10 @@ import React, { useEffect } from 'react';
 import Link from 'umi/link';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
-import { Icon, Result, Button } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
-import { isAntDesignPro, getAuthorityFromRouter } from '@/utils/utils';
 
 import logo from '../assets/xdata_logo.png';
 import GlobalFooter from '@/components/GlobalFooter';
@@ -54,7 +52,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   });
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
-  const { dispatch, children, settings, location = { pathname: '/' } } = props;
+  const { dispatch, children, settings } = props;
   /**
    * constructor
    */
@@ -63,9 +61,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
-      });
-      dispatch({
-        type: 'settings/getSetting',
       });
     }
   }, []);
@@ -79,10 +74,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         payload,
       });
     }
-  };
-  // get children authority
-  const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
-    authority: undefined,
   };
 
   return (

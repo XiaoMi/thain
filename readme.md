@@ -3,6 +3,7 @@
  This source code is licensed under the Apache License Version 2.0, which
  can be found in the LICENSE file in the root directory of this source tree.
 -->
+
 # Thain
 
 ![Java CI badge](https://github.com/XiaoMi/thain/workflows/Java%20CI/badge.svg)
@@ -28,9 +29,10 @@ Thain has completed backend management system which supports depending, re-run, 
    ```
 
 1. Environmental Requirements
-    - jdk >= 8
-    - maven 3
-    - nodejs >= 8
+
+   - jdk >= 8
+   - maven 3
+   - nodejs >= 8
 
 1. Execute in order under the project root directory
 
@@ -48,7 +50,7 @@ Thain has completed backend management system which supports depending, re-run, 
    java -jar thain-server/target/thain-server-1.2.0.jar
    ```
 
-1. Open localhost:9900 to see the effect
+1. Open [localhost:9900](http://localhost:9900) to see the effect
 
 1. Initial account password: admin, admin
 
@@ -72,7 +74,7 @@ Thain has completed backend management system which supports depending, re-run, 
 ## Help Us Do Better
 
 Now Thain continues to be developed by xiaomi internal developers. If you have any questions, you can ask in the issues or send email to:
-    
+
 - zuojianguang@xiaomi.com
 - liangyongrui@xiaomi.com
 - miaoyu3@xiaomi.com

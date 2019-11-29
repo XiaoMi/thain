@@ -3,6 +3,7 @@
  This source code is licensed under the Apache License Version 2.0, which
  can be found in the LICENSE file in the root directory of this source tree.
 -->
+
 # Thain
 
 ![Java CI badge](https://github.com/XiaoMi/thain/workflows/Java%20CI/badge.svg)
@@ -16,8 +17,8 @@
 
 ## 产品简介
 
-Thain是小米自研的新一代分布式任务调度平台，提供定时、任务编排、分布式跑等功能。
-Thain提供了任务调度与执行的一整套解决方案，在小米集团内部使用并久经考验，具有易学习、易上手、开发高效稳定的特点。
+Thain 是小米自研的新一代分布式任务调度平台，提供定时、任务编排、分布式跑等功能。
+Thain 提供了任务调度与执行的一整套解决方案，在小米集团内部使用并久经考验，具有易学习、易上手、开发高效稳定的特点。
 有完善的后台管理界面，支持任务的依赖，重跑，回溯，任务执行情况查看。
 
 ## 快速上手
@@ -29,10 +30,11 @@ Thain提供了任务调度与执行的一整套解决方案，在小米集团内
    ```
 
 1. 运行环境需求
-    - jdk >= 8
-    - maven 3
-    - nodejs >= 8
-    - 操作系统：Linux 或 MacOS 测试通过，windows前端编译 *可能* 会有问题
+
+   - jdk >= 8
+   - maven 3
+   - nodejs >= 8
+   - 操作系统：Linux 或 MacOS 测试通过，windows 前端编译 _可能_ 会有问题
 
 1. 在项目根目录下依次执行
 
@@ -50,7 +52,7 @@ Thain提供了任务调度与执行的一整套解决方案，在小米集团内
    java -jar thain-server/target/thain-server-1.2.0.jar
    ```
 
-1. 打开 localhost:9900 就可以看到效果了
+1. 打开 [localhost:9900](http://localhost:9900) 就可以看到效果了
 
 1. 初始账号密码：admin, admin
 
@@ -73,7 +75,8 @@ Thain提供了任务调度与执行的一整套解决方案，在小米集团内
 
 ## 帮助我们做的更好
 
-有任何疑问都可以在issues中提出，或发送邮件到：
+有任何疑问都可以在 issues 中提出，或发送邮件到：
+
 - zuojianguang@xiaomi.com
 - liangyongrui@xiaomi.com
 - miaoyu3@xiaomi.com

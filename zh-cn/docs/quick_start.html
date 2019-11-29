@@ -18,12 +18,19 @@
  can be found in the LICENSE file in the root directory of this source tree.
 -->
 <h1>快速启动</h1>
+<h2>获取jar包</h2>
+<blockquote>
+<p>两种办法</p>
+</blockquote>
 <ol>
 <li>
-<p>下载完整代码</p>
-<pre><code class="language-shell">git clone https://github.com/XiaoMi/thain.git
+<p>下载编译好的文件</p>
+<pre><code class="language-text">https://github.com/XiaoMi/thain/releases/download/v1.2.0/thain-server-1.2.0.jar
 </code></pre>
 </li>
+<li>
+<p>代码自行编译</p>
+<ul>
 <li>
 <p>运行环境需求</p>
 <ul>
@@ -35,20 +42,34 @@
 </li>
 <li>
 <p>在项目根目录下依次执行</p>
-<pre><code class="language-shell">cd thain-fe
+<pre><code class="language-shell">git clone https://github.com/XiaoMi/thain.git
+cd thain
+cd thain-fe
 npm install
 npm run build
 cd ..
 mvn -U clean package
+cd thain-server/target
+</code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<h2>运行jar包</h2>
+<ol>
+<li>
+<p>环境要求</p>
+<ol>
+<li>jre &gt;= 8</li>
+</ol>
+</li>
+<li>
+<p>在jar包所在路径执行</p>
+<pre><code class="language-shell">java -jar thain-server-1.2.0.jar
 </code></pre>
 </li>
 <li>
-<p>打包完成后，即可运行</p>
-<pre><code class="language-shell">java -jar thain-server/target/thain-server-1.2.0.jar
-</code></pre>
-</li>
-<li>
-<p>打开 localhost:9900 就可以看到效果了</p>
+<p>打开 <a href="http://localhost:9900">localhost:9900</a> 就可以看到效果了</p>
 </li>
 <li>
 <p>初始账号密码：admin, admin</p>

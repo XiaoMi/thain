@@ -47,7 +47,7 @@ Thain has completed backend management system which supports depending, re-run, 
 1. Run
 
    ```shell
-   java -jar thain-server/target/thain-server-1.2.0.jar
+   java -jar thain-server/target/thain-server-1.2.1.jar
    ```
 
 1. Open [localhost:9900](http://localhost:9900) to see the effect

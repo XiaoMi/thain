@@ -63,15 +63,19 @@ public class JobExecutionService {
     }
 
     public void endJobExecution() {
-        switch (endStatus) {
-            case ERROR:
-                jobExecutionLogHandler.add("executed abort with：" + errorMessage, LogLevel.ERROR);
-                break;
-            default:
-                jobExecutionLogHandler.add("executed completed", LogLevel.INFO);
+        try {
+            switch (endStatus) {
+                case ERROR:
+                    jobExecutionLogHandler.add("executed abort with：" + errorMessage, LogLevel.ERROR);
+                    break;
+                case SUCCESS:
+                default:
+                    jobExecutionLogHandler.add("executed completed", LogLevel.INFO);
+            }
+        } finally {
+            jobExecutionDao.updateStatus(jobExecutionId, endStatus);
+            jobExecutionLogHandler.close();
         }
-        jobExecutionLogHandler.close();
-        jobExecutionDao.updateStatus(jobExecutionId, endStatus);
     }
 
     public void addError(@NonNull String errorMessage) {

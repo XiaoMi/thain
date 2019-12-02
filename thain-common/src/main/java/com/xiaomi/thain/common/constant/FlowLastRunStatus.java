@@ -14,6 +14,7 @@ import lombok.val;
  * @author liangyongrui
  */
 public enum FlowLastRunStatus {
+
     /**
      * 1 未运行
      */
@@ -37,7 +38,12 @@ public enum FlowLastRunStatus {
     /**
      * 6 暂停运行
      */
-    PAUSE(6);
+    PAUSE(6),
+    /**
+     * 自动kill
+     */
+    AUTO_KILLED(7)
+    ;
 
     public final int code;
 

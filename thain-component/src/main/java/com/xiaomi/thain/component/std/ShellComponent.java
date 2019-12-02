@@ -5,10 +5,11 @@
  */
 package com.xiaomi.thain.component.std;
 
+import com.xiaomi.thain.common.exception.JobExecuteException;
 import com.xiaomi.thain.component.annotation.ThainComponent;
 import com.xiaomi.thain.component.tools.ComponentTools;
 import lombok.val;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -35,12 +36,8 @@ public class ShellComponent {
 
     private String environmentVariable;
 
-    private void run() throws IOException {
-        {
-            //测试使用
-            tools.addDebugLog("script content:" + shellBase64);
-            tools.addDebugLog("variable content:" + environmentVariable);
-        }
+    @SuppressWarnings("unused")
+    private void run() throws IOException, JobExecuteException {
         File file = new File("shell/job_execution_" + tools.getJobExecutionId());
         file.mkdirs();
         String filePath = file.getAbsolutePath() + "/thain_shell.sh";
@@ -52,7 +49,7 @@ public class ShellComponent {
 
         Runtime runtime = Runtime.getRuntime();
         Process process;
-        if (Strings.isNotBlank(environmentVariable)) {
+        if (StringUtils.isNotBlank(environmentVariable)) {
             val list = new ArrayList<>(Arrays.asList(kv));
             list.addAll(Arrays.asList(environmentVariable.split("\n")));
             process = runtime.exec("sh " + filePath, list.toArray(new String[0]));
@@ -62,18 +59,23 @@ public class ShellComponent {
         try (val in = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String inline;
             while ((inline = in.readLine()) != null) {
-                if (Strings.isNotBlank(inline)) {
+                if (StringUtils.isNotBlank(inline)) {
                     tools.addInfoLog(inline);
                 }
             }
         }
+        val sb = new StringBuilder();
         try (val in = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
             String inline;
             while ((inline = in.readLine()) != null) {
-                if (Strings.isNotBlank(inline)) {
+                if (StringUtils.isNotBlank(inline)) {
                     tools.addErrorLog(inline);
+                    sb.append(inline).append("\n");
                 }
             }
+        }
+        if (sb.length() > 0) {
+            throw new JobExecuteException(sb.toString());
         }
 
     }

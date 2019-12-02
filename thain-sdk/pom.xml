@@ -5,7 +5,7 @@
     <parent>
         <artifactId>thain</artifactId>
         <groupId>com.xiaomi.thain</groupId>
-        <version>1.1.1</version>
+        <version>1.2.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>thain-sdk</artifactId>
@@ -14,13 +14,32 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <spring.boot.version>2.2.1.RELEASE</spring.boot.version>
+        <common.version>1.2.1</common.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.xiaomi.thain</groupId>
             <artifactId>thain-common</artifactId>
-            <version>1.1.1</version>
+            <version>${common.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>junit-jupiter-api</artifactId>
+                    <groupId>org.junit.jupiter</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

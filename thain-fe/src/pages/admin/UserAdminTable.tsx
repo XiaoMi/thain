@@ -3,26 +3,20 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-import { connect } from 'dva';
+import { useSelector, useDispatch } from 'dva';
 import { Button, Modal, Table, Select, Form } from 'antd';
-import { TableResult } from '@/typings/ApiResult';
 import { UserModel } from './models/UserAdminModel';
-import { ConnectProps, ConnectState } from '@/models/connect';
-import React, { useState } from 'react';
+import { ConnectState } from '@/models/connect';
+import React, { useState, useEffect } from 'react';
 import ButtonGroup from 'antd/es/button/button-group';
 import AddUserForm from './AddUserForm';
 import { PaginationConfig } from 'antd/lib/table';
 import { formatMessage } from 'umi-plugin-react/locale';
 
-interface Props extends ConnectProps {
-  tableResult?: TableResult<UserModel>;
-  loading?: boolean;
-}
-
-const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => {
-  if (tableResult === undefined) {
-    tableResult = new TableResult();
-  }
+const UserAdminTable: React.FC<{}> = () => {
+  const dispatch = useDispatch();
+  const tableResult = useSelector((s: ConnectState) => s.admin.tableResult);
+  const loading = useSelector((s: ConnectState) => s.loading.models.admin);
   const { data, count, page, pageSize } = tableResult;
   const [isVisiable, setIsvisiable] = useState<boolean>(false);
   const [deleteId, setDeleteId] = useState();
@@ -73,6 +67,16 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
       },
     },
   ];
+
+  useEffect(() => {
+    return () => {
+      if (dispatch) {
+        dispatch({
+          type: 'admin/unmount',
+        });
+      }
+    };
+  }, []);
 
   function tableChange(pagination: PaginationConfig) {
     if (dispatch) {
@@ -166,7 +170,4 @@ const UserAdminTable: React.FC<Props> = ({ tableResult, dispatch, loading }) => 
   );
 };
 
-export default connect(({ admin, loading }: ConnectState) => ({
-  tableResult: admin.tableResult,
-  loading: loading.models.admin,
-}))(UserAdminTable);
+export default UserAdminTable;

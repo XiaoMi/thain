@@ -89,9 +89,17 @@ public class JobExecutionDao {
         if (needDeleteJobExecutionIds.isEmpty()) {
             return;
         }
-        execute(t->{
-            t.deleteJobExecutionByIds(needDeleteJobExecutionIds);
-            return null;
-        }) ;
+        execute(t -> t.deleteJobExecutionByIds(needDeleteJobExecutionIds));
+    }
+
+    public void killJobExecution(long flowExecutionId) {
+        execute(t -> t.killJobExecution(flowExecutionId));
+    }
+
+    public void deleteJobExecutionByFlowExecutionIds(@NonNull List<Long> flowExecutionIds) {
+        if (flowExecutionIds.isEmpty()) {
+            return;
+        }
+        execute(t -> t.deleteJobExecutionByFlowExecutionIds(flowExecutionIds));
     }
 }

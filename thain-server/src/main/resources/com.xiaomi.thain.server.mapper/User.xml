@@ -18,7 +18,7 @@
 
     </resultMap>
     <insert id="insertUser">
-        insert into thain_user(user_id, user_name, password_hash, email)
+        insert into thain_user(user_id, user_name, password_hash, email, admin)
         values (#{userId}, #{username} ,
         <choose>
             <when test="passwordHash != null">
@@ -35,6 +35,15 @@
             </when>
             <otherwise>
                 ''
+            </otherwise>
+        </choose>
+        ,
+        <choose>
+            <when test="admin != null">
+                #{admin}
+            </when>
+            <otherwise>
+                false
             </otherwise>
         </choose>
         )

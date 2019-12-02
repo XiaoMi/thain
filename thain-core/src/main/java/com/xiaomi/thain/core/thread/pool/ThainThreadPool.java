@@ -24,17 +24,25 @@ public class ThainThreadPool implements Executor {
     @NonNull
     private final ThreadPoolExecutor threadPoolExecutor;
 
+    public static final ThainThreadPool DEFAULT_THREAD_POOL = getInstance("default", 100);
+
+    public static final ThainThreadPool MANUAL_TRIGGER_THREAD_POOL = getInstance("MANUAL_TRIGGER", 20);
+
     private ThainThreadPool(@NonNull String threadName, int corePoolSize, int maximumPoolSize, long keepAliveSecond) {
         threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveSecond,
                 TimeUnit.SECONDS, new LinkedBlockingDeque<>(), runnable -> new Thread(runnable, threadName));
     }
 
-    public static ThainThreadPool getInstance(@NonNull String threadName, int corePoolSize, int maximumPoolSize, long keepAliveSecond) {
-        return new ThainThreadPool(threadName, corePoolSize, maximumPoolSize, keepAliveSecond);
+    public static ThainThreadPool getInstance(@NonNull String threadName, int corePoolSize) {
+        return new ThainThreadPool(threadName, corePoolSize, corePoolSize, 60);
     }
 
     @Override
     public void execute(@Nonnull Runnable command) {
         threadPoolExecutor.execute(command);
+    }
+
+    public int corePoolSize() {
+        return threadPoolExecutor.getCorePoolSize();
     }
 }

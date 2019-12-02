@@ -28,6 +28,10 @@ export enum FlowLastRunStatus {
    * 6 暂停运行
    */
   PAUSE = 6,
+  /**
+   * 7 自动kill
+   */
+  AUTO_KILLED = 7,
 }
 let entries: [string, number][];
 export function FlowLastRunStatusGetEntries() {

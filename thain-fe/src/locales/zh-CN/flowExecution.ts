@@ -4,10 +4,13 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 export default {
+  'flow.execution.waiting': '排队中',
   'flow.execution.running': '正在运行',
   'flow.execution.success': '执行成功',
   'flow.execution.error': '执行异常',
   'flow.execution.killed': '手动杀死',
+  'flow.execution.do.not.run.same.time': '禁止同一时间运行',
+  'flow.execution.timeout.auto.killed': '自动杀死',
   'flow.execution.consuming': '耗时',
   'flow.execution.view.log': '查看日志',
   'flow.execution.trigger.type': '触发类型',

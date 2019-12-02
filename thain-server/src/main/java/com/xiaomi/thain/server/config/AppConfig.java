@@ -36,7 +36,7 @@ public class AppConfig {
 
     @Bean("thainFacade")
     public ThainFacade createProcessEngineFacade(@NonNull @Qualifier("mysqlDataSource") DataSource dataSource)
-            throws ThainException, IOException, SQLException {
+            throws ThainException, IOException, SQLException, InterruptedException {
 
         val processEngineConfiguration = ProcessEngineConfiguration.builder()
                 .mailHost(env.getProperty("mail.host", ""))
@@ -46,13 +46,7 @@ public class AppConfig {
                 .dataSource(dataSource)
                 .flowExecutionJobExecutionThreadPoolCoreSize(
                         Integer.valueOf(env.getProperty("flow.execution.job.execution.thread.pool.core.size", "3")))
-                .flowExecutionJobExecutionThreadPoolMaximumSize(
-                        Integer.valueOf(env.getProperty("flow.execution.job.execution.thread.pool.maximum.size", "5")))
-                .flowExecutionJobExecutionThreadPoolKeepAliveSecond(
-                        Long.valueOf(env.getProperty("flow.execution.job.execution.thread.pool.keep.alive.second", "60")))
                 .flowExecutionThreadPoolCoreSize(Integer.valueOf(env.getProperty("flowExecution.thread.pool.core.size", "5")))
-                .flowExecutionThreadPoolMaximumSize(Integer.valueOf(env.getProperty("flowExecution.thread.pool.maximum.size", "10")))
-                .flowExecutionThreadPoolKeepAliveSecond(Long.valueOf(env.getProperty("flowExecution.thread.pool.keep.alive.second", "60")))
                 .dataReserveDays(Integer.valueOf(env.getProperty("dataReserveDays", "30")))
                 .initLevel(env.getProperty("datasource.initialization.level", "-1"))
                 .build();

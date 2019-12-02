@@ -3,6 +3,13 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
+import { AnyAction } from 'redux';
+import { MenuDataItem } from '@ant-design/pro-layout';
+import { RouterTypes } from 'umi';
+import { GlobalModelState } from './global';
+import { DefaultSettings as SettingModelState } from '../../config/defaultSettings';
+import { UserModelState } from './user';
+import { LoginModelType } from './login';
 import { EffectsCommandMap } from 'dva';
 import { AnyAction } from 'redux';
 import { RouterTypes } from 'umi';
@@ -13,7 +20,7 @@ import { MenuDataItem } from '@ant-design/pro-layout';
 import { FlowExecutionListModelState } from '../pages/FlowExecution/List/models/flowExecutionList';
 import { FlowEditorModelState } from '../pages/FlowEditor/model';
 import { FlowListModelState } from '@/pages/Flow/List/model';
-import { FlowExecutionDetailModelState } from '@/pages/FlowExecution/Detail/model';
+import { FlowExecutionDetailModelState } from '@/pages/FlowExecution/List/models/flowExecutionDetail';
 import { DashboardState } from '@/pages/Dashboard/model';
 import { AdminUserModel } from '@/pages/admin/models/UserAdminModel';
 import { X5TableModel } from '@/pages/admin/models/X5ConfigModel';
@@ -76,9 +83,6 @@ export interface Route extends MenuDataItem {
 /**
  * @type T: Params matched in dynamic routing
  */
-export interface ConnectProps<T extends { [key: string]: any } = {}>
-  extends Partial<RouterTypes<Route, T>> {
-  dispatch?: Dispatch;
+export interface ConnectProps<T = {}> extends Partial<RouterTypes<Route, T>> {
+  dispatch?<K = any>(action: AnyAction): K;
 }
-
-export default ConnectState;

@@ -14,7 +14,6 @@ import com.xiaomi.thain.component.tools.ComponentTools;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
@@ -25,7 +24,7 @@ import java.util.Objects;
  * @author liangyongrui@xiaomi.com
  */
 @ThainComponent(group = "std", name = "http",
-        defineJson = "[{\"property\": \"url\", \"label\": \"HTTP URL\", \"required\": true, \"input\": {\"id\": \"textarea\"}}, {\"property\": \"method\", \"label\": \"HTTP Method\", \"required\": true, \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"GET\"}, {\"id\": \"POST\"}]}}, {\"property\": \"contentType\", \"label\": \"Content-Type\", \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"application/json\"}, {\"id\": \"application/x-www-form-urlencoded\"}]}}, {\"property\": \"referenceData\", \"label\": \"流程数据引用, 多个用逗号分开, 如: `aName:a.name,bAge:b.age`, 冒号前面的是http发过去的key, 后面是value\", \"input\": {\"id\": \"textarea\"}}, {\"property\": \"forwardData\", \"label\": \"转发数据\", \"input\": {\"id\": \"textarea\"}}]")
+        defineJson = "[{\"property\": \"url\", \"label\": \"HTTP URL\", \"required\": true, \"input\": {\"id\": \"textarea\"}}, {\"property\": \"method\", \"label\": \"HTTP Method\", \"required\": true, \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"GET\"}, {\"id\": \"POST\"}]}}, {\"property\": \"contentType\", \"label\": \"Content-Type\", \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"application/json\"}, {\"id\": \"application/x-www-form-urlencoded\"}]}}, {\"property\": \"referenceData\", \"label\": \"流程数据引用, 多个用逗号分开\", \"input\": {\"id\": \"textarea\"}}, {\"property\": \"forwardData\", \"label\": \"转发数据\", \"input\": {\"id\": \"textarea\"}}]")
 @SuppressWarnings("unused")
 public class HttpComponent {
     /**
@@ -59,7 +58,7 @@ public class HttpComponent {
     private String forwardData;
 
     @SuppressWarnings("unused")
-    private void run() throws IOException, ThainException {
+    private void run() throws ThainException {
 
         val data = new HashMap<String, String>(16);
         if (Objects.nonNull(forwardData)) {
@@ -96,8 +95,7 @@ public class HttpComponent {
                     throw new ThainException("can not support this method:" + method);
             }
         } catch (Exception e) {
-            tools.addErrorLog(e.getMessage());
-            throw new ThainException(e.getMessage());
+            throw new ThainException(e);
         }
         tools.putStorage("result", result);
         tools.addInfoLog(result);

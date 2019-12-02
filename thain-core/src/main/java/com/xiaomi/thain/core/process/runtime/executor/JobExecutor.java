@@ -14,7 +14,7 @@ import com.xiaomi.thain.component.tools.ComponentTools;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import com.xiaomi.thain.core.process.component.tools.impl.ComponentToolsImpl;
 import com.xiaomi.thain.core.process.runtime.executor.service.JobExecutionService;
-import com.xiaomi.thain.core.process.runtime.notice.HttpNotice;
+import com.xiaomi.thain.core.process.runtime.notice.JobHttpNotice;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -40,7 +40,7 @@ public class JobExecutor {
     @NonNull
     private final JobExecutionService jobExecutionService;
     @NonNull
-    private final HttpNotice httpNotice;
+    private final JobHttpNotice jobHttpNotice;
 
     private JobExecutor(long flowExecutionId,
                         @NonNull JobModel jobModel,
@@ -51,53 +51,43 @@ public class JobExecutor {
         this.processEngineStorage = processEngineStorage;
         this.jobExecutionModelId = jobExecutionModel.id;
         this.jobExecutionService = JobExecutionService.getInstance(jobExecutionModelId, jobModel.name, processEngineStorage);
-        this.httpNotice = HttpNotice.getInstance(jobModel.callbackUrl, jobModel.flowId, flowExecutionId);
+        this.jobHttpNotice = JobHttpNotice.getInstance(jobModel.callbackUrl, jobModel.flowId, flowExecutionId);
     }
 
     /**
      * 执行job, 返回是否执行完成
      */
-    public static boolean start(long flowExecutionId,
-                                @NonNull JobModel jobModel,
-                                @NonNull JobExecutionModel jobExecutionModel,
-                                @NonNull ProcessEngineStorage processEngineStorage) {
-        try {
-            val jobExecutor = new JobExecutor(flowExecutionId, jobModel, jobExecutionModel, processEngineStorage);
-            return jobExecutor.run();
-        } catch (Exception e) {
-            log.error("", e);
-        }
-        return false;
+    public static void start(long flowExecutionId,
+                             @NonNull JobModel jobModel,
+                             @NonNull JobExecutionModel jobExecutionModel,
+                             @NonNull ProcessEngineStorage processEngineStorage) throws JobExecuteException {
+        val jobExecutor = new JobExecutor(flowExecutionId, jobModel, jobExecutionModel, processEngineStorage);
+        jobExecutor.run();
     }
 
-    private boolean run() {
+    private void run() throws JobExecuteException {
         try {
             jobExecutionService.startJobExecution();
-            httpNotice.sendStart();
+            jobHttpNotice.sendStart();
             execute();
-            httpNotice.sendSuccess();
-            return true;
-        } catch (JobExecuteException e) {
-            jobExecutionService.addError("Abort with: " + ExceptionUtils.getRootCauseMessage(e));
-            httpNotice.sendError(ExceptionUtils.getRootCauseMessage(e));
-            log.warn(ExceptionUtils.getRootCauseMessage(e));
+            jobHttpNotice.sendSuccess();
         } catch (Exception e) {
             jobExecutionService.addError("Abort with: " + ExceptionUtils.getRootCauseMessage(e));
-            httpNotice.sendError(ExceptionUtils.getRootCauseMessage(e));
-            log.error("", e);
+            jobHttpNotice.sendError(ExceptionUtils.getRootCauseMessage(e));
+            log.warn(ExceptionUtils.getRootCauseMessage(e));
+            throw new JobExecuteException(e);
         } finally {
             try {
                 jobExecutionService.endJobExecution();
             } catch (Exception e) {
                 try {
                     processEngineStorage.mailService.sendSeriousError(
-                            "Failed to modify job status,detail message：" + ExceptionUtils.getStackTrace(e));
+                            "Failed to modify job status, detail message：" + ExceptionUtils.getStackTrace(e));
                 } catch (Exception ex) {
                     log.error("", ex);
                 }
             }
         }
-        return false;
     }
 
     /**
@@ -116,7 +106,7 @@ public class JobExecutor {
                     continue;
                 }
                 if (field.getType().isAssignableFrom(String.class)) {
-                    val v = Optional.ofNullable(jobModel.properties.get(field.getName()));
+                    val v = Optional.ofNullable(jobModel.properties).map(t -> t.get(field.getName()));
                     if (v.isPresent()) {
                         field.set(instance, v.get());
                     }

@@ -39,6 +39,8 @@ public class UserDao {
         insertUser.setUserId(addUserRq.userId);
         insertUser.setUsername(addUserRq.username);
         insertUser.setPasswordHash(new BCryptPasswordEncoder().encode(addUserRq.password));
+        insertUser.setEmail(addUserRq.email);
+        insertUser.setAdmin(addUserRq.admin);
         userMapper.insertUser(insertUser);
     }
 

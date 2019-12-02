@@ -40,7 +40,7 @@
   },
   {
     "property": "referenceData",
-    "label": "流程数据引用, 多个用逗号分开, 如: `aName:a.name,bAge:b.age`, 冒号前面的是http发过去的key, 后面是value",
+    "label": "流程数据引用",
     "input": {
       "id": "textarea"
     }

@@ -9,14 +9,19 @@ package com.xiaomi.thain.core.utils;
 import com.google.common.collect.ImmutableMap;
 import com.xiaomi.thain.common.utils.HttpUtils;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.http.conn.HttpHostConnectException;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 /**
  * Date 19-7-10 下午2:07
  *
  * @author liangyongrui@xiaomi.com
  */
+@Slf4j
 public class SendModifyUtils {
 
     private static final int PAUSE = 1;
@@ -27,10 +32,18 @@ public class SendModifyUtils {
     }
 
     public static void sendPause(long flowId, @NonNull String modifyCallbackUrl) throws IOException {
-        HttpUtils.post(modifyCallbackUrl, ImmutableMap.of("flowId", flowId, "status", PAUSE));
+        try {
+            HttpUtils.post(modifyCallbackUrl, ImmutableMap.of("flowId", flowId, "status", PAUSE));
+        } catch (HttpHostConnectException e) {
+            log.warn(ExceptionUtils.getRootCauseMessage(e));
+        }
     }
 
     public static void sendScheduling(long flowId, @NonNull String modifyCallbackUrl) throws IOException {
-        HttpUtils.post(modifyCallbackUrl, ImmutableMap.of("flowId", flowId, "status", SCHEDULING));
+        try {
+            HttpUtils.post(modifyCallbackUrl, ImmutableMap.of("flowId", flowId, "status", SCHEDULING));
+        } catch (HttpHostConnectException | UnknownHostException e) {
+            log.warn(ExceptionUtils.getRootCauseMessage(e));
+        }
     }
 }

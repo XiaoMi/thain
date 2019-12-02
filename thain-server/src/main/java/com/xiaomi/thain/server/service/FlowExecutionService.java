@@ -37,4 +37,13 @@ public interface FlowExecutionService {
     List<JobModel> getJobModelList(long flowExecutionId) throws ThainException;
 
     List<JobExecutionModel> getJobExecutionModelList(long flowExecutionId) throws ThainException;
+
+    /**
+     * kill execution by flowId
+     *
+     * @param flowId flowId
+     * @return {@code true} if kill success and has Running execution
+     * @throws ThainException kill failure
+     */
+    boolean killFlowExecutionsByFlowId(long flowId) throws ThainException;
 }

@@ -5,19 +5,19 @@
  */
 package com.xiaomi.thain.core.process;
 
-import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.NOT_SET;
-import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.SCHEDULING;
-
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
-import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
+import com.xiaomi.thain.common.model.rq.AddFlowRq;
+import com.xiaomi.thain.common.model.rq.UpdateFlowRq;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.core.config.DatabaseHandler;
-import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.dao.*;
-import com.xiaomi.thain.core.process.runtime.executor.FlowExecutor;
+import com.xiaomi.thain.core.process.runtime.FlowExecutionLoader;
+import com.xiaomi.thain.core.process.runtime.heartbeat.FlowExecutionHeartbeat;
 import com.xiaomi.thain.core.process.service.ComponentService;
 import com.xiaomi.thain.core.process.service.MailService;
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool;
@@ -33,12 +33,12 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.LongFunction;
 
 import static com.xiaomi.thain.common.constant.FlowSchedulingStatus.NOT_SET;
@@ -59,24 +59,22 @@ public class ProcessEngine {
     public final ProcessEngineStorage processEngineStorage;
     @NonNull
     public final ThainFacade thainFacade;
+    @NonNull
+    public final FlowExecutionLoader flowExecutionLoader;
 
     private static final Map<String, ProcessEngine> PROCESS_ENGINE_MAP = new ConcurrentHashMap<>();
 
     private ProcessEngine(@NonNull ProcessEngineConfiguration processEngineConfiguration, @NonNull ThainFacade thainFacade)
-            throws ThainMissRequiredArgumentsException, SQLException, IOException {
+            throws ThainMissRequiredArgumentsException, SQLException, IOException, InterruptedException {
         this.thainFacade = thainFacade;
         this.processEngineId = UUID.randomUUID().toString();
         PROCESS_ENGINE_MAP.put(processEngineId, this);
 
         LongFunction<ThainThreadPool> flowExecutionJobExecutionThreadPool = flowExecutionId -> ThainThreadPool.getInstance(
                 "thain-job-execution-thread[flowExecutionId:" + flowExecutionId + "]",
-                processEngineConfiguration.flowExecutionJobExecutionThreadPoolCoreSize,
-                processEngineConfiguration.flowExecutionJobExecutionThreadPoolMaximumSize,
-                processEngineConfiguration.flowExecutionJobExecutionThreadPoolKeepAliveSecond);
-        val flowExecutionThreadPool = ThainThreadPool.getInstance("thain-flowExecution-thread",
-                processEngineConfiguration.flowExecutionThreadPoolCoreSize,
-                processEngineConfiguration.flowExecutionThreadPoolMaximumSize,
-                processEngineConfiguration.flowExecutionThreadPoolKeepAliveSecond);
+                processEngineConfiguration.flowExecutionJobExecutionThreadPoolCoreSize);
+        val flowExecutionThreadPool = ThainThreadPool.getInstance("thain-flow-execution-thread",
+                processEngineConfiguration.flowExecutionThreadPoolCoreSize);
 
         val sqlSessionFactory = DatabaseHandler.getSqlSessionFactory(processEngineConfiguration.dataSource);
 
@@ -104,8 +102,10 @@ public class ProcessEngine {
         val flowExecutionDao = FlowExecutionDao.getInstance(sqlSessionFactory, mailService, processEngineConfiguration.dataReserveDays);
         val jobDao = JobDao.getInstance(sqlSessionFactory, mailService);
         val jobExecutionDao = JobExecutionDao.getInstance(sqlSessionFactory, mailService);
-
         val componentService = ComponentService.getInstance();
+
+        val flowExecutionWaitingQueue = new LinkedBlockingQueue<FlowExecutionDr>();
+
 
         processEngineStorage = ProcessEngineStorage.builder()
                 .flowExecutionJobExecutionThreadPool(flowExecutionJobExecutionThreadPool)
@@ -117,7 +117,14 @@ public class ProcessEngine {
                 .jobExecutionDao(jobExecutionDao)
                 .mailService(mailService)
                 .componentService(componentService)
+                .flowExecutionWaitingQueue(flowExecutionWaitingQueue)
                 .build();
+
+        this.flowExecutionLoader = FlowExecutionLoader.getInstance(processEngineStorage);
+        val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService);
+        flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
+        flowExecutionHeartbeat.addCollections(flowExecutionLoader.runningFlowExecution);
+
     }
 
     private void createTable(@NonNull Connection connection) throws IOException, SQLException {
@@ -153,7 +160,7 @@ public class ProcessEngine {
 
     public static ProcessEngine newInstance(@NonNull ProcessEngineConfiguration processEngineConfiguration,
                                             @NonNull ThainFacade thainFacade)
-            throws ThainMissRequiredArgumentsException, IOException, SQLException {
+            throws ThainMissRequiredArgumentsException, IOException, SQLException, InterruptedException {
         return new ProcessEngine(processEngineConfiguration, thainFacade);
     }
 
@@ -161,34 +168,32 @@ public class ProcessEngine {
      * 插入flow
      * 成功返回 flow id
      */
-    public Optional<Long> addFlow(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList) {
+    public Optional<Long> addFlow(@NonNull AddFlowRq addFlowRq, @NonNull List<JobModel> jobModelList) {
         try {
             int schedulingStatus = NOT_SET.code;
-            if (StringUtils.isNotBlank(flowModel.cron)) {
+            if (StringUtils.isNotBlank(addFlowRq.cron)) {
                 schedulingStatus = SCHEDULING.code;
             }
-            val cloneFlowModel = flowModel.toBuilder().schedulingStatus(schedulingStatus).build();
+            val cloneFlowModel = addFlowRq.toBuilder().schedulingStatus(schedulingStatus).build();
             processEngineStorage.flowDao.addFlow(cloneFlowModel, jobModelList);
-            return Optional.of(cloneFlowModel.id);
+            return Optional.ofNullable(cloneFlowModel.id);
         } catch (Exception e) {
             log.error("addFlow:", e);
         }
         return Optional.empty();
     }
 
-    public boolean updateFlow(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList) {
-        try {
-            int schedulingStatus = NOT_SET.code;
-            if (StringUtils.isNotBlank(flowModel.cron)) {
-                schedulingStatus = SCHEDULING.code;
-            }
-            val cloneFlowModel = flowModel.toBuilder().schedulingStatus(schedulingStatus).build();
-            processEngineStorage.flowDao.updateFlow(cloneFlowModel, jobModelList);
-            return true;
-        } catch (Exception e) {
-            log.error("updateFlow:", e);
+    public boolean updateFlow(@NonNull UpdateFlowRq updateFlowRq, @NonNull List<JobModel> jobModelList) throws ThainException {
+        int schedulingStatus = NOT_SET.code;
+        if (StringUtils.isNotBlank(updateFlowRq.cron)) {
+            schedulingStatus = SCHEDULING.code;
         }
-        return false;
+        val cloneFlowModel = updateFlowRq.toBuilder().schedulingStatus(schedulingStatus).build();
+        processEngineStorage.flowDao.updateFlow(cloneFlowModel, jobModelList);
+        if (cloneFlowModel.id == null) {
+            throw new ThainException("update failed");
+        }
+        return true;
     }
 
     /**
@@ -202,15 +207,8 @@ public class ProcessEngine {
     /**
      * 手动触发一次
      */
-    public void startProcess(long flowId) throws ThainException {
-        FlowExecutor.startProcess(flowId, processEngineStorage, FlowExecutionTriggerType.MANUAL);
-    }
-
-    /**
-     * 自动触发一次
-     */
-    public void schedulerStartProcess(long flowId) throws ThainException {
-        FlowExecutor.startProcess(flowId, processEngineStorage, FlowExecutionTriggerType.AUTOMATIC);
+    public long startProcess(long flowId) throws ThainException, ThainRepeatExecutionException {
+        return flowExecutionLoader.startAsync(flowId);
     }
 
     public String getFlowCron(long flowId) throws ThainException {

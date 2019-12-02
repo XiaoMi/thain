@@ -8,8 +8,10 @@ package com.xiaomi.thain.core.dao;
 
 import com.xiaomi.thain.common.constant.FlowLastRunStatus;
 import com.xiaomi.thain.common.constant.FlowSchedulingStatus;
-import com.xiaomi.thain.common.model.FlowModel;
+import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.rq.AddFlowRq;
+import com.xiaomi.thain.common.model.rq.UpdateFlowRq;
 import com.xiaomi.thain.core.mapper.FlowMapper;
 import com.xiaomi.thain.core.process.service.MailService;
 import lombok.AccessLevel;
@@ -64,26 +66,29 @@ public class FlowDao {
     /**
      * 数据库插入flow，成功flowModel插入id
      */
-    public void addFlow(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList) {
+    public void addFlow(@NonNull AddFlowRq addFlowRq, @NonNull List<JobModel> jobModelList) {
         execute(t -> {
-            t.addFlow(flowModel);
+            t.addFlow(addFlowRq);
+            if (addFlowRq.id == null) {
+                return new ThainRuntimeException("add flow error");
+            }
             return t.addJobList(jobModelList.stream().map(job -> job.toBuilder()
-                    .flowId(flowModel.id).build()).collect(Collectors.toList()));
+                    .flowId(addFlowRq.id).build()).collect(Collectors.toList()));
         });
     }
 
     /**
      * 更新flow
      */
-    public void updateFlow(@NonNull FlowModel flowModel, @NonNull List<JobModel> jobModelList) {
+    public void updateFlow(@NonNull UpdateFlowRq updateFlowRq, @NonNull List<JobModel> jobModelList) {
         execute(t -> {
-            t.updateFlow(flowModel);
-            t.invalidJobList(flowModel.id);
+            t.updateFlow(updateFlowRq);
+            t.invalidJobList(updateFlowRq.id);
             if (jobModelList.isEmpty()) {
                 return true;
             }
             return t.addJobList(jobModelList.stream()
-                    .map(job -> job.toBuilder().flowId(flowModel.id).build())
+                    .map(job -> job.toBuilder().flowId(updateFlowRq.id).build())
                     .collect(Collectors.toList()));
         });
     }
@@ -101,7 +106,7 @@ public class FlowDao {
     /**
      * 根据flow id 获取FlowModel
      */
-    public Optional<FlowModel> getFlow(long flowId) {
+    public Optional<com.xiaomi.thain.common.model.dr.FlowDr> getFlow(long flowId) {
         return execute(t -> t.getFlow(flowId));
     }
 

@@ -10,9 +10,6 @@ import com.xiaomi.thain.core.dao.FlowDao;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import lombok.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Date 19-5-21 上午10:46
  * 不影响流程执行的flow相关操作
@@ -42,11 +39,11 @@ public class FlowService {
      * 开始运行flow
      * 设置当前的flow状态为 正在运行
      */
-    public void startFlow() {
+    void startFlow() {
         flowDao.updateLastRunStatus(flowId, FlowLastRunStatus.RUNNING);
     }
 
-    public void endFlow(@NonNull FlowLastRunStatus endStatus) {
+    void endFlow(@NonNull FlowLastRunStatus endStatus) {
         flowDao.updateLastRunStatus(flowId, endStatus);
     }
 

@@ -3,8 +3,9 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
+import { Button, message, notification } from 'antd';
+
 import React from 'react';
-import { notification, Button, message } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
 import defaultSettings from '../config/defaultSettings';
 
@@ -24,7 +25,7 @@ if (pwa) {
       // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
       const worker = e.detail && e.detail.waiting;
       if (!worker) {
-        return Promise.resolve();
+        return true;
       }
       // Send skip-waiting event to waiting SW with MessageChannel
       await new Promise((resolve, reject) => {
@@ -63,8 +64,25 @@ if (pwa) {
     });
   });
 } else if ('serviceWorker' in navigator) {
-  // eslint-disable-next-line compat/compat
-  navigator.serviceWorker.ready.then(registration => {
-    registration.unregister();
+  // unregister service worker
+  const { serviceWorker } = navigator;
+  if (serviceWorker.getRegistrations) {
+    serviceWorker.getRegistrations().then(sws => {
+      sws.forEach(sw => {
+        sw.unregister();
+      });
+    });
+  }
+  serviceWorker.getRegistration().then(sw => {
+    if (sw) sw.unregister();
   });
+
+  // remove all caches
+  if (window.caches && window.caches.keys) {
+    caches.keys().then(keys => {
+      keys.forEach(key => {
+        caches.delete(key);
+      });
+    });
+  }
 }

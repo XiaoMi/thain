@@ -6,8 +6,8 @@
 package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.server.model.X5Config;
+import com.xiaomi.thain.server.model.dr.X5ConfigDr;
 import com.xiaomi.thain.server.model.rq.X5ConfigRq;
-import com.xiaomi.thain.server.model.rp.X5ConfigResponse;
 import lombok.NonNull;
 
 import java.util.List;
@@ -28,9 +28,9 @@ public interface X5Service {
     /**
      * get All Configs
      *
-     * @return see {@link X5ConfigResponse}
+     * @return see {@link X5ConfigDr}
      */
-    List<X5ConfigResponse> getAllConfigs();
+    List<X5ConfigDr> getAllConfigs();
 
     /**
      * delete Config

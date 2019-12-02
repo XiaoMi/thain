@@ -36,7 +36,7 @@ export default function TextareaInput(props: InputProps) {
 
   return (
     <TextArea
-      autosize={{ minRows: 1, maxRows: 6 }}
+      autoSize={{ minRows: 1, maxRows: 6 }}
       value={inputValue}
       onChange={changeInputValue}
       onBlur={() => update(inputValue)}

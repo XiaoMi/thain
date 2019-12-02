@@ -7,7 +7,7 @@ import { TableResult, ApiResult } from '@/typings/ApiResult';
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
 import { getClients, delteClient, addClient, updateClent } from '../x5configService';
-import ConnectState from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { notification } from 'antd';
 
 export class X5ConfigModel {
@@ -20,7 +20,7 @@ export class X5ConfigModel {
 }
 
 export class X5TableModel {
-  tableResult = new TableResult<X5ConfigModel>();
+  tableResult: TableResult<X5ConfigModel> = new TableResult<X5ConfigModel>();
 }
 
 export interface X5Model {

@@ -4,27 +4,34 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 
-import { ConnectProps, ConnectState } from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
 } from '@ant-design/pro-layout';
-import React, { useState } from 'react';
 
-import Authorized from '@/utils/Authorized';
+import React, { useEffect } from 'react';
 import Link from 'umi/link';
-import RightContent from '@/components/GlobalHeader/RightContent';
+import { Dispatch } from 'redux';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
+
+import Authorized from '@/utils/Authorized';
+import RightContent from '@/components/GlobalHeader/RightContent';
+
 import logo from '../assets/xdata_logo.png';
 import GlobalFooter from '@/components/GlobalFooter';
 
-export interface BasicLayoutProps extends ProLayoutProps, Omit<ConnectProps, 'location'> {
+export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
   };
+  route: ProLayoutProps['route'] & {
+    authority: string[];
+  };
   settings: Settings;
+  dispatch: Dispatch;
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
@@ -50,34 +57,41 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
    * constructor
    */
 
-  useState(() => {
+  useEffect(() => {
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
       });
-      dispatch({
-        type: 'settings/getSetting',
-      });
     }
-  });
-
+  }, []);
   /**
    * init variables
    */
-  const handleMenuCollapse = (payload: boolean): void =>
-    dispatch &&
-    dispatch({
-      type: 'global/changeLayoutCollapsed',
-      payload,
-    });
+  const handleMenuCollapse = (payload: boolean): void => {
+    if (dispatch) {
+      dispatch({
+        type: 'global/changeLayoutCollapsed',
+        payload,
+      });
+    }
+  };
 
   return (
     <ProLayout
       logo={logo}
-      onCollapse={handleMenuCollapse}
-      menuItemRender={(menuItemProps, defaultDom) => (
-        <Link to={menuItemProps.path}>{defaultDom}</Link>
+      menuHeaderRender={(logoDom, titleDom) => (
+        <Link to="/">
+          {logoDom}
+          {titleDom}
+        </Link>
       )}
+      onCollapse={handleMenuCollapse}
+      menuItemRender={(menuItemProps, defaultDom) => {
+        if (menuItemProps.isUrl || menuItemProps.children) {
+          return defaultDom;
+        }
+        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+      }}
       breadcrumbRender={(routers = []) => [
         {
           path: '/',
@@ -88,6 +102,14 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         },
         ...routers,
       ]}
+      itemRender={(route, params, routes, paths) => {
+        const first = routes.indexOf(route) === 0;
+        return first ? (
+          <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+        ) : (
+          <span>{route.breadcrumbName}</span>
+        );
+      }}
       footerRender={(a, b) => (
         <GlobalFooter copyright={formatMessage({ id: 'global.copyright' })} />
       )}

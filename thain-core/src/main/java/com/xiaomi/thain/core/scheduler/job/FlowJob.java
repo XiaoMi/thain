@@ -6,17 +6,22 @@
 
 package com.xiaomi.thain.core.scheduler.job;
 
-import com.xiaomi.thain.common.exception.ThainException;
-import com.xiaomi.thain.common.exception.ThainFlowRunningException;
+import com.xiaomi.thain.common.constant.FlowExecutionStatus;
+import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException;
+import com.xiaomi.thain.common.exception.ThainRuntimeException;
+import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
+import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import lombok.val;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
 
 /**
  * @author liangyongrui
@@ -25,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class FlowJob implements Job {
 
     @NonNull
-    private ProcessEngine processEngine;
+    private final ProcessEngine processEngine;
 
     private static final Map<String, FlowJob> FLOW_JOB_MAP = new ConcurrentHashMap<>();
 
@@ -42,12 +47,22 @@ public class FlowJob implements Job {
     public void execute(@NonNull JobExecutionContext context) {
         try {
             long flowId = context.getJobDetail().getJobDataMap().getLong("flowId");
-            log.info("auto execution: " + flowId);
-            processEngine.schedulerStartProcess(flowId);
-        } catch (ThainFlowRunningException e) {
-            log.warn(ExceptionUtils.getRootCauseMessage(e));
-        } catch (ThainException e) {
-            log.error("Failed to auto trigger flow：", e);
+            val addFlowExecutionDp = AddFlowExecutionDp.builder()
+                    .flowId(flowId)
+                    .hostInfo(getHostInfo())
+                    .status(FlowExecutionStatus.WAITING.code)
+                    .triggerType(FlowExecutionTriggerType.AUTOMATIC.code)
+                    .build();
+            processEngine.processEngineStorage.flowExecutionDao.addFlowExecution(addFlowExecutionDp);
+            if (addFlowExecutionDp.id == null) {
+                throw new ThainCreateFlowExecutionException();
+            }
+
+            val flowExecutionDr = processEngine.processEngineStorage.flowExecutionDao
+                    .getFlowExecution(addFlowExecutionDp.id).orElseThrow(ThainRuntimeException::new);
+            processEngine.processEngineStorage.flowExecutionWaitingQueue.put(flowExecutionDr);
+        } catch (Exception e) {
+            log.error("Failed to add queue：", e);
         }
     }
 

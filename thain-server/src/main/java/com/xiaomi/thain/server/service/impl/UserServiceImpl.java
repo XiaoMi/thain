@@ -5,15 +5,13 @@
  */
 package com.xiaomi.thain.server.service.impl;
 
-import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.dao.UserDao;
+import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.model.rq.AddUserRq;
 import com.xiaomi.thain.server.model.rq.UpdateUserRq;
-import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.service.UserService;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

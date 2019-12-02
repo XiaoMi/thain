@@ -4,42 +4,48 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 import { Tabs } from 'antd';
-import { connect } from 'dva';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
 import UserAdminTable from './UserAdminTable';
 import X5ConfigTable from './X5ConfigTable';
-import { ConnectProps } from '@/models/connect';
-
-const AdminTabs: React.FC<ConnectProps> = ({ dispatch }) => {
+import { router } from 'umi';
+import { useDispatch } from 'dva';
+interface Props {
+  type: string;
+}
+const AdminTabs: React.FC<Props> = ({ type }) => {
+  const dispatch = useDispatch();
   const { TabPane } = Tabs;
-  function handleAdminClick() {
-    if (dispatch) {
+
+  useEffect(() => {
+    if (type === 'user') {
       dispatch({
         type: 'admin/fetchTable',
       });
-    }
-  }
-  function handleClientClick() {
-    if (dispatch) {
+    } else if (type === 'client') {
       dispatch({
         type: 'x5config/fetchTable',
       });
     }
-  }
+  }, [type]);
+
   return (
     <div>
       <Tabs
-        defaultActiveKey="1"
+        activeKey={type}
         tabPosition="left"
         onChange={activeKey => {
-          activeKey === '1' ? handleAdminClick() : handleClientClick();
+          if (activeKey === 'user') {
+            router.push('/admin/user');
+          } else {
+            router.push('/admin/client');
+          }
         }}
       >
-        <TabPane tab={formatMessage({ id: 'admin.index.userAdmin' })} key="1">
+        <TabPane tab={formatMessage({ id: 'admin.index.userAdmin' })} key="user">
           <UserAdminTable />
         </TabPane>
-        <TabPane tab={formatMessage({ id: 'admin.index.ClientAdmin' })} key="2">
+        <TabPane tab={formatMessage({ id: 'admin.index.ClientAdmin' })} key="client">
           <X5ConfigTable />
         </TabPane>
       </Tabs>
@@ -47,4 +53,4 @@ const AdminTabs: React.FC<ConnectProps> = ({ dispatch }) => {
   );
 };
 
-export default connect(() => ({}))(AdminTabs);
+export default AdminTabs;

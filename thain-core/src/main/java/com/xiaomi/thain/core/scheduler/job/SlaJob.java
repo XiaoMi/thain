@@ -11,7 +11,7 @@ import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SlaJob implements Job {
 
     @NonNull
-    private ProcessEngine processEngine;
+    private final ProcessEngine processEngine;
 
     private static final Map<String, SlaJob> SLA_JOB_MAP = new ConcurrentHashMap<>();
 
@@ -53,9 +53,9 @@ public class SlaJob implements Job {
                 val flow = processEngine.processEngineStorage.flowDao.getFlow(flowId)
                         .orElseThrow(() -> new ThainRuntimeException("flow does not exist， flowId:" + flowId));
                 if (flow.slaKill) {
-                    processEngine.thainFacade.killFlowExecution(flowExecutionId);
+                    processEngine.thainFacade.killFlowExecution(flowExecutionId, true);
                 }
-                if (Strings.isNotBlank(flow.slaEmail)) {
+                if (StringUtils.isNotBlank(flow.slaEmail)) {
                     processEngine.processEngineStorage.mailService.send(
                             flow.slaEmail.trim().split(","),
                             "Thain SLA提醒",

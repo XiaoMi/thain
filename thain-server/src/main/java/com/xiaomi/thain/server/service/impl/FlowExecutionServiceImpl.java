@@ -13,6 +13,7 @@ import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.server.dao.FlowExecutionDao;
 import com.xiaomi.thain.server.service.FlowExecutionService;
 import lombok.NonNull;
+import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class FlowExecutionServiceImpl implements FlowExecutionService {
 
     @Override
     public void killFlowExecution(long flowExecutionId) throws ThainException {
-        thainFacade.killFlowExecution(flowExecutionId);
+        thainFacade.killFlowExecution(flowExecutionId, false);
     }
 
     @Override
@@ -65,5 +66,17 @@ public class FlowExecutionServiceImpl implements FlowExecutionService {
     @Override
     public List<JobExecutionModel> getJobExecutionModelList(long flowExecutionId) {
         return flowExecutionDao.getJobExecutionModelList(flowExecutionId);
+    }
+
+    @Override
+    public boolean killFlowExecutionsByFlowId(long flowId) throws ThainException {
+        val executionIds = flowExecutionDao.getRunningExecutionIdsByFlowId(flowId);
+        if (!executionIds.isEmpty()) {
+            for (val executionId : executionIds) {
+                killFlowExecution(executionId);
+            }
+            return true;
+        }
+        return false;
     }
 }

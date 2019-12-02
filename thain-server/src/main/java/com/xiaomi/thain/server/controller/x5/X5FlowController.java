@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.model.rq.AddRq;
 import com.xiaomi.thain.server.controller.FlowController;
 import com.xiaomi.thain.server.service.FlowService;
@@ -52,8 +53,8 @@ public class X5FlowController {
     public ApiResult add(@NonNull @RequestBody String json, @NonNull String appId) {
         try {
             Gson gson = new Gson();
-            val addDto = gson.fromJson(json, AddRq.class);
-            return flowController.add(addDto, appId);
+            val addRq = gson.fromJson(json, AddRq.class);
+            return flowController.add(addRq, appId);
         } catch (Exception e) {
             log.error("add:", e);
             return ApiResult.fail(e.getMessage());
@@ -82,15 +83,14 @@ public class X5FlowController {
             if (!permissionService.getFlowAccessible(flowId, appId)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowService.start(flowId);
-        } catch (ThainFlowRunningException e) {
+            return ApiResult.success(flowService.start(flowId));
+        } catch (ThainRepeatExecutionException | ThainFlowRunningException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
             return ApiResult.fail(e.getMessage());
         } catch (Exception e) {
             log.error("start:", e);
             return ApiResult.fail(e.getMessage());
         }
-        return ApiResult.success();
     }
 
     @PostMapping("pause")

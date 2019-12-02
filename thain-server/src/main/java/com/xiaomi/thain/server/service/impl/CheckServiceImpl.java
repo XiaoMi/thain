@@ -10,8 +10,8 @@ import com.google.gson.reflect.TypeToken;
 import com.xiaomi.thain.common.entity.ComponentItemDefine;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
-import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.rq.AddFlowRq;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.server.service.CheckService;
 import lombok.NonNull;
@@ -40,11 +40,11 @@ public class CheckServiceImpl implements CheckService {
     }
 
     @Override
-    public void checkFlowModel(@NonNull FlowModel flowModel) throws ThainException {
-        if (StringUtils.isBlank(flowModel.name)) {
+    public void checkFlowModel(@NonNull AddFlowRq addFlowRq) throws ThainException {
+        if (StringUtils.isBlank(addFlowRq.name)) {
             throw new ThainException("flow name is empty");
         }
-        if (StringUtils.isBlank(flowModel.createUser)) {
+        if (StringUtils.isBlank(addFlowRq.createUser)) {
             throw new ThainException("failed to obtain createUser");
         }
     }

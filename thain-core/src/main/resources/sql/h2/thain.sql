@@ -3,6 +3,8 @@
 -- can be found in the LICENSE file in the root directory of this source tree.
 CREATE
 ALIAS if not exists UNIX_TIMESTAMP FOR "com.xiaomi.thain.core.utils.H2Extended.unixTimestamp";
+CREATE
+ALIAS if not exists FROM_UNIXTIME FOR "com.xiaomi.thain.core.utils.H2Extended.fromUnixTime";
 
 create table thain_flow
 (
@@ -27,18 +29,17 @@ create table thain_flow
     deleted                  int(1)       default 0                     not null comment '标记是否删除'
 );
 
-
-
 create table thain_flow_execution
 (
     id           int auto_increment primary key,
     flow_id      int          default 0                     not null comment '所属flow id',
-    status       int          default 1                     not null comment '流程执行状态，1 执行中，2 执行结束，3执行异常,4 手动kill',
+    status       int          default 0                     not null comment '流程执行状态，0 排队中，1 执行中，2 执行结束，3执行异常,4 手动kill',
     host_info    varchar(128) default ''                    not null comment '机器信息',
     trigger_type int          default 1                     not null comment '触发类型 1手动 2自动',
     logs         mediumtext                                 null comment '日志',
     create_time  timestamp    default '2019-01-01 00:00:00' not null comment '创建时间',
-    update_time  timestamp    default '2019-01-01 00:00:00' not null comment '更新时间'
+    update_time  timestamp    default '2019-01-01 00:00:00' not null comment '更新时间',
+    heartbeat    timestamp    default '2019-01-01 00:00:00' not null comment '最近一次心跳时间'
 );
 
 create table thain_job
@@ -61,7 +62,7 @@ create table thain_job_execution
     id                int auto_increment primary key,
     flow_execution_id int       default 0                     not null comment '关联的flow_execution',
     job_id            int       default 0                     not null comment 'job id',
-    status            int       default 0                     not null comment '节点执行状态：1未执行，2执行中，3执行结束，4执行异常',
+    status            int       default 0                     not null comment '流程执行状态，0 排队中，1 执行中，2 执行结束，3执行异常,4 手动kill, 5 禁止同时运行',
     logs              mediumtext                              null comment 'job running logs',
     create_time       timestamp default '2019-01-01 00:00:00' not null comment 'create time',
     update_time       timestamp default '2019-01-01 00:00:00' not null comment 'update time'
@@ -92,4 +93,3 @@ create table thain_x5_config
     constraint sch_x5_config_app_id_uindex
         unique (app_id)
 );
-

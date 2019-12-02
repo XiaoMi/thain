@@ -8,7 +8,7 @@ package com.xiaomi.thain.core.process.runtime.executor.service;
 import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.constant.FlowLastRunStatus;
 import com.xiaomi.thain.common.exception.ThainException;
-import com.xiaomi.thain.common.model.FlowModel;
+import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.core.dao.FlowExecutionDao;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
@@ -18,7 +18,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class FlowExecutionService {
     @NonNull
     private final ProcessEngineStorage processEngineStorage;
     @NonNull
-    private final FlowModel flowModel;
+    private final FlowDr flowDr;
 
     /**
      * 如果是异常结束,异常信息.
@@ -71,19 +72,19 @@ public class FlowExecutionService {
     private static final Map<Long, FlowExecutionService> FLOW_EXECUTION_SERVICE_MAP = new ConcurrentHashMap<>();
 
     private FlowExecutionService(long flowExecutionId,
-                                 @NonNull FlowModel flowModel,
+                                 @NonNull FlowDr flowDr,
                                  @NonNull ProcessEngineStorage processEngineStorage) {
         this.processEngineStorage = processEngineStorage;
         this.flowExecutionId = flowExecutionId;
-        this.flowService = FlowService.getInstance(flowModel.id, processEngineStorage);
+        this.flowService = FlowService.getInstance(flowDr.id, processEngineStorage);
         this.flowExecutionLogHandler = FlowExecutionLogHandler.getInstance(flowExecutionId, processEngineStorage);
         this.flowExecutionDao = processEngineStorage.flowExecutionDao;
-        this.mailNotice = processEngineStorage.getMailNotice(flowModel.callbackEmail);
-        this.flowModel = flowModel;
+        this.mailNotice = processEngineStorage.getMailNotice(flowDr.callbackEmail);
+        this.flowDr = flowDr;
     }
 
     public static FlowExecutionService getInstance(long flowExecutionId,
-                                                   @NonNull FlowModel flowModel,
+                                                   @NonNull FlowDr flowModel,
                                                    @NonNull ProcessEngineStorage processEngineStorage) {
         return FLOW_EXECUTION_SERVICE_MAP.computeIfAbsent(flowExecutionId,
                 id -> new FlowExecutionService(id, flowModel, processEngineStorage));
@@ -110,6 +111,16 @@ public class FlowExecutionService {
         flowExecutionEndStatus = FlowExecutionStatus.ERROR;
     }
 
+
+    /**
+     * 添加错误
+     */
+    public void autoKilled() {
+        this.errorMessage = "auto kill";
+        flowEndStatus = FlowLastRunStatus.AUTO_KILLED;
+        flowExecutionEndStatus = FlowExecutionStatus.AUTO_KILLED;
+    }
+
     /**
      * 添加错误
      */
@@ -128,17 +139,19 @@ public class FlowExecutionService {
                 case SUCCESS:
                     flowExecutionLogHandler.endSuccess();
                     break;
+                case ERROR:
                 default:
                     flowExecutionLogHandler.endError(errorMessage);
                     mailNotice.sendError(errorMessage);
                     checkContinuousFailure();
 
             }
+        } catch (Exception e) {
+            log.warn(ExceptionUtils.getRootCauseMessage(e));
+        } finally {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, flowExecutionEndStatus.code);
             flowService.endFlow(flowEndStatus);
             close();
-        } catch (Exception e) {
-            log.error("", e);
         }
     }
 
@@ -150,16 +163,16 @@ public class FlowExecutionService {
      * 连续失败暂停任务
      */
     private void checkContinuousFailure() throws ThainException, IOException, MessagingException {
-        if (flowModel.pauseContinuousFailure > 0) {
-            val latest = flowExecutionDao.getLatest(flowModel.id, flowModel.pauseContinuousFailure).orElseGet(Collections::emptyList);
+        if (flowDr.pauseContinuousFailure > 0) {
+            val latest = flowExecutionDao.getLatest(flowDr.id, flowDr.pauseContinuousFailure).orElseGet(Collections::emptyList);
             val count = latest.stream().filter(t -> FlowExecutionStatus.getInstance(t.status) == FlowExecutionStatus.ERROR).count();
-            if (count >= flowModel.pauseContinuousFailure - 1) {
-                ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade.pauseFlow(flowModel.id);
-                if (Strings.isNotBlank(flowModel.emailContinuousFailure)) {
+            if (count >= flowDr.pauseContinuousFailure - 1) {
+                ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade.pauseFlow(flowDr.id);
+                if (StringUtils.isNotBlank(flowDr.emailContinuousFailure)) {
                     processEngineStorage.mailService.send(
-                            flowModel.emailContinuousFailure.trim().split(","),
+                            flowDr.emailContinuousFailure.trim().split(","),
                             "Thain 任务连续失败通知",
-                            "您的任务：" + flowModel.name + ", 连续失败了" + flowModel.pauseContinuousFailure + "次，任务已经暂停。最近一次失败原因：" + errorMessage
+                            "您的任务：" + flowDr.name + ", 连续失败了" + flowDr.pauseContinuousFailure + "次，任务已经暂停。最近一次失败原因：" + errorMessage
                     );
                 }
             }

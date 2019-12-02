@@ -15,8 +15,8 @@ import {
   pauseFlow,
   schedulingFlow,
   startFlow,
+  killFlow,
 } from '@/pages/Flow/List/service';
-import { ConnectState } from '@/models/connect';
 import { TableResult } from '@/typings/ApiResult';
 import { FlowModel } from '@/commonModels/FlowModel';
 import { FlowSchedulingStatus } from '@/enums/FlowSchedulingStatus';
@@ -31,14 +31,7 @@ export interface FetchTableData {
 }
 
 export class FlowListModelState {
-  flowId?: number;
-  lastRunStatus?: number;
-  flowName?: string;
-  searchApp?: string;
-  createUser?: string;
-  scheduleStatus?: FlowSchedulingStatus;
-  updateTime?: number[];
-  tableResult = new TableResult<FlowModel>();
+  tableResult?: TableResult<FlowModel> = new TableResult<FlowModel>();
 }
 
 interface FlowListModelType {
@@ -50,6 +43,7 @@ interface FlowListModelType {
     pause: Effect;
     start: Effect;
     delete: Effect;
+    kill: Effect;
   };
   reducers: {
     updateState: Reducer<FlowListModelState>;
@@ -57,14 +51,14 @@ interface FlowListModelType {
   };
 }
 
-export interface FlowSearch {
+export class FlowSearch {
   flowId?: number;
   lastRunStatus?: number;
   flowName?: string;
   searchApp?: string;
   createUser?: string;
   scheduleStatus?: FlowSchedulingStatus;
-  updateTime?: number[];
+  updateTime: number[] = [];
   page?: number;
   pageSize?: number;
   sortKey?: string;
@@ -76,45 +70,16 @@ const FlowListModel: FlowListModelType = {
   state: new FlowListModelState(),
 
   effects: {
-    *fetchTable({ payload }, { call, put, select }) {
-      const state: FlowListModelState = yield select((s: ConnectState) => s.flowList);
-      const props: FlowSearch = {
-        flowId: payload && payload.flowId !== undefined ? payload.flowId : state.flowId,
-        lastRunStatus:
-          payload && payload.lastRunStatus !== undefined
-            ? payload.lastRunStatus
-            : state.lastRunStatus,
-        page: (payload && payload.page) || state.tableResult.page,
-        pageSize: (payload && payload.pageSize) || state.tableResult.pageSize,
-        sortKey: (payload && payload.sort && payload.sort.key) || 'id',
-        sortOrderDesc: (payload && payload.sort && payload.sort.orderDesc) || false,
-        flowName: payload && payload.flowName !== undefined ? payload.flowName : state.flowName,
-        searchApp: payload && payload.searchApp !== undefined ? payload.searchApp : state.searchApp,
-        createUser:
-          payload && payload.createUser !== undefined ? payload.createUser : state.createUser,
-        scheduleStatus:
-          payload && payload.scheduleStatus !== undefined
-            ? payload.scheduleStatus
-            : state.scheduleStatus,
-        updateTime:
-          payload && payload.updateTime !== undefined ? payload.updateTime : state.updateTime,
-      };
-      const tableResult: TableResult<FlowModel> | undefined = yield call(getTableList, props);
+    *fetchTable({ payload }, { call, put }) {
+      const tableResult: TableResult<FlowModel> | undefined = yield call(getTableList, payload);
       yield put({
         type: 'updateState',
         payload: {
-          tableResult,
-          flowId: props.flowId,
-          lastRunStatus: props.lastRunStatus,
-          flowName: props.flowName,
-          scheduleStatus: props.scheduleStatus,
-          updateTime: props.updateTime,
-          searchApp: props.searchApp,
-          createUser: props.createUser,
+          tableResult: tableResult,
         },
       });
     },
-    *scheduling({ payload: { id } }, { call, put }) {
+    *scheduling({ payload: { id, condition } }, { call, put }) {
       const result = yield call(schedulingFlow, id);
       if (result === undefined) {
         return;
@@ -124,9 +89,10 @@ const FlowListModel: FlowListModelType = {
       });
       yield put({
         type: 'fetchTable',
+        payload: condition,
       });
     },
-    *pause({ payload: { id } }, { call, put }) {
+    *pause({ payload: { id, condition } }, { call, put }) {
       const result = yield call(pauseFlow, id);
       if (result === undefined) {
         return;
@@ -136,9 +102,10 @@ const FlowListModel: FlowListModelType = {
       });
       yield put({
         type: 'fetchTable',
+        payload: condition,
       });
     },
-    *start({ payload: { id } }, { call, put }) {
+    *start({ payload: { id, condition } }, { call, put }) {
       const result = yield call(startFlow, id);
       if (result === undefined) {
         return;
@@ -148,9 +115,10 @@ const FlowListModel: FlowListModelType = {
       });
       yield put({
         type: 'fetchTable',
+        payload: condition,
       });
     },
-    *delete({ payload: { id } }, { call, put }) {
+    *delete({ payload: { id, condition } }, { call, put }) {
       const result = yield call(deleteFlow, id);
       if (result === undefined) {
         return;
@@ -160,6 +128,20 @@ const FlowListModel: FlowListModelType = {
       });
       yield put({
         type: 'fetchTable',
+        payload: condition,
+      });
+    },
+    *kill({ payload: { id, condition } }, { call, put }) {
+      const result = yield call(killFlow, id);
+      if (result === undefined) {
+        return;
+      }
+      notification.success({
+        message: `${id}:${formatMessage({ id: 'flow.kill.success' })}`,
+      });
+      yield put({
+        type: 'fetchTable',
+        payload: condition,
       });
     },
   },

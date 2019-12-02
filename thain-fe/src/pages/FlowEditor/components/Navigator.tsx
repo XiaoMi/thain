@@ -10,7 +10,7 @@
 import React, { useRef, useEffect } from 'react';
 import Editor from '../editor';
 import '../style/navigator.less';
-import ConnectState, { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { connect } from 'dva';
 import { formatMessage } from 'umi-plugin-react/locale';
 

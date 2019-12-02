@@ -10,7 +10,7 @@ import Editor from '../editor';
 import React, { useState } from 'react';
 import { Checkbox, Modal, TimePicker, Form, Input } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import ConnectState, { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { connect } from 'dva';
 import { FlowAttributes } from '@/pages/FlowEditor/model';
 import LineInput from './input/LineInput';

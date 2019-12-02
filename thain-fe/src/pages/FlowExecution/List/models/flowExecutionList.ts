@@ -11,7 +11,7 @@ import { Effect } from 'dva';
 import { Reducer } from 'redux';
 import { getTableList, killFlowExecution } from '@/pages/FlowExecution/List/service';
 import { notification } from 'antd';
-import ConnectState from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { FlowExecutionModel } from '@/commonModels/FlowExecutionModel';
 import { formatMessage } from 'umi-plugin-react/locale';
 

@@ -6,7 +6,6 @@
  * @author liangyongrui@xiaomi.com
  */
 import React from 'react';
-import ConnectState from '@/models/connect';
 import { useSelector } from 'dva';
 import LineInput from './input/LineInput';
 import TextareaInput from './input/TextareaInput';
@@ -17,6 +16,7 @@ import SqlInput from './input/SqlInput';
 import ShellInput from './input/ShellInput';
 import UploadBase64Input from './input/UploadBase64Input';
 import { formatMessage } from 'umi-plugin-react/locale';
+import { ConnectState } from '@/models/connect';
 
 const getInput = (inputName: string) => {
   switch (inputName) {

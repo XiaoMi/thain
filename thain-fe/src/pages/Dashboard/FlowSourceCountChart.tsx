@@ -3,7 +3,7 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-import ConnectState, { ConnectProps } from '@/models/connect';
+import { ConnectState, ConnectProps } from '@/models/connect';
 import { Axis, Chart, Coord, Geom, Guide, Legend, Tooltip } from 'bizcharts';
 import DataSet from '@antv/data-set';
 import React from 'react';

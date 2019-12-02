@@ -9,7 +9,7 @@
 import Editor from '../editor';
 import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'dva';
-import ConnectState, { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { Modal } from 'antd';
 import NodeDetail from './NodeDetail';
 import { formatMessage } from 'umi-plugin-react/locale';

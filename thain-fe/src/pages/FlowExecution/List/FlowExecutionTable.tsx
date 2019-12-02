@@ -5,7 +5,7 @@
  */
 import styles from './table.less';
 import { useDispatch, useSelector } from 'dva';
-import ConnectState from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import React, { useState } from 'react';
 import { Button, Modal, Table } from 'antd';
 import { FlowExecutionStatus, getScheduleStatusDesc } from '@/enums/FlowExecutionStatus';

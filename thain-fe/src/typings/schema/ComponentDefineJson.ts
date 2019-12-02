@@ -24,7 +24,7 @@ export type ComponentDefineJson = Array<{
   label?: string;
   input:
     | {
-        id: 'line' | 'textarea' | 'sql' | 'shell' | 'richText';
+        id: 'line' | 'textarea' | 'sql' | 'shell' | 'richText' | 'uploadBase64';
       }
     | {
         id: 'select';

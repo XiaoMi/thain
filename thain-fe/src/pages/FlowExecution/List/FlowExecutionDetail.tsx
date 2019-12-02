@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useState, useEffect } from 'react';
 import { Row, Col, Button, Table, Icon } from 'antd';
-import ConnectState from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { useSelector, useDispatch } from 'dva';
 import Editor from '@/pages/FlowEditor/editor';
 import Logs from './Logs';

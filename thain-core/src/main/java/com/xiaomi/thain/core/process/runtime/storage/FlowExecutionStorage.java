@@ -8,7 +8,6 @@ package com.xiaomi.thain.core.process.runtime.storage;
 
 import lombok.NonNull;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -32,7 +31,7 @@ public class FlowExecutionStorage {
 
     private FlowExecutionStorage(long flowExecutionId) {
         storageMap = new ConcurrentHashMap<>();
-        finishJob = new HashSet<>();
+        finishJob = ConcurrentHashMap.newKeySet();
     }
 
     public static FlowExecutionStorage getInstance(final long flowExecutionId) {

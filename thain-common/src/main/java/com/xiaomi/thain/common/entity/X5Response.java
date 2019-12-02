@@ -8,6 +8,9 @@ package com.xiaomi.thain.common.entity;
 
 import lombok.Data;
 
+/**
+ * @author liangyongrui
+ */
 @Data
 public class X5Response {
     private Header header = new Header();

@@ -30,7 +30,7 @@ import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
 public class FlowJob implements Job {
 
     @NonNull
-    private ProcessEngine processEngine;
+    private final ProcessEngine processEngine;
 
     private static final Map<String, FlowJob> FLOW_JOB_MAP = new ConcurrentHashMap<>();
 

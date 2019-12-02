@@ -10,7 +10,6 @@ import com.google.gson.reflect.TypeToken;
 import com.xiaomi.thain.common.entity.ComponentItemDefine;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
-import com.xiaomi.thain.common.model.FlowModel;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.rq.AddFlowRq;
 import com.xiaomi.thain.core.ThainFacade;

@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SlaJob implements Job {
 
     @NonNull
-    private ProcessEngine processEngine;
+    private final ProcessEngine processEngine;
 
     private static final Map<String, SlaJob> SLA_JOB_MAP = new ConcurrentHashMap<>();
 

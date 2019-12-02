@@ -30,7 +30,7 @@ import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
 public class RecoveryJob implements Job {
 
     @NonNull
-    private ProcessEngine processEngine;
+    private final ProcessEngine processEngine;
 
     private static final Map<String, RecoveryJob> CLEAN_JOB_MAP = new ConcurrentHashMap<>();
 

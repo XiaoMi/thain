@@ -1,6 +1,6 @@
 {
   "filename": "example.md",
-  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>组件组合使用示例</h1>\n",
+  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>组件组合使用示例</h1>\n<ol>\n<li>\n<p>新建一个 flow</p>\n</li>\n<li>\n<p>里面有两个节点，http 和 mail</p>\n<p><img src=\"../../../img/docs/component/example-all-job.jpg\" alt=\"example-all-job\"></p>\n</li>\n<li>\n<p>http_job 的参数</p>\n<p><img src=\"../../../img/docs/component/example-http-job.jpg\" alt=\"example-http-job\"></p>\n</li>\n<li>\n<p>mail_job 的参数</p>\n<p><img src=\"../../../img/docs/component/example-mail-job.jpg\" alt=\"example-mail-job\"></p>\n</li>\n<li>\n<p>创建完成后，点击立即执行</p>\n</li>\n<li>\n<p>执行后的日志</p>\n<p><img src=\"../../../img/docs/component/example-log.jpg\" alt=\"example-log\"></p>\n</li>\n<li>\n<p>邮件产生的结果</p>\n<p><img src=\"../../../img/docs/component/example-mail-result.jpg\" alt=\"example-mail-result\"></p>\n<p>因为 http 得到的是一串不完整的 html，所以渲染出来“有点丑”</p>\n</li>\n</ol>\n",
   "link": "/zh-cn/docs/component/example.html",
   "meta": {}
 }

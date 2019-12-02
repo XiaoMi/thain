@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<meta name="keywords" content="mail" />
-	<meta name="description" content="mail" />
+	<meta name="keywords" content="definition" />
+	<meta name="description" content="definition" />
 	<!-- 网页标签标题 -->
-	<title>mail</title>
+	<title>definition</title>
 	<link rel="shortcut icon" href="/thain/img/docsite.ico"/>
 	<link rel="stylesheet" href="/thain/build/documentation.css" />
 </head>
@@ -17,15 +17,117 @@
  This source code is licensed under the Apache License Version 2.0, which
  can be found in the LICENSE file in the root directory of this source tree.
 -->
-<h1>邮件发送组件</h1>
-<h2>组件名称</h2>
-<p>std::mail</p>
-<h2>必填参数</h2>
-<p>title: 邮件标题</p>
-<p>contentHtml: 邮件内容</p>
-<p>recipient: 收件人（多个用逗号隔开）</p>
-<h2>其他</h2>
-<p>可以在邮件标题和内容中用<code>${}</code>引用别的job产生的结果, 如: <code>${a.name}</code></p>
+<h1>组件定义</h1>
+<p>组件通过 json 进行的定义。</p>
+<h2>目的</h2>
+<ol>
+<li>前端可拖动组件的生成</li>
+<li>后端创建 flow 的时候，对 job 输入的内容进行校验</li>
+</ol>
+<h2>组件定义 json 的格式</h2>
+<p>一个满足标准的 json，需要满足如下 typescript 定义。</p>
+<p>可以用<a href="https://app.quicktype.io/">这个网站</a>生成 json 定义</p>
+<pre><code class="language-ts"><span class="hljs-keyword">type</span> ComponentDefineJson = <span class="hljs-built_in">Array</span>&lt;{
+  <span class="hljs-comment">/**
+   * 传到后端的key
+   */</span>
+  property: <span class="hljs-built_in">string</span>;
+  <span class="hljs-comment">/**
+   * 是否必填，false 或不写 则为不是必填
+   */</span>
+  required?: <span class="hljs-built_in">boolean</span>;
+  <span class="hljs-comment">/**
+   * 输入框前面的标识，不写默认用property
+   */</span>
+  label?: <span class="hljs-built_in">string</span>;
+  input:
+    | {
+        id: <span class="hljs-string">"line"</span> | <span class="hljs-string">"textarea"</span> | <span class="hljs-string">"sql"</span> | <span class="hljs-string">"shell"</span> | <span class="hljs-string">"richText"</span> | <span class="hljs-string">"uploadBase64"</span>;
+      }
+    | {
+        id: <span class="hljs-string">"select"</span>;
+        options: <span class="hljs-built_in">Array</span>&lt;{
+          <span class="hljs-comment">/**
+           * 属性的值
+           */</span>
+          id: <span class="hljs-built_in">string</span>;
+          <span class="hljs-comment">/**
+           * 下拉框中的候选项，不写用id代替
+           */</span>
+          name?: <span class="hljs-built_in">string</span>;
+        }&gt;;
+      };
+}&gt;;
+</code></pre>
+<h2>举个例子</h2>
+<p>参考 std::mail 组件的 json 定义。</p>
+<pre><code class="language-json">[
+  {
+    <span class="hljs-attr">"property"</span>: <span class="hljs-string">"title"</span>,
+    <span class="hljs-attr">"label"</span>: <span class="hljs-string">"邮件标题"</span>,
+    <span class="hljs-attr">"required"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"input"</span>: {
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"textarea"</span>
+    }
+  },
+  {
+    <span class="hljs-attr">"property"</span>: <span class="hljs-string">"contentHtml"</span>,
+    <span class="hljs-attr">"label"</span>: <span class="hljs-string">"邮件内容"</span>,
+    <span class="hljs-attr">"required"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"input"</span>: {
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"richText"</span>
+    }
+  },
+  {
+    <span class="hljs-attr">"property"</span>: <span class="hljs-string">"recipient"</span>,
+    <span class="hljs-attr">"label"</span>: <span class="hljs-string">"收件人（多个用逗号隔开）"</span>,
+    <span class="hljs-attr">"required"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"input"</span>: {
+      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"textarea"</span>
+    }
+  }
+]
+</code></pre>
+<p>每一个 property 都是用户可以在页面输入的项。</p>
+<h2>页面支持的 input 类型</h2>
+<ol>
+<li>line
+<ul>
+<li>单行文本框</li>
+</ul>
+</li>
+<li>textarea
+<ul>
+<li>多行文本框</li>
+</ul>
+</li>
+<li>sql
+<ul>
+<li>sql输入框</li>
+</ul>
+</li>
+<li>shell
+<ul>
+<li>shell输入框</li>
+</ul>
+</li>
+<li>richText
+<ul>
+<li>富文本编辑器</li>
+</ul>
+</li>
+<li>uploadBase64
+<ul>
+<li>文件上传</li>
+</ul>
+</li>
+<li>select
+<ul>
+<li>下拉单选框</li>
+</ul>
+</li>
+</ol>
+<p>如果还有你需要的，可以提issus。</p>
 </div></section><footer class="footer-container"><div class="footer-body"><div class="copyright"><span>Copyright © 2020 XIAOMI </span></div></div></footer></div></div>
 	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
 	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>

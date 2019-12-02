@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import { Chart, Geom, Axis, Tooltip, Legend } from 'bizcharts';
-import ConnectState, { ConnectProps } from '@/models/connect';
+import { ConnectState, ConnectProps } from '@/models/connect';
 import { connect } from 'dva';
 import LoadingWrapper from './LoadingWrapper';
 import moment from 'moment';

@@ -40,17 +40,15 @@ public class CustomOauth2UserServiceImpl implements OAuth2UserService<OidcUserRe
     @Override
     public OidcUser loadUser(@NonNull OidcUserRequest userRequest) {
         Assert.notNull(userRequest, "userRequest cannot be null");
-        OidcUserInfo userInfo = null;
         Set<GrantedAuthority> authorities = Collections.singleton(
-                new OidcUserAuthority(userRequest.getIdToken(), userInfo));
-
+                new OidcUserAuthority(userRequest.getIdToken(), null));
         OidcUser user;
         String userNameAttributeName = userRequest.getClientRegistration()
                 .getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
         if (StringUtils.hasText(userNameAttributeName)) {
-            user = new DefaultOidcUser(authorities, userRequest.getIdToken(), userInfo, userNameAttributeName);
+            user = new DefaultOidcUser(authorities, userRequest.getIdToken(), null, userNameAttributeName);
         } else {
-            user = new DefaultOidcUser(authorities, userRequest.getIdToken(), userInfo);
+            user = new DefaultOidcUser(authorities, userRequest.getIdToken(), (OidcUserInfo)null);
         }
         //第三方登陆后插入数据库
         String userId = String.valueOf(user.getAttributes().get("email"));

@@ -19,6 +19,12 @@ import javax.mail.MessagingException;
  */
 public interface ComponentTools {
 
+    /**
+     * 发送邮件
+     * @param to 收件人
+     * @param subject 主题
+     * @param content 正文
+     */
     void sendMail(String[] to, String subject, String content) throws IOException, MessagingException;
 
     /**
@@ -52,22 +58,16 @@ public interface ComponentTools {
 
     /**
      * 增加debug日志
-     *
-     * @param content
      */
     void addDebugLog(String content);
 
     /**
      * 增加info日志
-     *
-     * @param content
      */
     void addInfoLog(String content);
 
     /**
      * 增加warning日志
-     *
-     * @param content
      */
     void addWarnLog(String content);
 
@@ -83,7 +83,6 @@ public interface ComponentTools {
      *
      * @param url url
      * @param data ?后面的
-     * @return
      */
     String httpGet(@NonNull String url, @NonNull Map<String, String> data) throws IOException;
 
@@ -93,7 +92,6 @@ public interface ComponentTools {
      * @param url url
      * @param headers headers
      * @param data data
-     * @return
      */
     String httpPost(@NonNull String url,
                     @NonNull Map<String, String> headers,
@@ -104,5 +102,8 @@ public interface ComponentTools {
      */
     long getJobExecutionId();
 
+    /**
+     * 获取flow当前产生的全部结果
+     */
     Map<String, Object> getStorage();
 }

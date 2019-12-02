@@ -18,9 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
@@ -31,7 +31,7 @@ import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
 @Slf4j
 public class FlowExecutionLoader {
 
-    public final Set<FlowExecutionDr> runningFlowExecution = new HashSet<>();
+    public final Set<FlowExecutionDr> runningFlowExecution = ConcurrentHashMap.newKeySet();
     @NonNull
     private final LinkedBlockingQueue<FlowExecutionDr> flowExecutionWaitingQueue;
     @NonNull

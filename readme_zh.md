@@ -26,7 +26,7 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 1. 下载完整代码
 
    ```shell
-   git clone https://github.com/XiaoMi/thain.git
+   git clone -b v1.2.x https://github.com/XiaoMi/thain.git
    ```
 
 1. 运行环境需求
@@ -49,7 +49,7 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 1. 打包完成后，即可运行
 
    ```shell
-   java -jar thain-server/target/thain-server-1.2.1.jar
+   java -jar thain-server/target/thain-server-1.2.2.jar
    ```
 
 1. 打开 [localhost:9900](http://localhost:9900) 就可以看到效果了

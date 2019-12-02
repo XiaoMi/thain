@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Card, Form, Row, Col, Input } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
-import ConnectState, { ConnectProps } from '@/models/connect';
+import { ConnectState, ConnectProps } from '@/models/connect';
 import { connect, useSelector, useDispatch } from 'dva';
 import FlowExecutionTable from './FlowExecutionTable';
 import { router } from 'umi';

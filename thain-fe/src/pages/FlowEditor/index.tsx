@@ -24,7 +24,7 @@ import ToolBar from './components/Toolbar';
 import './style/baseFlowEditor.less';
 import editorStyle from './style/editor.less';
 import { connect } from 'dva';
-import ConnectState, { ConnectProps } from '@/models/connect';
+import { ConnectState, ConnectProps } from '@/models/connect';
 import { FlowAttributes } from '@/pages/FlowEditor/model';
 import { FlowModel } from '@/commonModels/FlowModel';
 import { JobModel } from '@/commonModels/JobModel';

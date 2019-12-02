@@ -16,7 +16,7 @@ import JobExecutionStatusCountChart from './JobExecutionStatusCountChart';
 import FlowSourceCountChart from './FlowSourceCountChart';
 import FlowExecutionStatusCountChart from './FlowExecutionStatusCountChart';
 import { connect } from 'dva';
-import ConnectState, { ConnectProps } from '@/models/connect';
+import { ConnectState, ConnectProps } from '@/models/connect';
 import { FlowSchedulingStatus } from '@/enums/FlowSchedulingStatus';
 import { RangePickerPresetRange } from 'antd/lib/date-picker/interface';
 import moment from 'moment';

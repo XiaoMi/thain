@@ -12,8 +12,8 @@ import React, { useRef, useEffect } from 'react';
 import Editor from '../editor';
 import '../style/toolbar.less';
 import { useSelector } from 'dva';
-import ConnectState from '@/models/connect';
 import { formatMessage } from 'umi-plugin-react/locale';
+import { ConnectState } from '@/models/connect';
 
 const Toolbar: React.FC<{}> = () => {
   const flowEditor = useSelector((s: ConnectState) => s.flowEditor);

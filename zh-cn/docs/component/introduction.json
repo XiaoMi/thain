@@ -1,0 +1,6 @@
+{
+  "filename": "introduction.md",
+  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>std组件介绍</h1>\n<p>目前std组件只提供了mail、shell、http的最简单实现版本。</p>\n<p>主要是为了供大家参考学习，如果有复杂的需求请自行创建组件实现。</p>\n",
+  "link": "/zh-cn/docs/component/introduction.html",
+  "meta": {}
+}

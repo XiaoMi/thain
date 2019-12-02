@@ -39,11 +39,11 @@ public class FlowService {
      * 开始运行flow
      * 设置当前的flow状态为 正在运行
      */
-    public void startFlow() {
+    void startFlow() {
         flowDao.updateLastRunStatus(flowId, FlowLastRunStatus.RUNNING);
     }
 
-    public void endFlow(@NonNull FlowLastRunStatus endStatus) {
+    void endFlow(@NonNull FlowLastRunStatus endStatus) {
         flowDao.updateLastRunStatus(flowId, endStatus);
     }
 

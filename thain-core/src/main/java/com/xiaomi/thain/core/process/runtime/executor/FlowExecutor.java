@@ -34,7 +34,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.util.stream.Collectors.*;
@@ -71,11 +70,6 @@ public class FlowExecutor {
     @NonNull
     private Collection<JobModel> notExecutedJobsPool;
     /**
-     * 监控节点是否执行完，也可用于中断任务 或 中断节点
-     */
-    @NonNull
-    private final Map<String, CompletableFuture<Void>> jobFutureMap;
-    /**
      * 监控节点是否执行完
      */
     @NonNull
@@ -90,7 +84,6 @@ public class FlowExecutor {
         this.processEngineStorage = processEngineStorage;
         this.flowDr = processEngineStorage.flowDao.getFlow(flowExecutionDr.flowId)
                 .orElseThrow(ThainFlowRunningException::new);
-        this.jobFutureMap = new ConcurrentHashMap<>();
         this.jobFutureQueue = new ConcurrentLinkedQueue<>();
         try {
             this.flowExecutionId = flowExecutionDr.id;
@@ -207,7 +200,6 @@ public class FlowExecutor {
                 flowExecutionStorage.addFinishJob(job.name);
                 runExecutableJobs();
             }, flowExecutionJobThreadPool);
-            jobFutureMap.put(job.name, future);
             jobFutureQueue.add(future);
         });
     }

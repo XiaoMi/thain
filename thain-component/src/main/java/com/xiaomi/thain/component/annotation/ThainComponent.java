@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 public @interface ThainComponent {
 
     /**
-     * 组件所属的组，如：std, xdata等，用于区分组件
+     * 组件所属的组，如：std，用于区分组件
      *
      * @return 组件所属组的名称
      */

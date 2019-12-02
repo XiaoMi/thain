@@ -23,9 +23,9 @@ import java.util.Map;
  * @author liangyongrui
  */
 public class ThainClient {
-    private String appId;
-    private String appKey;
-    private String url;
+    private final String appId;
+    private final String appKey;
+    private final String url;
 
     private static final String ADD_PATH = "/x5/flow/add";
     private static final String START_PATH = "/x5/flow/start";

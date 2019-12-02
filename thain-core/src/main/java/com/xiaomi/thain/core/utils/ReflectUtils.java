@@ -17,6 +17,7 @@ import java.lang.annotation.Annotation;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -43,7 +44,7 @@ public class ReflectUtils {
     private static Set<Class<?>> scanFile(URL url, String packageName)
             throws UnsupportedEncodingException, ClassNotFoundException {
         log.info("scanning of file type");
-        String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
+        String filePath = URLDecoder.decode(url.getFile(), StandardCharsets.UTF_8.name());
         return findAndAddClassesInPackageByFile(packageName, filePath);
     }
 

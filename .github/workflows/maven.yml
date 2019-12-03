@@ -16,4 +16,6 @@ jobs:
       with:
         java-version: ${{matrix.java_version}}
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: |
+        mvn -U clean package
+        mvn test

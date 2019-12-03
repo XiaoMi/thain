@@ -49,7 +49,7 @@ public class FlowServiceTests {
                         "url", "https://github.com"
                 )).build());
         val flowId = flowService.add(addFlowRq, jobs, "thain");
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(10);
         val flow = flowService.getFlow(flowId);
         Assert.assertEquals(flow.schedulingStatus, FlowSchedulingStatus.SCHEDULING.code);
         val flowId2 = flowService.add(addFlowRq.toBuilder().id(flowId).build(), jobs, "thain");

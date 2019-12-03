@@ -1,10 +1,6 @@
 -- Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
 -- This source code is licensed under the Apache License Version 2.0, which
 -- can be found in the LICENSE file in the root directory of this source tree.
-CREATE
-ALIAS if not exists UNIX_TIMESTAMP FOR "com.xiaomi.thain.core.utils.H2Extended.unixTimestamp";
-CREATE
-ALIAS if not exists FROM_UNIXTIME FOR "com.xiaomi.thain.core.utils.H2Extended.fromUnixTime";
 
 create table thain_flow
 (

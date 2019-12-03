@@ -87,21 +87,14 @@ public class ThainFacade {
     /**
      * 更新flow
      */
-    public boolean updateFlow(@NonNull UpdateFlowRq updateFlowRq, @NonNull List<JobModel> jobModelList) throws SchedulerException, ThainException, ParseException {
-
-        if (StringUtils.isBlank(updateFlowRq.cron)) {
-            return processEngine.updateFlow(updateFlowRq, jobModelList);
+    public void updateFlow(@NonNull UpdateFlowRq updateFlowRq, @NonNull List<JobModel> jobModelList) throws SchedulerException, ThainException, ParseException {
+        if (StringUtils.isNotBlank(updateFlowRq.cron)) {
+            CronExpression.validateExpression(updateFlowRq.cron);
+            val oldFlow = processEngine.getFlow(updateFlowRq.id);
+            schedulerEngine.addFlow(updateFlowRq.id, updateFlowRq.cron);
+            updateFlowRq = updateFlowRq.toBuilder().schedulingStatus(oldFlow.schedulingStatus).build();
         }
-
-        CronExpression.validateExpression(updateFlowRq.cron);
-        schedulerEngine.addFlow(updateFlowRq.id, updateFlowRq.cron);
-        try {
-            processEngine.updateFlow(updateFlowRq, jobModelList);
-            return true;
-        } catch (Exception e) {
-            schedulerEngine.addFlow(updateFlowRq.id, processEngine.getFlowCron(updateFlowRq.id));
-            throw new ThainException(e);
-        }
+        processEngine.updateFlow(updateFlowRq, jobModelList);
     }
 
     /**

@@ -10,6 +10,7 @@ import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.common.model.rq.AddFlowRq;
 import com.xiaomi.thain.common.model.rq.UpdateFlowRq;
@@ -183,17 +184,8 @@ public class ProcessEngine {
         return Optional.empty();
     }
 
-    public boolean updateFlow(@NonNull UpdateFlowRq updateFlowRq, @NonNull List<JobModel> jobModelList) throws ThainException {
-        int schedulingStatus = NOT_SET.code;
-        if (StringUtils.isNotBlank(updateFlowRq.cron)) {
-            schedulingStatus = SCHEDULING.code;
-        }
-        val cloneFlowModel = updateFlowRq.toBuilder().schedulingStatus(schedulingStatus).build();
-        processEngineStorage.flowDao.updateFlow(cloneFlowModel, jobModelList);
-        if (cloneFlowModel.id == null) {
-            throw new ThainException("update failed");
-        }
-        return true;
+    public void updateFlow(@NonNull UpdateFlowRq updateFlowRq, @NonNull List<JobModel> jobModelList) {
+        processEngineStorage.flowDao.updateFlow(updateFlowRq, jobModelList);
     }
 
     /**
@@ -211,9 +203,9 @@ public class ProcessEngine {
         return flowExecutionLoader.startAsync(flowId);
     }
 
-    public String getFlowCron(long flowId) throws ThainException {
+    public FlowDr getFlow(long flowId) throws ThainException {
         return processEngineStorage.flowDao
-                .getFlow(flowId).orElseThrow(() -> new ThainException("failed to obtain flow"))
-                .cron;
+                .getFlow(flowId).orElseThrow(() -> new ThainException("failed to obtain flow"));
+
     }
 }

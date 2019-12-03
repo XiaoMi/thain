@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.xiaomi.thain.common.constant.FlowSchedulingStatus;
 import com.xiaomi.thain.common.exception.ThainException;
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.rq.AddFlowRq;
 import com.xiaomi.thain.server.Application;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +36,7 @@ public class FlowServiceTests {
     private FlowServiceImpl flowService;
 
     @Test
-    public void test() throws ParseException, ThainException, SchedulerException, InterruptedException {
+    public void test() throws ParseException, ThainException, SchedulerException, InterruptedException, ThainRepeatExecutionException, IOException {
         val addFlowRq = AddFlowRq.builder()
                 .name("test")
                 .cron("* * * * * ?")
@@ -55,6 +57,9 @@ public class FlowServiceTests {
         val flowId2 = flowService.add(addFlowRq.toBuilder().id(flowId).build(), jobs, "thain");
         Assert.assertEquals(flowId, flowId2);
         Assert.assertEquals(flow.schedulingStatus, FlowSchedulingStatus.SCHEDULING.code);
+        flowService.pause(flowId);
+        flowService.scheduling(flowId);
+        flowService.delete(flowId);
     }
 
 }

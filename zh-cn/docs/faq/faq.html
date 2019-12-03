@@ -23,6 +23,10 @@
 <li>A: 目前的kill 只是在数据库标记了一下，每个job执行之前会读一下是否被kill，如果被kill了，未执行的job就不再执行了,正在执行的job还会继续执行。</li>
 </ul>
 <hr>
+<ul>
+<li>Q: 负载均衡是怎么实现的</li>
+<li>A: 数据库随机抢占，具体参考Quartz</li>
+</ul>
 </div></section><footer class="footer-container"><div class="footer-body"><div class="copyright"><span>Copyright © 2020 XIAOMI </span></div></div></footer></div></div>
 	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
 	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>

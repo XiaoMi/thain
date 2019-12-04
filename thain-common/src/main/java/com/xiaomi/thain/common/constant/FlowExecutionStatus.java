@@ -7,7 +7,7 @@
 package com.xiaomi.thain.common.constant;
 
 /**
- * flow的最后一次运行状态
+ * flow execution 的执行状态
  *
  * @author liangyongrui
  */

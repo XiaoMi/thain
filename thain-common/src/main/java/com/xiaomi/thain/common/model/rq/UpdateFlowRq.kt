@@ -6,6 +6,7 @@
 package com.xiaomi.thain.common.model.rq
 
 import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.common.model.rq.kt.AddFlowRq
 
 /**
  * add flow model

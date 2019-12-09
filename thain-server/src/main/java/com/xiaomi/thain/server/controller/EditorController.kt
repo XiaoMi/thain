@@ -34,9 +34,7 @@ class EditorController(private val flowService: FlowService,
         return try {
             val gson = Gson()
             val addRq = gson.fromJson(json, AddFlowAndJobsRq::class.java)
-            add(addRq.copy(
-                    flowModel = addRq.flowModel.copy(createUser = ThreadLocalUser.getUsername())
-            ), "thain")
+            add(addRq.copy(flowModel = addRq.flowModel.copy(createUser = ThreadLocalUser.getUsername())), "thain")
         } catch (e: Exception) {
             log.error("", e)
             ApiResult.fail(e.message)

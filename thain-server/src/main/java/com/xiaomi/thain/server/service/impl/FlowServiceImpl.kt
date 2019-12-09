@@ -10,6 +10,7 @@ import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
 import com.xiaomi.thain.common.exception.ThainRuntimeException
 import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
+import com.xiaomi.thain.common.model.rq.UpdateFlowRq
 import com.xiaomi.thain.core.ThainFacade
 import com.xiaomi.thain.server.dao.FlowDao
 import com.xiaomi.thain.common.model.rq.kt.AddFlowAndJobsRq
@@ -42,19 +43,20 @@ class FlowServiceImpl(
 
     @Throws(ThainException::class, ParseException::class, SchedulerException::class)
     override fun add(addFlowRq: AddFlowRq, addJobRqList: List<AddJobRq>, appId: String): Long {
-        var localAddFlowRq = addFlowRq
-        if (!localAddFlowRq.slaKill || localAddFlowRq.slaDuration == 0L) {
-            localAddFlowRq = localAddFlowRq.copy(
+        val localAddFlowRq = if (!addFlowRq.slaKill || addFlowRq.slaDuration == 0L) {
+            addFlowRq.copy(
                     slaKill = true,
                     slaDuration = 3L * 60 * 60
             )
+        } else {
+            addFlowRq
         }
-        //todo update
-//        if (localAddFlowRq.id != null && flowDao.flowExist(localAddFlowRq.id!!)) {
-//            val updateFlowRq = UpdateFlowRq.getInstance(localAddFlowRq, localAddFlowRq.id!!)
-//            thainFacade.updateFlow(updateFlowRq, jobModelList)
-//            return updateFlowRq.id
-//        }
+        val localAddFlowRqId = localAddFlowRq.id
+        if (localAddFlowRqId != null && flowDao.flowExist(localAddFlowRqId)) {
+            val updateFlowRq = UpdateFlowRq(localAddFlowRq, localAddFlowRqId)
+            thainFacade.updateFlow(updateFlowRq, addJobRqList)
+            return updateFlowRq.id
+        }
         val flowId = thainFacade.addFlow(AddFlowAndJobsRq(localAddFlowRq, addJobRqList))
         flowDao.updateAppId(flowId, appId)
         return flowId

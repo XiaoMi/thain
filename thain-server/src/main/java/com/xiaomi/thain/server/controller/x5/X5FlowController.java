@@ -12,7 +12,7 @@ import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.model.rq.kt.AddFlowAndJobsRq;
-import com.xiaomi.thain.server.controller.FlowController;
+import com.xiaomi.thain.server.controller.EditorController;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;
 import lombok.NonNull;
@@ -39,24 +39,23 @@ public class X5FlowController {
     @NonNull
     private final PermissionService permissionService;
     @NonNull
-    private final FlowController flowController;
+    private final EditorController editorController;
 
     public X5FlowController(@NonNull FlowService flowService,
                             @NonNull PermissionService permissionService,
-                            @NonNull FlowController flowController) {
+                            @NonNull EditorController editorController
+    ) {
         this.flowService = flowService;
         this.permissionService = permissionService;
-        this.flowController = flowController;
+        this.editorController = editorController;
     }
 
     @PostMapping("add")
     public ApiResult add(@NonNull @RequestBody String json, @NonNull String appId) {
         try {
-            Gson gson = new Gson();
+            val gson = new Gson();
             val addRq = gson.fromJson(json, AddFlowAndJobsRq.class);
-            //todo
-//            return flowController.add(addRq, appId);
-            return null;
+            return editorController.add(addRq, appId);
         } catch (Exception e) {
             log.error("add:", e);
             return ApiResult.fail(e.getMessage());

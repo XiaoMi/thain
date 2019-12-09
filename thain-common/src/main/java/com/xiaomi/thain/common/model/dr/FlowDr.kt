@@ -13,7 +13,7 @@ import java.sql.Timestamp
  *
  * @author liangyongrui@xiaomi.com
  */
-class FlowDr(
+data class FlowDr(
         val id: Long,
         val name: String,
         val cron: String,

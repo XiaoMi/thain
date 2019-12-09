@@ -11,6 +11,7 @@ package com.xiaomi.thain.common.model.rq.kt
  * @author liangyongrui@xiaomi.com
  */
 data class AddFlowRq(
+        val id: Long?,
         /**
          * 添加成功后 id存在
          */

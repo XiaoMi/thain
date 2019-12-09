@@ -40,10 +40,9 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
 
     val schedulerEngine: SchedulerEngine
 
-    private val processEngine: ProcessEngine
+    private val processEngine: ProcessEngine = ProcessEngine.newInstance(processEngineConfiguration, this)
 
     init {
-        processEngine = ProcessEngine.newInstance(processEngineConfiguration, this)
         schedulerEngine = SchedulerEngine.getInstance(schedulerEngineConfiguration, processEngine)
         schedulerEngine.start()
     }
@@ -116,10 +115,11 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
             }
         } catch (e: Exception) {
             log.error("", e)
-            try { //todo
-//                val jobModelList = processEngine.processEngineStorage
-//                        .jobDao.getJobs(flowId).orElseGet(Collections::emptyList);
-//                updateFlow(UpdateFlowRq.getInstance(flowDr), jobModelList);
+            try {
+                val jobModelList = processEngine.processEngineStorage
+                        .jobDao.getJobs(flowId)
+                        .map { AddJobRq(it) }
+                updateFlow(UpdateFlowRq(flowDr), jobModelList)
             } catch (ex: Exception) {
                 log.error("", ex)
             }
@@ -160,14 +160,12 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
     fun updateCron(flowId: Long, cron: String?) {
         val flowDr = processEngine.processEngineStorage.flowDao.getFlow(flowId)
                 .orElseThrow { ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)) }
-        val jobModelList = processEngine.processEngineStorage.jobDao.getJobs(flowId)
-        //todo
-//        if (cron == null) {
-//            updateFlow(UpdateFlowRq.getInstance(flowDr), jobModelList.map{AddJob});
-//        } else {
-//            updateFlow(UpdateFlowRq.getInstance(flowDr.toBuilder().cron(cron).build()), jobModelList);
-//        }
-
+        val jobModelList = processEngine.processEngineStorage.jobDao.getJobs(flowId).map { AddJobRq(it) }
+        if (cron == null) {
+            updateFlow(UpdateFlowRq(flowDr), jobModelList)
+        } else {
+            updateFlow(UpdateFlowRq(flowDr.copy(cron = cron)), jobModelList)
+        }
         if (StringUtils.isNotBlank(flowDr.modifyCallbackUrl)) {
             SendModifyUtils.sendScheduling(flowId, flowDr.modifyCallbackUrl)
         }

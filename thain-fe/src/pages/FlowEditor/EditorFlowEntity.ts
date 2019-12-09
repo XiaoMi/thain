@@ -23,6 +23,8 @@ export class EditorFlowEntity {
       instance.slaDuration = flowModel.slaDuration;
       instance.slaEmail = flowModel.slaEmail;
       instance.slaKill = flowModel.slaKill;
+      instance.retryNumber = flowModel.retryNumber;
+      instance.timeInterval = flowModel.timeInterval;
     }
     instance.jobs = jobModelList;
     instance.needArrange = instance.getNeedArrange();
@@ -55,6 +57,10 @@ export class EditorFlowEntity {
   public slaDuration?: number;
   public slaEmail?: string;
   public slaKill?: boolean;
+
+  public retryNumber?: number;
+  public timeInterval?: number;
+
   public jobs: JobModel[] = [];
   public editorNodes: EditorNode[] = [];
   public editorEdges: EditorEdge[] = [];
@@ -72,6 +78,8 @@ export class EditorFlowEntity {
       slaDuration: this.slaDuration,
       slaEmail: this.slaEmail,
       slaKill: this.slaKill,
+      retryNumber: this.retryNumber,
+      timeInterval: this.timeInterval,
     };
   }
   /**

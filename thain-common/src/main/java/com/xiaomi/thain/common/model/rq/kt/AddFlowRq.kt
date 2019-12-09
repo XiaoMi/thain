@@ -29,7 +29,7 @@ data class AddFlowRq(
         /**
          * 创建的appId,"thain" 为网页创建
          */
-        val createAppId: String,
+        val createAppId: String?,
         /**
          * 秒时间戳
          */

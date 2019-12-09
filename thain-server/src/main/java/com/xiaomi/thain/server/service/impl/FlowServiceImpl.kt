@@ -44,13 +44,10 @@ class FlowServiceImpl(
     @Throws(ThainException::class, ParseException::class, SchedulerException::class)
     override fun add(addFlowRq: AddFlowRq, addJobRqList: List<AddJobRq>, appId: String): Long {
         val localAddFlowRq = if (!addFlowRq.slaKill || addFlowRq.slaDuration == 0L) {
-            addFlowRq.copy(
-                    slaKill = true,
-                    slaDuration = 3L * 60 * 60
-            )
+            addFlowRq.copy(slaKill = true, slaDuration = 3L * 60 * 60)
         } else {
             addFlowRq
-        }
+        }.copy(createAppId = appId)
         val localAddFlowRqId = localAddFlowRq.id
         if (localAddFlowRqId != null && flowDao.flowExist(localAddFlowRqId)) {
             val updateFlowRq = UpdateFlowRq(localAddFlowRq, localAddFlowRqId)

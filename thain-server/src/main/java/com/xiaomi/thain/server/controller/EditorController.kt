@@ -33,7 +33,7 @@ class EditorController(private val flowService: FlowService,
     fun addFlow(@RequestBody json: String): ApiResult {
         return try {
             val gson = Gson()
-            val addRq = gson.fromJson(json, AddFlowAndJobsRq::class.java)
+            val addRq = gson.fromJson(json, AddFlowAndJobsRq::class.java).copy()
             add(addRq.copy(flowModel = addRq.flowModel.copy(createUser = ThreadLocalUser.getUsername())), "thain")
         } catch (e: Exception) {
             log.error("", e)

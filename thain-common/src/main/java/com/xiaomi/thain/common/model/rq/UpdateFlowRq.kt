@@ -28,14 +28,6 @@ data class UpdateFlowRq(
         val slaDuration: Long?,
         val slaEmail: String?,
         val slaKill: Boolean = false
-//    /**
-//     * 最后一次运行状态,com.xiaomi.thain.common.constant.FlowLastRunStatus
-//     */
-//    val lastRunStatus: Int?,
-//    /**
-//     * 调度状态，1 调度中、2 暂停调度、（3 未设置调度{只运行一次的任务}）
-//     */
-//    val schedulingStatus: Int? = null
 ) {
     constructor(addFlowRq: AddFlowRq, id: Long) : this(
             id, addFlowRq.name, addFlowRq.cron,

@@ -34,7 +34,7 @@ public class AddJobDp {
                 addJobRq.getCondition(),
                 addJobRq.getComponent(),
                 addJobRq.getCallbackUrl(),
-                addJobRq.getProperties(),
+                addJobRq.getPropertiesString(),
                 addJobRq.getXAxis(),
                 addJobRq.getYAxis());
     }

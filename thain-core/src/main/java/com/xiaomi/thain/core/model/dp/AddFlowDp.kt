@@ -5,6 +5,7 @@
  */
 package com.xiaomi.thain.core.model.dp
 
+import com.xiaomi.thain.common.exception.ThainException
 import com.xiaomi.thain.common.model.rq.kt.AddFlowRq
 
 /**
@@ -25,22 +26,22 @@ data class AddFlowDp(
          */
         val pauseContinuousFailure: Long?,
         val emailContinuousFailure: String?,
-        val createUser: String?,
+        val createUser: String,
         val callbackUrl: String?,
         val callbackEmail: String?,
         /**
          * 创建的appId,"thain" 为网页创建
          */
-        val createAppId: String,
+        val createAppId: String?,
         /**
          * 秒时间戳
          */
-        val slaDuration: Long = 0,
+        val slaDuration: Long?,
         val slaEmail: String?,
         val slaKill: Boolean = false,
-        val retryNumbers: Int,
-        val timeInterval: Int,
-        val flowSchedulingStatus: Int
+        val retryNumbers: Int?,
+        val timeInterval: Int?,
+        val schedulingStatus: Int
 ) {
     constructor(addFlowRq: AddFlowRq, flowSchedulingStatus: Int) : this(
             null,
@@ -49,10 +50,10 @@ data class AddFlowDp(
             addFlowRq.modifyCallbackUrl,
             addFlowRq.pauseContinuousFailure,
             addFlowRq.emailContinuousFailure,
-            addFlowRq.createUser,
+            addFlowRq.createUser ?: throw ThainException("No set create user"),
             addFlowRq.callbackUrl,
             addFlowRq.callbackEmail,
-            addFlowRq.createAppId,
+            addFlowRq.createAppId ?: throw ThainException("No set create app id"),
             addFlowRq.slaDuration,
             addFlowRq.slaEmail,
             addFlowRq.slaKill,

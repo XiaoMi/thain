@@ -72,7 +72,7 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
      */
     @Throws(SchedulerException::class, ThainException::class, ParseException::class)
     fun updateFlow(updateFlowRq: UpdateFlowRq, jobModelList: List<AddJobRq>) {
-        val schedulingStatus = if (updateFlowRq.cron != null) {
+        val schedulingStatus = if (!updateFlowRq.cron.isNullOrBlank()) {
             CronExpression.validateExpression(updateFlowRq.cron)
             schedulerEngine.addFlow(updateFlowRq.id, updateFlowRq.cron!!)
             processEngine.getFlow(updateFlowRq.id).schedulingStatus

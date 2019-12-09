@@ -96,7 +96,7 @@ public class CheckServiceImpl implements CheckService {
         out:
         for (val item : componentDefine) {
             if (item.required) {
-                for (val prop : addJobRq.getPropertiesMap().keySet()) {
+                for (val prop : addJobRq.getProperties().keySet()) {
                     if (item.property.equals(prop)) {
                         continue out;
                     }

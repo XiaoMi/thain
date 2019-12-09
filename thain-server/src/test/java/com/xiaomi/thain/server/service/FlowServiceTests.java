@@ -13,7 +13,7 @@ import com.xiaomi.thain.common.constant.FlowSchedulingStatus;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.common.model.rq.AddFlowRq;
+import com.xiaomi.thain.common.model.rq.AddJobRq;
 import com.xiaomi.thain.server.Application;
 import com.xiaomi.thain.server.service.impl.FlowServiceImpl;
 import lombok.val;
@@ -52,7 +52,7 @@ public class FlowServiceTests {
                                         "method", "GET",
                                         "contentType", "application/json",
                                         "url", "https://github.com"
-                                )).build()), com.xiaomi.thain.common.model.rq.kt.AddJobRq.class));
+                                )).build()), AddJobRq.class));
         val flowId = flowService.add(addFlowRq, jobs, "thain");
         TimeUnit.SECONDS.sleep(10);
         val flow = flowService.getFlow(flowId);

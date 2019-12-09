@@ -9,8 +9,8 @@ import com.xiaomi.thain.common.exception.ThainException
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
 import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
-import com.xiaomi.thain.common.model.rq.kt.AddFlowRq
-import com.xiaomi.thain.common.model.rq.kt.AddJobRq
+import com.xiaomi.thain.common.model.rq.AddFlowRq
+import com.xiaomi.thain.common.model.rq.AddJobRq
 import com.xiaomi.thain.server.model.sp.FlowListSp
 import org.quartz.SchedulerException
 import org.springframework.stereotype.Service

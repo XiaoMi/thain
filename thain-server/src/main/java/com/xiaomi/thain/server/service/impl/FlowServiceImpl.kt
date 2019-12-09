@@ -13,9 +13,9 @@ import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.rq.UpdateFlowRq
 import com.xiaomi.thain.core.ThainFacade
 import com.xiaomi.thain.server.dao.FlowDao
-import com.xiaomi.thain.common.model.rq.kt.AddFlowAndJobsRq
-import com.xiaomi.thain.common.model.rq.kt.AddFlowRq
-import com.xiaomi.thain.common.model.rq.kt.AddJobRq
+import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
+import com.xiaomi.thain.common.model.rq.AddFlowRq
+import com.xiaomi.thain.common.model.rq.AddJobRq
 import com.xiaomi.thain.server.model.sp.FlowListSp
 import com.xiaomi.thain.server.service.FlowService
 import lombok.extern.slf4j.Slf4j

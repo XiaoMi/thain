@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
-import com.xiaomi.thain.common.model.rq.kt.AddFlowAndJobsRq;
+import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq;
 import com.xiaomi.thain.server.controller.EditorController;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;

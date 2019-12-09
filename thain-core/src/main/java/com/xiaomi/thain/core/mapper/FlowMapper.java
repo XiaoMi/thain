@@ -5,11 +5,7 @@
  */
 package com.xiaomi.thain.core.mapper;
 
-import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.dp.UpdateFlowDp;
-import com.xiaomi.thain.common.model.rq.kt.AddFlowRq;
-import com.xiaomi.thain.common.model.rq.UpdateFlowRq;
-import com.xiaomi.thain.common.model.rq.kt.AddJobRq;
 import com.xiaomi.thain.core.model.dp.AddFlowDp;
 import com.xiaomi.thain.core.model.dp.AddJobDp;
 import lombok.NonNull;

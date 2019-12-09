@@ -6,8 +6,8 @@
 package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.common.exception.ThainException;
-import com.xiaomi.thain.common.model.rq.kt.AddFlowRq;
-import com.xiaomi.thain.common.model.rq.kt.AddJobRq;
+import com.xiaomi.thain.common.model.rq.AddFlowRq;
+import com.xiaomi.thain.common.model.rq.AddJobRq;
 import lombok.NonNull;
 
 import java.util.List;

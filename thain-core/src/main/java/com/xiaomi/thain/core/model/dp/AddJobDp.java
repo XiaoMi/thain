@@ -1,6 +1,6 @@
 package com.xiaomi.thain.core.model.dp;
 
-import com.xiaomi.thain.common.model.rq.kt.AddJobRq;
+import com.xiaomi.thain.common.model.rq.AddJobRq;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 

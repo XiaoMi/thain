@@ -8,7 +8,7 @@ package com.xiaomi.thain.server.controller
 import com.google.gson.Gson
 import com.xiaomi.thain.common.entity.ApiResult
 import com.xiaomi.thain.server.handler.ThreadLocalUser
-import com.xiaomi.thain.common.model.rq.kt.AddFlowAndJobsRq
+import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
 import com.xiaomi.thain.server.service.CheckService
 import com.xiaomi.thain.server.service.FlowService
 import lombok.extern.slf4j.Slf4j

@@ -13,8 +13,8 @@ import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerException
 import com.xiaomi.thain.common.model.dp.UpdateFlowDp
 import com.xiaomi.thain.common.model.rq.UpdateFlowRq
-import com.xiaomi.thain.common.model.rq.kt.AddFlowAndJobsRq
-import com.xiaomi.thain.common.model.rq.kt.AddJobRq
+import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
+import com.xiaomi.thain.common.model.rq.AddJobRq
 import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineConfiguration
 import com.xiaomi.thain.core.scheduler.SchedulerEngine

@@ -76,10 +76,10 @@ public class FlowExecutionService {
                                  @NonNull ProcessEngineStorage processEngineStorage) {
         this.processEngineStorage = processEngineStorage;
         this.flowExecutionId = flowExecutionId;
-        this.flowService = FlowService.getInstance(flowDr.id, processEngineStorage);
+        this.flowService = FlowService.getInstance(flowDr.getId(), processEngineStorage);
         this.flowExecutionLogHandler = FlowExecutionLogHandler.getInstance(flowExecutionId, processEngineStorage);
         this.flowExecutionDao = processEngineStorage.flowExecutionDao;
-        this.mailNotice = processEngineStorage.getMailNotice(flowDr.callbackEmail);
+        this.mailNotice = processEngineStorage.getMailNotice(flowDr.getCallbackEmail());
         this.flowDr = flowDr;
     }
 
@@ -163,16 +163,16 @@ public class FlowExecutionService {
      * 连续失败暂停任务
      */
     private void checkContinuousFailure() throws ThainException, IOException, MessagingException {
-        if (flowDr.pauseContinuousFailure > 0) {
-            val latest = flowExecutionDao.getLatest(flowDr.id, flowDr.pauseContinuousFailure).orElseGet(Collections::emptyList);
+        if (flowDr.getPauseContinuousFailure() > 0) {
+            val latest = flowExecutionDao.getLatest(flowDr.getId(), flowDr.getPauseContinuousFailure()).orElseGet(Collections::emptyList);
             val count = latest.stream().filter(t -> FlowExecutionStatus.getInstance(t.status) == FlowExecutionStatus.ERROR).count();
-            if (count >= flowDr.pauseContinuousFailure - 1) {
-                ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade.pauseFlow(flowDr.id);
-                if (StringUtils.isNotBlank(flowDr.emailContinuousFailure)) {
+            if (count >= flowDr.getPauseContinuousFailure() - 1) {
+                ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade.pauseFlow(flowDr.getId());
+                if (StringUtils.isNotBlank(flowDr.getEmailContinuousFailure())) {
                     processEngineStorage.mailService.send(
-                            flowDr.emailContinuousFailure.trim().split(","),
+                            flowDr.getEmailContinuousFailure().trim().split(","),
                             "Thain 任务连续失败通知",
-                            "您的任务：" + flowDr.name + ", 连续失败了" + flowDr.pauseContinuousFailure + "次，任务已经暂停。最近一次失败原因：" + errorMessage
+                            "您的任务：" + flowDr.getName() + ", 连续失败了" + flowDr.getPauseContinuousFailure() + "次，任务已经暂停。最近一次失败原因：" + errorMessage
                     );
                 }
             }

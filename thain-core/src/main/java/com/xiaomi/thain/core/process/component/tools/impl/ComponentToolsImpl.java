@@ -5,7 +5,7 @@
  */
 package com.xiaomi.thain.core.process.component.tools.impl;
 
-import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dr.JobDr;
 import com.xiaomi.thain.common.utils.HttpUtils;
 import com.xiaomi.thain.component.tools.ComponentTools;
 import com.xiaomi.thain.core.constant.LogLevel;
@@ -28,7 +28,7 @@ import javax.mail.MessagingException;
 public class ComponentToolsImpl implements ComponentTools {
 
     @NonNull
-    private final JobModel jobModel;
+    private final JobDr jobDr;
     @NonNull
     private final FlowExecutionStorage flowExecutionStorage;
     @NonNull
@@ -38,13 +38,13 @@ public class ComponentToolsImpl implements ComponentTools {
 
     private final long jobExecutionId;
 
-    public ComponentToolsImpl(@NonNull JobModel jobModel,
+    public ComponentToolsImpl(@NonNull JobDr jobDr,
                               long jobExecutionId,
                               long flowExecutionId,
                               @NonNull ProcessEngineStorage processEngineStorage) {
         this.jobExecutionId = jobExecutionId;
         this.mailService = processEngineStorage.mailService;
-        this.jobModel = jobModel;
+        this.jobDr = jobDr;
         this.flowExecutionStorage = FlowExecutionStorage.getInstance(flowExecutionId);
         this.log = JobExecutionLogHandler.getInstance(jobExecutionId, processEngineStorage);
     }
@@ -57,20 +57,20 @@ public class ComponentToolsImpl implements ComponentTools {
     /**
      * 保存当前节点产生的数据
      *
-     * @param key 数据的key
+     * @param key   数据的key
      * @param value 数据的value
      */
     @Override
     public void putStorage(@NonNull final String key, @NonNull final Object value) {
-        flowExecutionStorage.put(jobModel.name, key, value);
+        flowExecutionStorage.put(jobDr.getName(), key, value);
     }
 
     /**
      * 获取流程已经产生的数据
      *
      * @param jobName 节点名称
-     * @param key key
-     * @param <T> 自动强制转换
+     * @param key     key
+     * @param <T>     自动强制转换
      * @return 返回对应值的Optional
      */
     @Override
@@ -81,10 +81,10 @@ public class ComponentToolsImpl implements ComponentTools {
     /**
      * 获取流程已经产生的数据
      *
-     * @param jobName 节点名称
-     * @param key key
+     * @param jobName      节点名称
+     * @param key          key
      * @param defaultValue 默认值
-     * @param <T> 自动强制转换
+     * @param <T>          自动强制转换
      * @return 返回对应值, 值不存在则返回defaultValue
      */
     @Override

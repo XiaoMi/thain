@@ -9,7 +9,7 @@ package com.xiaomi.thain.core.process.runtime.executor;
 import com.xiaomi.thain.common.exception.JobExecuteException;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.model.JobExecutionModel;
-import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dr.JobDr;
 import com.xiaomi.thain.component.tools.ComponentTools;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import com.xiaomi.thain.core.process.component.tools.impl.ComponentToolsImpl;
@@ -31,7 +31,7 @@ import java.util.Optional;
 public class JobExecutor {
 
     @NonNull
-    private final JobModel jobModel;
+    private final JobDr jobDr;
     private final long jobExecutionModelId;
     private final long flowExecutionId;
 
@@ -43,25 +43,25 @@ public class JobExecutor {
     private final JobHttpNotice jobHttpNotice;
 
     private JobExecutor(long flowExecutionId,
-                        @NonNull JobModel jobModel,
+                        @NonNull JobDr jobDr,
                         @NonNull JobExecutionModel jobExecutionModel,
                         @NonNull ProcessEngineStorage processEngineStorage) {
-        this.jobModel = jobModel;
+        this.jobDr = jobDr;
         this.flowExecutionId = flowExecutionId;
         this.processEngineStorage = processEngineStorage;
         this.jobExecutionModelId = jobExecutionModel.id;
-        this.jobExecutionService = JobExecutionService.getInstance(jobExecutionModelId, jobModel.name, processEngineStorage);
-        this.jobHttpNotice = JobHttpNotice.getInstance(jobModel.callbackUrl, jobModel.flowId, flowExecutionId);
+        this.jobExecutionService = JobExecutionService.getInstance(jobExecutionModelId, jobDr.getName(), processEngineStorage);
+        this.jobHttpNotice = JobHttpNotice.getInstance(jobDr.getCallbackUrl(), jobDr.getFlowId(), flowExecutionId);
     }
 
     /**
      * 执行job, 返回是否执行完成
      */
     public static void start(long flowExecutionId,
-                             @NonNull JobModel jobModel,
+                             @NonNull JobDr jobDr,
                              @NonNull JobExecutionModel jobExecutionModel,
                              @NonNull ProcessEngineStorage processEngineStorage) throws JobExecuteException {
-        val jobExecutor = new JobExecutor(flowExecutionId, jobModel, jobExecutionModel, processEngineStorage);
+        val jobExecutor = new JobExecutor(flowExecutionId, jobDr, jobExecutionModel, processEngineStorage);
         jobExecutor.run();
     }
 
@@ -94,7 +94,7 @@ public class JobExecutor {
      * 执行组件
      */
     private void execute() throws ThainException {
-        val clazz = processEngineStorage.componentService.getComponentClass(jobModel.component)
+        val clazz = processEngineStorage.componentService.getComponentClass(jobDr.getComponent())
                 .orElseThrow(() -> new ThainException("component does not exist"));
         try {
             val instance = clazz.getConstructor().newInstance();
@@ -102,11 +102,11 @@ public class JobExecutor {
             for (val field : fields) {
                 field.setAccessible(true);
                 if (ComponentTools.class.isAssignableFrom(field.getType())) {
-                    field.set(instance, new ComponentToolsImpl(jobModel, jobExecutionModelId, flowExecutionId, processEngineStorage));
+                    field.set(instance, new ComponentToolsImpl(jobDr, jobExecutionModelId, flowExecutionId, processEngineStorage));
                     continue;
                 }
                 if (field.getType().isAssignableFrom(String.class)) {
-                    val v = Optional.ofNullable(jobModel.properties).map(t -> t.get(field.getName()));
+                    val v = Optional.ofNullable(jobDr.getPropertiesMap()).map(t -> t.get(field.getName()));
                     if (v.isPresent()) {
                         field.set(instance, v.get());
                     }

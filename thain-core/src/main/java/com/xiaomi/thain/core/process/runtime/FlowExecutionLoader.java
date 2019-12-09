@@ -92,7 +92,7 @@ public class FlowExecutionLoader {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.KILLED.code);
             return new ThainException("flow does not exist");
         });
-        val flowLastRunStatus = FlowLastRunStatus.getInstance(flowModel.lastRunStatus);
+        val flowLastRunStatus = FlowLastRunStatus.getInstance(flowModel.getLastRunStatus());
         if (flowLastRunStatus == FlowLastRunStatus.RUNNING) {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.DO_NOT_RUN_SAME_TIME.code);
             throw new ThainRepeatExecutionException("flow is running");

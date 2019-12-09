@@ -6,8 +6,8 @@
 package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.common.exception.ThainException;
-import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.common.model.rq.AddFlowRq;
+import com.xiaomi.thain.common.model.rq.kt.AddFlowRq;
+import com.xiaomi.thain.common.model.rq.kt.AddJobRq;
 import lombok.NonNull;
 
 import java.util.List;
@@ -27,5 +27,5 @@ public interface CheckService {
      */
     void checkFlowModel(@NonNull AddFlowRq addFlowRq) throws ThainException;
 
-    void checkJobModelList(@NonNull List<JobModel> jobModelList) throws ThainException;
+    void checkJobModelList(@NonNull List<AddJobRq> jobModelList) throws ThainException;
 }

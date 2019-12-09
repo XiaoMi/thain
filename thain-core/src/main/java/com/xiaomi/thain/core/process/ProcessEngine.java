@@ -12,8 +12,9 @@ import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
-import com.xiaomi.thain.common.model.rq.AddFlowRq;
+import com.xiaomi.thain.common.model.rq.kt.AddFlowRq;
 import com.xiaomi.thain.common.model.rq.UpdateFlowRq;
+import com.xiaomi.thain.common.model.rq.kt.AddJobRq;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.core.config.DatabaseHandler;
 import com.xiaomi.thain.core.dao.*;
@@ -26,6 +27,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -169,24 +171,22 @@ public class ProcessEngine {
      * 插入flow
      * 成功返回 flow id
      */
-    public Optional<Long> addFlow(@NonNull AddFlowRq addFlowRq, @NonNull List<JobModel> jobModelList) {
+    public Optional<Long> addFlow(@NonNull AddFlowRq addFlowRq, @NonNull List<AddJobRq> jobModelList) {
         try {
-            int schedulingStatus = NOT_SET.code;
-            if (StringUtils.isNotBlank(addFlowRq.cron)) {
-                schedulingStatus = SCHEDULING.code;
+            var schedulingStatus = NOT_SET;
+            if (StringUtils.isNotBlank(addFlowRq.getCron())) {
+                schedulingStatus = SCHEDULING;
             }
-            val cloneFlowModel = addFlowRq.toBuilder().schedulingStatus(schedulingStatus).build();
-            processEngineStorage.flowDao.addFlow(cloneFlowModel, jobModelList);
-            return Optional.ofNullable(cloneFlowModel.id);
+            return processEngineStorage.flowDao.addFlow(addFlowRq, jobModelList, schedulingStatus);
         } catch (Exception e) {
             log.error("addFlow:", e);
         }
         return Optional.empty();
     }
 
-    public void updateFlow(@NonNull UpdateFlowRq updateFlowRq, @NonNull List<JobModel> jobModelList) {
-        processEngineStorage.flowDao.updateFlow(updateFlowRq, jobModelList);
-    }
+//    public void updateFlow(@NonNull UpdateFlowRq updateFlowRq, @NonNull List<AddJobRq> jobModelList) {
+//        processEngineStorage.flowDao.updateFlow(updateFlowRq, jobModelList);
+//    }
 
     /**
      * 删除flow

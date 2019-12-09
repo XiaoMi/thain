@@ -8,7 +8,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaomi.thain.core.mapper.FlowMapper">
 
-    <insert id="addFlow" parameterType="com.xiaomi.thain.common.model.rq.AddFlowRq" useGeneratedKeys="true"
+    <insert id="addFlow" parameterType="com.xiaomi.thain.core.model.dp.AddFlowDp" useGeneratedKeys="true"
             keyProperty="id">
         insert into thain_flow (name,
         <if test="cron != null">
@@ -99,7 +99,7 @@
             </choose>
             ,
             <choose>
-                <when test="job.propertiesString != null">#{job.propertiesString}</when>
+                <when test="job.properties != null">#{job.properties}</when>
                 <otherwise>''</otherwise>
             </choose>
             ,
@@ -118,7 +118,7 @@
         </foreach>
     </insert>
 
-    <update id="updateFlow" parameterType="com.xiaomi.thain.common.model.rq.UpdateFlowRq">
+    <update id="updateFlow" parameterType="com.xiaomi.thain.common.model.dp.UpdateFlowDp">
         update thain_flow
         set `id`= #{id},
         <if test="name != null and name != ''">

@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
-import com.xiaomi.thain.common.model.rq.AddRq;
+import com.xiaomi.thain.common.model.rq.kt.AddFlowAndJobsRq;
 import com.xiaomi.thain.server.controller.FlowController;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;
@@ -53,8 +53,10 @@ public class X5FlowController {
     public ApiResult add(@NonNull @RequestBody String json, @NonNull String appId) {
         try {
             Gson gson = new Gson();
-            val addRq = gson.fromJson(json, AddRq.class);
-            return flowController.add(addRq, appId);
+            val addRq = gson.fromJson(json, AddFlowAndJobsRq.class);
+            //todo
+//            return flowController.add(addRq, appId);
+            return null;
         } catch (Exception e) {
             log.error("add:", e);
             return ApiResult.fail(e.getMessage());

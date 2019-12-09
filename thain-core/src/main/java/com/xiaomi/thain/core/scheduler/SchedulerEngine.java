@@ -99,11 +99,11 @@ public class SchedulerEngine {
         JobDetail jobDetail = newJob(SlaJob.class)
                 .withIdentity("flowExecution_" + flowExecutionId, "flowExecution")
                 .usingJobData("flowExecutionId", flowExecutionId)
-                .usingJobData("flowId", flowDr.id)
+                .usingJobData("flowId", flowDr.getId())
                 .build();
         Trigger trigger = newTrigger()
                 .withIdentity("trigger_" + flowExecutionId, "flowExecution")
-                .startAt(Date.from(Instant.now().plusSeconds(flowDr.slaDuration)))
+                .startAt(Date.from(Instant.now().plusSeconds(flowDr.getSlaDuration())))
                 .build();
         scheduler.deleteJob(jobDetail.getKey());
         scheduler.scheduleJob(jobDetail, trigger);

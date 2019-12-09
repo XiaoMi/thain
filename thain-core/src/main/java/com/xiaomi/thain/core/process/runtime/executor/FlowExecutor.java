@@ -17,6 +17,7 @@ import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
+import com.xiaomi.thain.common.model.dr.JobDr;
 import com.xiaomi.thain.core.constant.FlowExecutionTriggerType;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
@@ -68,7 +69,7 @@ public class FlowExecutor {
      * 当前未执行的节点
      */
     @NonNull
-    private Collection<JobModel> notExecutedJobsPool;
+    private Collection<JobDr> notExecutedJobsPool;
     /**
      * 监控节点是否执行完
      */
@@ -87,17 +88,16 @@ public class FlowExecutor {
         this.jobFutureQueue = new ConcurrentLinkedQueue<>();
         try {
             this.flowExecutionId = flowExecutionDr.id;
-            val jobModelList = processEngineStorage.jobDao.getJobs(flowDr.id)
-                    .orElseThrow(ThainFlowRunningException::new);
+            val jobModelList = processEngineStorage.jobDao.getJobs(flowDr.getId());
             this.flowExecutionService = FlowExecutionService.getInstance(flowExecutionId, flowDr, processEngineStorage);
             this.notExecutedJobsPool = ImmutableList.copyOf(jobModelList);
             this.jobConditionChecker = JobConditionChecker.getInstance(flowExecutionId);
             this.flowExecutionStorage = FlowExecutionStorage.getInstance(flowExecutionId);
-            this.flowHttpNotice = FlowHttpNotice.getInstance(flowDr.callbackUrl, flowDr.id, flowExecutionId);
+            this.flowHttpNotice = FlowHttpNotice.getInstance(flowDr.getCallbackUrl(), flowDr.getId(), flowExecutionId);
             this.flowExecutionJobThreadPool = processEngineStorage.flowExecutionJobThreadPool(flowExecutionId);
-            this.jobExecutionModelMap = jobModelList.stream().collect(toMap(t -> t.id, t -> {
+            this.jobExecutionModelMap = jobModelList.stream().collect(toMap(t -> t.getId(), t -> {
                 val jobExecutionModel = JobExecutionModel.builder()
-                        .jobId(t.id)
+                        .jobId(t.getId())
                         .flowExecutionId(flowExecutionId)
                         .status(JobExecutionStatus.NEVER.code)
                         .build();
@@ -106,7 +106,7 @@ public class FlowExecutor {
             }));
         } catch (Exception e) {
             log.error("", e);
-            throw new ThainCreateFlowExecutionException(flowDr.id, e.getMessage());
+            throw new ThainCreateFlowExecutionException(flowDr.getId(), e.getMessage());
         }
     }
 
@@ -132,10 +132,10 @@ public class FlowExecutor {
         try {
             flowExecutionService.startFlowExecution();
             flowHttpNotice.sendStart();
-            if (flowDr.slaDuration > 0) {
+            if (flowDr.getSlaDuration() > 0) {
                 ProcessEngine.getInstance(processEngineStorage.processEngineId)
                         .thainFacade
-                        .schedulerEngine
+                        .getSchedulerEngine()
                         .addSla(flowExecutionId, flowDr);
             }
             runExecutableJobs();
@@ -188,25 +188,25 @@ public class FlowExecutor {
         val executableJobs = getExecutableJobs();
         executableJobs.forEach(job -> {
             val future = CompletableFuture.runAsync(() -> {
-                flowExecutionService.addInfo("Start executing the job [" + job.name + "]");
+                flowExecutionService.addInfo("Start executing the job [" + job.getName() + "]");
                 try {
-                    JobExecutor.start(flowExecutionId, job, jobExecutionModelMap.get(job.id), processEngineStorage);
+                    JobExecutor.start(flowExecutionId, job, jobExecutionModelMap.get(job.getId()), processEngineStorage);
                 } catch (Exception e) {
-                    flowExecutionService.addError("Job[" + job.name + "] exception: "
+                    flowExecutionService.addError("Job[" + job.getName() + "] exception: "
                             + ExceptionUtils.getRootCauseMessage(e));
                     return;
                 }
-                flowExecutionService.addInfo("Execute job[" + job.name + "] complete");
-                flowExecutionStorage.addFinishJob(job.name);
+                flowExecutionService.addInfo("Execute job[" + job.getName() + "] complete");
+                flowExecutionStorage.addFinishJob(job.getName());
                 runExecutableJobs();
             }, flowExecutionJobThreadPool);
             jobFutureQueue.add(future);
         });
     }
 
-    private Collection<JobModel> getExecutableJobs() {
+    private Collection<JobDr> getExecutableJobs() {
         val executableJobs = notExecutedJobsPool.stream()
-                .filter(t -> jobConditionChecker.executable(t.condition)).collect(toSet());
+                .filter(t -> jobConditionChecker.executable(t.getCondition())).collect(toSet());
         notExecutedJobsPool = notExecutedJobsPool.stream()
                 .filter(t -> !executableJobs.contains(t)).collect(toList());
         return executableJobs;

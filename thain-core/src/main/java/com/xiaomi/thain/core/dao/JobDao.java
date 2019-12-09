@@ -6,6 +6,7 @@
 package com.xiaomi.thain.core.dao;
 
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dr.JobDr;
 import com.xiaomi.thain.core.mapper.JobMapper;
 import com.xiaomi.thain.core.process.service.MailService;
 import lombok.AccessLevel;
@@ -19,6 +20,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+
+import static java.util.Collections.emptyList;
 
 /**
  * Date 19-5-17 下午5:22
@@ -55,7 +58,7 @@ public class JobDao {
         }
     }
 
-    public Optional<List<JobModel>> getJobs(long flowId) {
-        return execute(t -> t.getJobs(flowId));
+    public List<JobDr> getJobs(long flowId) {
+        return execute(t -> t.getJobs(flowId)).orElse(emptyList());
     }
 }

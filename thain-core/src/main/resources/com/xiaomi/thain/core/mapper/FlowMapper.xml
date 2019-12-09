@@ -37,7 +37,7 @@
         <if test="createAppId != null">
             create_app_id,
         </if>
-        <if test="slaDuration">
+        <if test="slaDuration != null">
             sla_duration,
         </if>
         <if test="slaEmail != null">
@@ -49,6 +49,12 @@
         last_run_status,
         <if test="schedulingStatus != null">
             scheduling_status,
+        </if>
+        <if test="retryNumber != null">
+            retry_number,
+        </if>
+        <if test="timeInterval != null">
+            time_interval,
         </if>
         create_time, update_time, status_update_time)
         values (
@@ -87,6 +93,12 @@
         1,
         <if test="schedulingStatus != null">
             #{schedulingStatus},
+        </if>
+        <if test="retryNumber != null">
+            #{retryNumber},
+        </if>
+        <if test="timeInterval != null">
+            #{timeInterval},
         </if>
         now(), now(), now())
     </insert>
@@ -171,6 +183,12 @@
         <if test="schedulingStatus != null">
             `scheduling_status` = #{schedulingStatus},
         </if>
+        <if test="retryNumber != null">
+            `retry_number` = #{retryNumber},
+        </if>
+        <if test="timeInterval != null">
+            `time_interval` = #{timeInterval},
+        </if>
         `update_time` = now()
         where id = #{id}
     </update>
@@ -218,6 +236,8 @@
                sla_kill,
                last_run_status,
                scheduling_status,
+               retry_number,
+               time_interval,
                create_time,
                update_time,
                status_update_time,

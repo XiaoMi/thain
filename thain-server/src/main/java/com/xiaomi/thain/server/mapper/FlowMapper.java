@@ -28,6 +28,9 @@ public interface FlowMapper {
 
     boolean getAppIdAccessible(@Param("flowId") long flowId, @NonNull @Param("appId") String appId);
 
+    /**
+     * @deprecated should use dr
+     */
     List<FlowModel> getFlowList(@NonNull FlowListSp flowListSp);
 
     Long getFlowListCount(@NonNull FlowListSp flowListSp);
@@ -38,6 +41,9 @@ public interface FlowMapper {
 
     Long getFlowIdByFlowExecutionId(long flowExecutionId);
 
+    /**
+     * @deprecated should use dr
+     */
     FlowModel getFlow(long flowId);
 
     List<JobModel> getJobModelList(long flowId);

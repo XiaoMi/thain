@@ -12,10 +12,8 @@
             resultType="com.xiaomi.thain.common.model.FlowModel">
         select
         id, name, cron, modify_callback_url, pause_continuous_failure, email_continuous_failure, create_user,
-        callback_url,
-        callback_email, create_app_id, sla_duration, sla_email, sla_kill, last_run_status, scheduling_status,
-        create_time, update_time,
-        status_update_time, deleted
+        callback_url, callback_email, create_app_id, sla_duration, sla_email, sla_kill, last_run_status,
+        scheduling_status, retry_number, time_interval, create_time, update_time, status_update_time, deleted
         from thain_flow where deleted != 1
         <if test="flowId != null and flowId > 0">
             and id = #{flowId}
@@ -120,6 +118,8 @@
                sla_kill,
                last_run_status,
                scheduling_status,
+               retry_number,
+               time_interval,
                create_time,
                update_time,
                status_update_time,

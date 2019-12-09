@@ -26,23 +26,42 @@ data class UpdateFlowRq(
          */
         val slaDuration: Long?,
         val slaEmail: String?,
-        val slaKill: Boolean = false
+        val slaKill: Boolean = false,
+        val retryNumber: Int?,
+        val timeInterval: Int?
 ) {
+
     constructor(addFlowRq: AddFlowRq, id: Long) : this(
-            id, addFlowRq.name, addFlowRq.cron,
+            id,
+            addFlowRq.name,
+            addFlowRq.cron,
             addFlowRq.modifyCallbackUrl,
             addFlowRq.pauseContinuousFailure,
             addFlowRq.emailContinuousFailure,
             addFlowRq.callbackUrl,
             addFlowRq.callbackEmail,
             addFlowRq.slaDuration,
-            addFlowRq.slaEmail
+            addFlowRq.slaEmail,
+            addFlowRq.slaKill,
+            addFlowRq.retryNumber,
+            addFlowRq.timeInterval
     )
 
-    constructor(flowDr: FlowDr) : this(flowDr.id,
-            flowDr.name, flowDr.cron, flowDr.modifyCallbackUrl, flowDr.pauseContinuousFailure,
+    constructor(flowDr: FlowDr) : this(
+            flowDr.id,
+            flowDr.name,
+            flowDr.cron,
+            flowDr.modifyCallbackUrl,
+            flowDr.pauseContinuousFailure,
             flowDr.emailContinuousFailure,
-            flowDr.callbackUrl, flowDr.callbackEmail, flowDr.slaDuration, flowDr.slaEmail)
+            flowDr.callbackUrl,
+            flowDr.callbackEmail,
+            flowDr.slaDuration,
+            flowDr.slaEmail,
+            flowDr.slaKill,
+            flowDr.retryNumber,
+            flowDr.timeInterval
+    )
 
 }
 

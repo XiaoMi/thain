@@ -27,14 +27,12 @@ data class UpdateFlowDp(
         val slaDuration: Long?,
         val slaEmail: String?,
         val slaKill: Boolean = false,
-//    /**
-//     * 最后一次运行状态,com.xiaomi.thain.common.constant.FlowLastRunStatus
-//     */
-//    val lastRunStatus: Int?,
         /**
          * 调度状态，1 调度中、2 暂停调度、（3 未设置调度{只运行一次的任务}）
          */
-        val schedulingStatus: Int
+        val schedulingStatus: Int,
+        val retryNumber: Int?,
+        val timeInterval: Int?
 ) {
     constructor(updateFlowRq: UpdateFlowRq, schedulingStatus: Int) : this(
             updateFlowRq.id,
@@ -48,7 +46,9 @@ data class UpdateFlowDp(
             updateFlowRq.slaDuration,
             updateFlowRq.slaEmail,
             updateFlowRq.slaKill,
-            schedulingStatus
+            schedulingStatus,
+            updateFlowRq.retryNumber,
+            updateFlowRq.timeInterval
     )
 
 }

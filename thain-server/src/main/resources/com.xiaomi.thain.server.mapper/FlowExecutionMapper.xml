@@ -73,6 +73,7 @@
         </if>
         )
     </select>
+
     <select id="getAppIdAccessible" resultType="java.lang.Boolean">
         select count(1)
         from thain_flow as tf
@@ -80,8 +81,8 @@
                 tf.id = tfe.flow_id
                 and tfe.id = #{flowExecutionId}
                 and tf.create_app_id = #{appId}
-
     </select>
+
     <select id="getRunningExecutionIdsByFlowId" resultType="java.lang.Long">
         select id
         from thain_flow_execution

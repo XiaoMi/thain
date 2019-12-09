@@ -41,6 +41,8 @@ data class FlowDr(
          * 调度状态，1 调度中、2 暂停调度、（3 未设置调度{只运行一次的任务}）
          */
         val schedulingStatus: Int = 0,
+        val retryNumber: Int = 0,
+        val timeInterval: Int = 0,
         /**
          * 创建时间
          */

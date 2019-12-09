@@ -11,13 +11,14 @@ import React, { useState } from 'react';
 import { Checkbox, Modal, TimePicker, Form, Input } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { ConnectProps, ConnectState } from '@/models/connect';
-import { connect } from 'dva';
+import { connect, useDispatch } from 'dva';
 import { FlowAttributes } from '@/pages/FlowEditor/model';
 import LineInput from './input/LineInput';
 import TextareaInput from './input/TextareaInput';
 import Button from 'antd/es/button/button';
 import moment, { Moment } from 'moment';
 import { formatMessage } from 'umi-plugin-react/locale';
+import RetryButtonModal from '@/pages/Editor/components/buttonModal/RetryButtonModal';
 
 function getDaySeconds(time: Moment | undefined) {
   if (!time) {
@@ -42,25 +43,18 @@ interface Props extends ConnectProps<{ flowId: number }> {
   flowAttributes: FlowAttributes;
   flowId: number;
 }
-const DetailPanel: React.FC<Props> = ({
-  editor,
-  flowAttributes,
-  flowId,
-  updateGraph,
-  dispatch,
-}) => {
+const DetailPanel: React.FC<Props> = ({ editor, flowAttributes, flowId, updateGraph }) => {
+  const dispatch = useDispatch();
   if (flowId && !flowAttributes.name) {
     return <div />;
   }
   const onBlurFunction = (attr: string, value: any) => {
-    if (dispatch) {
-      dispatch({
-        type: 'flowEditor/changeFlowAttributes',
-        payload: {
-          [attr]: value,
-        },
-      });
-    }
+    dispatch({
+      type: 'flowEditor/changeFlowAttributes',
+      payload: {
+        [attr]: value,
+      },
+    });
   };
 
   function toggleGrid(e: CheckboxChangeEvent) {
@@ -121,6 +115,21 @@ const DetailPanel: React.FC<Props> = ({
         <Button style={{ marginTop: '10px' }} onClick={() => setSlaModalShow(true)}>
           {formatMessage({ id: 'flow.autokill.settings' })}
         </Button>
+        <RetryButtonModal
+          style={{ marginTop: '10px' }}
+          timeInterval={flowAttributes.timeInterval}
+          retryNumbers={flowAttributes.retryNumbers}
+          onSave={(setModelHide, newTimeInterval, newRetryNumbers) => {
+            dispatch({
+              type: 'flowEditor/changeFlowAttributes',
+              payload: {
+                timeInterval: newTimeInterval,
+                retryNumbers: newRetryNumbers,
+              },
+              callback: setModelHide,
+            });
+          }}
+        />
       </div>
 
       <Modal
@@ -128,17 +137,15 @@ const DetailPanel: React.FC<Props> = ({
         visible={slaModalShow}
         onCancel={() => setSlaModalShow(false)}
         onOk={() => {
-          if (dispatch) {
-            dispatch({
-              type: 'flowEditor/changeFlowAttributes',
-              payload: {
-                slaDuration: getDaySeconds(slaTime),
-                slaEmail,
-                slaKill: true,
-              },
-              callback: () => setSlaModalShow(false),
-            });
-          }
+          dispatch({
+            type: 'flowEditor/changeFlowAttributes',
+            payload: {
+              slaDuration: getDaySeconds(slaTime),
+              slaEmail,
+              slaKill: true,
+            },
+            callback: () => setSlaModalShow(false),
+          });
         }}
       >
         <Form layout="vertical">

@@ -35,7 +35,7 @@ export interface FlowAttributes {
   slaDuration?: number;
   slaEmail?: string;
   slaKill?: boolean;
-  retryNumbers?: number;
+  retryNumber?: number;
   timeInterval?: number;
 }
 

@@ -36,6 +36,6 @@ data class AddFlowRq(
         val slaDuration: Long = 0,
         val slaEmail: String?,
         val slaKill: Boolean = false,
-        val retryNumbers: Int,
+        val retryNumber: Int,
         val timeInterval: Int
 )

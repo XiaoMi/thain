@@ -39,7 +39,7 @@ data class AddFlowDp(
         val slaDuration: Long?,
         val slaEmail: String?,
         val slaKill: Boolean = false,
-        val retryNumbers: Int?,
+        val retryNumber: Int?,
         val timeInterval: Int?,
         val schedulingStatus: Int
 ) {
@@ -57,7 +57,7 @@ data class AddFlowDp(
             addFlowRq.slaDuration,
             addFlowRq.slaEmail,
             addFlowRq.slaKill,
-            addFlowRq.retryNumbers,
+            addFlowRq.retryNumber,
             addFlowRq.timeInterval,
             flowSchedulingStatus)
 }

@@ -6,7 +6,7 @@ interface Props {
   /**
    * 保存后触发, 返回是否保存成功
    */
-  onSave: (setModelHide: () => void, timeInterval?: number, retryNumbers?: number) => void;
+  onSave: (setModelHide: () => void, timeInterval?: number, retryNumber?: number) => void;
   /**
    * 当前重试时间间隔，单位s
    */
@@ -14,7 +14,7 @@ interface Props {
   /**
    * 当前重试次数
    */
-  retryNumbers?: number;
+  retryNumber?: number;
   style?: any;
 }
 
@@ -25,12 +25,12 @@ const RetryButtonModal: React.FC<Props> = ({
   onSave,
   style,
   timeInterval: initTimeInterval,
-  retryNumbers: initRetryNumbers,
+  retryNumber: initretryNumber,
 }) => {
   const [modalShow, setModalShow] = useState(false);
   const [timeInterval, setTimeInterval] = useState(initTimeInterval);
-  const [retryNumbers, setRetryNumbers] = useState(initRetryNumbers);
-  const [enableRetry, setEnableRetry] = useState(!!initTimeInterval && !!initRetryNumbers);
+  const [retryNumber, setretryNumber] = useState(initretryNumber);
+  const [enableRetry, setEnableRetry] = useState(!!initTimeInterval && !!initretryNumber);
 
   return (
     <div>
@@ -43,8 +43,8 @@ const RetryButtonModal: React.FC<Props> = ({
         onCancel={() => setModalShow(false)}
         onOk={() => {
           if (enableRetry) {
-            if (timeInterval && retryNumbers) {
-              onSave(() => setModalShow(false), timeInterval, retryNumbers);
+            if (timeInterval && retryNumber) {
+              onSave(() => setModalShow(false), timeInterval, retryNumber);
             } else {
               notification.warn({ message: 'Time interval and retry numbers are all required.' });
             }
@@ -68,7 +68,7 @@ const RetryButtonModal: React.FC<Props> = ({
           {enableRetry && (
             <>
               <Form.Item label={formatMessage({ id: 'editor.retry.numbers' })} required>
-                <InputNumber value={retryNumbers} onChange={setRetryNumbers} />
+                <InputNumber value={retryNumber} onChange={setretryNumber} />
               </Form.Item>
               <Form.Item label={formatMessage({ id: 'editor.retry.time.interval' })} required>
                 <InputNumber value={timeInterval} onChange={setTimeInterval} />

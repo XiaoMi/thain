@@ -14,7 +14,6 @@ import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.common.model.JobExecutionModel;
-import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.common.model.dr.JobDr;

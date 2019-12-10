@@ -79,3 +79,4 @@ Temporary Items
 **/junit-report
 /shell/job_execution*
 .gradle
+build

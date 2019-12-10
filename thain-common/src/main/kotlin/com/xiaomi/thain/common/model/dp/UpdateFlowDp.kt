@@ -1,11 +1,4 @@
-/*
- * Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
- * This source code is licensed under the Apache License Version 2.0, which
- * can be found in the LICENSE file in the root directory of this source tree.
- */
 package com.xiaomi.thain.common.model.dp
-
-import com.xiaomi.thain.common.model.rq.UpdateFlowRq
 
 /**
  * add flow model
@@ -34,7 +27,7 @@ data class UpdateFlowDp(
         val retryNumber: Int?,
         val timeInterval: Int?
 ) {
-    constructor(updateFlowRq: UpdateFlowRq, schedulingStatus: Int) : this(
+    constructor(updateFlowRq: com.xiaomi.thain.common.model.rq.UpdateFlowRq, schedulingStatus: Int) : this(
             updateFlowRq.id,
             updateFlowRq.name,
             updateFlowRq.cron,
@@ -52,4 +45,3 @@ data class UpdateFlowDp(
     )
 
 }
-

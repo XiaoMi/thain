@@ -38,6 +38,7 @@ gen### Java template
 
 # Package Files #
 *.jar
+!gradle-wrapper.jar
 *.war
 *.ear
 *.zip

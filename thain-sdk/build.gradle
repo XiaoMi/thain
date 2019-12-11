@@ -6,5 +6,5 @@ plugins {
 }
 dependencies {
     compile project(':thain-common')
-    testCompile('org.springframework.boot:spring-boot-starter-test:2.2.1.RELEASE')
+    testCompile 'org.springframework.boot:spring-boot-starter-test:2.2.2.RELEASE'
 }

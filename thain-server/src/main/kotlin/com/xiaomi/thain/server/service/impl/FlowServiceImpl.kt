@@ -1,5 +1,6 @@
 package com.xiaomi.thain.server.service.impl
 
+import com.xiaomi.thain.common.model.dr.FlowDr
 import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
 import com.xiaomi.thain.common.model.rq.AddFlowRq
 import com.xiaomi.thain.common.model.rq.AddJobRq
@@ -53,8 +54,8 @@ class FlowServiceImpl(
         return thainFacade.startFlow(flowId)
     }
 
-    override fun getFlow(flowId: Long): com.xiaomi.thain.common.model.FlowModel {
-        return flowDao.getFlow(flowId).orElseThrow { com.xiaomi.thain.common.exception.ThainRuntimeException("Flow does not exist, flow Id:$flowId") }
+    override fun getFlow(flowId: Long): FlowDr? {
+        return flowDao.getFlow(flowId)
     }
 
     override fun getJobModelList(flowId: Long): List<com.xiaomi.thain.common.model.JobModel> {

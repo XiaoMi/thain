@@ -1,5 +1,7 @@
 package com.xiaomi.thain.server.service
 
+import com.xiaomi.thain.common.model.JobModel
+import com.xiaomi.thain.common.model.dr.FlowDr
 import com.xiaomi.thain.common.model.rq.AddFlowRq
 import com.xiaomi.thain.common.model.rq.AddJobRq
 
@@ -28,8 +30,8 @@ interface FlowService {
     @Throws(com.xiaomi.thain.common.exception.ThainException::class, com.xiaomi.thain.common.exception.ThainRepeatExecutionException::class)
     fun start(flowId: Long): Long
 
-    fun getFlow(flowId: Long): com.xiaomi.thain.common.model.FlowModel
-    fun getJobModelList(flowId: Long): List<com.xiaomi.thain.common.model.JobModel>
+    fun getFlow(flowId: Long): FlowDr?
+    fun getJobModelList(flowId: Long): List<JobModel>
     fun getComponentDefineStringMap(): Map<String, String>
     @Throws(com.xiaomi.thain.common.exception.ThainException::class, org.quartz.SchedulerException::class, java.io.IOException::class)
     fun scheduling(flowId: Long)

@@ -102,7 +102,7 @@
         from thain_flow_execution
         where id = #{flowExecutionId}
     </select>
-    <select id="getFlow" resultType="com.xiaomi.thain.common.model.FlowModel">
+    <select id="getFlow" resultType="com.xiaomi.thain.common.model.dr.FlowDr">
         select id,
                name,
                cron,

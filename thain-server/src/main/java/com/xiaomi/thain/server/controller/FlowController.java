@@ -9,6 +9,7 @@ package com.xiaomi.thain.server.controller;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
+import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.model.rp.FlowAllInfoRp;
 import com.xiaomi.thain.server.model.rq.FlowListRq;
 import com.xiaomi.thain.server.model.sp.FlowListSp;
@@ -35,8 +36,6 @@ public class FlowController {
 
     @NonNull
     private final FlowService flowService;
-//    @NonNull
-//    private final CheckService checkService;
     @NonNull
     private final PermissionService permissionService;
     @NonNull
@@ -88,10 +87,11 @@ public class FlowController {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
             val flowModel = flowService.getFlow(flowId);
+            if (flowModel == null) {
+                throw new ThainRuntimeException();
+            }
             val jobModelList = flowService.getJobModelList(flowId);
-            return ApiResult.success(FlowAllInfoRp.builder()
-                    .flowModel(flowModel)
-                    .jobModelList(jobModelList).build());
+            return ApiResult.success(new FlowAllInfoRp(flowModel, jobModelList));
         } catch (Exception e) {
             return ApiResult.fail(ExceptionUtils.getRootCauseMessage(e));
         }

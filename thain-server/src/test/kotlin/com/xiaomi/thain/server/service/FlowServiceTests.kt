@@ -6,9 +6,9 @@
 package com.xiaomi.thain.server.service
 
 import com.alibaba.fastjson.JSON
+import com.xiaomi.thain.common.constant.FlowLastRunStatus
 import com.xiaomi.thain.common.constant.FlowSchedulingStatus
 import com.xiaomi.thain.common.exception.ThainException
-import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
 import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.rq.AddFlowRq
@@ -18,12 +18,9 @@ import com.xiaomi.thain.server.service.impl.FlowServiceImpl
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.quartz.SchedulerException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-import java.io.IOException
-import java.text.ParseException
 import java.util.concurrent.TimeUnit
 
 @RunWith(SpringRunner::class)
@@ -33,8 +30,7 @@ class FlowServiceTests {
     private val flowService: FlowServiceImpl? = null
 
     @Test
-    @Throws(ParseException::class, ThainException::class, SchedulerException::class, InterruptedException::class, ThainRepeatExecutionException::class, IOException::class)
-    fun test() {
+    fun commonTest() {
         val addFlowRq = JSON.parseObject(JSON.toJSONString(FlowModel.builder()
                 .name("test")
                 .cron("* * * * * ?")
@@ -51,13 +47,45 @@ class FlowServiceTests {
                                         "url" to "https://www.mi.com"
                                 )).build()), AddJobRq::class.java))
         val flowId = flowService!!.add(addFlowRq, jobs, "thain")
+        flowService.start(flowId);
         TimeUnit.SECONDS.sleep(10)
-        val flow = flowService.getFlow(flowId)
-        Assert.assertEquals(flow.schedulingStatus.toLong(), FlowSchedulingStatus.SCHEDULING.code.toLong())
+        val flow = flowService.getFlow(flowId) ?: throw ThainException()
+        Assert.assertEquals(flow.schedulingStatus, FlowSchedulingStatus.SCHEDULING.code)
         val flowId2 = flowService.add(addFlowRq.copy(id = flowId), jobs, "thain");
         Assert.assertEquals(flowId, flowId2);
-        val flow2 = flowService.getFlow(flowId)
-        Assert.assertEquals(flow2.schedulingStatus.toLong(), FlowSchedulingStatus.SCHEDULING.code.toLong())
+        val flow2 = flowService.getFlow(flowId) ?: throw ThainException()
+        Assert.assertEquals(flow2.schedulingStatus, FlowSchedulingStatus.SCHEDULING.code)
+        flowService.pause(flowId)
+        flowService.scheduling(flowId)
+        flowService.delete(flowId)
+    }
+
+    @Test
+    fun retryTest() {
+        val addFlowRq = JSON.parseObject(JSON.toJSONString(FlowModel.builder()
+                .name("test")
+                .createUser("admin")
+                .build()), AddFlowRq::class.java)
+        val jobs = listOf(
+                JSON.parseObject(
+                        JSON.toJSONString(JobModel.builder()
+                                .name("test")
+                                .component("std::http")
+                                .properties(mapOf(
+                                        "method" to "GET",
+                                        "contentType" to "application/json",
+                                        "url" to "失败"
+                                )).build()), AddJobRq::class.java))
+        val flowId = flowService!!.add(addFlowRq, jobs, "thain")
+        TimeUnit.SECONDS.sleep(10)
+        val flow = flowService.getFlow(flowId) ?: throw ThainException()
+        Assert.assertEquals(flow.schedulingStatus, FlowSchedulingStatus.NOT_SET.code)
+        Assert.assertEquals(flow.lastRunStatus, FlowLastRunStatus.ERROR.code)
+        val flowId2 = flowService.add(addFlowRq.copy(id = flowId, cron = "* * * * * ?"), jobs, "thain")
+        Assert.assertEquals(flowId, flowId2)
+        val flow2 = flowService.getFlow(flowId) ?: throw ThainException()
+        Assert.assertEquals(flow2.schedulingStatus, FlowSchedulingStatus.SCHEDULING.code)
+        Assert.assertEquals(flow2.lastRunStatus, FlowLastRunStatus.ERROR.code)
         flowService.pause(flowId)
         flowService.scheduling(flowId)
         flowService.delete(flowId)

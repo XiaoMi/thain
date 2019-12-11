@@ -1,5 +1,8 @@
 package com.xiaomi.thain.server.service
 
+import com.xiaomi.thain.common.model.rq.AddFlowRq
+import com.xiaomi.thain.common.model.rq.AddJobRq
+
 /**
  * @author liangyongrui
  */

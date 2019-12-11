@@ -1,5 +1,10 @@
 package com.xiaomi.thain.core
 
+import com.xiaomi.thain.common.model.dp.UpdateFlowDp
+import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
+import com.xiaomi.thain.common.model.rq.AddJobRq
+import com.xiaomi.thain.common.model.rq.UpdateFlowRq
+import org.slf4j.LoggerFactory
 import kotlin.collections.map
 import kotlin.jvm.javaClass
 
@@ -10,7 +15,7 @@ import kotlin.jvm.javaClass
 class ThainFacade private constructor(processEngineConfiguration: com.xiaomi.thain.core.process.ProcessEngineConfiguration,
                                       schedulerEngineConfiguration: com.xiaomi.thain.core.scheduler.SchedulerEngineConfiguration) {
 
-    private val log = org.slf4j.LoggerFactory.getLogger(this.javaClass)!!
+    private val log = LoggerFactory.getLogger(this.javaClass)!!
 
     val schedulerEngine: com.xiaomi.thain.core.scheduler.SchedulerEngine
 

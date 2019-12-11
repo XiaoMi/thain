@@ -1,20 +1,28 @@
 package com.xiaomi.thain.server.controller
 
+import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
+import com.xiaomi.thain.server.service.CheckService
+import com.xiaomi.thain.server.service.FlowService
+import org.slf4j.LoggerFactory
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import kotlin.jvm.javaClass
 
 /**
  * @author liangyongrui@xiaomi.com
  */
 @lombok.extern.slf4j.Slf4j
-@org.springframework.web.bind.annotation.RestController
-@org.springframework.web.bind.annotation.RequestMapping("api/editor")
-class EditorController(private val flowService: com.xiaomi.thain.server.service.FlowService,
-                       private val checkService: com.xiaomi.thain.server.service.CheckService) {
+@RestController
+@RequestMapping("api/editor")
+class EditorController(private val flowService: FlowService,
+                       private val checkService: CheckService) {
 
-    private val log = org.slf4j.LoggerFactory.getLogger(this.javaClass)!!
+    private val log = LoggerFactory.getLogger(this.javaClass)!!
 
-    @org.springframework.web.bind.annotation.PostMapping("")
-    fun addFlow(@org.springframework.web.bind.annotation.RequestBody json: String): com.xiaomi.thain.common.entity.ApiResult {
+    @PostMapping("")
+    fun addFlow(@RequestBody json: String): com.xiaomi.thain.common.entity.ApiResult {
         return try {
             val gson = com.google.gson.Gson()
             val addRq = gson.fromJson(json, AddFlowAndJobsRq::class.java).copy()

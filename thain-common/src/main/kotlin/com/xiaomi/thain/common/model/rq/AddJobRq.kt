@@ -1,5 +1,7 @@
 package com.xiaomi.thain.common.model.rq
 
+import com.xiaomi.thain.common.model.dr.JobDr
+
 /**
  * Date 19-5-20 下午9:00
  *

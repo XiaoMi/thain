@@ -21,8 +21,6 @@ import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.text.MessageFormat
 import java.text.ParseException
-import kotlin.collections.map
-import kotlin.jvm.javaClass
 
 /**
  * @author liangyongrui@xiaomi.com
@@ -172,7 +170,6 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
     companion object {
         private const val NON_EXIST_FLOW = "flow does not exist:{0}"
         @JvmStatic
-        @Throws(com.xiaomi.thain.common.exception.scheduler.ThainSchedulerException::class, com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException::class, java.io.IOException::class, java.sql.SQLException::class, InterruptedException::class)
         fun getInstance(processEngineConfiguration: ProcessEngineConfiguration,
                         schedulerEngineConfiguration: SchedulerEngineConfiguration): ThainFacade {
             return ThainFacade(processEngineConfiguration, schedulerEngineConfiguration)

@@ -1,5 +1,8 @@
 package com.xiaomi.thain.common.model.dp
 
+import com.xiaomi.thain.common.constant.FlowSchedulingStatus
+import com.xiaomi.thain.common.model.rq.UpdateFlowRq
+
 /**
  * add flow model
  *
@@ -27,7 +30,7 @@ data class UpdateFlowDp(
         val retryNumber: Int?,
         val timeInterval: Int?
 ) {
-    constructor(updateFlowRq: com.xiaomi.thain.common.model.rq.UpdateFlowRq, schedulingStatus: Int) : this(
+    constructor(updateFlowRq: UpdateFlowRq, schedulingStatus: FlowSchedulingStatus) : this(
             updateFlowRq.id,
             updateFlowRq.name,
             updateFlowRq.cron,
@@ -39,7 +42,7 @@ data class UpdateFlowDp(
             updateFlowRq.slaDuration,
             updateFlowRq.slaEmail,
             updateFlowRq.slaKill,
-            schedulingStatus,
+            schedulingStatus.code,
             updateFlowRq.retryNumber,
             updateFlowRq.timeInterval
     )

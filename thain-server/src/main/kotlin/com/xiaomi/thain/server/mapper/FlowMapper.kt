@@ -4,12 +4,14 @@ import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
 import com.xiaomi.thain.server.model.sp.FlowListSp
+import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 import org.springframework.stereotype.Component
 
 /**
  * @author liangyongrui@xiaomi.com
  */
+@Mapper
 @Component
 interface FlowMapper {
     fun getUserAccessible(@Param("flowId") flowId: Long, @Param("userId") userId: String,

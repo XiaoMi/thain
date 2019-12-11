@@ -42,11 +42,9 @@ public class FlowController {
     private final FlowExecutionService flowExecutionService;
 
     public FlowController(@NonNull FlowService flowService,
-//                          @NonNull CheckService checkService,
                           @NonNull PermissionService permissionService,
                           @NonNull FlowExecutionService flowExecutionService) {
         this.flowService = flowService;
-//        this.checkService = checkService;
         this.permissionService = permissionService;
         this.flowExecutionService = flowExecutionService;
     }
@@ -96,41 +94,6 @@ public class FlowController {
             return ApiResult.fail(ExceptionUtils.getRootCauseMessage(e));
         }
     }
-
-//    @PostMapping("add")
-//    public ApiResult add(@NonNull @RequestBody String json) {
-//        try {
-//            Gson gson = new Gson();
-//            val addRq = gson.fromJson(json, AddRq.class);
-//            return add(addRq
-//                    .toBuilder()
-//                    .flowModel(addRq.flowModel
-//                            .toBuilder()
-//                            .createUser(getUsername())
-//                            .build())
-//                    .build(), "thain");
-//        } catch (Exception e) {
-//            log.error("", e);
-//            return ApiResult.fail(e.getMessage());
-//        }
-//    }
-
-//    public ApiResult add(@NonNull AddRq addRq, @NonNull String appId) {
-//        val addFlowRq = addRq.flowModel;
-//        val jobModelList = addRq.jobModelList;
-//        try {
-//            checkService.checkFlowModel(addFlowRq);
-//            checkService.checkJobModelList(jobModelList);
-//        } catch (Exception e) {
-//            return ApiResult.fail(e.getMessage());
-//        }
-//        try {
-//            return ApiResult.success(flowService.add(addFlowRq, jobModelList, appId));
-//        } catch (Exception e) {
-//            log.error("add", e);
-//            return ApiResult.fail(e.getMessage());
-//        }
-//    }
 
     @DeleteMapping("{flowId}")
     public ApiResult delete(@PathVariable long flowId) {

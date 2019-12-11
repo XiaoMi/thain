@@ -1,31 +1,40 @@
 package com.xiaomi.thain.server.service.impl
 
+import com.xiaomi.thain.common.exception.ThainException
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
+import com.xiaomi.thain.common.model.FlowModel
+import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
 import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
 import com.xiaomi.thain.common.model.rq.AddFlowRq
 import com.xiaomi.thain.common.model.rq.AddJobRq
 import com.xiaomi.thain.common.model.rq.UpdateFlowRq
 import com.xiaomi.thain.core.ThainFacade
+import com.xiaomi.thain.server.dao.FlowDao
+import com.xiaomi.thain.server.model.sp.FlowListSp
 import com.xiaomi.thain.server.service.FlowService
+import org.quartz.SchedulerException
+import org.springframework.stereotype.Service
+import java.io.IOException
+import java.text.ParseException
 
 /**
  * @author liangyongrui
  */
-@org.springframework.stereotype.Service
-@lombok.extern.slf4j.Slf4j
+@Service
 class FlowServiceImpl(
-        private val flowDao: com.xiaomi.thain.server.dao.FlowDao,
+        private val flowDao: FlowDao,
         private val thainFacade: ThainFacade) : FlowService {
 
-    override fun getFlowList(flowListSp: com.xiaomi.thain.server.model.sp.FlowListSp): List<com.xiaomi.thain.common.model.FlowModel> {
+    override fun getFlowList(flowListSp: FlowListSp): List<FlowModel> {
         return flowDao.getFlowList(flowListSp)
     }
 
-    override fun getFlowListCount(flowListSp: com.xiaomi.thain.server.model.sp.FlowListSp): Long {
+    override fun getFlowListCount(flowListSp: FlowListSp): Long {
         return flowDao.getFlowListCount(flowListSp)
     }
 
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class, java.text.ParseException::class, org.quartz.SchedulerException::class)
+    @Throws(ThainException::class, ParseException::class, SchedulerException::class)
     override fun add(addFlowRq: AddFlowRq, addJobRqList: List<AddJobRq>, appId: String): Long {
         val localAddFlowRq = if (!addFlowRq.slaKill || addFlowRq.slaDuration == 0L) {
             addFlowRq.copy(slaKill = true, slaDuration = 3L * 60 * 60)
@@ -43,13 +52,13 @@ class FlowServiceImpl(
         return flowId
     }
 
-    @Throws(org.quartz.SchedulerException::class)
+    @Throws(SchedulerException::class)
     override fun delete(flowId: Long): Boolean {
         thainFacade.deleteFlow(flowId)
         return true
     }
 
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class, com.xiaomi.thain.common.exception.ThainRepeatExecutionException::class)
+    @Throws(ThainException::class, ThainRepeatExecutionException::class)
     override fun start(flowId: Long): Long {
         return thainFacade.startFlow(flowId)
     }
@@ -58,7 +67,7 @@ class FlowServiceImpl(
         return flowDao.getFlow(flowId)
     }
 
-    override fun getJobModelList(flowId: Long): List<com.xiaomi.thain.common.model.JobModel> {
+    override fun getJobModelList(flowId: Long): List<JobModel> {
         return flowDao.getJobModelList(flowId)
     }
 
@@ -66,17 +75,17 @@ class FlowServiceImpl(
         return thainFacade.componentDefineJsonList
     }
 
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class, org.quartz.SchedulerException::class, java.io.IOException::class)
+    @Throws(ThainException::class, SchedulerException::class, IOException::class)
     override fun scheduling(flowId: Long) {
         thainFacade.schedulingFlow(flowId)
     }
 
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class, java.text.ParseException::class, org.quartz.SchedulerException::class, java.io.IOException::class)
+    @Throws(ThainException::class, ParseException::class, SchedulerException::class, IOException::class)
     override fun updateCron(flowId: Long, cron: String?) {
         thainFacade.updateCron(flowId, cron)
     }
 
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class)
+    @Throws(ThainException::class)
     override fun pause(flowId: Long) {
         thainFacade.pauseFlow(flowId)
     }

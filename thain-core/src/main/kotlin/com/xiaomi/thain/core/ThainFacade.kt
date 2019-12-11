@@ -1,10 +1,26 @@
 package com.xiaomi.thain.core
 
+import com.xiaomi.thain.common.constant.FlowExecutionStatus
+import com.xiaomi.thain.common.constant.FlowSchedulingStatus
+import com.xiaomi.thain.common.exception.ThainException
+import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
 import com.xiaomi.thain.common.model.dp.UpdateFlowDp
 import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
 import com.xiaomi.thain.common.model.rq.AddJobRq
 import com.xiaomi.thain.common.model.rq.UpdateFlowRq
+import com.xiaomi.thain.common.utils.ifNull
+import com.xiaomi.thain.core.process.ProcessEngine
+import com.xiaomi.thain.core.process.ProcessEngineConfiguration
+import com.xiaomi.thain.core.scheduler.SchedulerEngine
+import com.xiaomi.thain.core.scheduler.SchedulerEngineConfiguration
+import com.xiaomi.thain.core.utils.SendModifyUtils
+import org.apache.commons.lang3.StringUtils.isNotBlank
+import org.quartz.CronExpression
+import org.quartz.SchedulerException
 import org.slf4j.LoggerFactory
+import java.io.IOException
+import java.text.MessageFormat
+import java.text.ParseException
 import kotlin.collections.map
 import kotlin.jvm.javaClass
 
@@ -12,36 +28,36 @@ import kotlin.jvm.javaClass
  * @author liangyongrui@xiaomi.com
  * @date 19-5-16 下午8:38
  */
-class ThainFacade private constructor(processEngineConfiguration: com.xiaomi.thain.core.process.ProcessEngineConfiguration,
-                                      schedulerEngineConfiguration: com.xiaomi.thain.core.scheduler.SchedulerEngineConfiguration) {
+class ThainFacade private constructor(processEngineConfiguration: ProcessEngineConfiguration,
+                                      schedulerEngineConfiguration: SchedulerEngineConfiguration) {
 
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
-    val schedulerEngine: com.xiaomi.thain.core.scheduler.SchedulerEngine
+    val schedulerEngine: SchedulerEngine
 
-    private val processEngine: com.xiaomi.thain.core.process.ProcessEngine = com.xiaomi.thain.core.process.ProcessEngine.newInstance(processEngineConfiguration, this)
+    private val processEngine: ProcessEngine = ProcessEngine.newInstance(processEngineConfiguration, this)
 
     init {
-        schedulerEngine = com.xiaomi.thain.core.scheduler.SchedulerEngine.getInstance(schedulerEngineConfiguration, processEngine)
+        schedulerEngine = SchedulerEngine.getInstance(schedulerEngineConfiguration, processEngine)
         schedulerEngine.start()
     }
 
     /**
      * 新建任务, cron为空的则只部署，不调度, 这个flowJson是不含id的，如果含id也没用
      */
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class)
+    @Throws(ThainException::class)
     fun addFlow(addRq: AddFlowAndJobsRq): Long {
         val flowId = processEngine.addFlow(addRq.flowModel, addRq.jobModelList)
-                .orElseThrow { com.xiaomi.thain.common.exception.ThainException("failed to insert flow") }
-        if (org.apache.commons.lang3.StringUtils.isBlank(addRq.flowModel.cron)) {
+                .orElseThrow { ThainException("failed to insert flow") }
+        if (addRq.flowModel.cron.isNullOrBlank()) {
             return flowId
         }
         try {
-            org.quartz.CronExpression.validateExpression(addRq.flowModel.cron)
+            CronExpression.validateExpression(addRq.flowModel.cron)
             schedulerEngine.addFlow(flowId, addRq.flowModel.cron!!)
         } catch (e: Exception) {
             processEngine.deleteFlow(flowId)
-            throw com.xiaomi.thain.common.exception.ThainException(e)
+            throw ThainException(e)
         }
         return flowId
     }
@@ -49,15 +65,18 @@ class ThainFacade private constructor(processEngineConfiguration: com.xiaomi.tha
     /**
      * 更新flow
      */
-    @Throws(org.quartz.SchedulerException::class, com.xiaomi.thain.common.exception.ThainException::class, java.text.ParseException::class)
+    @Throws(SchedulerException::class, ThainException::class, ParseException::class)
     fun updateFlow(updateFlowRq: UpdateFlowRq, jobModelList: List<AddJobRq>) {
-        val schedulingStatus = if (!updateFlowRq.cron.isNullOrBlank()) {
-            org.quartz.CronExpression.validateExpression(updateFlowRq.cron)
-            schedulerEngine.addFlow(updateFlowRq.id, updateFlowRq.cron!!)
-            processEngine.getFlow(updateFlowRq.id).schedulingStatus
-        } else {
-            1
-        }
+        val schedulingStatus = updateFlowRq.cron
+                .takeIf { !it.isNullOrBlank() }
+                ?.let {
+                    CronExpression.validateExpression(it)
+                    schedulerEngine.addFlow(updateFlowRq.id, it)
+                    FlowSchedulingStatus.getInstance(processEngine.getFlow(updateFlowRq.id).schedulingStatus)
+                            .takeIf { status -> status != FlowSchedulingStatus.NOT_SET }
+                            .ifNull { FlowSchedulingStatus.SCHEDULING }
+                }
+                .ifNull { FlowSchedulingStatus.NOT_SET }
         val updateFlowDp = UpdateFlowDp(updateFlowRq, schedulingStatus)
         processEngine.processEngineStorage.flowDao.updateFlow(updateFlowDp, jobModelList)
     }
@@ -65,7 +84,7 @@ class ThainFacade private constructor(processEngineConfiguration: com.xiaomi.tha
     /**
      * 删除Flow
      */
-    @Throws(org.quartz.SchedulerException::class)
+    @Throws(SchedulerException::class)
     fun deleteFlow(flowId: Long) {
         schedulerEngine.deleteFlow(flowId)
         processEngine.deleteFlow(flowId)
@@ -74,7 +93,7 @@ class ThainFacade private constructor(processEngineConfiguration: com.xiaomi.tha
     /**
      * 触发某个Flow
      */
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class, com.xiaomi.thain.common.exception.ThainRepeatExecutionException::class)
+    @Throws(ThainException::class, ThainRepeatExecutionException::class)
     fun startFlow(flowId: Long): Long {
         return processEngine.startProcess(flowId)
     }
@@ -82,15 +101,15 @@ class ThainFacade private constructor(processEngineConfiguration: com.xiaomi.tha
     val componentDefineJsonList: Map<String, String>
         get() = processEngine.processEngineStorage.componentService.componentDefineJsonList
 
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class)
+    @Throws(ThainException::class)
     fun pauseFlow(flowId: Long) {
         val flowDr = processEngine.processEngineStorage.flowDao.getFlow(flowId)
-                .orElseThrow { com.xiaomi.thain.common.exception.ThainException(java.text.MessageFormat.format(NON_EXIST_FLOW, flowId)) }
+                .orElseThrow { ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)) }
         try {
             processEngine.processEngineStorage.flowDao.pauseFlow(flowId)
             schedulerEngine.deleteFlow(flowId)
-            if (org.apache.commons.lang3.StringUtils.isNotBlank(flowDr.modifyCallbackUrl)) {
-                com.xiaomi.thain.core.utils.SendModifyUtils.sendPause(flowId, flowDr.modifyCallbackUrl)
+            if (isNotBlank(flowDr.modifyCallbackUrl)) {
+                SendModifyUtils.sendPause(flowId, flowDr.modifyCallbackUrl)
             }
         } catch (e: Exception) {
             log.error("", e)
@@ -102,51 +121,51 @@ class ThainFacade private constructor(processEngineConfiguration: com.xiaomi.tha
             } catch (ex: Exception) {
                 log.error("", ex)
             }
-            throw com.xiaomi.thain.common.exception.ThainException(e)
+            throw ThainException(e)
         }
     }
 
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class, org.quartz.SchedulerException::class, java.io.IOException::class)
+    @Throws(ThainException::class, SchedulerException::class, java.io.IOException::class)
     fun schedulingFlow(flowId: Long) {
         val flowModel = processEngine.processEngineStorage.flowDao.getFlow(flowId)
-                .orElseThrow { com.xiaomi.thain.common.exception.ThainException(java.text.MessageFormat.format(NON_EXIST_FLOW, flowId)) }
+                .orElseThrow { ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)) }
         schedulerEngine.addFlow(flowModel.id, flowModel.cron)
         processEngine.processEngineStorage.flowDao
-                .updateSchedulingStatus(flowModel.id, com.xiaomi.thain.common.constant.FlowSchedulingStatus.SCHEDULING)
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(flowModel.modifyCallbackUrl)) {
-            com.xiaomi.thain.core.utils.SendModifyUtils.sendScheduling(flowId, flowModel.modifyCallbackUrl)
+                .updateSchedulingStatus(flowModel.id, FlowSchedulingStatus.SCHEDULING)
+        if (isNotBlank(flowModel.modifyCallbackUrl)) {
+            SendModifyUtils.sendScheduling(flowId, flowModel.modifyCallbackUrl)
         }
     }
 
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class)
+    @Throws(ThainException::class)
     fun killFlowExecution(flowExecutionId: Long, auto: Boolean) {
         val flowExecutionModel = processEngine.processEngineStorage.flowExecutionDao
                 .getFlowExecution(flowExecutionId)
-                .orElseThrow { com.xiaomi.thain.common.exception.ThainException("flowExecution id does not exist：$flowExecutionId") }
-        if (com.xiaomi.thain.common.constant.FlowExecutionStatus.getInstance(flowExecutionModel.status) != com.xiaomi.thain.common.constant.FlowExecutionStatus.RUNNING) {
-            throw com.xiaomi.thain.common.exception.ThainException("flowExecution does not running: $flowExecutionId")
+                .orElseThrow { ThainException("flowExecution id does not exist：$flowExecutionId") }
+        if (FlowExecutionStatus.getInstance(flowExecutionModel.status) != FlowExecutionStatus.RUNNING) {
+            throw ThainException("flowExecution does not running: $flowExecutionId")
         }
         if (auto) {
-            processEngine.processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, com.xiaomi.thain.common.constant.FlowExecutionStatus.AUTO_KILLED.code)
+            processEngine.processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, FlowExecutionStatus.AUTO_KILLED.code)
         } else {
-            processEngine.processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, com.xiaomi.thain.common.constant.FlowExecutionStatus.KILLED.code)
+            processEngine.processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, FlowExecutionStatus.KILLED.code)
         }
         processEngine.processEngineStorage.jobExecutionDao.killJobExecution(flowExecutionId)
         processEngine.processEngineStorage.flowDao.killFlow(flowExecutionModel.flowId)
     }
 
-    @Throws(com.xiaomi.thain.common.exception.ThainException::class, java.text.ParseException::class, org.quartz.SchedulerException::class, java.io.IOException::class)
+    @Throws(ThainException::class, ParseException::class, SchedulerException::class, IOException::class)
     fun updateCron(flowId: Long, cron: String?) {
         val flowDr = processEngine.processEngineStorage.flowDao.getFlow(flowId)
-                .orElseThrow { com.xiaomi.thain.common.exception.ThainException(java.text.MessageFormat.format(NON_EXIST_FLOW, flowId)) }
+                .orElseThrow { ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)) }
         val jobModelList = processEngine.processEngineStorage.jobDao.getJobs(flowId).map { AddJobRq(it) }
         if (cron == null) {
             updateFlow(UpdateFlowRq(flowDr), jobModelList)
         } else {
             updateFlow(UpdateFlowRq(flowDr.copy(cron = cron)), jobModelList)
         }
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(flowDr.modifyCallbackUrl)) {
-            com.xiaomi.thain.core.utils.SendModifyUtils.sendScheduling(flowId, flowDr.modifyCallbackUrl)
+        if (isNotBlank(flowDr.modifyCallbackUrl)) {
+            SendModifyUtils.sendScheduling(flowId, flowDr.modifyCallbackUrl)
         }
     }
 
@@ -154,8 +173,8 @@ class ThainFacade private constructor(processEngineConfiguration: com.xiaomi.tha
         private const val NON_EXIST_FLOW = "flow does not exist:{0}"
         @JvmStatic
         @Throws(com.xiaomi.thain.common.exception.scheduler.ThainSchedulerException::class, com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException::class, java.io.IOException::class, java.sql.SQLException::class, InterruptedException::class)
-        fun getInstance(processEngineConfiguration: com.xiaomi.thain.core.process.ProcessEngineConfiguration,
-                        schedulerEngineConfiguration: com.xiaomi.thain.core.scheduler.SchedulerEngineConfiguration): ThainFacade {
+        fun getInstance(processEngineConfiguration: ProcessEngineConfiguration,
+                        schedulerEngineConfiguration: SchedulerEngineConfiguration): ThainFacade {
             return ThainFacade(processEngineConfiguration, schedulerEngineConfiguration)
         }
     }

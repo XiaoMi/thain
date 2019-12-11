@@ -47,14 +47,13 @@ class FlowServiceTests {
                                         "url" to "https://www.mi.com"
                                 )).build()), AddJobRq::class.java))
         val flowId = flowService!!.add(addFlowRq, jobs, "thain")
-        flowService.start(flowId);
         TimeUnit.SECONDS.sleep(10)
         val flow = flowService.getFlow(flowId) ?: throw ThainException()
-        Assert.assertEquals(flow.schedulingStatus, FlowSchedulingStatus.SCHEDULING.code)
-        val flowId2 = flowService.add(addFlowRq.copy(id = flowId), jobs, "thain");
+        Assert.assertEquals(FlowSchedulingStatus.SCHEDULING.code, flow.schedulingStatus)
+        val flowId2 = flowService.add(addFlowRq.copy(id = flowId, cron = ""), jobs, "thain");
         Assert.assertEquals(flowId, flowId2);
         val flow2 = flowService.getFlow(flowId) ?: throw ThainException()
-        Assert.assertEquals(flow2.schedulingStatus, FlowSchedulingStatus.SCHEDULING.code)
+        Assert.assertEquals(FlowSchedulingStatus.NOT_SET.code, flow2.schedulingStatus)
         flowService.pause(flowId)
         flowService.scheduling(flowId)
         flowService.delete(flowId)
@@ -77,6 +76,7 @@ class FlowServiceTests {
                                         "url" to "失败"
                                 )).build()), AddJobRq::class.java))
         val flowId = flowService!!.add(addFlowRq, jobs, "thain")
+        flowService.start(flowId);
         TimeUnit.SECONDS.sleep(10)
         val flow = flowService.getFlow(flowId) ?: throw ThainException()
         Assert.assertEquals(flow.schedulingStatus, FlowSchedulingStatus.NOT_SET.code)

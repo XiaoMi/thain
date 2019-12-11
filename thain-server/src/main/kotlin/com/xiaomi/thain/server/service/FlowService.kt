@@ -1,17 +1,20 @@
 package com.xiaomi.thain.server.service
 
+import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
 import com.xiaomi.thain.common.model.rq.AddFlowRq
 import com.xiaomi.thain.common.model.rq.AddJobRq
+import com.xiaomi.thain.server.model.sp.FlowListSp
+import org.springframework.stereotype.Service
 
 /**
  * @author liangyongrui
  */
-@org.springframework.stereotype.Service
+@Service
 interface FlowService {
-    fun getFlowList(flowListSp: com.xiaomi.thain.server.model.sp.FlowListSp): List<com.xiaomi.thain.common.model.FlowModel?>
-    fun getFlowListCount(flowListSp: com.xiaomi.thain.server.model.sp.FlowListSp): Long
+    fun getFlowList(flowListSp: FlowListSp): List<FlowModel?>
+    fun getFlowListCount(flowListSp: FlowListSp): Long
     /**
      * 创建或更新任务
      */

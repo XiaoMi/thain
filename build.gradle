@@ -19,6 +19,10 @@ subprojects {
         mavenCentral()
     }
 
+    tasks.withType(Test) {
+        maxParallelForks = Runtime.runtime.availableProcessors()
+    }
+
     dependencies {
         annotationProcessor 'org.projectlombok:lombok:1.18.10'
         compileOnly 'org.projectlombok:lombok:1.18.10'

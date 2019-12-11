@@ -27,20 +27,20 @@ import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
  * @author liangyongrui
  */
 @Slf4j
-public class FlowJob implements Job {
+public class FlowQob implements Job {
 
     @NonNull
     private final ProcessEngine processEngine;
 
-    private static final Map<String, FlowJob> FLOW_JOB_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, FlowQob> FLOW_QOB_MAP = new ConcurrentHashMap<>();
 
-    private FlowJob(@NonNull ProcessEngine processEngine) {
+    private FlowQob(@NonNull ProcessEngine processEngine) {
         this.processEngine = processEngine;
     }
 
-    public static FlowJob getInstance(@NonNull ProcessEngine processEngine) {
-        return FLOW_JOB_MAP.computeIfAbsent(processEngine.processEngineId,
-                t -> new FlowJob(processEngine));
+    public static FlowQob getInstance(@NonNull ProcessEngine processEngine) {
+        return FLOW_QOB_MAP.computeIfAbsent(processEngine.processEngineId,
+                t -> new FlowQob(processEngine));
     }
 
     @Override

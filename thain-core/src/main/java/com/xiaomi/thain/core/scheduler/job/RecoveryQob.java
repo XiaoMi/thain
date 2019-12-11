@@ -27,19 +27,19 @@ import static com.xiaomi.thain.common.utils.HostUtils.getHostInfo;
  * @author liangyongrui
  */
 @Slf4j
-public class RecoveryJob implements Job {
+public class RecoveryQob implements Job {
 
     @NonNull
     private final ProcessEngine processEngine;
 
-    private static final Map<String, RecoveryJob> CLEAN_JOB_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, RecoveryQob> RECOVERY_QOB_MAP = new ConcurrentHashMap<>();
 
-    private RecoveryJob(@NonNull ProcessEngine processEngine) {
+    private RecoveryQob(@NonNull ProcessEngine processEngine) {
         this.processEngine = processEngine;
     }
 
-    public static RecoveryJob getInstance(@NonNull ProcessEngine processEngine) {
-        return CLEAN_JOB_MAP.computeIfAbsent(processEngine.processEngineId, t -> new RecoveryJob(processEngine));
+    public static RecoveryQob getInstance(@NonNull ProcessEngine processEngine) {
+        return RECOVERY_QOB_MAP.computeIfAbsent(processEngine.processEngineId, t -> new RecoveryQob(processEngine));
     }
 
     @Override

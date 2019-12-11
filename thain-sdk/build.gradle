@@ -6,8 +6,5 @@ plugins {
 }
 dependencies {
     compile project(':thain-common')
-    testCompile ('org.springframework.boot:spring-boot-starter-test:2.2.1.RELEASE'){
-        exclude group: 'junit-jupiter-api', module: 'org.junit.jupiter'
-        exclude group: 'slf4j-api', module: 'org.slf4j'
-    }
+    testCompile('org.springframework.boot:spring-boot-starter-test:2.2.1.RELEASE')
 }

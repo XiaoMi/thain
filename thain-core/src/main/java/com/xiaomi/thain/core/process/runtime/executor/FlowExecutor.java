@@ -7,6 +7,7 @@
 package com.xiaomi.thain.core.process.runtime.executor;
 
 import com.google.common.collect.ImmutableList;
+import com.mchange.lang.ThrowableUtils;
 import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.constant.JobExecutionStatus;
 import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException;
@@ -94,7 +95,7 @@ public class FlowExecutor {
             this.flowExecutionStorage = FlowExecutionStorage.getInstance(flowExecutionId);
             this.flowHttpNotice = FlowHttpNotice.getInstance(flowDr.getCallbackUrl(), flowDr.getId(), flowExecutionId);
             this.flowExecutionJobThreadPool = processEngineStorage.flowExecutionJobThreadPool(flowExecutionId);
-            this.jobExecutionModelMap = jobModelList.stream().collect(toMap(t -> t.getId(), t -> {
+            this.jobExecutionModelMap = jobModelList.stream().collect(toMap(JobDr::getId, t -> {
                 val jobExecutionModel = JobExecutionModel.builder()
                         .jobId(t.getId())
                         .flowExecutionId(flowExecutionId)
@@ -103,6 +104,7 @@ public class FlowExecutor {
                 processEngineStorage.jobExecutionDao.add(jobExecutionModel);
                 return jobExecutionModel;
             }));
+
         } catch (Exception e) {
             log.error("", e);
             throw new ThainCreateFlowExecutionException(flowDr.getId(), e.getMessage());
@@ -193,6 +195,10 @@ public class FlowExecutor {
                 } catch (Exception e) {
                     flowExecutionService.addError("Job[" + job.getName() + "] exception: "
                             + ExceptionUtils.getRootCauseMessage(e));
+                    return;
+                } catch (Throwable e) {
+                    processEngineStorage.mailService.sendSeriousError(ThrowableUtils.extractStackTrace(e));
+                    flowExecutionService.addError("Job[" + job.getName() + "] exception: " + e.getMessage());
                     return;
                 }
                 flowExecutionService.addInfo("Execute job[" + job.getName() + "] complete");

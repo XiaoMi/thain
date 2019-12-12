@@ -3,6 +3,7 @@ package com.xiaomi.thain.server.dao
 import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.common.model.dr.JobDr
 import com.xiaomi.thain.server.mapper.FlowMapper
 import com.xiaomi.thain.server.model.sp.FlowListSp
 import org.springframework.stereotype.Repository
@@ -16,7 +17,7 @@ class FlowDao(private val flowMapper: FlowMapper) {
         return flowMapper.getUserAccessible(flowId, userId, appIds)
     }
 
-    fun getFlowList(flowListSp: FlowListSp): List<FlowModel> {
+    fun getFlowList(flowListSp: FlowListSp): List<FlowDr> {
         return flowMapper.getFlowList(flowListSp)
     }
 
@@ -36,7 +37,7 @@ class FlowDao(private val flowMapper: FlowMapper) {
         return flowMapper.getFlow(flowId)
     }
 
-    fun getJobModelList(flowId: Long): List<JobModel> {
+    fun getJobModelList(flowId: Long): List<JobDr> {
         return flowMapper.getJobModelList(flowId)
     }
 

@@ -5,6 +5,7 @@ import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
 import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.common.model.dr.JobDr
 import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
 import com.xiaomi.thain.common.model.rq.AddFlowRq
 import com.xiaomi.thain.common.model.rq.AddJobRq
@@ -26,7 +27,7 @@ class FlowServiceImpl(
         private val flowDao: FlowDao,
         private val thainFacade: ThainFacade) : FlowService {
 
-    override fun getFlowList(flowListSp: FlowListSp): List<FlowModel> {
+    override fun getFlowList(flowListSp: FlowListSp): List<FlowDr> {
         return flowDao.getFlowList(flowListSp)
     }
 
@@ -67,7 +68,7 @@ class FlowServiceImpl(
         return flowDao.getFlow(flowId)
     }
 
-    override fun getJobModelList(flowId: Long): List<JobModel> {
+    override fun getJobModelList(flowId: Long): List<JobDr> {
         return flowDao.getJobModelList(flowId)
     }
 

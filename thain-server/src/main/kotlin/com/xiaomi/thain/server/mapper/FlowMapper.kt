@@ -3,6 +3,7 @@ package com.xiaomi.thain.server.mapper
 import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.common.model.dr.JobDr
 import com.xiaomi.thain.server.model.sp.FlowListSp
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
@@ -19,8 +20,7 @@ interface FlowMapper {
 
     fun getAppIdAccessible(@Param("flowId") flowId: Long, @Param("appId") appId: String): Boolean
 
-    @Deprecated("should use dr")
-    fun getFlowList(flowListSp: FlowListSp): List<FlowModel>
+    fun getFlowList(flowListSp: FlowListSp): List<FlowDr>
 
     fun getFlowListCount(flowListSp: FlowListSp): Long
     fun flowExist(flowId: Long): Boolean
@@ -28,6 +28,5 @@ interface FlowMapper {
     fun getFlowIdByFlowExecutionId(flowExecutionId: Long): Long
     fun getFlow(flowId: Long): FlowDr?
 
-    @Deprecated("should use dr")
-    fun getJobModelList(flowId: Long): List<JobModel>
+    fun getJobModelList(flowId: Long): List<JobDr>
 }

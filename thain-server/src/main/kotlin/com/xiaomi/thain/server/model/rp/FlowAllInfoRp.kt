@@ -1,7 +1,7 @@
 package com.xiaomi.thain.server.model.rp
 
-import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.common.model.dr.JobDr
 
 /**
  * Date 19-7-1 上午10:33
@@ -11,5 +11,5 @@ import com.xiaomi.thain.common.model.dr.FlowDr
  */
 class FlowAllInfoRp(
         val flowModel: FlowDr,
-        val jobModelList: List<JobModel>
+        val jobModelList: List<JobDr>
 )

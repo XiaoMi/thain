@@ -1,8 +1,8 @@
 package com.xiaomi.thain.server.service
 
-import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.common.model.dr.JobDr
 import com.xiaomi.thain.common.model.rq.AddFlowRq
 import com.xiaomi.thain.common.model.rq.AddJobRq
 import com.xiaomi.thain.server.model.sp.FlowListSp
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
  */
 @Service
 interface FlowService {
-    fun getFlowList(flowListSp: FlowListSp): List<FlowModel?>
+    fun getFlowList(flowListSp: FlowListSp): List<FlowDr>
     fun getFlowListCount(flowListSp: FlowListSp): Long
     /**
      * 创建或更新任务
@@ -34,7 +34,7 @@ interface FlowService {
     fun start(flowId: Long): Long
 
     fun getFlow(flowId: Long): FlowDr?
-    fun getJobModelList(flowId: Long): List<JobModel>
+    fun getJobModelList(flowId: Long): List<JobDr>
     fun getComponentDefineStringMap(): Map<String, String>
     @Throws(com.xiaomi.thain.common.exception.ThainException::class, org.quartz.SchedulerException::class, java.io.IOException::class)
     fun scheduling(flowId: Long)

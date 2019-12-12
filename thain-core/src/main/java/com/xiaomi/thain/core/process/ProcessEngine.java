@@ -5,6 +5,7 @@
  */
 package com.xiaomi.thain.core.process;
 
+import com.xiaomi.thain.common.constant.FlowSchedulingStatus;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
@@ -25,7 +26,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -171,7 +171,7 @@ public class ProcessEngine {
      */
     public Optional<Long> addFlow(@NonNull AddFlowRq addFlowRq, @NonNull List<AddJobRq> jobModelList) {
         try {
-            var schedulingStatus = NOT_SET;
+            FlowSchedulingStatus schedulingStatus = NOT_SET;
             if (StringUtils.isNotBlank(addFlowRq.getCron())) {
                 schedulingStatus = SCHEDULING;
             }

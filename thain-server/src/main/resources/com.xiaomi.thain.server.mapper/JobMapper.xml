@@ -13,7 +13,7 @@
         where id = #{id}
     </update>
 
-    <select id="getJobByFlowIdAndName" resultType="com.xiaomi.thain.server.model.dr.JobDr">
+    <select id="getJobByFlowIdAndName" resultType="com.xiaomi.thain.common.model.dr.JobDr">
         select id,
                flow_id,
                name,

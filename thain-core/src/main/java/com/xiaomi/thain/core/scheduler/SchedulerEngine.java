@@ -10,10 +10,10 @@ import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerInitException;
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerStartException;
 import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.core.process.ProcessEngine;
-import com.xiaomi.thain.core.scheduler.job.CleanQob;
-import com.xiaomi.thain.core.scheduler.job.FlowQob;
-import com.xiaomi.thain.core.scheduler.job.RecoveryQob;
-import com.xiaomi.thain.core.scheduler.job.SlaQob;
+import com.xiaomi.thain.core.scheduler.job.CleanJob;
+import com.xiaomi.thain.core.scheduler.job.FlowJob;
+import com.xiaomi.thain.core.scheduler.job.RecoveryJob;
+import com.xiaomi.thain.core.scheduler.job.SlaJob;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -66,7 +66,7 @@ public class SchedulerEngine {
     }
 
     private void initRecovery() throws SchedulerException {
-        JobDetail jobDetail = newJob(RecoveryQob.class)
+        JobDetail jobDetail = newJob(RecoveryJob.class)
                 .withIdentity("job_recovery", SYSTEM_GROUP)
                 .build();
         Trigger trigger = newTrigger()
@@ -78,7 +78,7 @@ public class SchedulerEngine {
     }
 
     private void initCleanUp() throws SchedulerException {
-        JobDetail jobDetail = newJob(CleanQob.class)
+        JobDetail jobDetail = newJob(CleanJob.class)
                 .withIdentity("job_clean_up", SYSTEM_GROUP)
                 .build();
         Trigger trigger = newTrigger()
@@ -96,7 +96,7 @@ public class SchedulerEngine {
     }
 
     public void addSla(long flowExecutionId, @NonNull FlowDr flowDr) throws SchedulerException {
-        JobDetail jobDetail = newJob(SlaQob.class)
+        JobDetail jobDetail = newJob(SlaJob.class)
                 .withIdentity("flowExecution_" + flowExecutionId, "flowExecution")
                 .usingJobData("flowExecutionId", flowExecutionId)
                 .usingJobData("flowId", flowDr.getId())
@@ -125,7 +125,7 @@ public class SchedulerEngine {
      * @param cron   cron
      */
     public void addFlow(long flowId, @NonNull String cron) throws SchedulerException {
-        JobDetail jobDetail = newJob(FlowQob.class)
+        JobDetail jobDetail = newJob(FlowJob.class)
                 .withIdentity("flow_" + flowId, "flow")
                 .usingJobData("flowId", flowId)
                 .build();

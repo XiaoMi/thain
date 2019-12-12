@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @author liangyongrui@xiaomi.com
  */
-class RetryFlowQob private constructor(private val processEngine: ProcessEngine) : Job {
+class RetryFlowJob private constructor(private val processEngine: ProcessEngine) : Job {
     override fun execute(context: JobExecutionContext) {
         val dataMap = context.jobDetail.jobDataMap
         val flowId = dataMap.getLong("flowId")
@@ -19,9 +19,9 @@ class RetryFlowQob private constructor(private val processEngine: ProcessEngine)
     }
 
     companion object {
-        private val RETRY_FLOW_QOB_MAP: MutableMap<String, RetryFlowQob> = ConcurrentHashMap()
-        fun getInstance(processEngine: ProcessEngine): RetryFlowQob {
-            return RETRY_FLOW_QOB_MAP.computeIfAbsent(processEngine.processEngineId) { RetryFlowQob(processEngine) }
+        private val RETRY_FLOW_JOB_MAP: MutableMap<String, RetryFlowJob> = ConcurrentHashMap()
+        fun getInstance(processEngine: ProcessEngine): RetryFlowJob {
+            return RETRY_FLOW_JOB_MAP.computeIfAbsent(processEngine.processEngineId) { RetryFlowJob(processEngine) }
         }
     }
 

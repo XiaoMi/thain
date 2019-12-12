@@ -20,19 +20,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author liangyongrui
  */
 @Slf4j
-public class CleanQob implements Job {
+public class CleanJob implements Job {
 
     @NonNull
     private final ProcessEngine processEngine;
 
-    private static final Map<String, CleanQob> CLEAN_QOB_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, CleanJob> CLEAN_JOB_MAP = new ConcurrentHashMap<>();
 
-    private CleanQob(@NonNull ProcessEngine processEngine) {
+    private CleanJob(@NonNull ProcessEngine processEngine) {
         this.processEngine = processEngine;
     }
 
-    public static CleanQob getInstance(@NonNull ProcessEngine processEngine) {
-        return CLEAN_QOB_MAP.computeIfAbsent(processEngine.processEngineId, t -> new CleanQob(processEngine));
+    public static CleanJob getInstance(@NonNull ProcessEngine processEngine) {
+        return CLEAN_JOB_MAP.computeIfAbsent(processEngine.processEngineId, t -> new CleanJob(processEngine));
     }
 
     @Override

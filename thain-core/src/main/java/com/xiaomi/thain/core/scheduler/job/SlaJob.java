@@ -24,19 +24,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author liangyongrui@xiaomi.com
  */
 @Slf4j
-public class SlaQob implements Job {
+public class SlaJob implements Job {
 
     @NonNull
     private final ProcessEngine processEngine;
 
-    private static final Map<String, SlaQob> SLA_JOB_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, SlaJob> SLA_JOB_MAP = new ConcurrentHashMap<>();
 
-    private SlaQob(@NonNull ProcessEngine processEngine) {
+    private SlaJob(@NonNull ProcessEngine processEngine) {
         this.processEngine = processEngine;
     }
 
-    public static SlaQob getInstance(@NonNull ProcessEngine processEngine) {
-        return SLA_JOB_MAP.computeIfAbsent(processEngine.processEngineId, t -> new SlaQob(processEngine));
+    public static SlaJob getInstance(@NonNull ProcessEngine processEngine) {
+        return SLA_JOB_MAP.computeIfAbsent(processEngine.processEngineId, t -> new SlaJob(processEngine));
     }
 
     @Override

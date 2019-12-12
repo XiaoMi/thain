@@ -21,9 +21,9 @@ class RetryFlowJob private constructor(private val processEngine: ProcessEngine)
 
     companion object {
         private val RETRY_FLOW_JOB_MAP: MutableMap<String, RetryFlowJob> = ConcurrentHashMap()
+        @JvmStatic
         fun getInstance(processEngine: ProcessEngine): RetryFlowJob {
             return RETRY_FLOW_JOB_MAP.computeIfAbsent(processEngine.processEngineId) { RetryFlowJob(processEngine) }
         }
     }
-
 }

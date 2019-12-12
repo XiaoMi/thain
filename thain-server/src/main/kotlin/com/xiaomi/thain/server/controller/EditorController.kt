@@ -1,5 +1,6 @@
 package com.xiaomi.thain.server.controller
 
+import com.xiaomi.thain.common.entity.ApiResult
 import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
 import com.xiaomi.thain.server.service.CheckService
 import com.xiaomi.thain.server.service.FlowService
@@ -21,31 +22,31 @@ class EditorController(private val flowService: FlowService,
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
     @PostMapping("")
-    fun addFlow(@RequestBody json: String): com.xiaomi.thain.common.entity.ApiResult {
+    fun addFlow(@RequestBody json: String): ApiResult {
         return try {
             val gson = com.google.gson.Gson()
             val addRq = gson.fromJson(json, AddFlowAndJobsRq::class.java).copy()
             add(addRq.copy(flowModel = addRq.flowModel.copy(createUser = com.xiaomi.thain.server.handler.ThreadLocalUser.getUsername())), "thain")
         } catch (e: Exception) {
             log.error("", e)
-            com.xiaomi.thain.common.entity.ApiResult.fail(e.message)
+            ApiResult.fail(e.message)
         }
     }
 
-    fun add(addRq: AddFlowAndJobsRq, appId: String): com.xiaomi.thain.common.entity.ApiResult {
+    fun add(addRq: AddFlowAndJobsRq, appId: String): ApiResult {
         val addFlowRq = addRq.flowModel
         val jobModelList = addRq.jobModelList
         try {
             checkService.checkFlowModel(addFlowRq)
             checkService.checkJobModelList(jobModelList)
         } catch (e: Exception) {
-            return com.xiaomi.thain.common.entity.ApiResult.fail(e.message)
+            return ApiResult.fail(e.message)
         }
         return try {
-            com.xiaomi.thain.common.entity.ApiResult.success(flowService.add(addFlowRq, jobModelList, appId))
+            ApiResult.success(flowService.add(addFlowRq, jobModelList, appId))
         } catch (e: Exception) {
             log.error("add", e)
-            com.xiaomi.thain.common.entity.ApiResult.fail(e.message)
+            ApiResult.fail(e.message)
         }
     }
 

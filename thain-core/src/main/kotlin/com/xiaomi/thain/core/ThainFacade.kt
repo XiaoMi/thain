@@ -123,7 +123,7 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
         }
     }
 
-    @Throws(ThainException::class, SchedulerException::class, java.io.IOException::class)
+    @Throws(ThainException::class, SchedulerException::class, IOException::class)
     fun schedulingFlow(flowId: Long) {
         val flowModel = processEngine.processEngineStorage.flowDao.getFlow(flowId)
                 .orElseThrow { ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)) }

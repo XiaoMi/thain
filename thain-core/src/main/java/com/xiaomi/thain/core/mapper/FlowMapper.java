@@ -6,6 +6,7 @@
 package com.xiaomi.thain.core.mapper;
 
 import com.xiaomi.thain.common.model.dp.UpdateFlowDp;
+import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.core.model.dp.AddFlowDp;
 import com.xiaomi.thain.core.model.dp.AddJobDp;
 import lombok.NonNull;
@@ -34,7 +35,7 @@ public interface FlowMapper {
     int deleteFlow(long flowId);
 
     @Nullable
-    com.xiaomi.thain.common.model.dr.FlowDr getFlow(long flowId);
+    FlowDr getFlow(long flowId);
 
     /**
      * 更新最后一次运行状态

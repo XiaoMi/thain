@@ -1,5 +1,7 @@
 package com.xiaomi.thain.common.model.dr
 
+import java.sql.Timestamp
+
 /**
  * Date 19-5-17 下午12:07
  * 数据库查出的flow
@@ -39,13 +41,13 @@ data class FlowDr(
         /**
          * 创建时间
          */
-        val createTime: java.sql.Timestamp,
+        val createTime: Timestamp,
         /**
          * 更新时间
          */
-        val updateTime: java.sql.Timestamp,
+        val updateTime: Timestamp,
         /**
          * 状态更新时间
          */
-        val statusUpdateTime: java.sql.Timestamp,
+        val statusUpdateTime: Timestamp,
         val deleted: Boolean = false)

@@ -1,5 +1,7 @@
 package com.xiaomi.thain.common.model.rq
 
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.TypeReference
 import com.xiaomi.thain.common.model.dr.JobDr
 
 /**
@@ -22,11 +24,11 @@ data class AddJobRq(
             jobDr.condition,
             jobDr.component,
             jobDr.callbackUrl,
-            com.alibaba.fastjson.JSON.parseObject(jobDr.properties, object : com.alibaba.fastjson.TypeReference<Map<String, String>>() {}),
+            JSON.parseObject(jobDr.properties, object : TypeReference<Map<String, String>>() {}),
             jobDr.xAxis,
             jobDr.yAxis
     )
 
     val propertiesString: String
-        get() = com.alibaba.fastjson.JSON.toJSONString(properties)
+        get() = JSON.toJSONString(properties)
 }

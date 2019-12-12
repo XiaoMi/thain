@@ -22,7 +22,6 @@ interface FlowService {
     /**
      * 创建或更新任务
      */
-    @Throws(ThainException::class, ParseException::class, SchedulerException::class)
     fun add(addFlowRq: AddFlowRq, addJobRqList: List<AddJobRq>, appId: String): Long
 
     /**

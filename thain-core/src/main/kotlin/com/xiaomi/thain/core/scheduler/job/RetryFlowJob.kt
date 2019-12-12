@@ -15,7 +15,8 @@ class RetryFlowJob private constructor(private val processEngine: ProcessEngine)
         val dataMap = context.jobDetail.jobDataMap
         val flowId = dataMap.getLong("flowId")
         val retryNumber = dataMap.getInt("retryNumber")
-        //todo 触发重试
+        processEngine.retryFlow(flowId, retryNumber)
+        context.scheduler.deleteJob(context.jobDetail.key)
     }
 
     companion object {

@@ -117,13 +117,13 @@ const DetailPanel: React.FC<Props> = ({ editor, flowAttributes, flowId, updateGr
         </Button>
         <RetryButtonModal
           style={{ marginTop: '10px' }}
-          timeInterval={flowAttributes.timeInterval}
+          retryTimeInterval={flowAttributes.retryTimeInterval}
           retryNumber={flowAttributes.retryNumber}
-          onSave={(setModelHide, newTimeInterval, newretryNumber) => {
+          onSave={(setModelHide, newretryTimeInterval, newretryNumber) => {
             dispatch({
               type: 'flowEditor/changeFlowAttributes',
               payload: {
-                timeInterval: newTimeInterval,
+                retryTimeInterval: newretryTimeInterval,
                 retryNumber: newretryNumber,
               },
               callback: setModelHide,

@@ -14,6 +14,10 @@ import lombok.val;
  */
 public enum FlowExecutionTriggerType {
     /**
+     * 自动重试
+     */
+    RETRY(3),
+    /**
      * 自动触发
      */
     AUTOMATIC(2),

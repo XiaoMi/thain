@@ -23,7 +23,7 @@ data class UpdateFlowRq(
         val slaEmail: String?,
         val slaKill: Boolean = false,
         val retryNumber: Int?,
-        val timeInterval: Int?
+        val retryTimeInterval: Int?
 ) {
 
     constructor(addFlowRq: AddFlowRq, id: Long) : this(
@@ -39,7 +39,7 @@ data class UpdateFlowRq(
             addFlowRq.slaEmail,
             addFlowRq.slaKill,
             addFlowRq.retryNumber,
-            addFlowRq.timeInterval
+            addFlowRq.retryTimeInterval
     )
 
     constructor(flowDr: FlowDr) : this(
@@ -55,7 +55,7 @@ data class UpdateFlowRq(
             flowDr.slaEmail,
             flowDr.slaKill,
             flowDr.retryNumber,
-            flowDr.timeInterval
+            flowDr.retryTimeInterval
     )
 
 }

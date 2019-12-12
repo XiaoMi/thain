@@ -28,7 +28,7 @@ data class UpdateFlowDp(
          */
         val schedulingStatus: Int,
         val retryNumber: Int?,
-        val timeInterval: Int?
+        val retryTimeInterval: Int?
 ) {
     constructor(updateFlowRq: UpdateFlowRq, schedulingStatus: FlowSchedulingStatus) : this(
             updateFlowRq.id,
@@ -44,7 +44,7 @@ data class UpdateFlowDp(
             updateFlowRq.slaKill,
             schedulingStatus.code,
             updateFlowRq.retryNumber,
-            updateFlowRq.timeInterval
+            updateFlowRq.retryTimeInterval
     )
 
 }

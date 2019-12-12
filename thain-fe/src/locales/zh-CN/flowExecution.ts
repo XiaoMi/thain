@@ -16,6 +16,7 @@ export default {
   'flow.execution.trigger.type': '触发类型',
   'flow.execution.manual': '手动',
   'flow.execution.auto': '自动',
+  'flow.execution.retry': '重试',
   'flow.execution.execution.machine': '执行机器',
   'flow.execution.create.time': '创建时间',
   'flow.execution.update.time': '更新时间',

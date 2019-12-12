@@ -6,9 +6,9 @@ import com.xiaomi.thain.common.model.dr.FlowDr
 import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineStorage
 import com.xiaomi.thain.core.process.runtime.log.FlowExecutionLogHandler
+import com.xiaomi.thain.core.process.runtime.notice.FlowHttpNotice
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Date 19-5-21 上午10:46
@@ -16,14 +16,16 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @author liangyongrui@xiaomi.com
  */
-class FlowExecutionService private constructor(val flowExecutionId: Long,
-                                               private val flowDr: FlowDr,
-                                               private val processEngineStorage: ProcessEngineStorage) {
+class FlowExecutionService(val flowExecutionId: Long,
+                           private val flowDr: FlowDr,
+                           private val retryNumber: Int,
+                           private val processEngineStorage: ProcessEngineStorage) {
 
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
     private val flowExecutionLogHandler = FlowExecutionLogHandler.getInstance(flowExecutionId, processEngineStorage)
     private val mailNotice = processEngineStorage.getMailNotice(flowDr.callbackEmail)
+    private val flowHttpNotice = FlowHttpNotice.getInstance(flowDr.callbackUrl, flowDr.id, flowExecutionId)
     private val flowService = FlowService.getInstance(flowDr.id, processEngineStorage)
     private val flowExecutionDao = processEngineStorage.flowExecutionDao
 
@@ -46,7 +48,10 @@ class FlowExecutionService private constructor(val flowExecutionId: Long,
      */
     fun startFlowExecution() {
         try {
-            flowService.startFlow()
+            if (retryNumber == 0) {
+                flowService.startFlow()
+                flowHttpNotice.sendStart()
+            }
             flowExecutionLogHandler.addInfo("begin to execute flow：$flowExecutionId")
         } catch (e: Exception) {
             log.error("", e)
@@ -86,24 +91,39 @@ class FlowExecutionService private constructor(val flowExecutionId: Long,
     fun endFlowExecution() {
         try {
             when (flowEndStatus) {
-                FlowLastRunStatus.SUCCESS -> flowExecutionLogHandler.endSuccess()
-                FlowLastRunStatus.ERROR -> {
+                FlowLastRunStatus.SUCCESS -> {
+                    flowExecutionLogHandler.endSuccess()
+                    flowHttpNotice.sendSuccess()
+                }
+                FlowLastRunStatus.KILLED -> {
                     flowExecutionLogHandler.endError(errorMessage)
-                    mailNotice.sendError(errorMessage)
-                    checkContinuousFailure()
+                    flowHttpNotice.sendKilled()
+                }
+                FlowLastRunStatus.AUTO_KILLED -> {
+                    flowExecutionLogHandler.endError(errorMessage)
+                    flowHttpNotice.sendAutoKilled()
                 }
                 else -> {
-                    flowExecutionLogHandler.endError(errorMessage)
-                    mailNotice.sendError(errorMessage)
-                    checkContinuousFailure()
+                    if (flowDr.retryNumber <= retryNumber) {
+                        try {
+                            flowExecutionLogHandler.endError(errorMessage)
+                            flowHttpNotice.sendError(errorMessage)
+                            mailNotice.sendError(errorMessage)
+                            checkContinuousFailure()
+                        } finally {
+                            flowService.endFlow(flowEndStatus)
+                        }
+                    } else {
+                        ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade
+                                .schedulerEngine
+                                .addRetry(flowDr, retryNumber + 1)
+                    }
                 }
             }
         } catch (e: Exception) {
             log.warn(ExceptionUtils.getRootCauseMessage(e))
         } finally {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, flowExecutionEndStatus.code)
-            flowService.endFlow(flowEndStatus)
-            close()
         }
     }
 
@@ -128,20 +148,6 @@ class FlowExecutionService private constructor(val flowExecutionId: Long,
                             "您的任务：[thain-${flowDr.id}]${flowDr.name}, 连续失败了${flowDr.pauseContinuousFailure}次，任务已经暂停。最近一次失败原因：$errorMessage"
                     )
                 }
-    }
-
-    private fun close() {
-        FLOW_EXECUTION_SERVICE_MAP.remove(flowExecutionId)
-    }
-
-    companion object {
-        private val FLOW_EXECUTION_SERVICE_MAP = ConcurrentHashMap<Long, FlowExecutionService>()
-
-        fun getInstance(flowExecutionId: Long,
-                        flowModel: FlowDr,
-                        processEngineStorage: ProcessEngineStorage): FlowExecutionService {
-            return FLOW_EXECUTION_SERVICE_MAP.computeIfAbsent(flowExecutionId) { FlowExecutionService(it, flowModel, processEngineStorage) }
-        }
     }
 
 }

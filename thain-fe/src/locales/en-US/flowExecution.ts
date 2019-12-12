@@ -16,6 +16,7 @@ export default {
   'flow.execution.trigger.type': 'Trigger type',
   'flow.execution.manual': 'Manual',
   'flow.execution.auto': 'Auto',
+  'flow.execution.retry': 'Retry',
   'flow.execution.status': 'Flow execution status',
   'flow.execution.execution.machine': 'Execution machine',
   'flow.execution.create.time': 'Create time',

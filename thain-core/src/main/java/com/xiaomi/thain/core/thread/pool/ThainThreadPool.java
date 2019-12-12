@@ -27,6 +27,7 @@ public class ThainThreadPool implements Executor {
     public static final ThainThreadPool DEFAULT_THREAD_POOL = getInstance("default", 100);
 
     public static final ThainThreadPool MANUAL_TRIGGER_THREAD_POOL = getInstance("MANUAL_TRIGGER", 20);
+    public static final ThainThreadPool RETRY_THREAD_POOL = getInstance("RETRY", 20);
 
     private ThainThreadPool(@NonNull String threadName, int corePoolSize, int maximumPoolSize, long keepAliveSecond) {
         threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveSecond,

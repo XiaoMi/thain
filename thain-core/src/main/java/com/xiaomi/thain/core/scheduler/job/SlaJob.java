@@ -9,6 +9,7 @@ import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +40,7 @@ public class SlaJob implements Job {
         return SLA_JOB_MAP.computeIfAbsent(processEngine.processEngineId, t -> new SlaJob(processEngine));
     }
 
+    @SneakyThrows
     @Override
     public void execute(@NonNull JobExecutionContext context) {
         val dataMap = context.getJobDetail().getJobDataMap();
@@ -66,6 +68,7 @@ public class SlaJob implements Job {
                 log.error("kill failed, flowExecutionId:" + flowExecutionId, e);
             }
         }
+        context.getScheduler().deleteJob(context.getJobDetail().getKey());
     }
 
 }

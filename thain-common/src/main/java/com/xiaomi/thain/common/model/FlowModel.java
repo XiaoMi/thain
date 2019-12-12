@@ -75,7 +75,7 @@ public class FlowModel {
 
     public final int retryNumber;
 
-    public final int timeInterval;
+    public final int retryTimeInterval;
 
     /**
      * 创建时间

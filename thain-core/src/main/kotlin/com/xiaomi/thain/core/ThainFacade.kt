@@ -52,7 +52,7 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
         }
         try {
             CronExpression.validateExpression(addRq.flowModel.cron)
-            schedulerEngine.addFlow(flowId, addRq.flowModel.cron!!)
+            schedulerEngine.addFlow(flowId, addRq.flowModel.cron)
         } catch (e: Exception) {
             processEngine.deleteFlow(flowId)
             throw ThainException(e)

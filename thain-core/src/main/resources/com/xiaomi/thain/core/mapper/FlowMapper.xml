@@ -53,8 +53,8 @@
         <if test="retryNumber != null">
             retry_number,
         </if>
-        <if test="timeInterval != null">
-            time_interval,
+        <if test="retryTimeInterval != null">
+            retry_time_interval,
         </if>
         create_time, update_time, status_update_time)
         values (
@@ -97,8 +97,8 @@
         <if test="retryNumber != null">
             #{retryNumber},
         </if>
-        <if test="timeInterval != null">
-            #{timeInterval},
+        <if test="retryTimeInterval != null">
+            #{retryTimeInterval},
         </if>
         now(), now(), now())
     </insert>
@@ -186,8 +186,8 @@
         <if test="retryNumber != null">
             `retry_number` = #{retryNumber},
         </if>
-        <if test="timeInterval != null">
-            `time_interval` = #{timeInterval},
+        <if test="retryTimeInterval != null">
+            retry_time_interval = #{retryTimeInterval},
         </if>
         `update_time` = now()
         where id = #{id}
@@ -237,7 +237,7 @@
                last_run_status,
                scheduling_status,
                retry_number,
-               time_interval,
+               retry_time_interval,
                create_time,
                update_time,
                status_update_time,

@@ -124,7 +124,7 @@ public class ProcessEngine {
         this.flowExecutionLoader = FlowExecutionLoader.getInstance(processEngineStorage);
         val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService);
         flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
-        flowExecutionHeartbeat.addCollections(flowExecutionLoader.runningFlowExecution);
+        flowExecutionHeartbeat.addCollections(flowExecutionLoader.getRunningFlowExecution());
 
     }
 
@@ -195,6 +195,10 @@ public class ProcessEngine {
      */
     public long startProcess(long flowId) throws ThainException, ThainRepeatExecutionException {
         return flowExecutionLoader.startAsync(flowId);
+    }
+
+    public long retryFlow(long flowId, int retryNumber) {
+        return flowExecutionLoader.retryAsync(flowId, retryNumber);
     }
 
     public FlowDr getFlow(long flowId) throws ThainException {

@@ -37,7 +37,7 @@ data class FlowDr(
          */
         val schedulingStatus: Int = 0,
         val retryNumber: Int = 0,
-        val timeInterval: Int = 0,
+        val retryTimeInterval: Int = 0,
         /**
          * 创建时间
          */

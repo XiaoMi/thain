@@ -106,7 +106,7 @@ public class JobExecutor {
                     continue;
                 }
                 if (field.getType().isAssignableFrom(String.class)) {
-                    val v = Optional.of(jobDr.getPropertiesMap()).map(t -> t.get(field.getName()));
+                    val v = Optional.of(jobDr.getProperties()).map(t -> t.get(field.getName()));
                     if (v.isPresent()) {
                         field.set(instance, v.get());
                     }

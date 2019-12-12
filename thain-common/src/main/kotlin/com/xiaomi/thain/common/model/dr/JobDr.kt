@@ -1,7 +1,7 @@
 package com.xiaomi.thain.common.model.dr
 
 import com.alibaba.fastjson.JSON
-import com.alibaba.fastjson.JSONObject
+import com.alibaba.fastjson.TypeReference
 import java.sql.Timestamp
 
 /**
@@ -15,12 +15,11 @@ class JobDr(val id: Long,
             val condition: String,
             val component: String,
             val callbackUrl: String?,
-            val properties: String,
+            propertiesString: String,
             val xAxis: Int,
             val yAxis: Int,
             val createTime: Timestamp,
             val deleted: Boolean
 ) {
-    val propertiesMap: JSONObject
-        get() = JSON.parseObject(properties)
+    val properties = JSON.parseObject(propertiesString, object : TypeReference<Map<String, String>>() {})!!
 }

@@ -57,7 +57,7 @@ public class ThainClient {
      */
     public ApiResult updateJobProperties(long flowId,
                                          @NonNull String jobName,
-                                         @NonNull Map<String, Object> modifyProperties) throws IOException {
+                                         @NonNull Map<String, String> modifyProperties) throws IOException {
         return buildRequest(url + UPDATE_JOB_PROPERTIES, JSON.toJSONString(UpdateJobPropertiesRq.builder()
                 .flowId(flowId)
                 .jobName(jobName)

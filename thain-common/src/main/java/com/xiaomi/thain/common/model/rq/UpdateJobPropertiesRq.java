@@ -17,5 +17,5 @@ public class UpdateJobPropertiesRq {
     @NonNull
     public final String jobName;
     @NonNull
-    public final Map<String, Object> modifyProperties;
+    public final Map<String, String> modifyProperties;
 }

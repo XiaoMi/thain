@@ -24,7 +24,7 @@ data class AddJobRq(
             jobDr.condition,
             jobDr.component,
             jobDr.callbackUrl,
-            JSON.parseObject(jobDr.properties, object : TypeReference<Map<String, String>>() {}),
+            jobDr.properties,
             jobDr.xAxis,
             jobDr.yAxis
     )

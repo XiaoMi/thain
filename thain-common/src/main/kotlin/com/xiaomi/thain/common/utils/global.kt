@@ -6,3 +6,7 @@ inline infix fun <T : Any> T?.ifNull(block: (T?) -> T): T {
     }
     return this
 }
+
+fun <T> List<T>.copyOf(): List<T> {
+    return mutableListOf<T>().also { it.addAll(this) }
+}

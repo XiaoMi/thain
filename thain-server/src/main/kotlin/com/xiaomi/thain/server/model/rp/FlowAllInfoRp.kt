@@ -2,7 +2,6 @@ package com.xiaomi.thain.server.model.rp
 
 import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
-import lombok.Builder
 
 /**
  * Date 19-7-1 上午10:33
@@ -10,7 +9,6 @@ import lombok.Builder
  *
  * @author liangyongrui@xiaomi.com
  */
-@Builder
 class FlowAllInfoRp(
         val flowModel: FlowDr,
         val jobModelList: List<JobModel>

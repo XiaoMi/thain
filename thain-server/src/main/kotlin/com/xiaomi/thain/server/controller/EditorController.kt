@@ -13,7 +13,6 @@ import kotlin.jvm.javaClass
 /**
  * @author liangyongrui@xiaomi.com
  */
-@lombok.extern.slf4j.Slf4j
 @RestController
 @RequestMapping("api/editor")
 class EditorController(private val flowService: FlowService,

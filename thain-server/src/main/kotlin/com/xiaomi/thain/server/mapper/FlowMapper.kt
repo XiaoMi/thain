@@ -1,7 +1,5 @@
 package com.xiaomi.thain.server.mapper
 
-import com.xiaomi.thain.common.model.FlowModel
-import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
 import com.xiaomi.thain.common.model.dr.JobDr
 import com.xiaomi.thain.server.model.sp.FlowListSp

@@ -2,8 +2,6 @@ package com.xiaomi.thain.server.service.impl
 
 import com.xiaomi.thain.common.exception.ThainException
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
-import com.xiaomi.thain.common.model.FlowModel
-import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowDr
 import com.xiaomi.thain.common.model.dr.JobDr
 import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq

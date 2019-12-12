@@ -43,7 +43,12 @@ public enum FlowExecutionStatus {
     /**
      * 自动kill
      */
-    AUTO_KILLED(6);
+    AUTO_KILLED(6),
+
+    /**
+     * 失败等待重试
+     */
+    ERROR_WAITING_RETRY(7);
 
 
     public final int code;

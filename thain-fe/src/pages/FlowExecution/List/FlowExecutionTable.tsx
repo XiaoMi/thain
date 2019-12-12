@@ -58,6 +58,8 @@ function FlowExecutionTable() {
         return styles.killedRow;
       case FlowExecutionStatus.DO_NOT_RUN_SAME_TIME:
         return styles.doNotRunSameTimeRow;
+      case FlowExecutionStatus.ERROR_WAITING_RETRY:
+        return styles.errorWaitingRetry;
       default:
         return styles.successRow;
     }
@@ -79,7 +81,7 @@ function FlowExecutionTable() {
           case 3:
             return formatMessage({ id: 'flow.execution.retry' });
           default:
-            triggerType;
+            return triggerType;
         }
       },
     },

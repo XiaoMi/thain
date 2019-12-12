@@ -114,6 +114,7 @@ class FlowExecutionService(val flowExecutionId: Long,
                             flowService.endFlow(flowEndStatus)
                         }
                     } else {
+                        flowExecutionEndStatus = FlowExecutionStatus.ERROR_WAITING_RETRY
                         ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade
                                 .schedulerEngine
                                 .addRetry(flowDr, retryNumber + 1)

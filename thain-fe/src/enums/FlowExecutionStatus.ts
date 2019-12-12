@@ -40,6 +40,8 @@ export enum FlowExecutionStatus {
    * 超时自动kill
    */
   AUTO_KILLED = 6,
+
+  ERROR_WAITING_RETRY = 7,
 }
 const map = {
   [FlowExecutionStatus.WAITING]: formatMessage({ id: 'flow.execution.waiting' }),
@@ -52,6 +54,9 @@ const map = {
   }),
   [FlowExecutionStatus.AUTO_KILLED]: formatMessage({
     id: 'flow.execution.timeout.auto.killed',
+  }),
+  [FlowExecutionStatus.ERROR_WAITING_RETRY]: formatMessage({
+    id: 'flow.execution.timeout.error.waiting.retry',
   }),
 };
 

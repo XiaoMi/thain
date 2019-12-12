@@ -9,6 +9,7 @@ export default {
   'flow.execution.success': 'Success',
   'flow.execution.error': 'Error',
   'flow.execution.killed': 'Killed',
+  'flow.execution.timeout.error.waiting.retry': 'Error waiting retry',
   'flow.execution.do.not.run.same.time': 'Do not run same time',
   'flow.execution.timeout.auto.killed': 'Auto killed',
   'flow.execution.consuming': 'Time consuming',

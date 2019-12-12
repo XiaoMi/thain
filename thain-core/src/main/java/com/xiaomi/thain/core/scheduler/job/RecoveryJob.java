@@ -32,14 +32,14 @@ public class RecoveryJob implements Job {
     @NonNull
     private final ProcessEngine processEngine;
 
-    private static final Map<String, RecoveryJob> CLEAN_JOB_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, RecoveryJob> RECOVERY_JOB_MAP = new ConcurrentHashMap<>();
 
     private RecoveryJob(@NonNull ProcessEngine processEngine) {
         this.processEngine = processEngine;
     }
 
     public static RecoveryJob getInstance(@NonNull ProcessEngine processEngine) {
-        return CLEAN_JOB_MAP.computeIfAbsent(processEngine.processEngineId, t -> new RecoveryJob(processEngine));
+        return RECOVERY_JOB_MAP.computeIfAbsent(processEngine.processEngineId, t -> new RecoveryJob(processEngine));
     }
 
     @Override

@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 /**
  * @author liangyongrui
  */
@@ -34,8 +36,8 @@ public class JobServiceImpl implements JobService {
     public void updateJobProperties(@NonNull UpdateJobPropertiesRq updateJobPropertiesRq) {
         val job = jobDao.getJobByFlowIdAndName(updateJobPropertiesRq.flowId, updateJobPropertiesRq.jobName)
                 .orElseThrow(() -> new ThainRuntimeException("job不存在"));
-        val properties = JSON.parseObject(job.properties);
+        val properties = new HashMap<String,String>(job.getProperties());
         properties.putAll(updateJobPropertiesRq.modifyProperties);
-        jobDao.updateJobProperties(job.id, JSON.toJSONString(properties));
+        jobDao.updateJobProperties(job.getId(), JSON.toJSONString(properties));
     }
 }

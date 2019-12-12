@@ -23,6 +23,8 @@ create table thain_flow
 	1 未设置调度，
 	2 调度中，
 	3 暂停调度',
+    retry_number             int unsigned     default 0                     not null comment '重试次数',
+    retry_time_interval            int unsigned     default 0                     not null comment '每次重试的间隔，单位秒',
     create_time              timestamp        default '2019-01-01 00:00:00' not null comment '创建时间',
     update_time              timestamp        default '2019-01-01 00:00:00' not null comment '更新时间',
     status_update_time       timestamp        default '2019-01-01 00:00:00' not null on update CURRENT_TIMESTAMP comment '状态更新时间',

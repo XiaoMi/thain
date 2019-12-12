@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import javax.sql.DataSource;
 
 /**
@@ -36,7 +35,7 @@ public class AppConfig {
 
     @Bean("thainFacade")
     public ThainFacade createProcessEngineFacade(@NonNull @Qualifier("mysqlDataSource") DataSource dataSource)
-            throws ThainException, IOException, SQLException, InterruptedException {
+            throws ThainException, IOException {
 
         val processEngineConfiguration = ProcessEngineConfiguration.builder()
                 .mailHost(env.getProperty("mail.host", ""))

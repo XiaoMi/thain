@@ -35,6 +35,8 @@ export interface FlowAttributes {
   slaDuration?: number;
   slaEmail?: string;
   slaKill?: boolean;
+  retryNumber?: number;
+  retryTimeInterval?: number;
 }
 
 export class FlowEditorModelState {

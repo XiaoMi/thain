@@ -5,7 +5,7 @@
  */
 package com.xiaomi.thain.core.mapper;
 
-import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dr.JobDr;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,5 +17,5 @@ import java.util.List;
  */
 public interface JobMapper {
 
-    List<JobModel> getJobs(@Param("flowId") long flowId);
+    List<JobDr> getJobs(@Param("flowId") long flowId);
 }

@@ -19,6 +19,8 @@ create table thain_flow
     sla_kill                 int(1)       default 0                     not null comment '超过期望时间 是否kill',
     last_run_status          int          default 0                     not null comment '最后一次运行状态：1 未运行、2 运行成功、3 运行异常、4 正在运行、5 手动杀死、6 暂停运行（运行了一半，点了暂停）',
     scheduling_status        int          default 0                     not null comment '调度状态：1 未设置调度，2 调度中，3 暂停调度',
+    retry_number             int          default 0                     not null comment '重试次数',
+    retry_time_interval            int          default 0                     not null comment '每次重试的间隔，单位秒',
     create_time              timestamp    default '2019-01-01 00:00:00' not null comment '创建时间',
     update_time              timestamp    default '2019-01-01 00:00:00' not null comment '更新时间',
     status_update_time       timestamp    default '2019-01-01 00:00:00' not null comment '状态更新时间',

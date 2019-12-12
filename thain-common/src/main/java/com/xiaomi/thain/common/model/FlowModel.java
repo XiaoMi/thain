@@ -73,6 +73,10 @@ public class FlowModel {
      */
     public final int schedulingStatus;
 
+    public final int retryNumber;
+
+    public final int retryTimeInterval;
+
     /**
      * 创建时间
      */

@@ -19,6 +19,8 @@ export class FlowModel {
   public slaDuration?: number;
   public slaEmail?: string;
   public slaKill?: boolean;
+  retryNumber?: number;
+  retryTimeInterval?: number;
   createTime?: number;
   updateTime?: number;
   statusUpdateTime?: number;

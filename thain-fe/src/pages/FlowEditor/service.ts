@@ -26,7 +26,7 @@ export async function getComponentDefineJson(): Promise<ComponentDefineJsons | u
  * 添加flow
  */
 export async function addFlow(data: FlowAllInfo) {
-  return post('/api/flow/add', JSON.stringify(data));
+  return post('/api/editor', JSON.stringify(data));
 }
 
 export async function getFlow(flowId: number) {

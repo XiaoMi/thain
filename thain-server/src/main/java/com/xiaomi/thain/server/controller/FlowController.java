@@ -6,15 +6,13 @@
 
 package com.xiaomi.thain.server.controller;
 
-import com.google.gson.Gson;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.common.exception.ThainFlowRunningException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
-import com.xiaomi.thain.common.model.rq.AddRq;
+import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.model.rp.FlowAllInfoRp;
 import com.xiaomi.thain.server.model.rq.FlowListRq;
 import com.xiaomi.thain.server.model.sp.FlowListSp;
-import com.xiaomi.thain.server.service.CheckService;
 import com.xiaomi.thain.server.service.FlowExecutionService;
 import com.xiaomi.thain.server.service.FlowService;
 import com.xiaomi.thain.server.service.PermissionService;
@@ -39,18 +37,14 @@ public class FlowController {
     @NonNull
     private final FlowService flowService;
     @NonNull
-    private final CheckService checkService;
-    @NonNull
     private final PermissionService permissionService;
     @NonNull
     private final FlowExecutionService flowExecutionService;
 
     public FlowController(@NonNull FlowService flowService,
-                          @NonNull CheckService checkService,
                           @NonNull PermissionService permissionService,
                           @NonNull FlowExecutionService flowExecutionService) {
         this.flowService = flowService;
-        this.checkService = checkService;
         this.permissionService = permissionService;
         this.flowExecutionService = flowExecutionService;
     }
@@ -91,47 +85,13 @@ public class FlowController {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
             val flowModel = flowService.getFlow(flowId);
+            if (flowModel == null) {
+                throw new ThainRuntimeException();
+            }
             val jobModelList = flowService.getJobModelList(flowId);
-            return ApiResult.success(FlowAllInfoRp.builder()
-                    .flowModel(flowModel)
-                    .jobModelList(jobModelList).build());
+            return ApiResult.success(new FlowAllInfoRp(flowModel, jobModelList));
         } catch (Exception e) {
             return ApiResult.fail(ExceptionUtils.getRootCauseMessage(e));
-        }
-    }
-
-    @PostMapping("add")
-    public ApiResult add(@NonNull @RequestBody String json) {
-        try {
-            Gson gson = new Gson();
-            val addRq = gson.fromJson(json, AddRq.class);
-            return add(addRq
-                    .toBuilder()
-                    .flowModel(addRq.flowModel
-                            .toBuilder()
-                            .createUser(getUsername())
-                            .build())
-                    .build(), "thain");
-        } catch (Exception e) {
-            log.error("", e);
-            return ApiResult.fail(e.getMessage());
-        }
-    }
-
-    public ApiResult add(@NonNull AddRq addRq, @NonNull String appId) {
-        val addFlowRq = addRq.flowModel;
-        val jobModelList = addRq.jobModelList;
-        try {
-            checkService.checkFlowModel(addFlowRq);
-            checkService.checkJobModelList(jobModelList);
-        } catch (Exception e) {
-            return ApiResult.fail(e.getMessage());
-        }
-        try {
-            return ApiResult.success(flowService.add(addFlowRq, jobModelList, appId));
-        } catch (Exception e) {
-            log.error("add", e);
-            return ApiResult.fail(e.getMessage());
         }
     }
 

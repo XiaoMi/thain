@@ -38,6 +38,7 @@ gen### Java template
 
 # Package Files #
 *.jar
+!gradle-wrapper.jar
 *.war
 *.ear
 *.zip
@@ -78,3 +79,5 @@ Temporary Items
 **/node/
 **/junit-report
 /shell/job_execution*
+.gradle
+build

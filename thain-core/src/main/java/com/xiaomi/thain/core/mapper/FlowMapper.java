@@ -5,9 +5,10 @@
  */
 package com.xiaomi.thain.core.mapper;
 
-import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.common.model.rq.AddFlowRq;
-import com.xiaomi.thain.common.model.rq.UpdateFlowRq;
+import com.xiaomi.thain.common.model.dp.UpdateFlowDp;
+import com.xiaomi.thain.common.model.dr.FlowDr;
+import com.xiaomi.thain.core.model.dp.AddFlowDp;
+import com.xiaomi.thain.core.model.dp.AddJobDp;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,24 +25,24 @@ public interface FlowMapper {
     /**
      * 数据库插入flow，成功flowModel插入id
      */
-    int addFlow(@NonNull AddFlowRq flowRq);
+    int addFlow(@NonNull AddFlowDp addFlowDp);
 
     /**
      * 更新
      */
-    int updateFlow(UpdateFlowRq updateFlowRq);
+    int updateFlow(@NonNull UpdateFlowDp updateFlowDp);
 
     int deleteFlow(long flowId);
 
     @Nullable
-    com.xiaomi.thain.common.model.dr.FlowDr getFlow(long flowId);
+    FlowDr getFlow(long flowId);
 
     /**
      * 更新最后一次运行状态
      */
     int updateLastRunStatus(@Param("flowId") long flowId, @Param("lastRunStatus") int lastRunStatus);
 
-    int addJobList(@NonNull List<JobModel> jobModelList);
+    int addJobList(@NonNull List<AddJobDp> addJobDpList);
 
     int invalidJobList(@Param("flowId") long flowId);
 

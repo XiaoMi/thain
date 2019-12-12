@@ -1,7 +1,7 @@
 package com.xiaomi.thain.server.dao;
 
+import com.xiaomi.thain.common.model.dr.JobDr;
 import com.xiaomi.thain.server.mapper.JobMapper;
-import com.xiaomi.thain.server.model.dr.JobDr;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 

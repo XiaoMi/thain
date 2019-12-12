@@ -10,9 +10,9 @@ import com.google.gson.reflect.TypeToken;
 import com.xiaomi.thain.common.entity.ComponentItemDefine;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
-import com.xiaomi.thain.common.model.JobModel;
-import com.xiaomi.thain.common.model.rq.AddFlowRq;
 import com.xiaomi.thain.core.ThainFacade;
+import com.xiaomi.thain.common.model.rq.AddFlowRq;
+import com.xiaomi.thain.common.model.rq.AddJobRq;
 import com.xiaomi.thain.server.service.CheckService;
 import lombok.NonNull;
 import lombok.val;
@@ -41,28 +41,28 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public void checkFlowModel(@NonNull AddFlowRq addFlowRq) throws ThainException {
-        if (StringUtils.isBlank(addFlowRq.name)) {
+        if (StringUtils.isBlank(addFlowRq.getName())) {
             throw new ThainException("flow name is empty");
         }
-        if (StringUtils.isBlank(addFlowRq.createUser)) {
+        if (StringUtils.isBlank(addFlowRq.getCreateUser())) {
             throw new ThainException("failed to obtain createUser");
         }
     }
 
     @Override
-    public void checkJobModelList(@NonNull List<JobModel> jobModelList) throws ThainException {
+    public void checkJobModelList(@NonNull List<AddJobRq> jobModelList) throws ThainException {
         if (jobModelList.isEmpty()) {
             throw new ThainException("job node is empty");
         }
         val jobNameSet = new HashSet<String>();
         for (val jobModel : jobModelList) {
-            if (!jobNameSet.add(jobModel.name)) {
-                throw new ThainException("duplicated job node name：" + jobModel.name);
+            if (!jobNameSet.add(jobModel.getName())) {
+                throw new ThainException("duplicated job node name：" + jobModel.getName());
             }
         }
         for (val jobModel : jobModelList) {
             checkJobModel(jobModel);
-            Optional.ofNullable(jobModel.condition)
+            Optional.ofNullable(jobModel.getCondition())
                     .map(t -> t.split("&&|\\|\\|"))
                     .map(Arrays::stream).orElseGet(Stream::empty)
                     .map(String::trim)
@@ -73,35 +73,35 @@ public class CheckServiceImpl implements CheckService {
                     .filter(t -> t.length() > 0)
                     .forEach(t -> {
                         if (!jobNameSet.contains(t)) {
-                            throw new ThainRuntimeException(jobModel.name + "relies on non-existent node: " + t);
+                            throw new ThainRuntimeException(jobModel.getName() + "relies on non-existent node: " + t);
                         }
-                        if (jobModel.name.equals(t)) {
-                            throw new ThainRuntimeException(jobModel.name + "relies on himself");
+                        if (jobModel.getName().equals(t)) {
+                            throw new ThainRuntimeException(jobModel.getName() + "relies on himself");
                         }
                     });
         }
     }
 
-    private void checkJobModel(@NonNull JobModel jobModel) throws ThainException {
-        if (StringUtils.isBlank(jobModel.name)) {
+    private void checkJobModel(@NonNull AddJobRq addJobRq) throws ThainException {
+        if (StringUtils.isBlank(addJobRq.getName())) {
             throw new ThainException("Some node name is empty");
         }
-        if (!jobModel.name.matches("^[_A-Za-z][_A-Za-z0-9]*$")) {
+        if (!addJobRq.getName().matches("^[_A-Za-z][_A-Za-z0-9]*$")) {
             throw new ThainException("Job names can only have numbers, letters, underscores, and begin with numbers or letters");
         }
         val componentDefineMap = getComponentDefineMap();
-        val componentDefine = Optional.ofNullable(componentDefineMap.get(jobModel.component))
-                .orElseThrow(() -> new ThainException("Component of node " + jobModel.name + " does not available "));
+        val componentDefine = Optional.ofNullable(componentDefineMap.get(addJobRq.getComponent()))
+                .orElseThrow(() -> new ThainException("Component of node " + addJobRq.getName() + " does not available "));
 
         out:
         for (val item : componentDefine) {
             if (item.required) {
-                for (val prop : jobModel.properties.keySet()) {
+                for (val prop : addJobRq.getProperties().keySet()) {
                     if (item.property.equals(prop)) {
                         continue out;
                     }
                 }
-                throw new ThainException("Required items of " + jobModel.name + " not filled in：" + item.property);
+                throw new ThainException("Required items of " + addJobRq.getName() + " not filled in：" + item.property);
             }
         }
     }

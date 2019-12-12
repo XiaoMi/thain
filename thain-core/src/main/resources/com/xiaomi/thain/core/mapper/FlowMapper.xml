@@ -8,9 +8,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaomi.thain.core.mapper.FlowMapper">
 
-    <insert id="addFlow" parameterType="com.xiaomi.thain.common.model.rq.AddFlowRq" useGeneratedKeys="true"
+    <insert id="addFlow"
+            parameterType="com.xiaomi.thain.core.model.dp.AddFlowDp"
+            useGeneratedKeys="true"
             keyProperty="id">
-        insert into thain_flow (name,
+
+        insert into thain_flow (
+        name,
         <if test="cron != null">
             cron,
         </if>
@@ -18,7 +22,9 @@
         <if test="callbackUrl != null">
             callback_url,
         </if>
-        pause_continuous_failure,
+        <if test="pauseContinuousFailure != null">
+            pause_continuous_failure,
+        </if>
         <if test="emailContinuousFailure != null">
             email_continuous_failure,
         </if>
@@ -31,17 +37,28 @@
         <if test="createAppId != null">
             create_app_id,
         </if>
-        sla_duration,
+        <if test="slaDuration != null">
+            sla_duration,
+        </if>
         <if test="slaEmail != null">
             sla_email,
         </if>
-        sla_kill,
-        <if test="lastRunStatus != null">
-            last_run_status,
+        <if test="slaKill != null">
+            sla_kill,
         </if>
-        scheduling_status,
+        last_run_status,
+        <if test="schedulingStatus != null">
+            scheduling_status,
+        </if>
+        <if test="retryNumber != null">
+            retry_number,
+        </if>
+        <if test="retryTimeInterval != null">
+            retry_time_interval,
+        </if>
         create_time, update_time, status_update_time)
-        values (#{name},
+        values (
+        #{name},
         <if test="cron != null">
             #{cron},
         </if>
@@ -49,7 +66,9 @@
         <if test="callbackUrl != null">
             #{callbackUrl},
         </if>
-        #{pauseContinuousFailure},
+        <if test="pauseContinuousFailure != null">
+            #{pauseContinuousFailure},
+        </if>
         <if test="emailContinuousFailure != null">
             #{emailContinuousFailure},
         </if>
@@ -62,15 +81,25 @@
         <if test="createAppId != null">
             #{createAppId},
         </if>
-        #{slaDuration},
+        <if test="slaDuration">
+            #{slaDuration},
+        </if>
         <if test="slaEmail != null">
             #{slaEmail},
         </if>
-        #{slaKill},
-        <if test="lastRunStatus != null">
-            #{lastRunStatus},
+        <if test="slaKill != null">
+            #{slaKill},
         </if>
-        #{schedulingStatus},
+        1,
+        <if test="schedulingStatus != null">
+            #{schedulingStatus},
+        </if>
+        <if test="retryNumber != null">
+            #{retryNumber},
+        </if>
+        <if test="retryTimeInterval != null">
+            #{retryTimeInterval},
+        </if>
         now(), now(), now())
     </insert>
     <insert id="addJobList">
@@ -99,7 +128,7 @@
             </choose>
             ,
             <choose>
-                <when test="job.propertiesString != null">#{job.propertiesString}</when>
+                <when test="job.properties != null">#{job.properties}</when>
                 <otherwise>''</otherwise>
             </choose>
             ,
@@ -118,7 +147,7 @@
         </foreach>
     </insert>
 
-    <update id="updateFlow" parameterType="com.xiaomi.thain.common.model.rq.UpdateFlowRq">
+    <update id="updateFlow" parameterType="com.xiaomi.thain.common.model.dp.UpdateFlowDp">
         update thain_flow
         set `id`= #{id},
         <if test="name != null and name != ''">
@@ -153,6 +182,12 @@
         </if>
         <if test="schedulingStatus != null">
             `scheduling_status` = #{schedulingStatus},
+        </if>
+        <if test="retryNumber != null">
+            `retry_number` = #{retryNumber},
+        </if>
+        <if test="retryTimeInterval != null">
+            retry_time_interval = #{retryTimeInterval},
         </if>
         `update_time` = now()
         where id = #{id}
@@ -201,6 +236,8 @@
                sla_kill,
                last_run_status,
                scheduling_status,
+               retry_number,
+               retry_time_interval,
                create_time,
                update_time,
                status_update_time,

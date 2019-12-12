@@ -5,15 +5,15 @@
  */
 package com.xiaomi.thain.core.process;
 
+import com.xiaomi.thain.common.constant.FlowSchedulingStatus;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
-import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.dr.FlowDr;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.common.model.rq.AddFlowRq;
-import com.xiaomi.thain.common.model.rq.UpdateFlowRq;
+import com.xiaomi.thain.common.model.rq.AddJobRq;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.core.config.DatabaseHandler;
 import com.xiaomi.thain.core.dao.*;
@@ -124,7 +124,7 @@ public class ProcessEngine {
         this.flowExecutionLoader = FlowExecutionLoader.getInstance(processEngineStorage);
         val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService);
         flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
-        flowExecutionHeartbeat.addCollections(flowExecutionLoader.runningFlowExecution);
+        flowExecutionHeartbeat.addCollections(flowExecutionLoader.getRunningFlowExecution());
 
     }
 
@@ -169,23 +169,17 @@ public class ProcessEngine {
      * 插入flow
      * 成功返回 flow id
      */
-    public Optional<Long> addFlow(@NonNull AddFlowRq addFlowRq, @NonNull List<JobModel> jobModelList) {
+    public Optional<Long> addFlow(@NonNull AddFlowRq addFlowRq, @NonNull List<AddJobRq> jobModelList) {
         try {
-            int schedulingStatus = NOT_SET.code;
-            if (StringUtils.isNotBlank(addFlowRq.cron)) {
-                schedulingStatus = SCHEDULING.code;
+            FlowSchedulingStatus schedulingStatus = NOT_SET;
+            if (StringUtils.isNotBlank(addFlowRq.getCron())) {
+                schedulingStatus = SCHEDULING;
             }
-            val cloneFlowModel = addFlowRq.toBuilder().schedulingStatus(schedulingStatus).build();
-            processEngineStorage.flowDao.addFlow(cloneFlowModel, jobModelList);
-            return Optional.ofNullable(cloneFlowModel.id);
+            return processEngineStorage.flowDao.addFlow(addFlowRq, jobModelList, schedulingStatus);
         } catch (Exception e) {
             log.error("addFlow:", e);
         }
         return Optional.empty();
-    }
-
-    public void updateFlow(@NonNull UpdateFlowRq updateFlowRq, @NonNull List<JobModel> jobModelList) {
-        processEngineStorage.flowDao.updateFlow(updateFlowRq, jobModelList);
     }
 
     /**
@@ -201,6 +195,10 @@ public class ProcessEngine {
      */
     public long startProcess(long flowId) throws ThainException, ThainRepeatExecutionException {
         return flowExecutionLoader.startAsync(flowId);
+    }
+
+    public long retryFlow(long flowId, int retryNumber) {
+        return flowExecutionLoader.retryAsync(flowId, retryNumber);
     }
 
     public FlowDr getFlow(long flowId) throws ThainException {

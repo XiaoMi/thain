@@ -5,6 +5,8 @@
  */
 package com.xiaomi.thain.common.constant;
 
+import lombok.val;
+
 /**
  * flow的调度状态
  *
@@ -31,4 +33,12 @@ public enum FlowSchedulingStatus {
         this.code = code;
     }
 
+    public static FlowSchedulingStatus getInstance(int code) {
+        for (val t : FlowSchedulingStatus.values()) {
+            if (t.code == code) {
+                return t;
+            }
+        }
+        return NOT_SET;
+    }
 }

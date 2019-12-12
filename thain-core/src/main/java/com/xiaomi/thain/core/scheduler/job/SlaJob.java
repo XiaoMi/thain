@@ -9,6 +9,7 @@ import com.xiaomi.thain.common.constant.FlowExecutionStatus;
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.core.process.ProcessEngine;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +40,7 @@ public class SlaJob implements Job {
         return SLA_JOB_MAP.computeIfAbsent(processEngine.processEngineId, t -> new SlaJob(processEngine));
     }
 
+    @SneakyThrows
     @Override
     public void execute(@NonNull JobExecutionContext context) {
         val dataMap = context.getJobDetail().getJobDataMap();
@@ -52,20 +54,21 @@ public class SlaJob implements Job {
             try {
                 val flow = processEngine.processEngineStorage.flowDao.getFlow(flowId)
                         .orElseThrow(() -> new ThainRuntimeException("flow does not exist， flowId:" + flowId));
-                if (flow.slaKill) {
+                if (flow.getSlaKill()) {
                     processEngine.thainFacade.killFlowExecution(flowExecutionId, true);
                 }
-                if (StringUtils.isNotBlank(flow.slaEmail)) {
+                if (StringUtils.isNotBlank(flow.getSlaEmail())) {
                     processEngine.processEngineStorage.mailService.send(
-                            flow.slaEmail.trim().split(","),
+                            flow.getSlaEmail().trim().split(","),
                             "Thain SLA提醒",
-                            "您的任务：" + flow.name + "(" + flow.id + "), 超出期望的执行时间"
+                            "您的任务：" + flow.getName() + "(" + flow.getId() + "), 超出期望的执行时间"
                     );
                 }
             } catch (Exception e) {
                 log.error("kill failed, flowExecutionId:" + flowExecutionId, e);
             }
         }
+        context.getScheduler().deleteJob(context.getJobDetail().getKey());
     }
 
 }

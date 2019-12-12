@@ -90,8 +90,8 @@ public class FlowExecutionDao {
         return execute(t -> t.getFlowExecution(flowExecutionId));
     }
 
-    public Optional<List<FlowExecutionModel>> getLatest(long flowId, long numbers) {
-        return execute(t -> t.getLatest(flowId, numbers));
+    public List<FlowExecutionModel> getLatest(long flowId, long numbers) {
+        return execute(t -> t.getLatest(flowId, numbers)).orElse(Collections.emptyList());
     }
 
     public List<Long> getNeedDeleteFlowExecutionId(@NonNull List<Long> flowIds) {

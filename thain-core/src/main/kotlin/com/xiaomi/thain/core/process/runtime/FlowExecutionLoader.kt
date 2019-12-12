@@ -118,7 +118,6 @@ class FlowExecutionLoader private constructor(private val processEngineStorage: 
         }
         val flowExecutionDr = processEngineStorage.flowExecutionDao
                 .getFlowExecution(addFlowExecutionDp.id!!).orElseThrow { ThainRuntimeException() }
-        checkFlowRunStatus(flowExecutionDr)
         CompletableFuture.runAsync(Runnable { runFlowExecution(flowExecutionDr, retryNumber) },
                 ThainThreadPool.RETRY_THREAD_POOL)
         return addFlowExecutionDp.id!!

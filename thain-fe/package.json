@@ -50,7 +50,7 @@
     "braft-extensions": "0.0.20",
     "classnames": "^2.2.6",
     "codemirror": "~5.49.2",
-    "core-js": "~3.4.8",
+    "core-js": "^3.5.0",
     "dva": "~2.6.0-beta.19",
     "lodash": "~4.17.15",
     "lodash-decorators": "^6.0.1",

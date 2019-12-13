@@ -67,16 +67,18 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
     fun updateFlow(updateFlowRq: UpdateFlowRq, jobModelList: List<AddJobRq>) {
         val schedulingStatus = updateFlowRq.cron
                 .takeIf { !it.isNullOrBlank() }
-                ?.let {
-                    CronExpression.validateExpression(it)
-                    schedulerEngine.addFlow(updateFlowRq.id, it)
+                ?.let {cron->
+                    CronExpression.validateExpression(cron)
                     FlowSchedulingStatus.getInstance(processEngine.getFlow(updateFlowRq.id).schedulingStatus)
-                            .takeIf { status -> status != FlowSchedulingStatus.NOT_SET }
+                            .takeIf { it != FlowSchedulingStatus.NOT_SET }
                             .ifNull { FlowSchedulingStatus.SCHEDULING }
-                }.ifNull {
-                    schedulerEngine.deleteFlow(updateFlowRq.id)
-                    FlowSchedulingStatus.NOT_SET
-                }
+                }.ifNull { FlowSchedulingStatus.NOT_SET }
+
+        if (schedulingStatus != FlowSchedulingStatus.SCHEDULING) {
+            schedulerEngine.deleteFlow(updateFlowRq.id)
+        } else {
+            schedulerEngine.addFlow(updateFlowRq.id, updateFlowRq.cron)
+        }
         val updateFlowDp = UpdateFlowDp(updateFlowRq, schedulingStatus)
         processEngine.processEngineStorage.flowDao.updateFlow(updateFlowDp, jobModelList)
     }

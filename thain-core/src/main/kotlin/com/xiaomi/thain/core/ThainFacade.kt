@@ -31,12 +31,11 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
 
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
-    val schedulerEngine: SchedulerEngine
-
     private val processEngine: ProcessEngine = ProcessEngine.newInstance(processEngineConfiguration, this)
 
+    val schedulerEngine = SchedulerEngine(schedulerEngineConfiguration, processEngine)
+
     init {
-        schedulerEngine = SchedulerEngine.getInstance(schedulerEngineConfiguration, processEngine)
         schedulerEngine.start()
     }
 
@@ -67,7 +66,7 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
     fun updateFlow(updateFlowRq: UpdateFlowRq, jobModelList: List<AddJobRq>) {
         val schedulingStatus = updateFlowRq.cron
                 .takeIf { !it.isNullOrBlank() }
-                ?.let {cron->
+                ?.let { cron ->
                     CronExpression.validateExpression(cron)
                     FlowSchedulingStatus.getInstance(processEngine.getFlow(updateFlowRq.id).schedulingStatus)
                             .takeIf { it != FlowSchedulingStatus.NOT_SET }

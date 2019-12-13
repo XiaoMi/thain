@@ -17,12 +17,15 @@ import java.util.*
  *
  * @author liangyongrui@xiaomi.com
  */
-class SchedulerEngine private constructor(schedulerEngineConfiguration: SchedulerEngineConfiguration,
-                                          processEngine: ProcessEngine) {
+
+class SchedulerEngine(schedulerEngineConfiguration: SchedulerEngineConfiguration,
+                      processEngine: ProcessEngine) {
+    companion object {
+        private const val SYSTEM_GROUP = "system"
+    }
 
     private val log = LoggerFactory.getLogger(this.javaClass)!!
-
-    private var scheduler: Scheduler
+    private val scheduler: Scheduler
 
     private fun initRecovery() {
         val jobDetail = JobBuilder.newJob(RecoveryJob::class.java)
@@ -116,14 +119,6 @@ class SchedulerEngine private constructor(schedulerEngineConfiguration: Schedule
                 .build()
         scheduler.deleteJob(jobDetail.key)
         scheduler.scheduleJob(jobDetail, trigger)
-    }
-
-    companion object {
-        private const val SYSTEM_GROUP = "system"
-        fun getInstance(schedulerEngineConfiguration: SchedulerEngineConfiguration,
-                        processEngine: ProcessEngine): SchedulerEngine {
-            return SchedulerEngine(schedulerEngineConfiguration, processEngine)
-        }
     }
 
     init {

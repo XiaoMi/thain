@@ -17,4 +17,4 @@ jobs:
         java-version: ${{matrix.java_version}}
     - name: Build with Gradle
       run: |
-        ./gradlew clean build --warning-mode all
+        ./gradlew clean build

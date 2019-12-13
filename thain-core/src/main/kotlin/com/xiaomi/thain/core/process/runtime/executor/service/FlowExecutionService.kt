@@ -87,14 +87,17 @@ class FlowExecutionService(private val flowExecutionId: Long,
                 FlowLastRunStatus.SUCCESS -> {
                     flowExecutionLogHandler.endSuccess()
                     flowHttpNotice.sendSuccess()
+                    flowService.endFlow(flowEndStatus)
                 }
                 FlowLastRunStatus.KILLED -> {
                     flowExecutionLogHandler.endError(errorMessage)
                     flowHttpNotice.sendKilled()
+                    flowService.endFlow(flowEndStatus)
                 }
                 FlowLastRunStatus.AUTO_KILLED -> {
                     flowExecutionLogHandler.endError(errorMessage)
                     flowHttpNotice.sendAutoKilled()
+                    flowService.endFlow(flowEndStatus)
                 }
                 else -> {
                     if (flowDr.retryNumber <= retryNumber) {

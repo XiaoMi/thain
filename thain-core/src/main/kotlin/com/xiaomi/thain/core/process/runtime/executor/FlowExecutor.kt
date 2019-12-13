@@ -73,8 +73,8 @@ class FlowExecutor private constructor(flowExecutionDr: FlowExecutionDr,
         } finally {
             try {
                 flowExecutionService.endFlowExecution()
-
             } finally {
+                flowExecutionJobThreadPool.shutdown()
                 FlowExecutionStorage.drop(flowExecutionId)
             }
         }

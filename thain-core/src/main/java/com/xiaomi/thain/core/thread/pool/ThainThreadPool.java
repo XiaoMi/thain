@@ -46,4 +46,8 @@ public class ThainThreadPool implements Executor {
     public int corePoolSize() {
         return threadPoolExecutor.getCorePoolSize();
     }
+
+    public void shutdown(){
+        threadPoolExecutor.shutdown();
+    }
 }

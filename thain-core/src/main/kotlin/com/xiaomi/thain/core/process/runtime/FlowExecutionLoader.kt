@@ -22,7 +22,7 @@ import java.util.concurrent.LinkedBlockingQueue
 /**
  * @author liangyongrui
  */
-class FlowExecutionLoader private constructor(private val processEngineStorage: ProcessEngineStorage) {
+class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage) {
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
     val runningFlowExecution: MutableSet<FlowExecutionDr> = ConcurrentHashMap.newKeySet()
@@ -35,23 +35,21 @@ class FlowExecutionLoader private constructor(private val processEngineStorage: 
     private fun loopLoader() {
         while (true) {
             try {
-                idleThread.take()
                 val flowExecutionDr = flowExecutionWaitingQueue.take()
                 try {
                     checkFlowRunStatus(flowExecutionDr)
                 } catch (e: Exception) {
-                    idleThread.put(true)
                     log.warn(e.message)
                     continue
                 }
-                CompletableFuture.runAsync(Runnable { runFlowExecution(flowExecutionDr, 0) }, flowExecutionThreadPool)
-                        .whenComplete { _, _ ->
-                            try {
-                                idleThread.put(true)
-                            } catch (te: Exception) {
-                                processEngineStorage.mailService.sendSeriousError(ExceptionUtils.getStackTrace(te))
-                            }
-                        }
+                idleThread.take()
+                CompletableFuture.runAsync(Runnable {
+                    try {
+                        runFlowExecution(flowExecutionDr, 0)
+                    } finally {
+                        idleThread.put(true)
+                    }
+                }, flowExecutionThreadPool)
             } catch (e: Exception) {
                 log.error("", e)
                 processEngineStorage.mailService.sendSeriousError(ExceptionUtils.getStackTrace(e))
@@ -59,7 +57,6 @@ class FlowExecutionLoader private constructor(private val processEngineStorage: 
         }
     }
 
-    @Throws(ThainException::class, ThainRepeatExecutionException::class)
     private fun checkFlowRunStatus(flowExecutionDr: FlowExecutionDr) {
         val flowModel = flowDao.getFlow(flowExecutionDr.flowId).orElseThrow {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.KILLED.code)
@@ -121,18 +118,8 @@ class FlowExecutionLoader private constructor(private val processEngineStorage: 
         return addFlowExecutionDp.id!!
     }
 
-    companion object {
-        @JvmStatic
-        @Throws(InterruptedException::class)
-        fun getInstance(processEngineStorage: ProcessEngineStorage): FlowExecutionLoader {
-            return FlowExecutionLoader(processEngineStorage)
-        }
-    }
-
     init {
-        for (i in 0 until flowExecutionThreadPool.corePoolSize()) {
-            idleThread.put(true)
-        }
+        repeat(flowExecutionThreadPool.corePoolSize()) { idleThread.put(true) }
         log.info("init FlowExecutionLoader, idleThread size: {}", idleThread.size)
         ThainThreadPool.DEFAULT_THREAD_POOL.execute { loopLoader() }
     }

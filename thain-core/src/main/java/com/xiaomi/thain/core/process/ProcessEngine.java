@@ -121,7 +121,7 @@ public class ProcessEngine {
                 .flowExecutionWaitingQueue(flowExecutionWaitingQueue)
                 .build();
 
-        this.flowExecutionLoader = FlowExecutionLoader.getInstance(processEngineStorage);
+        this.flowExecutionLoader = new FlowExecutionLoader(processEngineStorage);
         val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService);
         flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
         flowExecutionHeartbeat.addCollections(flowExecutionLoader.getRunningFlowExecution());

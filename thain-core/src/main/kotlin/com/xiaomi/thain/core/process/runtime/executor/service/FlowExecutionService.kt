@@ -33,10 +33,6 @@ class FlowExecutionService(private val flowExecutionId: Long,
      * 正常结束时，errorMessage为""
      */
     private var errorMessage = ""
-    /**
-     * 流程结束状态
-     */
-    private var flowEndStatus = FlowLastRunStatus.SUCCESS
 
     private var flowExecutionEndStatus = FlowExecutionStatus.SUCCESS
 
@@ -56,7 +52,6 @@ class FlowExecutionService(private val flowExecutionId: Long,
      */
     fun addError(message: String) {
         errorMessage = message
-        flowEndStatus = FlowLastRunStatus.ERROR
         flowExecutionEndStatus = FlowExecutionStatus.ERROR
     }
 
@@ -64,8 +59,6 @@ class FlowExecutionService(private val flowExecutionId: Long,
      * 添加错误
      */
     fun autoKilled() {
-        errorMessage = "auto kill"
-        flowEndStatus = FlowLastRunStatus.AUTO_KILLED
         flowExecutionEndStatus = FlowExecutionStatus.AUTO_KILLED
     }
 
@@ -73,41 +66,39 @@ class FlowExecutionService(private val flowExecutionId: Long,
      * 添加错误
      */
     fun killed() {
-        errorMessage = "manual kill"
-        flowEndStatus = FlowLastRunStatus.KILLED
         flowExecutionEndStatus = FlowExecutionStatus.KILLED
     }
+
 
     /**
      * 结束任务
      */
     fun endFlowExecution() {
         try {
-            when (flowEndStatus) {
-                FlowLastRunStatus.SUCCESS -> {
+            when (flowExecutionEndStatus) {
+                FlowExecutionStatus.SUCCESS -> {
                     flowExecutionLogHandler.endSuccess()
                     flowHttpNotice.sendSuccess()
-                    flowService.endFlow(flowEndStatus)
+                    flowService.endFlow(FlowLastRunStatus.SUCCESS)
                 }
-                FlowLastRunStatus.KILLED -> {
-                    flowExecutionLogHandler.endError(errorMessage)
+                FlowExecutionStatus.KILLED -> {
+                    errorMessage = "manual kill"
                     flowHttpNotice.sendKilled()
-                    flowService.endFlow(flowEndStatus)
+                    flowService.endFlow(FlowLastRunStatus.KILLED)
                 }
-                FlowLastRunStatus.AUTO_KILLED -> {
-                    flowExecutionLogHandler.endError(errorMessage)
+                FlowExecutionStatus.AUTO_KILLED -> {
+                    errorMessage = "auto kill"
                     flowHttpNotice.sendAutoKilled()
-                    flowService.endFlow(flowEndStatus)
+                    flowService.endFlow(FlowLastRunStatus.AUTO_KILLED)
                 }
                 else -> {
                     if (flowDr.retryNumber <= retryNumber) {
                         try {
-                            flowExecutionLogHandler.endError(errorMessage)
                             flowHttpNotice.sendError(errorMessage)
                             mailNotice.sendError(errorMessage)
                             checkContinuousFailure()
                         } finally {
-                            flowService.endFlow(flowEndStatus)
+                            flowService.endFlow(FlowLastRunStatus.ERROR)
                         }
                     } else {
                         flowExecutionEndStatus = FlowExecutionStatus.ERROR_WAITING_RETRY
@@ -117,8 +108,9 @@ class FlowExecutionService(private val flowExecutionId: Long,
                     }
                 }
             }
-        } catch (e: Exception) {
-            log.warn(ExceptionUtils.getRootCauseMessage(e))
+            if (errorMessage.isNotBlank()) {
+                flowExecutionLogHandler.endError(errorMessage)
+            }
         } finally {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, flowExecutionEndStatus.code)
         }

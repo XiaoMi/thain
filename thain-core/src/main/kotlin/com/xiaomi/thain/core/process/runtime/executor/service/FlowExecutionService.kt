@@ -28,7 +28,6 @@ class FlowExecutionService(private val flowExecutionId: Long,
     private val flowHttpNotice = FlowHttpNotice.getInstance(flowDr.callbackUrl, flowDr.id, flowExecutionId)
     private val flowService = FlowService.getInstance(flowDr.id, processEngineStorage)
     private val flowExecutionDao = processEngineStorage.flowExecutionDao
-
     /**
      * 如果是异常结束,异常信息.
      * 正常结束时，errorMessage为""
@@ -37,8 +36,7 @@ class FlowExecutionService(private val flowExecutionId: Long,
     /**
      * 流程结束状态
      */
-    var flowEndStatus = FlowLastRunStatus.SUCCESS
-        private set
+    private var flowEndStatus = FlowLastRunStatus.SUCCESS
 
     private var flowExecutionEndStatus = FlowExecutionStatus.SUCCESS
 
@@ -46,15 +44,11 @@ class FlowExecutionService(private val flowExecutionId: Long,
      * 开始任务
      */
     fun startFlowExecution() {
-        try {
-            if (retryNumber == 0) {
-                flowService.startFlow()
-                flowHttpNotice.sendStart()
-            }
-            flowExecutionLogHandler.addInfo("begin to execute flow：$flowExecutionId")
-        } catch (e: Exception) {
-            log.error("", e)
+        if (retryNumber == 0) {
+            flowService.startFlow()
+            flowHttpNotice.sendStart()
         }
+        flowExecutionLogHandler.addInfo("begin to execute flow：$flowExecutionId")
     }
 
     /**

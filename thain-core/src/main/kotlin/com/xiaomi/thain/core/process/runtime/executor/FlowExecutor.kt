@@ -7,9 +7,9 @@ import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException
 import com.xiaomi.thain.common.exception.ThainFlowRunningException
 import com.xiaomi.thain.common.exception.ThainRuntimeException
 import com.xiaomi.thain.common.model.JobExecutionModel
-import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.core.model.dr.FlowDr
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr
-import com.xiaomi.thain.common.model.dr.JobDr
+import com.xiaomi.thain.core.model.dr.JobDr
 import com.xiaomi.thain.common.utils.copyOf
 import com.xiaomi.thain.core.constant.FlowExecutionTriggerType
 import com.xiaomi.thain.core.process.ProcessEngine

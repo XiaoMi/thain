@@ -6,7 +6,7 @@
 
 package com.xiaomi.thain.server.mapper;
 
-import com.xiaomi.thain.common.model.dr.JobDr;
+import com.xiaomi.thain.core.model.dr.JobDr;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;

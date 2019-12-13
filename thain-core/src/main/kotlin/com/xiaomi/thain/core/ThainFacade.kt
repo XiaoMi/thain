@@ -4,10 +4,10 @@ import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.FlowSchedulingStatus
 import com.xiaomi.thain.common.exception.ThainException
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
-import com.xiaomi.thain.common.model.dp.UpdateFlowDp
-import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
-import com.xiaomi.thain.common.model.rq.AddJobRq
-import com.xiaomi.thain.common.model.rq.UpdateFlowRq
+import com.xiaomi.thain.core.model.dp.UpdateFlowDp
+import com.xiaomi.thain.core.model.rq.AddFlowAndJobsRq
+import com.xiaomi.thain.core.model.rq.AddJobRq
+import com.xiaomi.thain.core.model.rq.UpdateFlowRq
 import com.xiaomi.thain.common.utils.ifNull
 import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineConfiguration

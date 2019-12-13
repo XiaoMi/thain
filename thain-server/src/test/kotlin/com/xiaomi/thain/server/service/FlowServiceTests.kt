@@ -11,8 +11,8 @@ import com.xiaomi.thain.common.constant.FlowSchedulingStatus
 import com.xiaomi.thain.common.exception.ThainException
 import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
-import com.xiaomi.thain.common.model.rq.AddFlowRq
-import com.xiaomi.thain.common.model.rq.AddJobRq
+import com.xiaomi.thain.core.model.rq.AddFlowRq
+import com.xiaomi.thain.core.model.rq.AddJobRq
 import com.xiaomi.thain.server.Application
 import com.xiaomi.thain.server.service.impl.FlowServiceImpl
 import org.junit.Assert

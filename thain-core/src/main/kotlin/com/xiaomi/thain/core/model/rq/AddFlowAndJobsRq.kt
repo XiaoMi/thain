@@ -1,4 +1,4 @@
-package com.xiaomi.thain.common.model.rq
+package com.xiaomi.thain.core.model.rq
 
 /**
  * Date 19-7-9 下午8:14

@@ -2,7 +2,7 @@ package com.xiaomi.thain.core.scheduler
 
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerInitException
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerStartException
-import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.core.model.dr.FlowDr
 import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.scheduler.job.*
 import org.quartz.*

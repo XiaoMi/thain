@@ -5,8 +5,8 @@
  */
 package com.xiaomi.thain.core.mapper;
 
-import com.xiaomi.thain.common.model.dp.UpdateFlowDp;
-import com.xiaomi.thain.common.model.dr.FlowDr;
+import com.xiaomi.thain.core.model.dp.UpdateFlowDp;
+import com.xiaomi.thain.core.model.dr.FlowDr;
 import com.xiaomi.thain.core.model.dp.AddFlowDp;
 import com.xiaomi.thain.core.model.dp.AddJobDp;
 import lombok.NonNull;

@@ -2,7 +2,7 @@ package com.xiaomi.thain.core.process.runtime.executor.service
 
 import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.FlowLastRunStatus
-import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.core.model.dr.FlowDr
 import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineStorage
 import com.xiaomi.thain.core.process.runtime.log.FlowExecutionLogHandler
@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory
  *
  * @author liangyongrui@xiaomi.com
  */
-class FlowExecutionService(val flowExecutionId: Long,
+class FlowExecutionService(private val flowExecutionId: Long,
                            private val flowDr: FlowDr,
                            private val retryNumber: Int,
                            private val processEngineStorage: ProcessEngineStorage) {
@@ -33,8 +33,7 @@ class FlowExecutionService(val flowExecutionId: Long,
      * 如果是异常结束,异常信息.
      * 正常结束时，errorMessage为""
      */
-    var errorMessage = ""
-        private set
+    private var errorMessage = ""
     /**
      * 流程结束状态
      */

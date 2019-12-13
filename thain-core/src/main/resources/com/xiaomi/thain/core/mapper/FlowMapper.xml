@@ -147,7 +147,7 @@
         </foreach>
     </insert>
 
-    <update id="updateFlow" parameterType="com.xiaomi.thain.common.model.dp.UpdateFlowDp">
+    <update id="updateFlow" parameterType="com.xiaomi.thain.core.model.dp.UpdateFlowDp">
         update thain_flow
         set `id`= #{id},
         <if test="name != null and name != ''">
@@ -220,7 +220,7 @@
             update_time       = now()
         where id = #{flowId}
     </update>
-    <select id="getFlow" resultType="com.xiaomi.thain.common.model.dr.FlowDr">
+    <select id="getFlow" resultType="com.xiaomi.thain.core.model.dr.FlowDr">
         select id,
                name,
                cron,

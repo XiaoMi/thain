@@ -16,6 +16,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:2.2.2.RELEASE'
     implementation project(':thain-core')
     implementation 'org.springframework.security:spring-security-ldap:5.2.1.RELEASE'
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.1"
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.1'
     implementation 'org.springframework.session:spring-session-jdbc:2.2.0.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-security:2.2.2.RELEASE'

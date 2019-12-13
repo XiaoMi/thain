@@ -73,8 +73,10 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
                     FlowSchedulingStatus.getInstance(processEngine.getFlow(updateFlowRq.id).schedulingStatus)
                             .takeIf { status -> status != FlowSchedulingStatus.NOT_SET }
                             .ifNull { FlowSchedulingStatus.SCHEDULING }
+                }.ifNull {
+                    schedulerEngine.deleteFlow(updateFlowRq.id)
+                    FlowSchedulingStatus.NOT_SET
                 }
-                .ifNull { FlowSchedulingStatus.NOT_SET }
         val updateFlowDp = UpdateFlowDp(updateFlowRq, schedulingStatus)
         processEngine.processEngineStorage.flowDao.updateFlow(updateFlowDp, jobModelList)
     }

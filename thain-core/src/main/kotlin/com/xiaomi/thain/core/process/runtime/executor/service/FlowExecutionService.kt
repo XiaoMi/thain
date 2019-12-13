@@ -44,6 +44,11 @@ class FlowExecutionService(private val flowExecutionId: Long,
             flowService.startFlow()
             flowHttpNotice.sendStart()
         }
+        if (flowDr.slaDuration > 0) {
+            ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade
+                    .schedulerEngine
+                    .addSla(flowExecutionId, flowDr)
+        }
         flowExecutionLogHandler.addInfo("begin to execute flow：$flowExecutionId")
     }
 

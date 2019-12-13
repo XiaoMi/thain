@@ -77,7 +77,7 @@ class FlowExecutionLoader private constructor(private val processEngineStorage: 
     private fun runFlowExecution(flowExecutionDr: FlowExecutionDr, retryNumber: Int) {
         try {
             runningFlowExecution.add(flowExecutionDr)
-            FlowExecutor.startProcess(flowExecutionDr, processEngineStorage, retryNumber)
+            FlowExecutor(flowExecutionDr, processEngineStorage, retryNumber).start()
         } catch (e: Exception) {
             log.error("runFlowExecution: ", e)
         } finally {

@@ -7,12 +7,10 @@ import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException
 import com.xiaomi.thain.common.exception.ThainFlowRunningException
 import com.xiaomi.thain.common.exception.ThainRuntimeException
 import com.xiaomi.thain.common.model.JobExecutionModel
-import com.xiaomi.thain.core.model.dr.FlowDr
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr
-import com.xiaomi.thain.core.model.dr.JobDr
 import com.xiaomi.thain.common.utils.copyOf
 import com.xiaomi.thain.core.constant.FlowExecutionTriggerType
-import com.xiaomi.thain.core.process.ProcessEngine
+import com.xiaomi.thain.core.model.dr.JobDr
 import com.xiaomi.thain.core.process.ProcessEngineStorage
 import com.xiaomi.thain.core.process.runtime.checker.JobConditionChecker
 import com.xiaomi.thain.core.process.runtime.executor.service.FlowExecutionService
@@ -28,12 +26,12 @@ import java.util.concurrent.ConcurrentLinkedQueue
  *
  * @author liangyongrui@xiaomi.com
  */
-class FlowExecutor private constructor(flowExecutionDr: FlowExecutionDr,
-                                       private val processEngineStorage: ProcessEngineStorage,
-                                       retryNumber: Int) {
+class FlowExecutor(flowExecutionDr: FlowExecutionDr,
+                   private val processEngineStorage: ProcessEngineStorage,
+                   retryNumber: Int) {
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
-    private val flowDr: FlowDr = processEngineStorage.flowDao.getFlow(flowExecutionDr.flowId)
+    private val flowDr = processEngineStorage.flowDao.getFlow(flowExecutionDr.flowId)
             .orElseThrow { ThainFlowRunningException() }
     /**
      * 监控节点是否执行完
@@ -55,14 +53,9 @@ class FlowExecutor private constructor(flowExecutionDr: FlowExecutionDr,
     /**
      * 流程执行入口
      */
-    private fun start() {
+    fun start() {
         try {
             flowExecutionService.startFlowExecution()
-            if (flowDr.slaDuration > 0) {
-                ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade
-                        .schedulerEngine
-                        .addSla(flowExecutionId, flowDr)
-            }
             runExecutableJobs()
             while (!jobFutureQueue.isEmpty()) {
                 jobFutureQueue.poll().join()
@@ -100,8 +93,7 @@ class FlowExecutor private constructor(flowExecutionDr: FlowExecutionDr,
                 // do down
             }
         }
-        val executableJobs = executableJobs
-        executableJobs.forEach { job: JobDr ->
+        executableJobs.forEach { job ->
             val future = CompletableFuture.runAsync(Runnable {
                 flowExecutionService.addInfo("Start executing the job [${job.name}]")
                 try {
@@ -124,38 +116,15 @@ class FlowExecutor private constructor(flowExecutionDr: FlowExecutionDr,
     }
 
     private val executableJobs: Collection<JobDr>
-        get() {
-            return notExecutedJobsPool
-                    .filter { jobConditionChecker.executable(it.condition) }
-                    .toSet()
-                    .also { jobs ->
-                        notExecutedJobsPool = notExecutedJobsPool
-                                .filter { !jobs.contains(it) }
-                                .toList()
-                    }
-        }
+        get() = notExecutedJobsPool
+                .filter { jobConditionChecker.executable(it.condition) }
+                .toSet()
+                .also { jobs ->
+                    notExecutedJobsPool = notExecutedJobsPool
+                            .filter { !jobs.contains(it) }
+                            .toList()
+                }
 
-    companion object {
-        val log = LoggerFactory.getLogger(FlowExecutor::class.java)!!
-        /**
-         * 开始执行流程，产生一个flowExecution，成功后异步执行start方法
-         * [retryNumber] 是当前重试的次数，0为新触发
-         */
-        @JvmStatic
-        fun startProcess(flowExecutionDr: FlowExecutionDr,
-                         processEngineStorage: ProcessEngineStorage,
-                         retryNumber: Int) {
-            processEngineStorage.flowExecutionDao
-                    .updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.RUNNING.code)
-            log.info("begin start flow: {}, flowExecutionId: {}, Trigger: {}",
-                    flowExecutionDr.flowId,
-                    flowExecutionDr.id,
-                    FlowExecutionTriggerType.getInstance(flowExecutionDr.triggerType))
-            val flowExecutionService = FlowExecutor(flowExecutionDr, processEngineStorage, retryNumber)
-            flowExecutionService.start()
-        }
-
-    }
 
     /**
      * 获取FlowExecutionExecutor实例
@@ -163,6 +132,8 @@ class FlowExecutor private constructor(flowExecutionDr: FlowExecutionDr,
      */
     init {
         try {
+            processEngineStorage.flowExecutionDao
+                    .updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.RUNNING.code)
             flowExecutionId = flowExecutionDr.id
             val jobModelList = processEngineStorage.jobDao.getJobs(flowDr.id)
             flowExecutionService = FlowExecutionService(flowExecutionId, flowDr, retryNumber, processEngineStorage)
@@ -179,8 +150,13 @@ class FlowExecutor private constructor(flowExecutionDr: FlowExecutionDr,
                     }
                     .onEach { processEngineStorage.jobExecutionDao.add(it.second) }
                     .toMap()
+
+            log.info("begin start flow: {}, flowExecutionId: {}, Trigger: {}",
+                    flowExecutionDr.flowId,
+                    flowExecutionDr.id,
+                    FlowExecutionTriggerType.getInstance(flowExecutionDr.triggerType))
         } catch (e: Exception) {
-            FlowExecutor.log.error("", e)
+            log.error("", e)
             throw ThainCreateFlowExecutionException(flowDr.id, e.message)
         }
     }

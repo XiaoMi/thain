@@ -5,7 +5,7 @@
  */
 package com.xiaomi.thain.core.mapper;
 
-import com.xiaomi.thain.common.model.dr.JobDr;
+import com.xiaomi.thain.core.model.dr.JobDr;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

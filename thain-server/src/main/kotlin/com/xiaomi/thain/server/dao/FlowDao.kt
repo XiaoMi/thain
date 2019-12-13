@@ -1,7 +1,7 @@
 package com.xiaomi.thain.server.dao
 
-import com.xiaomi.thain.common.model.dr.FlowDr
-import com.xiaomi.thain.common.model.dr.JobDr
+import com.xiaomi.thain.core.model.dr.FlowDr
+import com.xiaomi.thain.core.model.dr.JobDr
 import com.xiaomi.thain.server.mapper.FlowMapper
 import com.xiaomi.thain.server.model.sp.FlowListSp
 import org.springframework.stereotype.Repository

@@ -1,4 +1,4 @@
-package com.xiaomi.thain.common.model.dr
+package com.xiaomi.thain.core.model.dr
 
 import java.sql.Timestamp
 
@@ -50,4 +50,5 @@ data class FlowDr(
          * 状态更新时间
          */
         val statusUpdateTime: Timestamp,
-        val deleted: Boolean = false)
+        val deleted: Boolean = false
+)

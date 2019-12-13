@@ -1,4 +1,4 @@
-package com.xiaomi.thain.common.model.rq
+package com.xiaomi.thain.core.model.rq
 
 /**
  * add flow model

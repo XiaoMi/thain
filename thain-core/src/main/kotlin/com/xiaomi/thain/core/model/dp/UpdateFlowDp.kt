@@ -1,7 +1,7 @@
-package com.xiaomi.thain.common.model.dp
+package com.xiaomi.thain.core.model.dp
 
 import com.xiaomi.thain.common.constant.FlowSchedulingStatus
-import com.xiaomi.thain.common.model.rq.UpdateFlowRq
+import com.xiaomi.thain.core.model.rq.UpdateFlowRq
 
 /**
  * add flow model

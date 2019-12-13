@@ -13,7 +13,6 @@ import com.xiaomi.thain.core.constant.FlowExecutionTriggerType
 import com.xiaomi.thain.core.process.ProcessEngineStorage
 import com.xiaomi.thain.core.process.runtime.executor.FlowExecutor
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool
-import lombok.extern.slf4j.Slf4j
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.slf4j.LoggerFactory
 import java.util.concurrent.CompletableFuture
@@ -23,7 +22,6 @@ import java.util.concurrent.LinkedBlockingQueue
 /**
  * @author liangyongrui
  */
-@Slf4j
 class FlowExecutionLoader private constructor(private val processEngineStorage: ProcessEngineStorage) {
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
@@ -77,7 +75,7 @@ class FlowExecutionLoader private constructor(private val processEngineStorage: 
     private fun runFlowExecution(flowExecutionDr: FlowExecutionDr, retryNumber: Int) {
         try {
             runningFlowExecution.add(flowExecutionDr)
-            FlowExecutor.startProcess(flowExecutionDr, processEngineStorage, retryNumber)
+            FlowExecutor(flowExecutionDr, processEngineStorage, retryNumber).start()
         } catch (e: Exception) {
             log.error("runFlowExecution: ", e)
         } finally {

@@ -1,7 +1,7 @@
 package com.xiaomi.thain.server.controller
 
 import com.xiaomi.thain.common.entity.ApiResult
-import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
+import com.xiaomi.thain.core.model.rq.AddFlowAndJobsRq
 import com.xiaomi.thain.server.service.CheckService
 import com.xiaomi.thain.server.service.FlowService
 import org.slf4j.LoggerFactory

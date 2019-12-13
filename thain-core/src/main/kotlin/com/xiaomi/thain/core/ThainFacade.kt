@@ -4,10 +4,10 @@ import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.FlowSchedulingStatus
 import com.xiaomi.thain.common.exception.ThainException
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
-import com.xiaomi.thain.common.model.dp.UpdateFlowDp
-import com.xiaomi.thain.common.model.rq.AddFlowAndJobsRq
-import com.xiaomi.thain.common.model.rq.AddJobRq
-import com.xiaomi.thain.common.model.rq.UpdateFlowRq
+import com.xiaomi.thain.core.model.dp.UpdateFlowDp
+import com.xiaomi.thain.core.model.rq.AddFlowAndJobsRq
+import com.xiaomi.thain.core.model.rq.AddJobRq
+import com.xiaomi.thain.core.model.rq.UpdateFlowRq
 import com.xiaomi.thain.common.utils.ifNull
 import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineConfiguration
@@ -31,12 +31,11 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
 
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
-    val schedulerEngine: SchedulerEngine
-
     private val processEngine: ProcessEngine = ProcessEngine.newInstance(processEngineConfiguration, this)
 
+    val schedulerEngine = SchedulerEngine(schedulerEngineConfiguration, processEngine)
+
     init {
-        schedulerEngine = SchedulerEngine.getInstance(schedulerEngineConfiguration, processEngine)
         schedulerEngine.start()
     }
 
@@ -67,14 +66,18 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
     fun updateFlow(updateFlowRq: UpdateFlowRq, jobModelList: List<AddJobRq>) {
         val schedulingStatus = updateFlowRq.cron
                 .takeIf { !it.isNullOrBlank() }
-                ?.let {
-                    CronExpression.validateExpression(it)
-                    schedulerEngine.addFlow(updateFlowRq.id, it)
+                ?.let { cron ->
+                    CronExpression.validateExpression(cron)
                     FlowSchedulingStatus.getInstance(processEngine.getFlow(updateFlowRq.id).schedulingStatus)
-                            .takeIf { status -> status != FlowSchedulingStatus.NOT_SET }
+                            .takeIf { it != FlowSchedulingStatus.NOT_SET }
                             .ifNull { FlowSchedulingStatus.SCHEDULING }
-                }
-                .ifNull { FlowSchedulingStatus.NOT_SET }
+                }.ifNull { FlowSchedulingStatus.NOT_SET }
+
+        if (schedulingStatus != FlowSchedulingStatus.SCHEDULING) {
+            schedulerEngine.deleteFlow(updateFlowRq.id)
+        } else {
+            schedulerEngine.addFlow(updateFlowRq.id, updateFlowRq.cron)
+        }
         val updateFlowDp = UpdateFlowDp(updateFlowRq, schedulingStatus)
         processEngine.processEngineStorage.flowDao.updateFlow(updateFlowDp, jobModelList)
     }

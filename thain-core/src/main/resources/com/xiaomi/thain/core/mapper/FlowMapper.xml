@@ -147,34 +147,34 @@
         </foreach>
     </insert>
 
-    <update id="updateFlow" parameterType="com.xiaomi.thain.common.model.dp.UpdateFlowDp">
+    <update id="updateFlow" parameterType="com.xiaomi.thain.core.model.dp.UpdateFlowDp">
         update thain_flow
         set `id`= #{id},
-        <if test="name != null and name != ''">
+        <if test="name != null">
             `name` = #{name},
         </if>
-        <if test="cron != null and cron != ''">
+        <if test="cron != null">
             `cron` = #{cron},
         </if>
-        <if test="modifyCallbackUrl != null and modifyCallbackUrl != ''">
+        <if test="modifyCallbackUrl != null">
             modify_callback_url = #{modifyCallbackUrl},
         </if>
         <if test="pauseContinuousFailure != null">
             pause_continuous_failure = #{pauseContinuousFailure},
         </if>
-        <if test="emailContinuousFailure != null and emailContinuousFailure != ''">
+        <if test="emailContinuousFailure != null">
             email_continuous_failure = #{emailContinuousFailure},
         </if>
-        <if test="callbackUrl != null and callbackUrl != ''">
+        <if test="callbackUrl != null">
             `callback_url` = #{callbackUrl},
         </if>
-        <if test="callbackEmail != null and callbackEmail != ''">
+        <if test="callbackEmail != null">
             `callback_email` = #{callbackEmail},
         </if>
         <if test="slaDuration != null">
             `sla_duration` = #{slaDuration},
         </if>
-        <if test="slaEmail != null and slaEmail != ''">
+        <if test="slaEmail != null">
             `sla_email` = #{slaEmail},
         </if>
         <if test="slaKill != null">
@@ -220,7 +220,7 @@
             update_time       = now()
         where id = #{flowId}
     </update>
-    <select id="getFlow" resultType="com.xiaomi.thain.common.model.dr.FlowDr">
+    <select id="getFlow" resultType="com.xiaomi.thain.core.model.dr.FlowDr">
         select id,
                name,
                cron,

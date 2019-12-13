@@ -5,7 +5,7 @@
  */
 package com.xiaomi.thain.core.dao;
 
-import com.xiaomi.thain.common.model.dr.JobDr;
+import com.xiaomi.thain.core.model.dr.JobDr;
 import com.xiaomi.thain.core.mapper.JobMapper;
 import com.xiaomi.thain.core.process.service.MailService;
 import lombok.AccessLevel;

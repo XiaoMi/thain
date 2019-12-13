@@ -1,6 +1,6 @@
-package com.xiaomi.thain.common.model.rq
+package com.xiaomi.thain.core.model.rq
 
-import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.core.model.dr.FlowDr
 
 /**
  * add flow model

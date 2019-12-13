@@ -5,7 +5,7 @@
  */
 package com.xiaomi.thain.core.process.component.tools.impl;
 
-import com.xiaomi.thain.common.model.dr.JobDr;
+import com.xiaomi.thain.core.model.dr.JobDr;
 import com.xiaomi.thain.common.utils.HttpUtils;
 import com.xiaomi.thain.component.tools.ComponentTools;
 import com.xiaomi.thain.core.constant.LogLevel;

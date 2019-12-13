@@ -2,7 +2,7 @@ package com.xiaomi.thain.core.process.runtime.executor.service
 
 import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.FlowLastRunStatus
-import com.xiaomi.thain.common.model.dr.FlowDr
+import com.xiaomi.thain.core.model.dr.FlowDr
 import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineStorage
 import com.xiaomi.thain.core.process.runtime.log.FlowExecutionLogHandler
@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory
  *
  * @author liangyongrui@xiaomi.com
  */
-class FlowExecutionService(val flowExecutionId: Long,
+class FlowExecutionService(private val flowExecutionId: Long,
                            private val flowDr: FlowDr,
                            private val retryNumber: Int,
                            private val processEngineStorage: ProcessEngineStorage) {
@@ -28,18 +28,11 @@ class FlowExecutionService(val flowExecutionId: Long,
     private val flowHttpNotice = FlowHttpNotice.getInstance(flowDr.callbackUrl, flowDr.id, flowExecutionId)
     private val flowService = FlowService.getInstance(flowDr.id, processEngineStorage)
     private val flowExecutionDao = processEngineStorage.flowExecutionDao
-
     /**
      * 如果是异常结束,异常信息.
      * 正常结束时，errorMessage为""
      */
-    var errorMessage = ""
-        private set
-    /**
-     * 流程结束状态
-     */
-    var flowEndStatus = FlowLastRunStatus.SUCCESS
-        private set
+    private var errorMessage = ""
 
     private var flowExecutionEndStatus = FlowExecutionStatus.SUCCESS
 
@@ -47,15 +40,16 @@ class FlowExecutionService(val flowExecutionId: Long,
      * 开始任务
      */
     fun startFlowExecution() {
-        try {
-            if (retryNumber == 0) {
-                flowService.startFlow()
-                flowHttpNotice.sendStart()
-            }
-            flowExecutionLogHandler.addInfo("begin to execute flow：$flowExecutionId")
-        } catch (e: Exception) {
-            log.error("", e)
+        if (retryNumber == 0) {
+            flowService.startFlow()
+            flowHttpNotice.sendStart()
         }
+        if (flowDr.slaDuration > 0) {
+            ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade
+                    .schedulerEngine
+                    .addSla(flowExecutionId, flowDr)
+        }
+        flowExecutionLogHandler.addInfo("begin to execute flow：$flowExecutionId")
     }
 
     /**
@@ -63,7 +57,6 @@ class FlowExecutionService(val flowExecutionId: Long,
      */
     fun addError(message: String) {
         errorMessage = message
-        flowEndStatus = FlowLastRunStatus.ERROR
         flowExecutionEndStatus = FlowExecutionStatus.ERROR
     }
 
@@ -71,8 +64,6 @@ class FlowExecutionService(val flowExecutionId: Long,
      * 添加错误
      */
     fun autoKilled() {
-        errorMessage = "auto kill"
-        flowEndStatus = FlowLastRunStatus.AUTO_KILLED
         flowExecutionEndStatus = FlowExecutionStatus.AUTO_KILLED
     }
 
@@ -80,41 +71,39 @@ class FlowExecutionService(val flowExecutionId: Long,
      * 添加错误
      */
     fun killed() {
-        errorMessage = "manual kill"
-        flowEndStatus = FlowLastRunStatus.KILLED
         flowExecutionEndStatus = FlowExecutionStatus.KILLED
     }
+
 
     /**
      * 结束任务
      */
     fun endFlowExecution() {
         try {
-            when (flowEndStatus) {
-                FlowLastRunStatus.SUCCESS -> {
+            when (flowExecutionEndStatus) {
+                FlowExecutionStatus.SUCCESS -> {
                     flowExecutionLogHandler.endSuccess()
                     flowHttpNotice.sendSuccess()
-                    flowService.endFlow(flowEndStatus)
+                    flowService.endFlow(FlowLastRunStatus.SUCCESS)
                 }
-                FlowLastRunStatus.KILLED -> {
-                    flowExecutionLogHandler.endError(errorMessage)
+                FlowExecutionStatus.KILLED -> {
+                    errorMessage = "manual kill"
                     flowHttpNotice.sendKilled()
-                    flowService.endFlow(flowEndStatus)
+                    flowService.endFlow(FlowLastRunStatus.KILLED)
                 }
-                FlowLastRunStatus.AUTO_KILLED -> {
-                    flowExecutionLogHandler.endError(errorMessage)
+                FlowExecutionStatus.AUTO_KILLED -> {
+                    errorMessage = "auto kill"
                     flowHttpNotice.sendAutoKilled()
-                    flowService.endFlow(flowEndStatus)
+                    flowService.endFlow(FlowLastRunStatus.AUTO_KILLED)
                 }
                 else -> {
                     if (flowDr.retryNumber <= retryNumber) {
                         try {
-                            flowExecutionLogHandler.endError(errorMessage)
                             flowHttpNotice.sendError(errorMessage)
                             mailNotice.sendError(errorMessage)
                             checkContinuousFailure()
                         } finally {
-                            flowService.endFlow(flowEndStatus)
+                            flowService.endFlow(FlowLastRunStatus.ERROR)
                         }
                     } else {
                         flowExecutionEndStatus = FlowExecutionStatus.ERROR_WAITING_RETRY
@@ -124,8 +113,9 @@ class FlowExecutionService(val flowExecutionId: Long,
                     }
                 }
             }
-        } catch (e: Exception) {
-            log.warn(ExceptionUtils.getRootCauseMessage(e))
+            if (errorMessage.isNotBlank()) {
+                flowExecutionLogHandler.endError(errorMessage)
+            }
         } finally {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, flowExecutionEndStatus.code)
         }

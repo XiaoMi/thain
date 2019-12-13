@@ -61,6 +61,8 @@ public class FlowJob implements Job {
             val flowExecutionDr = processEngine.processEngineStorage.flowExecutionDao
                     .getFlowExecution(addFlowExecutionDp.id).orElseThrow(ThainRuntimeException::new);
             processEngine.processEngineStorage.flowExecutionWaitingQueue.put(flowExecutionDr);
+            log.debug("flow {} add queue，There are currently {} flows in the queue",
+                    flowId, processEngine.processEngineStorage.flowExecutionWaitingQueue.size());
         } catch (Exception e) {
             log.error("Failed to add queue：", e);
         }

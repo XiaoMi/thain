@@ -12,7 +12,6 @@
             parameterType="com.xiaomi.thain.core.model.dp.AddFlowDp"
             useGeneratedKeys="true"
             keyProperty="id">
-
         insert into thain_flow (
         name,
         <if test="cron != null">
@@ -204,22 +203,31 @@
         from thain_flow
         where id = #{flowId}
     </delete>
+
     <delete id="deleteJob">
         delete
         from thain_job
         where flow_id = #{flowId}
     </delete>
+
+    <delete id="cleanUpExpiredAndDeletedFlow">
+        delete from thain_flow
+        where update_time &lt; from_unixtime(unix_timestamp(now()) - ${dataReserveDays} * 24 * 60 * 60) and deleted = 1
+    </delete>
+
     <update id="invalidJobList">
         update thain_job
         set deleted = 1
         where flow_id = #{flowId}
     </update>
+
     <update id="updateSchedulingStatus">
         update thain_flow
         set scheduling_status = #{schedulingStatus},
             update_time       = now()
         where id = #{flowId}
     </update>
+
     <select id="getFlow" resultType="com.xiaomi.thain.core.model.dr.FlowDr">
         select id,
                name,
@@ -245,10 +253,6 @@
         from thain_flow
         where id = #{flowId}
           and deleted = 0
-    </select>
-    <select id="getAllFlowIds" resultType="java.lang.Long">
-        select id
-        from thain_flow;
     </select>
 
 </mapper>

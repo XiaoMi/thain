@@ -7,6 +7,10 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaomi.thain.core.mapper.JobMapper">
+    <delete id="cleanUpExpiredAndDeletedJob">
+        delete from thain_job
+        where create_time &lt; from_unixtime(unix_timestamp(now()) - ${dataReserveDays} * 24 * 60 * 60) and deleted = 1
+    </delete>
 
     <select id="getJobs" resultType="com.xiaomi.thain.core.model.dr.JobDr">
         select id,

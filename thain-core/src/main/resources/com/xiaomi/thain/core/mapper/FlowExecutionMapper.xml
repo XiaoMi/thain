@@ -52,20 +52,10 @@
         where id = #{id}
     </update>
 
-    <delete id="clearFlowExecution">
+    <delete id="cleanUpExpiredFlowExecution">
         delete
         from thain_flow_execution
-        where update_time &lt; from_unixtime(unix_timestamp(now()) - #{dataReserveDays} * 24 * 60 * 60)
-    </delete>
-
-    <delete id="deleteFlowExecutionByIds">
-        delete
-        from thain_flow_execution
-        where id in (
-        <foreach collection="collection" item="id" separator=",">
-            #{id}
-        </foreach>
-        )
+        where update_time &lt; from_unixtime(unix_timestamp(now()) - ${dataReserveDays} * 24 * 60 * 60)
     </delete>
 
     <select id="getFlowExecution" resultType="com.xiaomi.thain.common.model.dr.FlowExecutionDr">
@@ -95,21 +85,6 @@
         where flow_id = #{flowId}
         order by id desc
         limit #{numbers}
-    </select>
-
-    <select id="getNeedDeleteFlowExecutionId" resultType="java.lang.Long">
-        select id
-        from thain_flow_execution
-        where flow_id not in (
-        <foreach collection="collection" item="id" separator=",">
-            #{id}
-        </foreach>
-        ) and update_time &lt; from_unixtime(unix_timestamp(now()) - 60 * 60)
-    </select>
-
-    <select id="getAllFlowExecutionIds" resultType="java.lang.Long">
-        select id
-        from thain_flow_execution;
     </select>
 
     <select id="getDead" resultType="com.xiaomi.thain.common.model.dr.FlowExecutionDr">

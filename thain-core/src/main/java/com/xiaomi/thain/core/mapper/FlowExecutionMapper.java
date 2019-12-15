@@ -25,7 +25,7 @@ public interface FlowExecutionMapper {
 
     int updateFlowExecutionStatus(@Param("flowExecutionId") long flowExecutionId, @Param("status") int status);
 
-    int clearFlowExecution(int dataReserveDays);
+    int cleanUpExpiredFlowExecution();
 
     @Nullable
     FlowExecutionDr getFlowExecution(long flowExecutionId);
@@ -38,23 +38,6 @@ public interface FlowExecutionMapper {
      * @return 记录
      */
     List<FlowExecutionModel> getLatest(@Param("flowId") long flowId, @Param("numbers") long numbers);
-
-    /**
-     * 获取所有需要删除的flow execution id
-     * <p>
-     * 需要删除：flowId 不在列表中， 并且最后一次更新时间大于一小时
-     */
-    List<Long> getNeedDeleteFlowExecutionId(@NonNull List<Long> flowIds);
-
-    /**
-     * 通过id 删除 flow execution
-     */
-    int deleteFlowExecutionByIds(@NonNull List<Long> needDeleteFlowExecutionIds);
-
-    /**
-     * 获取全部的flow execution ids
-     */
-    List<Long> getAllFlowExecutionIds();
 
     int addFlowExecution(@NonNull AddFlowExecutionDp addFlowExecutionDp);
 

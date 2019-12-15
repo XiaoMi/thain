@@ -17,9 +17,7 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -41,17 +39,14 @@ public class JobExecutionDao {
      * 自动释放sqlSession，事务执行mapper
      *
      * @param function function 是一个事务
-     * @return 自定义的返回值
      */
-    private <T> Optional<T> execute(@NonNull Function<JobExecutionMapper, T> function) {
+    private <T> void execute(@NonNull Function<JobExecutionMapper, T> function) {
         try (val sqlSession = sqlSessionFactory.openSession()) {
-            val apply = function.apply(sqlSession.getMapper(JobExecutionMapper.class));
+            function.apply(sqlSession.getMapper(JobExecutionMapper.class));
             sqlSession.commit();
-            return Optional.ofNullable(apply);
         } catch (Exception e) {
             log.error("", e);
             mailService.sendSeriousError(ExceptionUtils.getStackTrace(e));
-            return Optional.empty();
         }
     }
 
@@ -78,20 +73,6 @@ public class JobExecutionDao {
         });
     }
 
-    public List<Long> getNeedDeleteJobExecutionIds(@NonNull List<Long> flowExecutionIds) {
-        if (flowExecutionIds.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return execute(t -> t.getNeedDeleteJobExecutionIds(flowExecutionIds)).orElseGet(Collections::emptyList);
-    }
-
-    public void deleteJobExecutionByIds(@NonNull List<Long> needDeleteJobExecutionIds) {
-        if (needDeleteJobExecutionIds.isEmpty()) {
-            return;
-        }
-        execute(t -> t.deleteJobExecutionByIds(needDeleteJobExecutionIds));
-    }
-
     public void killJobExecution(long flowExecutionId) {
         execute(t -> t.killJobExecution(flowExecutionId));
     }
@@ -101,5 +82,9 @@ public class JobExecutionDao {
             return;
         }
         execute(t -> t.deleteJobExecutionByFlowExecutionIds(flowExecutionIds));
+    }
+
+    public void cleanUpExpiredFlowExecution() {
+        execute(JobExecutionMapper::cleanUpExpiredFlowExecution);
     }
 }

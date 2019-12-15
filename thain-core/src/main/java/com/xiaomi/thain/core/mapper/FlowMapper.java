@@ -50,8 +50,5 @@ public interface FlowMapper {
 
     int updateSchedulingStatus(@Param("flowId") long flowId, @Param("schedulingStatus") int schedulingStatus);
 
-    /**
-     * 获取所有的flow id
-     */
-    List<Long> getAllFlowIds();
+    int cleanUpExpiredAndDeletedFlow();
 }

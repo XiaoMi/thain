@@ -18,4 +18,6 @@ import java.util.List;
 public interface JobMapper {
 
     List<JobDr> getJobs(@Param("flowId") long flowId);
+
+    int cleanUpExpiredAndDeletedJob();
 }

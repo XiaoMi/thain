@@ -26,15 +26,6 @@ public interface JobExecutionMapper {
 
     int updateCreateTime(@Param("jobExecutionId") long jobExecutionId);
 
-    /**
-     * 获取所有需要删除的Job execution id
-     * <p>
-     * 需要删除：flow execution Id 不在列表中， 并且最后一次更新时间大于一小时
-     */
-    List<Long> getNeedDeleteJobExecutionIds(@NonNull List<Long> flowExecutionIds);
-
-    int deleteJobExecutionByIds(@NonNull List<Long> needDeleteJobExecutionIds);
-
     int killJobExecution(long flowExecutionId);
 
     /**
@@ -44,4 +35,6 @@ public interface JobExecutionMapper {
      * @return ignore
      */
     int deleteJobExecutionByFlowExecutionIds(@NonNull List<Long> flowExecutionIds);
+
+    int cleanUpExpiredFlowExecution();
 }

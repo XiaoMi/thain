@@ -25,7 +25,6 @@ import lombok.val;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -141,7 +140,7 @@ public class FlowDao {
         execute(t -> t.updateSchedulingStatus(flowId, scheduling.code));
     }
 
-    public List<Long> getAllFlowIds() {
-        return execute(FlowMapper::getAllFlowIds).orElseGet(Collections::emptyList);
+    public void cleanUpExpiredAndDeletedFlow() {
+        execute(FlowMapper::cleanUpExpiredAndDeletedFlow);
     }
 }

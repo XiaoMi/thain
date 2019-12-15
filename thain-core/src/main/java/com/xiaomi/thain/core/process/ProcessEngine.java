@@ -66,7 +66,7 @@ public class ProcessEngine {
     private static final Map<String, ProcessEngine> PROCESS_ENGINE_MAP = new ConcurrentHashMap<>();
 
     private ProcessEngine(@NonNull ProcessEngineConfiguration processEngineConfiguration, @NonNull ThainFacade thainFacade)
-            throws ThainMissRequiredArgumentsException, SQLException, IOException, InterruptedException {
+            throws ThainMissRequiredArgumentsException, SQLException, IOException {
         this.thainFacade = thainFacade;
         this.processEngineId = UUID.randomUUID().toString();
         PROCESS_ENGINE_MAP.put(processEngineId, this);
@@ -77,7 +77,8 @@ public class ProcessEngine {
         val flowExecutionThreadPool = ThainThreadPool.getInstance("thain-flow-execution-thread",
                 processEngineConfiguration.flowExecutionThreadPoolCoreSize);
 
-        val sqlSessionFactory = DatabaseHandler.getSqlSessionFactory(processEngineConfiguration.dataSource);
+        val sqlSessionFactory = DatabaseHandler.newSqlSessionFactory(processEngineConfiguration.dataSource,
+                processEngineConfiguration.dataReserveDays);
 
         switch (processEngineConfiguration.initLevel) {
             case "1":
@@ -100,7 +101,7 @@ public class ProcessEngine {
                 userDao);
 
         val flowDao = FlowDao.getInstance(sqlSessionFactory, mailService);
-        val flowExecutionDao = FlowExecutionDao.getInstance(sqlSessionFactory, mailService, processEngineConfiguration.dataReserveDays);
+        val flowExecutionDao = FlowExecutionDao.getInstance(sqlSessionFactory, mailService);
         val jobDao = JobDao.getInstance(sqlSessionFactory, mailService);
         val jobExecutionDao = JobExecutionDao.getInstance(sqlSessionFactory, mailService);
         val componentService = ComponentService.getInstance();
@@ -161,7 +162,7 @@ public class ProcessEngine {
 
     public static ProcessEngine newInstance(@NonNull ProcessEngineConfiguration processEngineConfiguration,
                                             @NonNull ThainFacade thainFacade)
-            throws ThainMissRequiredArgumentsException, IOException, SQLException, InterruptedException {
+            throws ThainMissRequiredArgumentsException, IOException, SQLException {
         return new ProcessEngine(processEngineConfiguration, thainFacade);
     }
 

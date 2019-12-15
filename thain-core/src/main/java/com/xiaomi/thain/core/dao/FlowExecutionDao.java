@@ -35,11 +35,9 @@ public class FlowExecutionDao {
     private final SqlSessionFactory sqlSessionFactory;
     @NonNull
     private final MailService mailService;
-    private final int dataReserveDays;
 
-    public static FlowExecutionDao getInstance(@NonNull SqlSessionFactory sqlSessionFactory, @NonNull MailService mailService,
-                                               int dataReserveDays) {
-        return new FlowExecutionDao(sqlSessionFactory, mailService, dataReserveDays);
+    public static FlowExecutionDao getInstance(@NonNull SqlSessionFactory sqlSessionFactory, @NonNull MailService mailService) {
+        return new FlowExecutionDao(sqlSessionFactory, mailService);
     }
 
     /**
@@ -80,10 +78,10 @@ public class FlowExecutionDao {
     }
 
     /**
-     * 清理失效日志
+     * clean up expired flow execution
      */
-    public void cleanFlowExecution() {
-        execute(t -> t.clearFlowExecution(dataReserveDays));
+    public void cleanUpExpiredFlowExecution() {
+        execute(FlowExecutionMapper::cleanUpExpiredFlowExecution);
     }
 
     public Optional<FlowExecutionDr> getFlowExecution(long flowExecutionId) {
@@ -92,24 +90,6 @@ public class FlowExecutionDao {
 
     public List<FlowExecutionModel> getLatest(long flowId, long numbers) {
         return execute(t -> t.getLatest(flowId, numbers)).orElse(Collections.emptyList());
-    }
-
-    public List<Long> getNeedDeleteFlowExecutionId(@NonNull List<Long> flowIds) {
-        if (flowIds.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return execute(t -> t.getNeedDeleteFlowExecutionId(flowIds)).orElseGet(Collections::emptyList);
-    }
-
-    public void deleteFlowExecutionByIds(@NonNull List<Long> needDeleteFlowExecutionIds) {
-        if (needDeleteFlowExecutionIds.isEmpty()) {
-            return;
-        }
-        execute(t -> t.deleteFlowExecutionByIds(needDeleteFlowExecutionIds));
-    }
-
-    public List<Long> getAllFlowExecutionIds() {
-        return execute(FlowExecutionMapper::getAllFlowExecutionIds).orElseGet(Collections::emptyList);
     }
 
     public void setFlowExecutionHeartbeat(@NonNull List<Long> flowExecutionIds) {

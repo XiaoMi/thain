@@ -60,4 +60,8 @@ public class JobDao {
     public List<JobDr> getJobs(long flowId) {
         return execute(t -> t.getJobs(flowId)).orElse(emptyList());
     }
+
+    public void cleanUpExpiredAndDeletedJob() {
+        execute(JobMapper::cleanUpExpiredAndDeletedJob);
+    }
 }

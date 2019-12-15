@@ -7,12 +7,12 @@ import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineStorage
 import com.xiaomi.thain.core.process.runtime.log.FlowExecutionLogHandler
 import com.xiaomi.thain.core.process.runtime.notice.FlowHttpNotice
-import org.apache.commons.lang3.exception.ExceptionUtils
 import org.slf4j.LoggerFactory
 
 /**
  * Date 19-5-21 上午10:46
- * 任务服务类，对不影响任务执行的方法进行管理，如：日志,状态等
+ * 任务服务类
+ * http callback, mail callback, sla, retry
  *
  * @author liangyongrui@xiaomi.com
  */
@@ -20,8 +20,6 @@ class FlowExecutionService(private val flowExecutionId: Long,
                            private val flowDr: FlowDr,
                            private val retryNumber: Int,
                            private val processEngineStorage: ProcessEngineStorage) {
-
-    private val log = LoggerFactory.getLogger(this.javaClass)!!
 
     private val flowExecutionLogHandler = FlowExecutionLogHandler.getInstance(flowExecutionId, processEngineStorage)
     private val mailNotice = processEngineStorage.getMailNotice(flowDr.callbackEmail)

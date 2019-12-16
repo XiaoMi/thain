@@ -14,17 +14,13 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author liangyongrui@xiaomi.com
  */
 @Component
 public interface FlowExecutionMapper {
-
-    boolean getUserAccessible(@Param("flowExecutionId") long flowExecutionId, @NonNull @Param("userId") String userId, @Nullable @Param("appIds") Set<String> appIds);
 
     boolean getAppIdAccessible(@Param("flowExecutionId") long flowExecutionId, @NonNull @Param("appId") String appId);
 

@@ -60,20 +60,6 @@
         where flow_execution_id = #{flowExecutionId}
     </select>
 
-    <select id="getUserAccessible" resultType="java.lang.Boolean">
-        select count(1) from thain_flow as tf inner join thain_flow_execution as tfe on
-        tf.id = tfe.flow_id
-        and tfe.id = #{flowExecutionId}
-        and (tf.create_user = #{userId}
-        <if test="appIds!=null and appIds.size > 0">
-            or tf.create_app_id in
-            <foreach collection="appIds" separator="," open="(" close=")" item="appId">
-                #{appId}
-            </foreach>
-        </if>
-        )
-    </select>
-
     <select id="getAppIdAccessible" resultType="java.lang.Boolean">
         select count(1)
         from thain_flow as tf

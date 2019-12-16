@@ -10,6 +10,7 @@ import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface FlowExecutionService {
 
     void killFlowExecution(long flowExecutionId) throws ThainException;
 
-    FlowExecutionModel getFlowExecution(long flowExecutionId) throws ThainException;
+    FlowExecutionDr getFlowExecution(long flowExecutionId) throws ThainException;
 
     List<JobModel> getJobModelList(long flowExecutionId) throws ThainException;
 

@@ -3,6 +3,7 @@ package com.xiaomi.thain.server.dao
 import com.xiaomi.thain.common.model.FlowExecutionModel
 import com.xiaomi.thain.common.model.JobExecutionModel
 import com.xiaomi.thain.common.model.JobModel
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr
 import com.xiaomi.thain.server.mapper.FlowExecutionMapper
 import org.springframework.stereotype.Repository
 
@@ -21,7 +22,7 @@ class FlowExecutionDao(private val flowExecutionMapper: FlowExecutionMapper) {
         return flowExecutionMapper.getFlowExecutionCount(flowId)
     }
 
-    fun getFlowExecution(flowExecutionId: Long): FlowExecutionModel? {
+    fun getFlowExecution(flowExecutionId: Long): FlowExecutionDr? {
         return flowExecutionMapper.getFlowExecution(flowExecutionId)
     }
 

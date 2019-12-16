@@ -9,6 +9,7 @@ import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.server.dao.FlowExecutionDao;
 import com.xiaomi.thain.server.service.FlowExecutionService;
@@ -17,6 +18,7 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Date 19-6-10 下午8:35
@@ -52,15 +54,14 @@ public class FlowExecutionServiceImpl implements FlowExecutionService {
     }
 
     @Override
-    public FlowExecutionModel getFlowExecution(long flowExecutionId) throws ThainException {
-        return flowExecutionDao.getFlowExecution(flowExecutionId).orElseThrow(
-                () -> new ThainException("flowExecution id does not exist：" + flowExecutionId));
+    public FlowExecutionDr getFlowExecution(long flowExecutionId) throws ThainException {
+        return Optional.ofNullable(flowExecutionDao.getFlowExecution(flowExecutionId))
+                .orElseThrow(() -> new ThainException("flowExecution id does not exist：" + flowExecutionId));
     }
 
     @Override
     public List<JobModel> getJobModelList(long flowExecutionId) throws ThainException {
-        return flowExecutionDao.getJobModelList(flowExecutionId).orElseThrow(
-                () -> new ThainException("flowExecution id does not exist：" + flowExecutionId));
+        return flowExecutionDao.getJobModelList(flowExecutionId);
     }
 
     @Override

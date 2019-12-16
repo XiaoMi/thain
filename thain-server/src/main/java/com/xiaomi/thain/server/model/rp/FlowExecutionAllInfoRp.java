@@ -5,9 +5,9 @@
  */
 package com.xiaomi.thain.server.model.rp;
 
-import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import lombok.Builder;
 import lombok.NonNull;
 
@@ -22,7 +22,7 @@ import java.util.List;
 @Builder
 public class FlowExecutionAllInfoRp {
     @NonNull
-    public final FlowExecutionModel flowExecutionModel;
+    public final FlowExecutionDr flowExecutionModel;
     @NonNull
     public final List<JobModel> jobModelList;
     @NonNull

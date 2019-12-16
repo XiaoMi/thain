@@ -9,11 +9,13 @@ package com.xiaomi.thain.server.mapper;
 import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -29,7 +31,8 @@ public interface FlowExecutionMapper {
     @Select("select count(*) from thain_flow_execution where flow_id = #{flowId}")
     long getFlowExecutionCount(@Param("flowId") long flowId);
 
-    FlowExecutionModel getFlowExecution(long flowExecutionId);
+    @Nullable
+    FlowExecutionDr getFlowExecution(long flowExecutionId);
 
     List<JobModel> getJobModelList(long flowExecutionId);
 

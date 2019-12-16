@@ -11,10 +11,14 @@ import java.util.concurrent.ConcurrentHashMap
 class CleanJob private constructor(private val processEngine: ProcessEngine) : Job {
 
     override fun execute(context: JobExecutionContext) {
-        processEngine.processEngineStorage.flowDao.cleanUpExpiredAndDeletedFlow()
-        processEngine.processEngineStorage.jobDao.cleanUpExpiredAndDeletedJob()
-        processEngine.processEngineStorage.flowExecutionDao.cleanUpExpiredFlowExecution()
-        processEngine.processEngineStorage.jobExecutionDao.cleanUpExpiredFlowExecution()
+        try {
+            processEngine.processEngineStorage.flowDao.cleanUpExpiredAndDeletedFlow()
+            processEngine.processEngineStorage.jobDao.cleanUpExpiredAndDeletedJob()
+            processEngine.processEngineStorage.flowExecutionDao.cleanUpExpiredFlowExecution()
+            processEngine.processEngineStorage.jobExecutionDao.cleanUpExpiredFlowExecution()
+        } catch (e: Throwable) {
+            //ignore
+        }
     }
 
     companion object {

@@ -36,5 +36,5 @@ public interface JobExecutionMapper {
      */
     int deleteJobExecutionByFlowExecutionIds(@NonNull List<Long> flowExecutionIds);
 
-    int cleanUpExpiredFlowExecution();
+    int cleanUpExpiredFlowExecution(int dataReserveDays);
 }

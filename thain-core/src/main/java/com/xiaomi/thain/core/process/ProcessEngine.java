@@ -100,14 +100,13 @@ public class ProcessEngine {
                 processEngineConfiguration.mailSenderPassword,
                 userDao);
 
-        val flowDao = FlowDao.getInstance(sqlSessionFactory, mailService);
-        val flowExecutionDao = FlowExecutionDao.getInstance(sqlSessionFactory, mailService);
-        val jobDao = JobDao.getInstance(sqlSessionFactory, mailService);
-        val jobExecutionDao = JobExecutionDao.getInstance(sqlSessionFactory, mailService);
+        val flowDao = new FlowDao(sqlSessionFactory, mailService);
+        val flowExecutionDao = new FlowExecutionDao(sqlSessionFactory, mailService);
+        val jobDao = new JobDao(sqlSessionFactory, mailService);
+        val jobExecutionDao = new JobExecutionDao(sqlSessionFactory, mailService);
         val componentService = ComponentService.getInstance();
 
         val flowExecutionWaitingQueue = new LinkedBlockingQueue<FlowExecutionDr>();
-
 
         processEngineStorage = ProcessEngineStorage.builder()
                 .flowExecutionJobExecutionThreadPool(flowExecutionJobExecutionThreadPool)

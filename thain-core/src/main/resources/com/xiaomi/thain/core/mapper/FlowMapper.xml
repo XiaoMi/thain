@@ -211,8 +211,10 @@
     </delete>
 
     <delete id="cleanUpExpiredAndDeletedFlow">
-        delete from thain_flow
-        where update_time &lt; from_unixtime(unix_timestamp(now()) - ${dataReserveDays} * 24 * 60 * 60) and deleted = 1
+        delete
+        from thain_flow
+        where update_time &lt; from_unixtime(unix_timestamp(now()) - #{dataReserveDays} * 24 * 60 * 60)
+          and deleted = 1
     </delete>
 
     <update id="invalidJobList">

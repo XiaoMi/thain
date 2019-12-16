@@ -50,5 +50,5 @@ public interface FlowMapper {
 
     int updateSchedulingStatus(@Param("flowId") long flowId, @Param("schedulingStatus") int schedulingStatus);
 
-    int cleanUpExpiredAndDeletedFlow();
+    int cleanUpExpiredAndDeletedFlow(int dataReserveDays);
 }

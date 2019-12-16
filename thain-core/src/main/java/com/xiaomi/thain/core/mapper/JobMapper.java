@@ -19,5 +19,5 @@ public interface JobMapper {
 
     List<JobDr> getJobs(@Param("flowId") long flowId);
 
-    int cleanUpExpiredAndDeletedJob();
+    int cleanUpExpiredAndDeletedJob(int dataReserveDays);
 }

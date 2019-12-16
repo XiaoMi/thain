@@ -25,7 +25,7 @@ public interface FlowExecutionMapper {
 
     int updateFlowExecutionStatus(@Param("flowExecutionId") long flowExecutionId, @Param("status") int status);
 
-    int cleanUpExpiredFlowExecution();
+    int cleanUpExpiredFlowExecution(int dataReserveDays);
 
     @Nullable
     FlowExecutionDr getFlowExecution(long flowExecutionId);

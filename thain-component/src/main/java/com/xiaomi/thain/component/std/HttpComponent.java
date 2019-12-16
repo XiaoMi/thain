@@ -25,7 +25,7 @@ import java.util.Objects;
  * @author liangyongrui@xiaomi.com
  */
 @ThainComponent(group = "std", name = "http",
-        defineJson = "[{\"property\": \"url\", \"label\": \"HTTP URL\", \"required\": true, \"input\": {\"id\": \"textarea\"}}, {\"property\": \"method\", \"label\": \"HTTP Method\", \"required\": true, \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"GET\"}, {\"id\": \"POST\"}]}}, {\"property\": \"contentType\", \"label\": \"Content-Type\", \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"application/json\"}, {\"id\": \"application/x-www-form-urlencoded\"}]}}, {\"property\": \"referenceData\", \"label\": \"流程数据引用, 多个用逗号分开\", \"input\": {\"id\": \"textarea\"}}, {\"property\": \"forwardData\", \"label\": \"转发数据\", \"input\": {\"id\": \"textarea\"}}]")
+        defineJson = "[{\"property\": \"url\", \"label\": \"HTTP URL\", \"required\": true, \"input\": {\"id\": \"textarea\"}}, {\"property\": \"method\", \"label\": \"HTTP Method\", \"required\": true, \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"GET\"}, {\"id\": \"POST\"}]}}, {\"property\": \"contentType\", \"label\": \"Content-Type\", \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"application/json\"}, {\"id\": \"application/x-www-form-urlencoded\"}]}}, {\"property\": \"referenceData\", \"label\": \"流程数据引用\", \"input\": {\"id\": \"textarea\"}}, {\"property\": \"resultRegular\", \"label\": \"结果正则\", \"input\": {\"id\": \"textarea\"}}]\n")
 @SuppressWarnings("unused")
 public class HttpComponent {
     /**
@@ -60,6 +60,12 @@ public class HttpComponent {
      */
     @Nullable
     private String forwardData;
+
+    /**
+     * 结果正则表达式
+     */
+    @Nullable
+    private String resultRegular;
 
     @SuppressWarnings("unused")
     private void run() throws ThainException {
@@ -103,6 +109,9 @@ public class HttpComponent {
         }
         tools.putStorage("result", result);
         tools.addInfoLog(result);
+        if (StringUtils.isNotBlank(resultRegular) && !result.matches(resultRegular)) {
+            throw new ThainException("Request result not satisfied regular expression: " + resultRegular);
+        }
     }
 
 }

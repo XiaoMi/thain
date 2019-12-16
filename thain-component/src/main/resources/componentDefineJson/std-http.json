@@ -46,8 +46,8 @@
     }
   },
   {
-    "property": "forwardData",
-    "label": "转发数据",
+    "property": "resultRegular",
+    "label": "结果正则",
     "input": {
       "id": "textarea"
     }

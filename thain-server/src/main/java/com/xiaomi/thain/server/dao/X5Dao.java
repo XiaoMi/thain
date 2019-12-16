@@ -33,18 +33,20 @@ public class X5Dao {
         return x5Mapper.getX5Config(appId);
     }
 
-    public List<X5ConfigDr> getAllX5Config(){
-        return  x5Mapper.getAllX5Config();
+    public List<X5ConfigDr> getAllX5Config() {
+        return x5Mapper.getAllX5Config();
     }
 
-    public void addX5Config(@NonNull X5ConfigDp x5ConfigDp){
+    public void addX5Config(@NonNull X5ConfigDp x5ConfigDp) {
         x5Mapper.addOrUpdateX5Config(x5ConfigDp);
     }
 
-    public  void deleteX5Config(@NonNull String appId){
+    public void deleteX5Config(@NonNull String appId) {
         x5Mapper.deleteX5Config(appId);
     }
 
-    public void updateX5Config(@NonNull X5ConfigDp x5ConfigDp){x5Mapper.updateX5Config(x5ConfigDp);}
+    public void updateX5Config(@NonNull X5ConfigDp x5ConfigDp) {
+        x5Mapper.updateX5Config(x5ConfigDp);
+    }
 }
 

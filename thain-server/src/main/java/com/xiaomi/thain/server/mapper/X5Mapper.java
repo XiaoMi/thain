@@ -33,18 +33,8 @@ public interface X5Mapper {
 
     /**
      * select all x5Configs
-     *
-     * @return see {@link X5ConfigDr}
      */
-    @Results(value = {
-            @Result(column = "app_id", property = "appId"),
-            @Result(column = "app_key", property = "appKey"),
-            @Result(column = "app_name", property = "appName"),
-            @Result(column = "principal", property = "principal"),
-            @Result(column = "app_description", property = "description"),
-            @Result(column = "create_time", property = "createTime")
-    }, id = "resultMap")
-    @Select("select app_id,app_key,app_name,principal,app_description,create_time from thain_x5_config")
+    @Select("select id, app_id, app_key, app_name, principal, app_description, create_time from thain_x5_config")
     List<X5ConfigDr> getAllX5Config();
 
     /**

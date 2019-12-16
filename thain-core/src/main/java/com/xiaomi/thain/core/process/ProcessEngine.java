@@ -122,7 +122,7 @@ public class ProcessEngine {
                 .build();
 
         this.flowExecutionLoader = new FlowExecutionLoader(processEngineStorage);
-        val flowExecutionHeartbeat = FlowExecutionHeartbeat.getInstance(flowExecutionDao, mailService);
+        val flowExecutionHeartbeat = new FlowExecutionHeartbeat(flowExecutionDao, mailService);
         flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue);
         flowExecutionHeartbeat.addCollections(flowExecutionLoader.getRunningFlowExecution());
 

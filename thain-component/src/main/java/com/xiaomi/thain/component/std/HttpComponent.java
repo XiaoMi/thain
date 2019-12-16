@@ -14,6 +14,7 @@ import com.xiaomi.thain.component.tools.ComponentTools;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
@@ -45,16 +46,19 @@ public class HttpComponent {
     /**
      * Content-Type
      */
+    @Nullable
     private String contentType;
 
     /**
      * 流程数据引用，引用的key用空格分开
      */
+    @Nullable
     private String referenceData;
 
     /**
      * forwardData
      */
+    @Nullable
     private String forwardData;
 
     @SuppressWarnings("unused")

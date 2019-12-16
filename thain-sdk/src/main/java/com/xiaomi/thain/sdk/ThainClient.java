@@ -117,7 +117,7 @@ public class ThainClient {
     }
 
     private ApiResult buildRequest(@NonNull String url, @NonNull String body) throws IOException {
-        String result = HttpUtils.post(url, X5Utils.buildX5Request(appId, appKey, body));
+        String result = HttpUtils.postForm(url, X5Utils.buildX5Request(appId, appKey, body));
         return JSON.parseObject(result, ApiResult.class);
     }
 

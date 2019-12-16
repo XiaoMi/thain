@@ -33,7 +33,7 @@ public class SendModifyUtils {
 
     public static void sendPause(long flowId, @NonNull String modifyCallbackUrl) throws IOException {
         try {
-            HttpUtils.post(modifyCallbackUrl, ImmutableMap.of("flowId", flowId, "status", PAUSE));
+            HttpUtils.postForm(modifyCallbackUrl, ImmutableMap.of("flowId", flowId, "status", PAUSE));
         } catch (HttpHostConnectException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
         }
@@ -41,7 +41,7 @@ public class SendModifyUtils {
 
     public static void sendScheduling(long flowId, @NonNull String modifyCallbackUrl) throws IOException {
         try {
-            HttpUtils.post(modifyCallbackUrl, ImmutableMap.of("flowId", flowId, "status", SCHEDULING));
+            HttpUtils.postForm(modifyCallbackUrl, ImmutableMap.of("flowId", flowId, "status", SCHEDULING));
         } catch (HttpHostConnectException | UnknownHostException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
         }

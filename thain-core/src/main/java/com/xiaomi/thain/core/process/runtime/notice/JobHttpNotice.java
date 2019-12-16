@@ -59,7 +59,7 @@ public class JobHttpNotice {
             return;
         }
         try {
-            HttpUtils.post(url, ImmutableMap.of(
+            HttpUtils.postForm(url, ImmutableMap.of(
                     FLOW_ID, flowId + "",
                     FLOW_EXECUTION_ID, flowExecutionId + "",
                     CODE_KEY, status.code + "",

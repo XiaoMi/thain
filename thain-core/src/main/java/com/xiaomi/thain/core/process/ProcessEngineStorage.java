@@ -7,10 +7,7 @@ package com.xiaomi.thain.core.process;
 
 import com.xiaomi.thain.common.exception.ThainMissRequiredArgumentsException;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
-import com.xiaomi.thain.core.dao.FlowDao;
-import com.xiaomi.thain.core.dao.FlowExecutionDao;
-import com.xiaomi.thain.core.dao.JobDao;
-import com.xiaomi.thain.core.dao.JobExecutionDao;
+import com.xiaomi.thain.core.dao.*;
 import com.xiaomi.thain.core.process.runtime.notice.MailNotice;
 import com.xiaomi.thain.core.process.service.ComponentService;
 import com.xiaomi.thain.core.process.service.MailService;
@@ -43,6 +40,8 @@ public final class ProcessEngineStorage {
     public final JobDao jobDao;
     @NonNull
     public final JobExecutionDao jobExecutionDao;
+    @NonNull
+    public final X5ConfigDao x5ConfigDao;
     @NonNull
     public final MailService mailService;
     @NonNull

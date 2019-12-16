@@ -10,7 +10,7 @@ import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.dao.X5Dao;
 import com.xiaomi.thain.server.model.X5Config;
 import com.xiaomi.thain.server.model.dp.X5ConfigDp;
-import com.xiaomi.thain.server.model.dr.X5ConfigDr;
+import com.xiaomi.thain.core.model.dr.X5ConfigDr;
 import com.xiaomi.thain.server.model.rq.X5ConfigRq;
 import com.xiaomi.thain.server.service.X5Service;
 import lombok.NonNull;

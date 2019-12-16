@@ -30,6 +30,7 @@ object DatabaseHandler {
             val transactionFactory = JdbcTransactionFactory()
             val environment = Environment("development", transactionFactory, dataSource)
             val configuration = Configuration(environment)
+            configuration.addMapper(X5ConfigMapper::class.java)
             configuration.addMapper(UserMapper::class.java)
             configuration.addMapper(FlowMapper::class.java)
             configuration.addMapper(JobMapper::class.java)

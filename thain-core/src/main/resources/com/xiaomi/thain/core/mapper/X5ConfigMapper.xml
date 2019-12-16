@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ This source code is licensed under the Apache License Version 2.0, which
+ can be found in the LICENSE file in the root directory of this source tree.
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaomi.thain.core.mapper.X5ConfigMapper">
+    <select id="getX5ConfigByAppId" resultType="com.xiaomi.thain.core.model.dr.X5ConfigDr">
+        select id, app_id, app_key, app_name, principal, app_description, create_time
+        from thain_x5_config
+        where app_id = #{appId}
+    </select>
+</mapper>

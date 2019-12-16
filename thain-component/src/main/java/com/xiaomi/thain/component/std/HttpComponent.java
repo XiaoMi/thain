@@ -15,9 +15,9 @@ import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
+
+import static com.xiaomi.thain.component.util.GlobalKt.formatHttpReferenceData;
 
 /**
  * Date 19-5-16 下午8:48
@@ -71,18 +71,10 @@ public class HttpComponent {
     private void run() throws ThainException {
 
         val data = new HashMap<String, String>(16);
-        if (Objects.nonNull(forwardData)) {
+        if (StringUtils.isNotBlank(forwardData)) {
             data.put("forwardData", forwardData);
         }
-        if (Objects.nonNull(referenceData)) {
-            Arrays.stream(referenceData.split(",")).map(String::trim).forEach(t -> {
-                val key = t.split("[:.]");
-                if (key.length == 3) {
-                    val value = String.valueOf(tools.getStorageValueOrDefault(key[1].trim(), key[2].trim(), ""));
-                    data.put(key[0].trim(), value);
-                }
-            });
-        }
+        data.putAll(formatHttpReferenceData(referenceData, tools::getStorageValueOrDefault));
         tools.addDebugLog(JSON.toJSONString(data));
         String result;
         try {

@@ -10,7 +10,7 @@ import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import com.xiaomi.thain.common.entity.ApiResult;
 import com.xiaomi.thain.server.model.ThainUser;
-import com.xiaomi.thain.server.model.dr.X5ConfigDr;
+import com.xiaomi.thain.core.model.dr.X5ConfigDr;
 import com.xiaomi.thain.server.model.rp.UserRp;
 import com.xiaomi.thain.server.model.rp.X5ConfigRp;
 import com.xiaomi.thain.server.model.rq.AddUserRq;
@@ -103,13 +103,13 @@ public class AdminController {
             val pageInfo = new PageInfo<X5ConfigDr>(x5Service.getAllConfigs());
             val x5Configs = new ArrayList<X5ConfigRp>();
             pageInfo.getList().forEach(x5ConfigDr -> {
-                val principals = JSON.parseArray(x5ConfigDr.principal, String.class);
+                val principals = JSON.parseArray(x5ConfigDr.getPrincipal(), String.class);
                 x5Configs.add(X5ConfigRp.builder()
-                        .appId(x5ConfigDr.appId)
-                        .appKey(x5ConfigDr.appKey)
-                        .appName(x5ConfigDr.appName)
-                        .description(x5ConfigDr.description)
-                        .createTime(x5ConfigDr.createTime.getTime())
+                        .appId(x5ConfigDr.getAppId())
+                        .appKey(x5ConfigDr.getAppKey())
+                        .appName(x5ConfigDr.getAppName())
+                        .description(x5ConfigDr.getAppDescription())
+                        .createTime(x5ConfigDr.getCreateTime().getTime())
                         .principals(principals).build());
             });
             return ApiResult.success(x5Configs, pageInfo.getTotal(), pageInfo.getPageNum(), pageInfo.getPageSize());

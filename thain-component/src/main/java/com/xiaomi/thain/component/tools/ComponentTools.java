@@ -8,6 +8,7 @@ package com.xiaomi.thain.component.tools;
 import lombok.NonNull;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import javax.mail.MessagingException;
@@ -21,7 +22,8 @@ public interface ComponentTools {
 
     /**
      * 发送邮件
-     * @param to 收件人
+     *
+     * @param to      收件人
      * @param subject 主题
      * @param content 正文
      */
@@ -30,7 +32,7 @@ public interface ComponentTools {
     /**
      * 保存当前节点产生的数据
      *
-     * @param key 数据的key
+     * @param key   数据的key
      * @param value 数据的value
      */
     void putStorage(@NonNull final String key, @NonNull final Object value);
@@ -39,8 +41,8 @@ public interface ComponentTools {
      * 获取流程已经产生的数据
      *
      * @param jobName 节点名称
-     * @param key key
-     * @param <T> 自动强制转换
+     * @param key     key
+     * @param <T>     自动强制转换
      * @return 返回对应值的Optional
      */
     <T> Optional<T> getStorageValue(@NonNull final String jobName, @NonNull final String key);
@@ -48,10 +50,10 @@ public interface ComponentTools {
     /**
      * 获取流程已经产生的数据
      *
-     * @param jobName 节点名称
-     * @param key key
+     * @param jobName      节点名称
+     * @param key          key
      * @param defaultValue 默认值
-     * @param <T> 自动强制转换
+     * @param <T>          自动强制转换
      * @return 返回对应值, 值不存在则返回defaultValue
      */
     <T> T getStorageValueOrDefault(@NonNull final String jobName, @NonNull final String key, @NonNull final T defaultValue);
@@ -81,7 +83,7 @@ public interface ComponentTools {
     /**
      * 发送http get 请求
      *
-     * @param url url
+     * @param url  url
      * @param data ?后面的
      */
     String httpGet(@NonNull String url, @NonNull Map<String, String> data) throws IOException;
@@ -89,9 +91,9 @@ public interface ComponentTools {
     /**
      * 发送 http post 请求
      *
-     * @param url url
+     * @param url     url
      * @param headers headers
-     * @param data data
+     * @param data    data
      */
     String httpPost(@NonNull String url,
                     @NonNull Map<String, String> headers,
@@ -106,4 +108,6 @@ public interface ComponentTools {
      * 获取flow当前产生的全部结果
      */
     Map<String, Object> getStorage();
+
+    String httpX5Post(String url, Map<String, String> data);
 }

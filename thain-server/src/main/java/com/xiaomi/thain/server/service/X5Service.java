@@ -6,7 +6,7 @@
 package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.server.model.X5Config;
-import com.xiaomi.thain.server.model.dr.X5ConfigDr;
+import com.xiaomi.thain.core.model.dr.X5ConfigDr;
 import com.xiaomi.thain.server.model.rq.X5ConfigRq;
 import lombok.NonNull;
 

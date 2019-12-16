@@ -42,9 +42,9 @@
     "not ie <= 10"
   ],
   "dependencies": {
-    "@ant-design/pro-layout": "^4.9.9",
+    "@ant-design/pro-layout": "^4.9.11",
     "@antv/data-set": "^0.10.2",
-    "antd": "~3.26.2",
+    "antd": "^3.26.3",
     "bizcharts": "~3.5.6",
     "braft-editor": "~2.3.8",
     "braft-extensions": "0.0.20",

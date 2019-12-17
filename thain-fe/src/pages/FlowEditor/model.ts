@@ -45,7 +45,7 @@ export class FlowEditorModelState {
   selectedModel = new SelectedModel();
   updateGraph?: (key: string, value: string, updateAttributes?: boolean) => void;
   flowAttributes: FlowAttributes = { name: '' };
-  componentDefines: ComponentDefine[] = [];
+  componentDefines?: ComponentDefine[];
 }
 
 function getUpdateGraph(editor: Editor) {

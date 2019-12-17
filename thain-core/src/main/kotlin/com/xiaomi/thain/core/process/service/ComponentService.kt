@@ -25,7 +25,7 @@ class ComponentService {
         componentClassList.forEach { clazz ->
             val json = clazz.getAnnotation(ThainComponent::class.java).value
             val componentDefine = JSON.parseObject(json, object : TypeReference<ComponentDefine>() {})
-            val fullName = "${componentDefine.group}:${componentDefine.name}"
+            val fullName = "${componentDefine.group}::${componentDefine.name}"
             mutableComponentDefineModels[fullName] = componentDefine
             mutableComponentClass[fullName] = clazz
         }

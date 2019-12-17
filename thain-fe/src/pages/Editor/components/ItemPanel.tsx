@@ -23,19 +23,19 @@ const nodeCommonDefine = {
 };
 
 const ItemPanel: React.FC<{}> = () => {
+  const itemPanelContainer = useRef(null);
   const { editor, componentDefines } = useSelector((s: ConnectState) => s.flowEditor);
 
-  if (!componentDefines) {
-    return <div />;
-  }
-
-  const itemPanelContainer = useRef(null);
   useEffect(() => {
     if (editor) {
       const itemPanel = new Editor.Itempanel({ container: itemPanelContainer.current });
       editor.add(itemPanel);
     }
   }, [editor]);
+
+  if (!editor || !componentDefines) {
+    return <div />;
+  }
 
   const contain: any[] = [];
   componentDefines

@@ -18,10 +18,13 @@ data class ComponentDefine(
             val required: Boolean = false,
             val label: String,
             val input: Input) {
-        interface Input
-        data class CommonInput(val id: String) : Input
-        data class SelectInput(val id: String, val options: List<Option>) : Input {
-            data class Option(val id: String, val name: String)
+
+        data class Input(val id: String,
+                         /**
+                          * 只有当id为select时 options才存在
+                          */
+                         val options: List<Option>?) {
+            data class Option(val id: String, val name: String?)
         }
     }
 }

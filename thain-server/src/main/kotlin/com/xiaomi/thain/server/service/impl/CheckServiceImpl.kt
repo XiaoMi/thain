@@ -69,12 +69,12 @@ class CheckServiceImpl(private val thainFacade: ThainFacade) : CheckService {
         val componentDefineMap = thainFacade.componentService.componentDefineModels
         val componentDefine = componentDefineMap[addJobRq.component]
                 ?: throw ThainException("Component of node " + addJobRq.name + " does not available ")
-
+        val inputProperties = addJobRq.properties.filter { p -> p.value.isNotBlank() }.keys
         componentDefine.items
                 .filter { it.required }
                 .map { it.property }
                 .forEach {
-                    if (!addJobRq.properties.keys.contains(it)) {
+                    if (!inputProperties.contains(it)) {
                         throw ThainException("Required items of " + addJobRq.name + " not filled in：" + it)
                     }
                 }

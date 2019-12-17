@@ -43,6 +43,9 @@ const NodeDetail: React.FC<{}> = () => {
   const flowEditor = useSelector((s: ConnectState) => s.flowEditor);
   const { selectedModel, componentDefines, updateGraph } = flowEditor;
   const { category, id } = selectedModel;
+  if (!componentDefines) {
+    return <div />;
+  }
   const componentDefine = componentDefines.find(t => category === `${t.group}::${t.name}`);
 
   if (!category || updateGraph === undefined || !componentDefine) {

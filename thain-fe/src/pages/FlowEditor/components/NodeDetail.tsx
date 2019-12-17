@@ -43,13 +43,17 @@ const NodeDetail: React.FC<{}> = () => {
   const flowEditor = useSelector((s: ConnectState) => s.flowEditor);
   const { selectedModel, componentDefines, updateGraph } = flowEditor;
   const { category, id } = selectedModel;
-  const componentDefine = componentDefines[category];
-  if (!category || updateGraph === undefined) {
+  if (!componentDefines) {
+    return <div />;
+  }
+  const componentDefine = componentDefines.find(t => category === `${t.group}::${t.name}`);
+
+  if (!category || updateGraph === undefined || !componentDefine) {
     return <div />;
   }
 
   const otherDetail: JSX.Element[] = [];
-  componentDefine.forEach(item => {
+  componentDefine.items.forEach(item => {
     const Input = getInput(item.input.id);
     otherDetail.push(
       <Form.Item

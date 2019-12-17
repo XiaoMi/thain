@@ -11,6 +11,7 @@ import com.xiaomi.thain.core.model.rq.UpdateFlowRq
 import com.xiaomi.thain.common.utils.ifNull
 import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineConfiguration
+import com.xiaomi.thain.core.process.service.ComponentService
 import com.xiaomi.thain.core.scheduler.SchedulerEngine
 import com.xiaomi.thain.core.scheduler.SchedulerEngineConfiguration
 import com.xiaomi.thain.core.utils.SendModifyUtils
@@ -26,8 +27,8 @@ import java.text.ParseException
  * @author liangyongrui@xiaomi.com
  * @date 19-5-16 下午8:38
  */
-class ThainFacade private constructor(processEngineConfiguration: ProcessEngineConfiguration,
-                                      schedulerEngineConfiguration: SchedulerEngineConfiguration) {
+class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
+                  schedulerEngineConfiguration: SchedulerEngineConfiguration) {
 
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
@@ -99,8 +100,8 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
         return processEngine.startProcess(flowId)
     }
 
-    val componentDefineJsonList: Map<String, String>
-        get() = processEngine.processEngineStorage.componentService.componentDefineJsonList
+    val componentService: ComponentService
+        get() = processEngine.processEngineStorage.componentService
 
     @Throws(ThainException::class)
     fun pauseFlow(flowId: Long) {
@@ -172,11 +173,6 @@ class ThainFacade private constructor(processEngineConfiguration: ProcessEngineC
 
     companion object {
         private const val NON_EXIST_FLOW = "flow does not exist:{0}"
-        @JvmStatic
-        fun getInstance(processEngineConfiguration: ProcessEngineConfiguration,
-                        schedulerEngineConfiguration: SchedulerEngineConfiguration): ThainFacade {
-            return ThainFacade(processEngineConfiguration, schedulerEngineConfiguration)
-        }
     }
 
 }

@@ -2,6 +2,7 @@ package com.xiaomi.thain.server.service.impl
 
 import com.xiaomi.thain.common.exception.ThainException
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
+import com.xiaomi.thain.common.model.ComponentDefine
 import com.xiaomi.thain.core.model.dr.FlowDr
 import com.xiaomi.thain.core.model.dr.JobDr
 import com.xiaomi.thain.core.model.rq.AddFlowAndJobsRq
@@ -68,8 +69,8 @@ class FlowServiceImpl(
         return flowDao.getJobModelList(flowId)
     }
 
-    override fun getComponentDefineStringMap(): Map<String, String> {
-        return thainFacade.componentDefineJsonList
+    override fun getComponentDefine(): List<ComponentDefine> {
+        return thainFacade.componentService.componentDefineList
     }
 
     @Throws(ThainException::class, SchedulerException::class, IOException::class)

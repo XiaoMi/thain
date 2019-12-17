@@ -23,8 +23,7 @@ import static com.xiaomi.thain.component.util.GlobalKt.formatHttpReferenceData;
  *
  * @author liangyongrui@xiaomi.com
  */
-@ThainComponent(group = "std", name = "x5http",
-        defineJson = "[{\"property\": \"url\", \"label\": \"HTTP URL\", \"required\": true, \"input\": {\"id\": \"textarea\"}}, {\"property\": \"referenceData\", \"label\": \"流程数据引用\", \"input\": {\"id\": \"textarea\"}}, {\"property\": \"resultRegular\", \"label\": \"结果正则\", \"input\": {\"id\": \"textarea\"}}]\n")
+@ThainComponent("{\"group\": \"std\", \"name\": \"x5http\", \"hidden\": true, \"items\": [{\"property\": \"url\", \"label\": \"HTTP URL\", \"required\": true, \"input\": {\"id\": \"textarea\"}}, {\"property\": \"referenceData\", \"label\": \"流程数据引用\", \"input\": {\"id\": \"textarea\"}}, {\"property\": \"resultRegular\", \"label\": \"结果正则\", \"input\": {\"id\": \"textarea\"}}]}\n")
 @SuppressWarnings("unused")
 public class X5HttpComponent {
     /**

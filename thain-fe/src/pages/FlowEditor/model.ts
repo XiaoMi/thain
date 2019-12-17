@@ -10,10 +10,10 @@
 import { Reducer } from 'redux';
 import Editor from '@/pages/FlowEditor/editor';
 import { Effect } from 'dva';
-import { getComponentDefineJson, getFlow } from '@/pages/FlowEditor/service';
+import { getComponentDefines, getFlow } from '@/pages/FlowEditor/service';
 import { EditorFlowEntity } from '@/pages/FlowEditor/EditorFlowEntity';
-import { ComponentDefineJsons } from '@/typings/entity/ComponentDefineJsons';
 import { FlowAllInfo } from '@/commonModels/FlowAllInfo';
+import { ComponentDefine } from '../Editor/ComponentDefine';
 
 export class SelectedModel {
   category = '';
@@ -45,7 +45,7 @@ export class FlowEditorModelState {
   selectedModel = new SelectedModel();
   updateGraph?: (key: string, value: string, updateAttributes?: boolean) => void;
   flowAttributes: FlowAttributes = { name: '' };
-  componentDefines: ComponentDefineJsons = {};
+  componentDefines?: ComponentDefine[];
 }
 
 function getUpdateGraph(editor: Editor) {
@@ -89,7 +89,7 @@ const FlowEditorModel: FlowEditorModelType = {
   effects: {
     *mount({ payload: { flowId } }, { call, put }) {
       const editor = new Editor();
-      const componentDefines = yield call(getComponentDefineJson);
+      const componentDefines = yield call(getComponentDefines);
       yield put({
         type: 'updateState',
         payload: { flowId, componentDefines, editor, updateGraph: getUpdateGraph(editor) },

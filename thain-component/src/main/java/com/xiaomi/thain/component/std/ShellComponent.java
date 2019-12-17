@@ -21,8 +21,7 @@ import java.util.Base64;
  *
  * @author liangyongrui@xiaomi.com
  */
-@ThainComponent(group = "std", name = "shell",
-        defineJson = "[{\"property\": \"shellBase64\", \"label\": \"shell 脚本\", \"required\": true, \"input\": {\"id\": \"uploadBase64\"}}, {\"property\": \"environmentVariable\", \"label\": \"shell 变量（xxx=yyy 形式，多个用换行隔开）\", \"input\": {\"id\": \"textarea\"}}]")
+@ThainComponent("{\"group\": \"std\", \"name\": \"shell\", \"hidden\": false, \"items\": [{\"property\": \"shellBase64\", \"label\": \"shell 脚本\", \"required\": true, \"input\": {\"id\": \"uploadBase64\"}}, {\"property\": \"environmentVariable\", \"label\": \"shell 变量（xxx=yyy 形式，多个用换行隔开）\", \"input\": {\"id\": \"textarea\"}}]}")
 @SuppressWarnings("unused")
 public class ShellComponent {
     /**

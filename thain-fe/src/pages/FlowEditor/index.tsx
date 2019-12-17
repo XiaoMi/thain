@@ -17,7 +17,7 @@ import { router } from 'umi';
 import { addFlow } from './service';
 import Contextmenu from './components/Contextmenu';
 import DetailPanel from './components/FlowDetailPanel';
-import ItemPanel from './components/ItemPanel';
+import ItemPanel from '../Editor/components/ItemPanel';
 import Navigator from './components/Navigator';
 import Page from './components/Page';
 import ToolBar from './components/Toolbar';

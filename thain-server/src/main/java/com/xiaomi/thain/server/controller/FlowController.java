@@ -52,7 +52,7 @@ public class FlowController {
     @GetMapping("/getComponentDefineJson")
     public ApiResult getComponentDefineJson() {
         try {
-            return ApiResult.success(flowService.getComponentDefineStringMap());
+            return ApiResult.success(flowService.getComponentDefine());
         } catch (Exception e) {
             log.error("getComponentDefineJson", e);
             return ApiResult.fail("Failed to obtain frontend component json definition : " + e.getMessage());

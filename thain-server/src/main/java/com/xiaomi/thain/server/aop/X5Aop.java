@@ -57,6 +57,7 @@ public class X5Aop {
 
     @Pointcut("execution(* com.xiaomi.thain.server.controller.x5.*.*(..))")
     public void controllerPointcut() {
+        // point cut
     }
 
     /**

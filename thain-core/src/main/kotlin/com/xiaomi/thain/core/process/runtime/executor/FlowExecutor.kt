@@ -4,6 +4,7 @@ import com.mchange.lang.ThrowableUtils
 import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.JobExecutionStatus
 import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException
+import com.xiaomi.thain.common.exception.ThainException
 import com.xiaomi.thain.common.exception.ThainFlowRunningException
 import com.xiaomi.thain.common.exception.ThainRuntimeException
 import com.xiaomi.thain.common.model.JobExecutionModel
@@ -32,7 +33,7 @@ class FlowExecutor(flowExecutionDr: FlowExecutionDr,
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
     private val flowDr = processEngineStorage.flowDao.getFlow(flowExecutionDr.flowId)
-            .orElseThrow { ThainFlowRunningException() }
+            .orElseThrow { ThainException() }
     /**
      * 监控节点是否执行完
      */

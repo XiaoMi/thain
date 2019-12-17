@@ -2,10 +2,7 @@ package com.xiaomi.thain.core.process.runtime
 
 import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.FlowLastRunStatus
-import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException
-import com.xiaomi.thain.common.exception.ThainException
-import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
-import com.xiaomi.thain.common.exception.ThainRuntimeException
+import com.xiaomi.thain.common.exception.*
 import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr
 import com.xiaomi.thain.common.utils.HostUtils
@@ -65,7 +62,7 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
         val flowLastRunStatus = FlowLastRunStatus.getInstance(flowModel.lastRunStatus)
         if (flowLastRunStatus == FlowLastRunStatus.RUNNING) {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.DO_NOT_RUN_SAME_TIME.code)
-            throw ThainRepeatExecutionException("flow is running")
+            throw ThainFlowRunningException(flowExecutionDr.flowId)
         }
     }
 

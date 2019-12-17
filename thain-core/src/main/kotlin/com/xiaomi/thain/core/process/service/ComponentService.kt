@@ -13,19 +13,17 @@ import java.util.*
 class ComponentService {
     private val componentClass: Map<String, Class<*>>
     val componentDefineModels: Map<String, ComponentDefine>
-    val componentJsonList: List<String>
+    val componentDefineList: List<ComponentDefine>
 
     init {
         val componentClassList = ReflectUtils.getClassesByAnnotation(
                 "com.xiaomi.thain.component", ThainComponent::class.java)
 
-        val mutableComponentJsonList = mutableListOf<String>()
         val mutableComponentDefineModels = mutableMapOf<String, ComponentDefine>()
         val mutableComponentClass = mutableMapOf<String, Class<*>>()
 
         componentClassList.forEach { clazz ->
             val json = clazz.getAnnotation(ThainComponent::class.java).value
-            mutableComponentJsonList.add(json)
             val componentDefine = JSON.parseObject(json, object : TypeReference<ComponentDefine>() {})
             val fullName = "${componentDefine.group}:${componentDefine.name}"
             mutableComponentDefineModels[fullName] = componentDefine
@@ -34,7 +32,7 @@ class ComponentService {
 
         componentDefineModels = mutableComponentDefineModels
         componentClass = mutableComponentClass
-        componentJsonList = componentClassList.map { it.getAnnotation(ThainComponent::class.java).value }
+        componentDefineList = mutableComponentDefineModels.values.toList()
     }
 
     fun getComponentClass(componentFullName: String): Optional<Class<*>> {

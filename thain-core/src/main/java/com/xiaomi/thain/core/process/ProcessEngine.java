@@ -106,7 +106,7 @@ public class ProcessEngine {
         val jobExecutionDao = new JobExecutionDao(sqlSessionFactory, mailService);
         val x5ConfigDao = new X5ConfigDao(sqlSessionFactory, mailService);
 
-        val componentService = ComponentService.getInstance();
+        val componentService = new ComponentService();
 
         val flowExecutionWaitingQueue = new LinkedBlockingQueue<FlowExecutionDr>();
 

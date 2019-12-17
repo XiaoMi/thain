@@ -57,7 +57,7 @@ public class AppConfig {
                 env.getProperty("spring.datasource.username", ""));
         schedulerEngineConfiguration.properties.put("org.quartz.dataSource.job_scheduler.password",
                 env.getProperty("spring.datasource.password", ""));
-        return ThainFacade.getInstance(processEngineConfiguration, schedulerEngineConfiguration);
+        return new ThainFacade(processEngineConfiguration, schedulerEngineConfiguration);
     }
 
 }

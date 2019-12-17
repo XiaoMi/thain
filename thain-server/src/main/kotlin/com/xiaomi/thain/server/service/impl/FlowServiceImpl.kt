@@ -68,8 +68,8 @@ class FlowServiceImpl(
         return flowDao.getJobModelList(flowId)
     }
 
-    override fun getComponentDefineStringMap(): Map<String, String> {
-        return thainFacade.componentDefineJsonList
+    override fun getComponentDefineJsonString(): List<String> {
+        return thainFacade.componentService.componentJsonList
     }
 
     @Throws(ThainException::class, SchedulerException::class, IOException::class)

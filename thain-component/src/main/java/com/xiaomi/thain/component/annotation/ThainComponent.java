@@ -23,26 +23,29 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface ThainComponent {
 
-    /**
-     * 组件所属的组，如：std，用于区分组件
-     *
-     * @return 组件所属组的名称
-     */
-    String group();
+//    /**
+//     * 组件所属的组，如：std，用于区分组件
+//     *
+//     * @return 组件所属组的名称
+//     */
+//    String group();
+//
+//    /**
+//     * 组件名称， 如：http
+//     *
+//     * @return 组件的名称
+//     */
+//    String name();
+//
+//    /**
+//     * 组件定义的json
+//     * http://json-schema.org/draft-07/schema
+//     * 这个json用来字段校验，前端组件展示等
+//     *
+//     * @return 组件定义的json
+//     */
+//    String defineJson();
 
-    /**
-     * 组件名称， 如：http
-     *
-     * @return 组件的名称
-     */
-    String name();
-
-    /**
-     * 组件定义的json
-     * http://json-schema.org/draft-07/schema
-     * 这个json用来字段校验，前端组件展示等
-     *
-     * @return 组件定义的json
-     */
-    String defineJson();
+    //todo 上面的都要删除
+    String value();
 }

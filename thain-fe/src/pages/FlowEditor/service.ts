@@ -11,6 +11,7 @@ import { FlowAllInfo } from '@/commonModels/FlowAllInfo';
  * 获取组件定义json
  */
 export async function getComponentDefineJson(): Promise<ComponentDefineJsons | undefined> {
+  // todo 改了 list 了
   const res = await get<string[]>('/api/flow/getComponentDefineJson');
   if (res === undefined) {
     return undefined;

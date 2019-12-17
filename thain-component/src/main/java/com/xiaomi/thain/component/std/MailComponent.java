@@ -18,8 +18,7 @@ import java.io.IOException;
  *
  * @author liangyongrui@xiaomi.com
  */
-@ThainComponent(group = "std", name = "mail",
-        defineJson = "[{\"property\": \"title\", \"label\": \"邮件标题\", \"required\": true, \"input\": {\"id\": \"textarea\"}}, {\"property\": \"contentHtml\", \"label\": \"邮件内容\", \"required\": true, \"input\": {\"id\": \"richText\"}}, {\"property\": \"recipient\", \"label\": \"收件人（多个用逗号隔开）\", \"required\": true, \"input\": {\"id\": \"textarea\"}}]")
+@ThainComponent("{\"group\": \"std\", \"name\": \"mail\", \"hidden\": false, \"items\": [{\"property\": \"title\", \"label\": \"邮件标题\", \"required\": true, \"input\": {\"id\": \"textarea\"}}, {\"property\": \"contentHtml\", \"label\": \"邮件内容\", \"required\": true, \"input\": {\"id\": \"richText\"}}, {\"property\": \"recipient\", \"label\": \"收件人（多个用逗号隔开）\", \"required\": true, \"input\": {\"id\": \"textarea\"}}]}\n")
 @SuppressWarnings("unused")
 public class MailComponent {
     /**

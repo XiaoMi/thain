@@ -38,7 +38,7 @@ interface FlowService {
 
     fun getFlow(flowId: Long): FlowDr?
     fun getJobModelList(flowId: Long): List<JobDr>
-    fun getComponentDefineStringMap(): Map<String, String>
+    fun getComponentDefineJsonString(): List<String>
     @Throws(ThainException::class, SchedulerException::class, IOException::class)
     fun scheduling(flowId: Long)
 

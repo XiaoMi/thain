@@ -3,13 +3,21 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
+
 /**
  * https://app.quicktype.io/#l=schema 这个网站生成json
  *
  * 组件前端 schema
  *
  */
-export type ComponentDefineJson = Array<{
+export interface ComponentDefine {
+  group: string;
+  name: string;
+  hidden: boolean;
+  items: ComponentDefineItem[];
+}
+
+export interface ComponentDefineItem {
   /**
    * 传到后端的key
    */
@@ -39,4 +47,4 @@ export type ComponentDefineJson = Array<{
           name?: string;
         }>;
       };
-}>;
+}

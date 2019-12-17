@@ -3,24 +3,15 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-import { ComponentDefineJsons } from '@/typings/entity/ComponentDefineJsons';
 import { get, post } from '@/utils/request';
 import { FlowAllInfo } from '@/commonModels/FlowAllInfo';
+import { ComponentDefine } from '../Editor/ComponentDefine';
 
 /**
  * 获取组件定义json
  */
-export async function getComponentDefineJson(): Promise<ComponentDefineJsons | undefined> {
-  // todo 改了 list 了
-  const res = await get<string[]>('/api/flow/getComponentDefineJson');
-  if (res === undefined) {
-    return undefined;
-  }
-  const result: ComponentDefineJsons = {};
-  for (const componentName of Object.keys(res)) {
-    result[componentName] = JSON.parse(res[componentName]);
-  }
-  return result;
+export async function getComponentDefines(): Promise<ComponentDefine[] | undefined> {
+  return await get<ComponentDefine[]>('/api/flow/getComponentDefineJson');
 }
 
 /**

@@ -25,13 +25,12 @@ Thain has completed backend management system which supports depending, re-run, 
 1. Clone Code
 
    ```shell
-   git clone -b v1.2.x https://github.com/XiaoMi/thain.git
+   git clone https://github.com/XiaoMi/thain.git
    ```
 
 1. Environmental Requirements
 
    - jdk >= 8
-   - maven 3
    - nodejs >= 8
 
 1. Execute in order under the project root directory
@@ -41,13 +40,13 @@ Thain has completed backend management system which supports depending, re-run, 
    npm install
    npm run build
    cd ..
-   mvn -U clean package
+   ./gradlew clean build
    ```
 
 1. Run
 
    ```shell
-   java -jar thain-server/target/thain-server-1.2.2.jar
+   java -jar thain-server/build/libs/thain-server-1.3.0.jar
    ```
 
 1. Open [localhost:9900](http://localhost:9900) to see the effect

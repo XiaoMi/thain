@@ -23,33 +23,31 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 
 ## 快速上手
 
-1. 下载完整代码
+1. Clone Code
 
    ```shell
-   git clone -b v1.2.x https://github.com/XiaoMi/thain.git
+   git clone https://github.com/XiaoMi/thain.git
    ```
 
-1. 运行环境需求
+1. Environmental Requirements
 
    - jdk >= 8
-   - maven 3
    - nodejs >= 8
-   - 操作系统：Linux 或 MacOS 测试通过，windows 前端编译 _可能_ 会有问题
 
-1. 在项目根目录下依次执行
+1. Execute in order under the project root directory
 
    ```shell
    cd thain-fe
    npm install
    npm run build
    cd ..
-   mvn -U clean package
+   ./gradlew clean build
    ```
 
-1. 打包完成后，即可运行
+1. Run
 
    ```shell
-   java -jar thain-server/target/thain-server-1.2.2.jar
+   java -jar thain-server/build/libs/thain-server-1.3.0.jar
    ```
 
 1. 打开 [localhost:9900](http://localhost:9900) 就可以看到效果了

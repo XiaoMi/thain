@@ -83,7 +83,7 @@ class FlowExecutionDao(
     }
 
     /**
-     * 获取超过1min没心跳的任务
+     * 获取超过2min没心跳的任务
      */
     val dead: List<FlowExecutionDr>
         get() = execute { it.dead }.orElseGet { emptyList() }

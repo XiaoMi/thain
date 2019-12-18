@@ -98,7 +98,7 @@
                update_time,
                heartbeat
         from thain_flow_execution
-        where heartbeat &lt; from_unixtime(unix_timestamp(now()) - 60)
+        where heartbeat &lt; from_unixtime(unix_timestamp(now()) - 120)
           and (status = 0 or status = 1)
     </select>
 

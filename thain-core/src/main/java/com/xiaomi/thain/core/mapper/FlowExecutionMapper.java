@@ -47,7 +47,7 @@ public interface FlowExecutionMapper {
     int setFlowExecutionHeartbeat(@NonNull List<Long> flowExecutionIds);
 
     /**
-     * 获取超过1min没心跳的任务
+     * 获取超过2min没心跳的任务
      */
     List<FlowExecutionDr> getDead();
 

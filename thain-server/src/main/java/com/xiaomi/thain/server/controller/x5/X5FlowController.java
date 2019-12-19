@@ -18,6 +18,7 @@ import com.xiaomi.thain.server.service.PermissionService;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -116,6 +117,9 @@ public class X5FlowController {
             String cron = JSON.parseObject(json).getString("cron");
             if (!permissionService.getFlowAccessible(flowId, appId)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
+            }
+            if (StringUtils.isBlank(cron)) {
+                flowService.scheduling(flowId);
             }
             flowService.updateCron(flowId, cron);
         } catch (Exception e) {

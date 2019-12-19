@@ -111,6 +111,7 @@ export class EditorFlowEntity {
       editorNode.y = job.yAxis;
       editorNode.attributes = job.properties;
       editorNode.condition = job.condition;
+      editorNode.callbackUrl = job.callbackUrl;
 
       const sourceJobNames = job.condition
         .split(/&&|\|\|/)

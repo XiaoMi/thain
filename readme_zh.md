@@ -47,7 +47,7 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 1. Run
 
    ```shell
-   java -jar thain-server/build/libs/thain-server-1.3.0.jar
+   java -jar thain-server/build/libs/thain-server-1.3.0-beta.0.jar
    ```
 
 1. 打开 [localhost:9900](http://localhost:9900) 就可以看到效果了

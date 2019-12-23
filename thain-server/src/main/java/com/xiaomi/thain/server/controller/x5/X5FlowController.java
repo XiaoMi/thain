@@ -118,10 +118,10 @@ public class X5FlowController {
             if (!permissionService.getFlowAccessible(flowId, appId)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            if (StringUtils.isBlank(cron)) {
-                flowService.scheduling(flowId);
+            if (StringUtils.isNotBlank(cron)) {
+                flowService.updateCron(flowId, cron);
             }
-            flowService.updateCron(flowId, cron);
+            flowService.scheduling(flowId);
         } catch (Exception e) {
             log.error("scheduling:", e);
             return ApiResult.fail(e.getMessage());

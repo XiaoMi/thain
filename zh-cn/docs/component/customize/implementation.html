@@ -26,8 +26,7 @@
 <p>上一节讲了如果写一个定义，我们实现的时候，需要把之前的定义引入。</p>
 <p>在类上使用com.xiaomi.thain.component.annotation.ThainComponent这个注解。</p>
 <p>如：</p>
-<pre><code class="language-java"><span class="hljs-meta">@ThainComponent</span>(group = <span class="hljs-string">"std"</span>, name = <span class="hljs-string">"mail"</span>,
-        defineJson = <span class="hljs-string">"这里填上一节写好的mail定义"</span>)
+<pre><code class="language-java"><span class="hljs-meta">@ThainComponent</span>(<span class="hljs-string">"这里填上一节写好的mail定义"</span>)
 </code></pre>
 <h2>定义属性</h2>
 <p>把json定义中的property放在class中，都用String类型接收。</p>

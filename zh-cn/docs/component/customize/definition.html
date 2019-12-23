@@ -27,7 +27,14 @@
 <h2>组件定义 json 的格式</h2>
 <p>一个满足标准的 json，需要满足如下 typescript 定义。</p>
 <p>可以用<a href="https://app.quicktype.io/">这个网站</a>生成 json 定义</p>
-<pre><code class="language-ts"><span class="hljs-keyword">type</span> ComponentDefineJson = <span class="hljs-built_in">Array</span>&lt;{
+<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> ComponentDefine {
+  group: <span class="hljs-built_in">string</span>;
+  name: <span class="hljs-built_in">string</span>;
+  hidden: <span class="hljs-built_in">boolean</span>;
+  items: ComponentDefineItem[];
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> ComponentDefineItem {
   <span class="hljs-comment">/**
    * 传到后端的key
    */</span>
@@ -57,38 +64,46 @@
           name?: <span class="hljs-built_in">string</span>;
         }&gt;;
       };
-}&gt;;
+}
 </code></pre>
 <h2>举个例子</h2>
 <p>参考 std::mail 组件的 json 定义。</p>
-<pre><code class="language-json">[
-  {
-    <span class="hljs-attr">"property"</span>: <span class="hljs-string">"title"</span>,
-    <span class="hljs-attr">"label"</span>: <span class="hljs-string">"邮件标题"</span>,
-    <span class="hljs-attr">"required"</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">"input"</span>: {
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"textarea"</span>
+<pre><code class="language-json">{
+  <span class="hljs-attr">"group"</span>: <span class="hljs-string">"std"</span>,
+  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"mail"</span>,
+  <span class="hljs-attr">"hidden"</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-attr">"items"</span>: [
+    {
+      <span class="hljs-attr">"property"</span>: <span class="hljs-string">"title"</span>,
+      <span class="hljs-attr">"label"</span>: <span class="hljs-string">"邮件标题"</span>,
+      <span class="hljs-attr">"required"</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">"input"</span>: {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-string">"textarea"</span>
+      }
+    },
+    {
+      <span class="hljs-attr">"property"</span>: <span class="hljs-string">"contentHtml"</span>,
+      <span class="hljs-attr">"label"</span>: <span class="hljs-string">"邮件内容"</span>,
+      <span class="hljs-attr">"required"</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">"input"</span>: {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-string">"richText"</span>
+      }
+    },
+    {
+      <span class="hljs-attr">"property"</span>: <span class="hljs-string">"recipient"</span>,
+      <span class="hljs-attr">"label"</span>: <span class="hljs-string">"收件人（多个用逗号隔开）"</span>,
+      <span class="hljs-attr">"required"</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">"input"</span>: {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-string">"textarea"</span>
+      }
     }
-  },
-  {
-    <span class="hljs-attr">"property"</span>: <span class="hljs-string">"contentHtml"</span>,
-    <span class="hljs-attr">"label"</span>: <span class="hljs-string">"邮件内容"</span>,
-    <span class="hljs-attr">"required"</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">"input"</span>: {
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"richText"</span>
-    }
-  },
-  {
-    <span class="hljs-attr">"property"</span>: <span class="hljs-string">"recipient"</span>,
-    <span class="hljs-attr">"label"</span>: <span class="hljs-string">"收件人（多个用逗号隔开）"</span>,
-    <span class="hljs-attr">"required"</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">"input"</span>: {
-      <span class="hljs-attr">"id"</span>: <span class="hljs-string">"textarea"</span>
-    }
-  }
-]
+  ]
+}
 </code></pre>
-<p>每一个 property 都是用户可以在页面输入的项。</p>
+<p>group: 组件分类</p>
+<p>name: 组件名称</p>
+<p>hidden: 组件在前端是否影藏</p>
+<p>item: 每一个 property 都是用户可以在页面输入的项</p>
 <h2>页面支持的 input 类型</h2>
 <ol>
 <li>line
@@ -103,12 +118,12 @@
 </li>
 <li>sql
 <ul>
-<li>sql输入框</li>
+<li>sql 输入框</li>
 </ul>
 </li>
 <li>shell
 <ul>
-<li>shell输入框</li>
+<li>shell 输入框</li>
 </ul>
 </li>
 <li>richText
@@ -127,7 +142,7 @@
 </ul>
 </li>
 </ol>
-<p>如果还有你需要的，可以提issus。</p>
+<p>如果还有你需要的，可以提 issus。</p>
 </div></section><footer class="footer-container"><div class="footer-body"><div class="copyright"><span>Copyright © 2020 XIAOMI </span></div></div></footer></div></div>
 	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>
 	<script src="https://f.alicdn.com/react/15.4.1/react-dom.min.js"></script>

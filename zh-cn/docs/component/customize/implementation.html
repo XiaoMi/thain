@@ -18,18 +18,18 @@
  can be found in the LICENSE file in the root directory of this source tree.
 -->
 <h1>组件实现</h1>
-<p>现阶段组件实现只支持java。</p>
+<p>现阶段组件实现只支持 java。</p>
 <h2>实现位置</h2>
 <p>建议把实现统一放在路径下：</p>
 <p>thain/thain-component/com.xiaomi.thain.component</p>
 <h2>引入定义</h2>
 <p>上一节讲了如果写一个定义，我们实现的时候，需要把之前的定义引入。</p>
-<p>在类上使用com.xiaomi.thain.component.annotation.ThainComponent这个注解。</p>
+<p>在类上使用 com.xiaomi.thain.component.annotation.ThainComponent 这个注解。</p>
 <p>如：</p>
 <pre><code class="language-java"><span class="hljs-meta">@ThainComponent</span>(<span class="hljs-string">"这里填上一节写好的mail定义"</span>)
 </code></pre>
 <h2>定义属性</h2>
-<p>把json定义中的property放在class中，都用String类型接收。</p>
+<p>把 json 定义中的 property 放在 class 中，都用 String 类型接收。</p>
 <p>如：</p>
 <pre><code class="language-java"><span class="hljs-comment">/**
  * 邮件标题
@@ -147,11 +147,11 @@
 }
 </code></pre>
 <h2>实现执行逻辑</h2>
-<p>在组件的class中定义一个run方法即可。</p>
+<p>在组件的 class 中定义一个 run 方法即可。</p>
 <pre><code class="language-java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span>
 </span></code></pre>
-<h2>job执行状态</h2>
-<p>job的执行状态取决于run方法中是否抛了异常。</p>
+<h2>job 执行状态</h2>
+<p>job 的执行状态取决于 run 方法中是否抛了异常。</p>
 <p>如果抛了就是为失败，没抛就是为成功。</p>
 </div></section><footer class="footer-container"><div class="footer-body"><div class="copyright"><span>Copyright © 2020 XIAOMI </span></div></div></footer></div></div>
 	<script src="https://f.alicdn.com/react/15.4.1/react-with-addons.min.js"></script>

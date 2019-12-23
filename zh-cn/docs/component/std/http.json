@@ -1,6 +1,6 @@
 {
   "filename": "http.md",
-  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>HTTP请求组件</h1>\n<h2>组件名称</h2>\n<p>std::http</p>\n<h2>必填参数</h2>\n<p>url: url</p>\n<p>method: GET 或  POST</p>\n<h2>选填参数</h2>\n<p>contentType: Content-Type</p>\n<p>referenceData: 流程数据引用, 多个用逗号分开, 如: <code>aName:a.name,bAge:b.age</code>, 冒号前面的是http发过去的key, 后面是value</p>\n<p>forwardData: 转发数据, 这个会原封不动的发给url, key是<code>forwardData</code></p>\n<p>resultRegular: 结果正则表达式验证, 如果http返回的result不满足这个正则表达式，则视为失败，不填写则不验证</p>\n<h2>产生结果</h2>\n<p>result : http请求的返回结果</p>\n",
+  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>HTTP 请求组件</h1>\n<h2>组件名称</h2>\n<p>std::http</p>\n<h2>必填参数</h2>\n<p>url: url</p>\n<p>method: GET 或 POST</p>\n<h2>选填参数</h2>\n<p>contentType: Content-Type</p>\n<p>referenceData: 流程数据引用, 多个用逗号分开, 如: <code>aName:a.name,bAge:b.age</code>, 冒号前面的是 http 发过去的 key, 后面是 value</p>\n<p>forwardData: 转发数据, 这个会原封不动的发给 url, key 是<code>forwardData</code></p>\n<p>resultRegular: 结果正则表达式验证, 如果 http 返回的 result 不满足这个正则表达式，则视为失败，不填写则不验证</p>\n<h2>产生结果</h2>\n<p>result : http 请求的返回结果</p>\n",
   "link": "/zh-cn/docs/component/std/http.html",
   "meta": {}
 }

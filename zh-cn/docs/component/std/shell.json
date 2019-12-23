@@ -1,6 +1,6 @@
 {
   "filename": "shell.md",
-  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>Shell脚本执行组件</h1>\n<h2>组件名称</h2>\n<p>std::shell</p>\n<h2>必填参数</h2>\n<p>shellBase64: shell 脚本文件 base64</p>\n<h2>选填参数</h2>\n<p>environmentVariable: shell 变量（xxx=yyy 形式，多个用换行隔开）</p>\n<h2>其他</h2>\n<p>推荐在页面创建时候使用该组件, 如果是第三方系统建议用http在自己的系统实现</p>\n",
+  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>Shell 脚本执行组件</h1>\n<h2>组件名称</h2>\n<p>std::shell</p>\n<h2>必填参数</h2>\n<p>shellBase64: shell 脚本文件 base64</p>\n<h2>选填参数</h2>\n<p>environmentVariable: shell 变量（xxx=yyy 形式，多个用换行隔开）</p>\n<h2>其他</h2>\n<p>推荐在页面创建时候使用该组件, 如果是第三方系统建议用 http 在自己的系统实现</p>\n",
   "link": "/zh-cn/docs/component/std/shell.html",
   "meta": {}
 }

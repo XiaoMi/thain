@@ -1,6 +1,6 @@
 {
   "filename": "mail.md",
-  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>邮件发送组件</h1>\n<h2>组件名称</h2>\n<p>std::mail</p>\n<h2>必填参数</h2>\n<p>title: 邮件标题</p>\n<p>contentHtml: 邮件内容</p>\n<p>recipient: 收件人（多个用逗号隔开）</p>\n<h2>其他</h2>\n<p>可以在邮件标题和内容中用<code>${}</code>引用别的job产生的结果, 如: <code>${a.name}</code></p>\n",
+  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>邮件发送组件</h1>\n<h2>组件名称</h2>\n<p>std::mail</p>\n<h2>必填参数</h2>\n<p>title: 邮件标题</p>\n<p>contentHtml: 邮件内容</p>\n<p>recipient: 收件人（多个用逗号隔开）</p>\n<h2>其他</h2>\n<p>可以在邮件标题和内容中用<code>${}</code>引用别的 job 产生的结果, 如: <code>${a.name}</code></p>\n",
   "link": "/zh-cn/docs/component/std/mail.html",
   "meta": {}
 }

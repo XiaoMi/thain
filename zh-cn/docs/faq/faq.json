@@ -1,6 +1,6 @@
 {
   "filename": "faq.md",
-  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>FAQ</h1>\n<ul>\n<li>Q: kill 一个flow，执行中的job怎么处理的？</li>\n<li>A: 目前的kill 只是在数据库标记了一下，每个job执行之前会读一下是否被kill，如果被kill了，未执行的job就不再执行了,正在执行的job还会继续执行。</li>\n</ul>\n<hr>\n<ul>\n<li>Q: 负载均衡是怎么实现的</li>\n<li>A: 数据库随机抢占，具体参考Quartz</li>\n</ul>\n",
+  "__html": "<!--\n Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.\n This source code is licensed under the Apache License Version 2.0, which\n can be found in the LICENSE file in the root directory of this source tree.\n-->\n<h1>FAQ</h1>\n<ul>\n<li>Q: kill 一个 flow，执行中的 job 怎么处理的？</li>\n<li>A: 目前的 kill 只是在数据库标记了一下，每个 job 执行之前会读一下是否被 kill，如果被 kill 了，未执行的 job 就不再执行了,正在执行的 job 还会继续执行。</li>\n</ul>\n<hr>\n<ul>\n<li>Q: 负载均衡是怎么实现的</li>\n<li>A: 数据库随机抢占，具体参考 Quartz</li>\n</ul>\n",
   "link": "/zh-cn/docs/faq/faq.html",
   "meta": {}
 }

@@ -22,17 +22,17 @@ Thain has completed backend management system which supports depending, re-run, 
 
 ## Quick Start
 
-1. Clone Code
-
-   ```shell
-   git clone https://github.com/XiaoMi/thain.git
-   ```
-
 1. Environmental Requirements
 
    - os : Linux or MacOS
    - jdk >= 8
    - nodejs >= 8
+
+1. Clone Code
+
+   ```shell
+   git clone https://github.com/XiaoMi/thain.git
+   ```
 
 1. Execute in order under the project root directory
 

@@ -23,17 +23,17 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 
 ## 快速上手
 
-1. Clone Code
-
-   ```shell
-   git clone https://github.com/XiaoMi/thain.git
-   ```
-
 1. Environmental Requirements
 
    - os : Linux or MacOS
    - jdk >= 8
    - nodejs >= 8
+
+1. Clone Code
+
+   ```shell
+   git clone https://github.com/XiaoMi/thain.git
+   ```
 
 1. Execute in order under the project root directory
 

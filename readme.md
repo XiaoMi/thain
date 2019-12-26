@@ -30,6 +30,7 @@ Thain has completed backend management system which supports depending, re-run, 
 
 1. Environmental Requirements
 
+   - os : Linux or MacOS
    - jdk >= 8
    - nodejs >= 8
 

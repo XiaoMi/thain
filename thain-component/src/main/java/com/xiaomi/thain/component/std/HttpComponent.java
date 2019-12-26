@@ -24,7 +24,7 @@ import static com.xiaomi.thain.component.util.GlobalKt.formatHttpReferenceData;
  *
  * @author liangyongrui@xiaomi.com
  */
-@ThainComponent("{\"group\": \"std\", \"name\": \"http\", \"hidden\": false, \"items\": [{\"property\": \"url\", \"label\": \"HTTP URL\", \"required\": true, \"input\": {\"id\": \"textarea\"}}, {\"property\": \"method\", \"label\": \"HTTP Method\", \"required\": true, \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"GET\"}, {\"id\": \"POST\"}]}}, {\"property\": \"contentType\", \"label\": \"Content-Type\", \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"application/json\"}, {\"id\": \"application/x-www-form-urlencoded\"}]}}, {\"property\": \"referenceData\", \"label\": \"流程数据引用\", \"input\": {\"id\": \"textarea\"}}, {\"property\": \"resultRegular\", \"label\": \"结果正则\", \"input\": {\"id\": \"textarea\"}}]}\n")
+@ThainComponent("{\"group\": \"std\", \"name\": \"http\", \"hidden\": false, \"items\": [{\"property\": \"url\", \"label\": \"HTTP URL\", \"required\": true, \"input\": {\"id\": \"textarea\"}}, {\"property\": \"method\", \"label\": \"HTTP Method\", \"required\": true, \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"GET\"}, {\"id\": \"POST\"}]}}, {\"property\": \"contentType\", \"label\": \"Content-Type\", \"input\": {\"id\": \"select\", \"options\": [{\"id\": \"application/json\"}, {\"id\": \"application/x-www-form-urlencoded\"}]}}, {\"property\": \"referenceData\", \"label\": \"流程数据引用\", \"input\": {\"id\": \"textarea\"}}, {\"property\": \"forwardData\", \"label\": \"转发数据\", \"input\": {\"id\": \"textarea\"}}, {\"property\": \"resultRegular\", \"label\": \"结果正则\", \"input\": {\"id\": \"textarea\"}}]}\n")
 @SuppressWarnings("unused")
 public class HttpComponent {
     /**

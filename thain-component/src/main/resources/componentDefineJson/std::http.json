@@ -50,6 +50,13 @@
       }
     },
     {
+      "property": "forwardData",
+      "label": "转发数据",
+      "input": {
+        "id": "textarea"
+      }
+    },
+    {
       "property": "resultRegular",
       "label": "结果正则",
       "input": {

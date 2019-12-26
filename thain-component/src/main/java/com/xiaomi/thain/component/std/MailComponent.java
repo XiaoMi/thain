@@ -12,6 +12,7 @@ import lombok.val;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Date 19-5-16 下午8:48
@@ -61,7 +62,7 @@ public class MailComponent {
             }
             val key = sb.substring(cur + 2, end).split("\\.");
             if (key.length == 2) {
-                tools.getStorageValue(key[0], key[1])
+                Optional.ofNullable(tools.getStorageValue(key[0], key[1]))
                         .ifPresent(t -> sb.replace(cur, end + 1, String.valueOf(t)));
 
             }

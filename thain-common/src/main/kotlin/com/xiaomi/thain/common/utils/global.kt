@@ -18,3 +18,11 @@ fun <T : Any> T?.isNotNull(): Boolean {
 fun <T> List<T>.copyOf(): List<T> {
     return mutableListOf<T>().also { it.addAll(this) }
 }
+
+inline fun <T> T.ifLet(predicate: (T) -> Boolean, transform: (T) -> T): T {
+    if (predicate(this)) {
+        return transform(this)
+    }
+    return this
+}
+

@@ -11,8 +11,6 @@ import com.xiaomi.thain.core.process.ProcessEngineStorage
 import com.xiaomi.thain.core.process.runtime.log.JobExecutionLogHandler
 import com.xiaomi.thain.core.process.runtime.storage.FlowExecutionStorage
 import java.io.IOException
-import java.util.*
-import javax.mail.MessagingException
 
 /**
  * Date 19-5-30 下午4:31
@@ -28,7 +26,6 @@ class ComponentToolsImpl(private val jobDr: JobDr,
     private val log = JobExecutionLogHandler.getInstance(jobExecutionId, processEngineStorage)
     private val mailService = processEngineStorage.mailService
 
-    @Throws(IOException::class, MessagingException::class)
     override fun sendMail(to: Array<String>, subject: String, content: String) {
         mailService.send(to, subject, content)
     }
@@ -49,10 +46,9 @@ class ComponentToolsImpl(private val jobDr: JobDr,
      * @param jobName 节点名称
      * @param key     key
      * @param <T>     自动强制转换
-     * @return 返回对应值的Optional
     </T> */
-    override fun <T> getStorageValue(jobName: String, key: String): Optional<T> {
-        return flowExecutionStorage[jobName, key]
+    override fun <T> getStorageValue(jobName: String, key: String): T? {
+        return flowExecutionStorage.get(jobName, key)
     }
 
     /**
@@ -65,7 +61,7 @@ class ComponentToolsImpl(private val jobDr: JobDr,
      * @return 返回对应值, 值不存在则返回defaultValue
     </T> */
     override fun <T> getStorageValueOrDefault(jobName: String, key: String, defaultValue: T): T {
-        return getStorageValue<T>(jobName, key).orElse(defaultValue)
+        return getStorageValue<T>(jobName, key)?:defaultValue
     }
 
     /**
@@ -110,7 +106,7 @@ class ComponentToolsImpl(private val jobDr: JobDr,
         return jobExecutionId
     }
 
-    override fun getStorage(): Map<String, Any> {
+    override fun getStorage(): Map<Pair<String,String>, Any> {
         return flowExecutionStorage.storageMap
     }
 

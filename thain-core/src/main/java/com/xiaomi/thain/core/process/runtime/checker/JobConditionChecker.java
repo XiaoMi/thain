@@ -73,8 +73,11 @@ public class JobConditionChecker {
 
     private boolean calculate(String name, String left, String op, Integer right) {
         try {
-            long leftValue = Long.parseLong(String.valueOf(flowExecutionStorage.get(name, left)
-                    .orElseThrow(() -> new ThainRuntimeException("The calculated value does not exist"))));
+            val t = flowExecutionStorage.get(name, left);
+            if (t == null) {
+                throw new ThainRuntimeException("The calculated value does not exist");
+            }
+            long leftValue = Long.parseLong(String.valueOf(t));
             switch (op) {
                 case "==":
                     return leftValue == right;

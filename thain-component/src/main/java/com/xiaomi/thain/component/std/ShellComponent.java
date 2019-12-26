@@ -44,7 +44,8 @@ public class ShellComponent {
         generateFile(filePath);
 
         String[] kv = tools.getStorage().entrySet().stream()
-                .map(t -> t.getKey() + "." + t.getValue()).toArray(String[]::new);
+                .map(t -> t.getKey().getFirst() + "_" + t.getKey().getSecond() + "=" + t.getValue())
+                .toArray(String[]::new);
 
         Runtime runtime = Runtime.getRuntime();
         Process process;

@@ -51,7 +51,7 @@ object HttpUtils {
 
     @JvmStatic
     @Throws(IOException::class)
-    operator fun get(url: String): String {
+    fun get(url: String): String {
         val httpGet = HttpGet(url)
         return httpClient.execute(httpGet).use { response ->
             response.entity?.let { EntityUtils.toString(it, StandardCharsets.UTF_8) } ?: ""
@@ -60,7 +60,7 @@ object HttpUtils {
 
     @JvmStatic
     @Throws(IOException::class)
-    operator fun get(url: String, data: Map<String, String>): String {
+    fun get(url: String, data: Map<String, String>): String {
         val condition = data.entries.joinToString("&") { it.key + "=" + it.value }
         val finalUrl = when {
             condition.isEmpty() -> url

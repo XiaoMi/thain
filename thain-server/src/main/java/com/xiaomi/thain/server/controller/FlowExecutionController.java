@@ -90,7 +90,8 @@ public class FlowExecutionController {
             if (!isAdmin() && !permissionService.getFlowExecutionAccessible(flowExecutionId, getUsername(), getAuthorities())) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowExecutionService.killFlowExecution(flowExecutionId);
+            val flowExecution = flowExecutionService.getFlowExecution(flowExecutionId);
+            flowExecutionService.killFlowExecution(flowExecution.flowId, flowExecutionId, "thain", getUsername());
             return ApiResult.success();
         } catch (Exception e) {
             return ApiResult.fail(e.getMessage());

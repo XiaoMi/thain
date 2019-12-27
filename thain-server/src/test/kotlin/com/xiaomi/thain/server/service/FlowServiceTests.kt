@@ -14,7 +14,6 @@ import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.core.model.rq.AddFlowRq
 import com.xiaomi.thain.core.model.rq.AddJobRq
 import com.xiaomi.thain.server.Application
-import com.xiaomi.thain.server.service.impl.FlowServiceImpl
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,7 +26,7 @@ import java.util.concurrent.TimeUnit
 @SpringBootTest(classes = [Application::class])
 class FlowServiceTests {
     @Autowired
-    private val flowService: FlowServiceImpl? = null
+    private val flowService: FlowService? = null
 
     @Test
     fun commonTest() {
@@ -54,9 +53,9 @@ class FlowServiceTests {
         Assert.assertEquals(flowId, flowId2)
         val flow2 = flowService.getFlow(flowId) ?: throw ThainException()
         Assert.assertEquals(FlowSchedulingStatus.NOT_SET.code, flow2.schedulingStatus)
-        flowService.pause(flowId)
-        flowService.scheduling(flowId)
-        flowService.delete(flowId)
+        flowService.pause(flowId, "test", "test")
+        flowService.scheduling(flowId, "test", "test")
+        flowService.delete(flowId, "test", "test")
     }
 
     @Test
@@ -76,7 +75,7 @@ class FlowServiceTests {
                                         "url" to "失败"
                                 )).build()), AddJobRq::class.java))
         val flowId = flowService!!.add(addFlowRq, jobs, "thain")
-        flowService.start(flowId)
+        flowService.start(flowId, "test", "test")
         TimeUnit.SECONDS.sleep(10)
         val flow = flowService.getFlow(flowId) ?: throw ThainException()
         Assert.assertEquals(flow.schedulingStatus, FlowSchedulingStatus.NOT_SET.code)
@@ -86,8 +85,8 @@ class FlowServiceTests {
         val flow2 = flowService.getFlow(flowId) ?: throw ThainException()
         Assert.assertEquals(flow2.schedulingStatus, FlowSchedulingStatus.SCHEDULING.code)
         Assert.assertEquals(flow2.lastRunStatus, FlowLastRunStatus.ERROR.code)
-        flowService.pause(flowId)
-        flowService.scheduling(flowId)
-        flowService.delete(flowId)
+        flowService.pause(flowId, "test", "test")
+        flowService.scheduling(flowId, "test", "test")
+        flowService.delete(flowId, "test", "test")
     }
 }

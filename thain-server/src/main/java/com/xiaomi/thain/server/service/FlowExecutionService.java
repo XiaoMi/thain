@@ -3,7 +3,6 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-
 package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.common.exception.ThainException;
@@ -11,40 +10,67 @@ import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
+import com.xiaomi.thain.core.ThainFacade;
+import com.xiaomi.thain.server.dao.FlowExecutionDao;
+import com.xiaomi.thain.server.service.FlowExecutionService;
+import lombok.NonNull;
+import lombok.val;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
- * Date 19-6-10 下午6:25
+ * Date 19-6-10 下午8:35
  *
  * @author liangyongrui@xiaomi.com
  */
-public interface FlowExecutionService {
+@Service
+public class FlowExecutionService {
 
-    /**
-     * 获取flowExecution列表
-     */
-    List<FlowExecutionModel> getFlowExecutionList(long flowId, int page, int pageSize);
+    @NonNull
+    private final FlowExecutionDao flowExecutionDao;
+    @NonNull
+    private final ThainFacade thainFacade;
 
-    /**
-     * 获取flowId现存的flowExecution数量
-     */
-    long getFlowExecutionCount(long flowId);
+    public FlowExecutionService(@NonNull FlowExecutionDao flowExecutionDao, @NonNull ThainFacade thainFacade) {
+        this.flowExecutionDao = flowExecutionDao;
+        this.thainFacade = thainFacade;
+    }
 
-    void killFlowExecution(long flowExecutionId) throws ThainException;
+    public List<FlowExecutionModel> getFlowExecutionList(long flowId, int page, int pageSize) {
+        return flowExecutionDao.getFlowExecutionList(flowId, page, pageSize);
+    }
 
-    FlowExecutionDr getFlowExecution(long flowExecutionId) throws ThainException;
+    public long getFlowExecutionCount(long flowId) {
+        return flowExecutionDao.getFlowExecutionCount(flowId);
+    }
 
-    List<JobModel> getJobModelList(long flowExecutionId) throws ThainException;
+    public void killFlowExecution(Long flowId, Long flowExecutionId, String appId, String username) throws ThainException {
+        thainFacade.killFlowExecution(flowId, flowExecutionId, false, appId, username);
+    }
 
-    List<JobExecutionModel> getJobExecutionModelList(long flowExecutionId) throws ThainException;
+    public FlowExecutionDr getFlowExecution(long flowExecutionId) throws ThainException {
+        return Optional.ofNullable(flowExecutionDao.getFlowExecution(flowExecutionId))
+                .orElseThrow(() -> new ThainException("flowExecution id does not exist：" + flowExecutionId));
+    }
 
-    /**
-     * kill execution by flowId
-     *
-     * @param flowId flowId
-     * @return {@code true} if kill success and has Running execution
-     * @throws ThainException kill failure
-     */
-    boolean killFlowExecutionsByFlowId(long flowId) throws ThainException;
+    public List<JobModel> getJobModelList(long flowExecutionId) throws ThainException {
+        return flowExecutionDao.getJobModelList(flowExecutionId);
+    }
+
+    public List<JobExecutionModel> getJobExecutionModelList(long flowExecutionId) {
+        return flowExecutionDao.getJobExecutionModelList(flowExecutionId);
+    }
+
+    public boolean killFlowExecutionsByFlowId(long flowId, String appId, String username) throws ThainException {
+        val executionIds = flowExecutionDao.getRunningExecutionIdsByFlowId(flowId);
+        if (!executionIds.isEmpty()) {
+            for (val executionId : executionIds) {
+                killFlowExecution(flowId, executionId, appId, username);
+            }
+            return true;
+        }
+        return false;
+    }
 }

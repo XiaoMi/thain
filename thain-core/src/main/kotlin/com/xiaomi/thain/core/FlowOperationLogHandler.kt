@@ -6,7 +6,9 @@
 package com.xiaomi.thain.core
 
 import com.xiaomi.thain.core.constant.FlowOperationType
-import org.slf4j.LoggerFactory
+import com.xiaomi.thain.core.mapper.FlowOperationLogMapper
+import com.xiaomi.thain.core.model.dp.AddFlowOperationLogDp
+import org.apache.ibatis.session.SqlSessionFactory
 
 /**
  * 记录一切flow操作
@@ -33,15 +35,26 @@ class FlowOperationLogHandler(
          */
         val extraInfo: String
 ) {
-    private val log = LoggerFactory.getLogger(this.javaClass)!!
 
     fun save() {
-        TODO()
+        sqlSessionFactory!!.openSession().use { sqlSession ->
+            sqlSession.getMapper(FlowOperationLogMapper::class.java)
+                    .addLog(AddFlowOperationLogDp(
+                            flowId = flowId,
+                            operationType = operationType.code,
+                            appId = appId,
+                            username = username,
+                            extraInfo = extraInfo
+                    ))
+            sqlSession.commit()
+        }
     }
 
     companion object {
-        fun removeLog(logId: Long) {
-            TODO()
+        private var sqlSessionFactory: SqlSessionFactory? = null
+
+        fun setSqlSessionFactory(sqlSessionFactory: SqlSessionFactory) {
+            this.sqlSessionFactory = sqlSessionFactory
         }
     }
 }

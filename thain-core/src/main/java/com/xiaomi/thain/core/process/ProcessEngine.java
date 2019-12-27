@@ -29,6 +29,7 @@ import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -62,6 +63,8 @@ public class ProcessEngine {
     public final ThainFacade thainFacade;
     @NonNull
     public final FlowExecutionLoader flowExecutionLoader;
+    @NonNull
+    public final SqlSessionFactory sqlSessionFactory;
 
     private static final Map<String, ProcessEngine> PROCESS_ENGINE_MAP = new ConcurrentHashMap<>();
 
@@ -77,7 +80,7 @@ public class ProcessEngine {
         val flowExecutionThreadPool = ThainThreadPool.getInstance("thain-flow-execution-thread",
                 processEngineConfiguration.flowExecutionThreadPoolCoreSize);
 
-        val sqlSessionFactory = DatabaseHandler.newSqlSessionFactory(processEngineConfiguration.dataSource,
+        sqlSessionFactory = DatabaseHandler.newSqlSessionFactory(processEngineConfiguration.dataSource,
                 processEngineConfiguration.dataReserveDays);
 
         switch (processEngineConfiguration.initLevel) {

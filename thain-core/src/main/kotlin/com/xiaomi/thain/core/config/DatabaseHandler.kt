@@ -36,6 +36,7 @@ object DatabaseHandler {
             configuration.addMapper(JobMapper::class.java)
             configuration.addMapper(FlowExecutionMapper::class.java)
             configuration.addMapper(JobExecutionMapper::class.java)
+            configuration.addMapper(FlowOperationLogMapper::class.java)
             configuration.isMapUnderscoreToCamelCase = true
             configuration.variables["dataReserveDays"] = dataReserveDays
             SqlSessionFactoryBuilder().build(configuration)

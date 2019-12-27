@@ -91,3 +91,14 @@ create table thain_x5_config
     constraint sch_x5_config_app_id_uindex
         unique (app_id)
 );
+
+create table thain_flow_operation_log
+(
+    id             int auto_increment primary key,
+    flow_id        int          default 0                 not null,
+    operation_type int          default 0                 not null comment '操作类型',
+    app_id         varchar(128) default ''                not null,
+    username       varchar(128) default ''                not null,
+    create_time    timestamp    default CURRENT_TIMESTAMP not null,
+    extra_info     text                                   null comment '附加信息'
+);

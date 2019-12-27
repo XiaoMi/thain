@@ -19,10 +19,12 @@ enum class FlowOperationType(val code: Int) {
     MANUAL_TRIGGER(4),
     /**
      * 自动触发
+     * !! 暂时没用
      */
     AUTO_TRIGGER(5),
     /**
      * 重试触发
+     * !! 暂时没用
      */
     RETRY_TRIGGER(6),
     /**

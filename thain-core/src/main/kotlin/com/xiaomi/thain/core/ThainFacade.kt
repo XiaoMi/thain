@@ -205,7 +205,7 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
             FlowOperationType.AUTO_KILL
         } else {
             processEngine.processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, FlowExecutionStatus.KILLED.code)
-            FlowOperationType.MANUAL_PAUSE
+            FlowOperationType.MANUAL_KILL
         }
         processEngine.processEngineStorage.jobExecutionDao.killJobExecution(flowExecutionId)
         processEngine.processEngineStorage.flowDao.killFlow(flowExecutionModel.flowId)

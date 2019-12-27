@@ -40,7 +40,8 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
 
     init {
         schedulerEngine.start()
-        FlowOperationLogHandler.setSqlSessionFactory(processEngine.sqlSessionFactory)
+        FlowOperationLogHandler.sqlSessionFactory = processEngine.sqlSessionFactory
+        FlowOperationLogHandler.mailService = processEngine.processEngineStorage.mailService
     }
 
     /**

@@ -116,9 +116,7 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
                 operationType = FlowOperationType.DELETE,
                 appId = appId,
                 username = username,
-                extraInfo = JSON.toJSONString(mapOf(
-                        "flowId" to flowId
-                ))).save()
+                extraInfo = "").save()
     }
 
     /**
@@ -134,9 +132,7 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
                 operationType = FlowOperationType.MANUAL_TRIGGER,
                 appId = appId,
                 username = username,
-                extraInfo = JSON.toJSONString(mapOf(
-                        "flowId" to flowId
-                ))).save()
+                extraInfo = "").save()
         return id
     }
 
@@ -162,9 +158,7 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
                     },
                     appId = appId,
                     username = username,
-                    extraInfo = JSON.toJSONString(mapOf(
-                            "flowId" to flowId
-                    ))).save()
+                    extraInfo = "").save()
         } catch (e: Exception) {
             log.error("", e)
             try {

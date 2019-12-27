@@ -12,7 +12,6 @@ import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import com.xiaomi.thain.core.ThainFacade;
 import com.xiaomi.thain.server.dao.FlowExecutionDao;
-import com.xiaomi.thain.server.service.FlowExecutionService;
 import lombok.NonNull;
 import lombok.val;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,7 @@ public class FlowExecutionService {
                 .orElseThrow(() -> new ThainException("flowExecution id does not exist：" + flowExecutionId));
     }
 
-    public List<JobModel> getJobModelList(long flowExecutionId) throws ThainException {
+    public List<JobModel> getJobModelList(long flowExecutionId) {
         return flowExecutionDao.getJobModelList(flowExecutionId);
     }
 

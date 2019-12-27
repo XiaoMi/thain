@@ -84,7 +84,7 @@ class FlowService(
 
     @Throws(ThainException::class)
     fun pause(flowId: Long, appId: String, username: String) {
-        thainFacade.pauseFlow(flowId, appId, username, false);
+        thainFacade.pauseFlow(flowId, appId, username, false)
     }
 
 }

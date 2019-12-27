@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class X5FlowController {
     private static final String NO_PERMISSION_MESSAGE = "You do not have permission to do this operation";
     private static final String FLOW_ID = "flowId";
+    private static final String UNKNOWN_USER = "unknown";
     @NonNull
     private final FlowService flowService;
     @NonNull
@@ -70,7 +71,7 @@ public class X5FlowController {
             if (!permissionService.getFlowAccessible(flowId, appId)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowService.delete(flowId);
+            flowService.delete(flowId, appId, UNKNOWN_USER);
         } catch (Exception e) {
             log.error("delete:", e);
             return ApiResult.fail(e.getMessage());
@@ -85,7 +86,7 @@ public class X5FlowController {
             if (!permissionService.getFlowAccessible(flowId, appId)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            return ApiResult.success(flowService.start(flowId));
+            return ApiResult.success(flowService.start(flowId, appId, UNKNOWN_USER));
         } catch (ThainRepeatExecutionException | ThainFlowRunningException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
             return ApiResult.fail(e.getMessage());
@@ -102,7 +103,7 @@ public class X5FlowController {
             if (!permissionService.getFlowAccessible(flowId, appId)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowService.pause(flowId);
+            flowService.pause(flowId, appId, UNKNOWN_USER);
         } catch (Exception e) {
             log.error("pause:", e);
             return ApiResult.fail(e.getMessage());
@@ -121,7 +122,7 @@ public class X5FlowController {
             if (StringUtils.isNotBlank(cron)) {
                 flowService.updateCron(flowId, cron);
             }
-            flowService.scheduling(flowId);
+            flowService.scheduling(flowId, appId, UNKNOWN_USER);
         } catch (Exception e) {
             log.error("scheduling:", e);
             return ApiResult.fail(e.getMessage());

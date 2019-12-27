@@ -64,7 +64,9 @@ public class X5FlowExecutionController {
             if (!permissionService.getFlowExecutionAccessible(flowExecutionId, appId)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowExecutionService.killFlowExecution(flowExecutionId);
+            val flowExecution = flowExecutionService.getFlowExecution(flowExecutionId);
+
+            flowExecutionService.killFlowExecution(flowExecution.flowId, flowExecutionId, appId, "unknown");
             return ApiResult.success();
         } catch (Exception e) {
             return ApiResult.fail(e.getMessage());

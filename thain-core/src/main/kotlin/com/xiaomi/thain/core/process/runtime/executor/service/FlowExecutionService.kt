@@ -7,7 +7,6 @@ import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineStorage
 import com.xiaomi.thain.core.process.runtime.log.FlowExecutionLogHandler
 import com.xiaomi.thain.core.process.runtime.notice.FlowHttpNotice
-import org.slf4j.LoggerFactory
 
 /**
  * Date 19-5-21 上午10:46
@@ -131,7 +130,13 @@ class FlowExecutionService(private val flowExecutionId: Long,
                 ?.let { flowExecutionDao.getLatest(flowDr.id, flowDr.pauseContinuousFailure) }
                 ?.filter { FlowExecutionStatus.getInstance(it.status) == FlowExecutionStatus.ERROR }
                 ?.takeIf { it.count() >= flowDr.pauseContinuousFailure - 1 }
-                ?.apply { ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade.pauseFlow(flowDr.id) }
+                ?.apply {
+                    ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade.pauseFlow(
+                            flowDr.id,
+                            "auto",
+                            "auto",
+                            true)
+                }
                 ?.takeIf { !flowDr.emailContinuousFailure.isBlank() }
                 ?.apply {
                     processEngineStorage.mailService.send(

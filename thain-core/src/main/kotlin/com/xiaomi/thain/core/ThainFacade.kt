@@ -1,5 +1,6 @@
 package com.xiaomi.thain.core
 
+import com.alibaba.fastjson.JSON
 import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.FlowSchedulingStatus
 import com.xiaomi.thain.common.exception.ThainException
@@ -9,6 +10,7 @@ import com.xiaomi.thain.core.model.rq.AddFlowAndJobsRq
 import com.xiaomi.thain.core.model.rq.AddJobRq
 import com.xiaomi.thain.core.model.rq.UpdateFlowRq
 import com.xiaomi.thain.common.utils.ifNull
+import com.xiaomi.thain.core.constant.FlowOperationType
 import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineConfiguration
 import com.xiaomi.thain.core.process.service.ComponentService
@@ -38,6 +40,8 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
 
     init {
         schedulerEngine.start()
+        FlowOperationLogHandler.sqlSessionFactory = processEngine.sqlSessionFactory
+        FlowOperationLogHandler.mailService = processEngine.processEngineStorage.mailService
     }
 
     /**
@@ -57,6 +61,15 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
             processEngine.deleteFlow(flowId)
             throw ThainException(e)
         }
+        FlowOperationLogHandler(
+                flowId = flowId,
+                operationType = FlowOperationType.CREATE,
+                appId = addRq.flowModel.createAppId ?: throw ThainException("app id cannot be empty"),
+                username = addRq.flowModel.createUser ?: throw ThainException("create user cannot be empty"),
+                extraInfo = JSON.toJSONString(mapOf(
+                        "flow" to addRq.flowModel,
+                        "jobList" to addRq.jobModelList
+                ))).save()
         return flowId
     }
 
@@ -81,30 +94,54 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
         }
         val updateFlowDp = UpdateFlowDp(updateFlowRq, schedulingStatus)
         processEngine.processEngineStorage.flowDao.updateFlow(updateFlowDp, jobModelList)
+        FlowOperationLogHandler(
+                flowId = updateFlowRq.id,
+                operationType = FlowOperationType.UPDATE,
+                appId = updateFlowRq.appId,
+                username = updateFlowRq.username,
+                extraInfo = JSON.toJSONString(mapOf(
+                        "flow" to updateFlowRq,
+                        "jobList" to jobModelList
+                ))).save()
     }
 
     /**
      * 删除Flow
      */
     @Throws(SchedulerException::class)
-    fun deleteFlow(flowId: Long) {
+    fun deleteFlow(flowId: Long, appId: String, username: String) {
         schedulerEngine.deleteFlow(flowId)
         processEngine.deleteFlow(flowId)
+        FlowOperationLogHandler(
+                flowId = flowId,
+                operationType = FlowOperationType.DELETE,
+                appId = appId,
+                username = username,
+                extraInfo = "").save()
     }
 
     /**
      * 触发某个Flow
+     *
+     * 返回 flow execution id
      */
     @Throws(ThainException::class, ThainRepeatExecutionException::class)
-    fun startFlow(flowId: Long): Long {
-        return processEngine.startProcess(flowId)
+    fun startFlow(flowId: Long, appId: String, username: String): Long {
+        val id = processEngine.startProcess(flowId)
+        FlowOperationLogHandler(
+                flowId = flowId,
+                operationType = FlowOperationType.MANUAL_TRIGGER,
+                appId = appId,
+                username = username,
+                extraInfo = "").save()
+        return id
     }
 
     val componentService: ComponentService
         get() = processEngine.processEngineStorage.componentService
 
     @Throws(ThainException::class)
-    fun pauseFlow(flowId: Long) {
+    fun pauseFlow(flowId: Long, appId: String, username: String, auto: Boolean) {
         val flowDr = processEngine.processEngineStorage.flowDao.getFlow(flowId)
                 .orElseThrow { ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)) }
         try {
@@ -113,6 +150,16 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
             if (isNotBlank(flowDr.modifyCallbackUrl)) {
                 SendModifyUtils.sendPause(flowId, flowDr.modifyCallbackUrl)
             }
+            FlowOperationLogHandler(
+                    flowId = flowId,
+                    operationType = if (auto) {
+                        FlowOperationType.AUTO_PAUSE
+                    } else {
+                        FlowOperationType.MANUAL_PAUSE
+                    },
+                    appId = appId,
+                    username = username,
+                    extraInfo = "").save()
         } catch (e: Exception) {
             log.error("", e)
             try {
@@ -128,7 +175,7 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
     }
 
     @Throws(ThainException::class, SchedulerException::class, IOException::class)
-    fun schedulingFlow(flowId: Long) {
+    fun schedulingFlow(flowId: Long, appId: String, username: String) {
         val flowModel = processEngine.processEngineStorage.flowDao.getFlow(flowId)
                 .orElseThrow { ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)) }
         schedulerEngine.addFlow(flowModel.id, flowModel.cron)
@@ -137,23 +184,37 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
         if (isNotBlank(flowModel.modifyCallbackUrl)) {
             SendModifyUtils.sendScheduling(flowId, flowModel.modifyCallbackUrl)
         }
+        FlowOperationLogHandler(
+                flowId = flowId,
+                operationType = FlowOperationType.SCHEDULE,
+                appId = appId,
+                username = username,
+                extraInfo = "").save()
     }
 
     @Throws(ThainException::class)
-    fun killFlowExecution(flowExecutionId: Long, auto: Boolean) {
+    fun killFlowExecution(flowId: Long, flowExecutionId: Long, auto: Boolean, appId: String, username: String) {
         val flowExecutionModel = processEngine.processEngineStorage.flowExecutionDao
                 .getFlowExecution(flowExecutionId)
                 .orElseThrow { ThainException("flowExecution id does not exist：$flowExecutionId") }
         if (FlowExecutionStatus.getInstance(flowExecutionModel.status) != FlowExecutionStatus.RUNNING) {
             throw ThainException("flowExecution does not running: $flowExecutionId")
         }
-        if (auto) {
+        val operationType = if (auto) {
             processEngine.processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, FlowExecutionStatus.AUTO_KILLED.code)
+            FlowOperationType.AUTO_KILL
         } else {
             processEngine.processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, FlowExecutionStatus.KILLED.code)
+            FlowOperationType.MANUAL_PAUSE
         }
         processEngine.processEngineStorage.jobExecutionDao.killJobExecution(flowExecutionId)
         processEngine.processEngineStorage.flowDao.killFlow(flowExecutionModel.flowId)
+        FlowOperationLogHandler(
+                flowId = flowId,
+                operationType = operationType,
+                appId = appId,
+                username = username,
+                extraInfo = "").save()
     }
 
     @Throws(ThainException::class, ParseException::class, SchedulerException::class, IOException::class)

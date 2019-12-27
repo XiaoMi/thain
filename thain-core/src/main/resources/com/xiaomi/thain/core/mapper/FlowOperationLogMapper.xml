@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
+ This source code is licensed under the Apache License Version 2.0, which
+ can be found in the LICENSE file in the root directory of this source tree.
+-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaomi.thain.core.mapper.FlowOperationLogMapper">
+
+    <insert id="addLog"
+            parameterType="com.xiaomi.thain.core.model.dp.AddFlowOperationLogDp"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        insert into thain_flow_operation_log(flow_id, operation_type, app_id, username, create_time, extra_info)
+        VALUES (#{flowId}, #{operationType}, #{appId}, #{username}, now(), #{extraInfo})
+    </insert>
+
+</mapper>

@@ -34,6 +34,8 @@ public class FlowController {
 
     private static final String NO_PERMISSION_MESSAGE = "You do not have permission to do this operation";
 
+    private static final String DEFAULT_APP_ID = "thain";
+
     @NonNull
     private final FlowService flowService;
     @NonNull
@@ -101,7 +103,7 @@ public class FlowController {
             if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowService.delete(flowId);
+            flowService.delete(flowId, DEFAULT_APP_ID, getUsername());
         } catch (Exception e) {
             log.error("delete:", e);
             return ApiResult.fail(e.getMessage());
@@ -115,7 +117,7 @@ public class FlowController {
             if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            return ApiResult.success(flowService.start(flowId));
+            return ApiResult.success(flowService.start(flowId, DEFAULT_APP_ID, getUsername()));
         } catch (ThainRepeatExecutionException | ThainFlowRunningException e) {
             log.warn(ExceptionUtils.getRootCauseMessage(e));
             return ApiResult.fail(e.getMessage());
@@ -131,7 +133,7 @@ public class FlowController {
             if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowService.scheduling(flowId);
+            flowService.scheduling(flowId, DEFAULT_APP_ID, getUsername());
         } catch (Exception e) {
             log.error("scheduling:", e);
             return ApiResult.fail(e.getMessage());
@@ -159,7 +161,7 @@ public class FlowController {
             if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            flowService.pause(flowId);
+            flowService.pause(flowId, DEFAULT_APP_ID, getUsername());
         } catch (Exception e) {
             log.error("pause:", e);
             return ApiResult.fail(e.getMessage());
@@ -173,7 +175,7 @@ public class FlowController {
             if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE);
             }
-            if (!flowExecutionService.killFlowExecutionsByFlowId(flowId)) {
+            if (!flowExecutionService.killFlowExecutionsByFlowId(flowId, DEFAULT_APP_ID, getUsername())) {
                 return ApiResult.fail("No execution need kill");
             }
         } catch (Exception e) {

@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os: [ubuntu-latest]
         java_version: [8, 11, 13]
     steps:
     - uses: actions/checkout@v1
@@ -19,4 +19,4 @@ jobs:
         java-version: ${{matrix.java_version}}
     - name: Build with Gradle
       run: |
-        ./gradlew clean build
+        ./gradlew clean build --info

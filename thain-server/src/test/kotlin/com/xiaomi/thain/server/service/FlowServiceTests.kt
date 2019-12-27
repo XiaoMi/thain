@@ -13,17 +13,13 @@ import com.xiaomi.thain.common.model.FlowModel
 import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.core.model.rq.AddFlowRq
 import com.xiaomi.thain.core.model.rq.AddJobRq
-import com.xiaomi.thain.server.Application
-import org.junit.Assert
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit4.SpringRunner
 import java.util.concurrent.TimeUnit
 
-@RunWith(SpringRunner::class)
-@SpringBootTest(classes = [Application::class])
+@SpringBootTest
 class FlowServiceTests {
     @Autowired
     private val flowService: FlowService? = null
@@ -48,11 +44,11 @@ class FlowServiceTests {
         val flowId = flowService!!.add(addFlowRq, jobs, "thain")
         TimeUnit.SECONDS.sleep(10)
         val flow = flowService.getFlow(flowId) ?: throw ThainException()
-        Assert.assertEquals(FlowSchedulingStatus.SCHEDULING.code, flow.schedulingStatus)
+        Assertions.assertEquals(FlowSchedulingStatus.SCHEDULING.code, flow.schedulingStatus)
         val flowId2 = flowService.add(addFlowRq.copy(id = flowId, cron = ""), jobs, "thain")
-        Assert.assertEquals(flowId, flowId2)
+        Assertions.assertEquals(flowId, flowId2)
         val flow2 = flowService.getFlow(flowId) ?: throw ThainException()
-        Assert.assertEquals(FlowSchedulingStatus.NOT_SET.code, flow2.schedulingStatus)
+        Assertions.assertEquals(FlowSchedulingStatus.NOT_SET.code, flow2.schedulingStatus)
         flowService.pause(flowId, "test", "test")
         flowService.scheduling(flowId, "test", "test")
         flowService.delete(flowId, "test", "test")
@@ -78,13 +74,13 @@ class FlowServiceTests {
         flowService.start(flowId, "test", "test")
         TimeUnit.SECONDS.sleep(10)
         val flow = flowService.getFlow(flowId) ?: throw ThainException()
-        Assert.assertEquals(flow.schedulingStatus, FlowSchedulingStatus.NOT_SET.code)
-        Assert.assertEquals(flow.lastRunStatus, FlowLastRunStatus.ERROR.code)
+        Assertions.assertEquals(flow.schedulingStatus, FlowSchedulingStatus.NOT_SET.code)
+        Assertions.assertEquals(flow.lastRunStatus, FlowLastRunStatus.ERROR.code)
         val flowId2 = flowService.add(addFlowRq.copy(id = flowId, cron = "* * * * * ?"), jobs, "thain")
-        Assert.assertEquals(flowId, flowId2)
+        Assertions.assertEquals(flowId, flowId2)
         val flow2 = flowService.getFlow(flowId) ?: throw ThainException()
-        Assert.assertEquals(flow2.schedulingStatus, FlowSchedulingStatus.SCHEDULING.code)
-        Assert.assertEquals(flow2.lastRunStatus, FlowLastRunStatus.ERROR.code)
+        Assertions.assertEquals(flow2.schedulingStatus, FlowSchedulingStatus.SCHEDULING.code)
+        Assertions.assertEquals(flow2.lastRunStatus, FlowLastRunStatus.ERROR.code)
         flowService.pause(flowId, "test", "test")
         flowService.scheduling(flowId, "test", "test")
         flowService.delete(flowId, "test", "test")

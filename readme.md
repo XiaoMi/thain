@@ -67,10 +67,6 @@ Thain has completed backend management system which supports depending, re-run, 
 - [poplp](https://github.com/poplp)
 - [holiday12138](https://github.com/holiday12138)
 
-## WeChat user group
-
-![WeChat](http://cdn.cnbj1.fds.api.mi-img.com/thain/WechatIMG.png)
-
 ## Help Us Do Better
 
 Now Thain continues to be developed by xiaomi internal developers. If you have any questions, you can ask in the issues or send email to:

@@ -115,6 +115,6 @@ create table thain_flow_operation_log
     app_id         varchar(128)     default ''                not null,
     username       varchar(128)     default ''                not null,
     create_time    timestamp        default CURRENT_TIMESTAMP not null,
-    extra_info     text                                       null comment '附加信息'
+    extra_info     mediumtext                                 null comment '附加信息'
 ) ENGINE = InnoDB
     comment 'flow操作日志表';

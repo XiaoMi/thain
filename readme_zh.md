@@ -68,9 +68,6 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 - [poplp](https://github.com/poplp)
 - [holiday12138](https://github.com/holiday12138)
 
-## 微信用户群
-
-![WeChat](http://cdn.cnbj1.fds.api.mi-img.com/thain/WechatIMG.png)
 
 ## 帮助我们做的更好
 

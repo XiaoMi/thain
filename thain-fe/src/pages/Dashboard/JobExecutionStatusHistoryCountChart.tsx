@@ -41,7 +41,7 @@ const JobExecutionStatusHistoryCountChart: React.FC<Props> = ({
     const longTime = countData.time;
     const time = longTime
       .split('~')
-      .map(t => moment.unix(Number(t)).format('YYYY-MM-DD HH:mm:ss'))
+      .map(t => moment.unix(Number(t)).format('yyyy-MM-DD HH:mm:ss'))
       .reduce((pre, cur) => {
         return pre + '\n ~ \n' + cur;
       });

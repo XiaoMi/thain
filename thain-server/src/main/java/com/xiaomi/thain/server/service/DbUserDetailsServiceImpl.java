@@ -4,7 +4,7 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 
-package com.xiaomi.thain.server.service.impl;
+package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.common.exception.ThainRuntimeException;
 import com.xiaomi.thain.server.dao.UserDao;

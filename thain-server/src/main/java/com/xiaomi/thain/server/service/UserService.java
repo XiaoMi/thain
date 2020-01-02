@@ -5,10 +5,13 @@
  */
 package com.xiaomi.thain.server.service;
 
+import com.xiaomi.thain.server.dao.UserDao;
+import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.model.rq.AddUserRq;
 import com.xiaomi.thain.server.model.rq.UpdateUserRq;
-import com.xiaomi.thain.server.model.ThainUser;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,50 +20,43 @@ import java.util.Optional;
  * @author miaoyu3@xiaomi.com
  * @date 19-8-7下午2:03
  */
-public interface UserService {
-    /**
-     * Insert third-party user
-     *
-     * @param thainUser see {@link ThainUser}
-     */
-    void insertThirdUser(@NonNull ThainUser thainUser);
+@Slf4j
+@Service
+public class UserService {
+    @NonNull
+    private final UserDao userDao;
 
-    /**
-     * get ThainUser By Id
-     *
-     * @param userId userId
-     * @return see {@link ThainUser}
-     */
-    Optional<ThainUser> getUserById(@NonNull String userId);
+    public UserService(@NonNull UserDao userDao) {
+        this.userDao = userDao;
+    }
 
-    /**
-     * delete user
-     *
-     * @param userId userId
-     */
-    void deleteUser(@NonNull String userId);
+    public void insertThirdUser(@NonNull ThainUser thainUser) {
+        userDao.insertThirdUser(thainUser);
+    }
 
-    /**
-     * get all thain user
-     *
-     * @return see {@link ThainUser}
-     */
-    List<ThainUser> getAllUsers();
+    public Optional<ThainUser> getUserById(@NonNull String userId) {
+        return userDao.getUserById(userId);
+    }
 
-    /**
-     * insert user By admin
-     *
-     * @param addUserRq see {@link AddUserRq}
-     * @return false-failure true-success
-     */
-    boolean insertUser(@NonNull AddUserRq addUserRq);
+    public void deleteUser(@NonNull String userId) {
+        userDao.deleteUser(userId);
+    }
 
-    /**
-     * update user By admin
-     *
-     * @param updateUserRq see {@link UpdateUserRq}
-     * @return false-failure true-success
-     */
-    boolean updateUser(@NonNull UpdateUserRq updateUserRq);
+    public List<ThainUser> getAllUsers() {
+        return userDao.getAllUsers();
+    }
+
+    public boolean insertUser(@NonNull AddUserRq addUserRq) {
+        if (!userDao.getUserById(addUserRq.userId).isPresent()) {
+            userDao.insertUser(addUserRq);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateUser(@NonNull UpdateUserRq updateUserRq) {
+        return userDao.updateUser(updateUserRq);
+    }
+
 }
 

@@ -5,7 +5,7 @@ import com.xiaomi.thain.server.mapper.JobMapper;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import javax.annotation.Nullable;
 
 /**
  * @author liangyongrui
@@ -20,7 +20,8 @@ public class JobDao {
         this.jobMapper = jobMapper;
     }
 
-    public Optional<JobDr> getJobByFlowIdAndName(long flowId, @NonNull String name) {
+    @Nullable
+    public JobDr getJobByFlowIdAndName(long flowId, @NonNull String name) {
         return jobMapper.getJobByFlowIdAndName(flowId, name);
     }
 

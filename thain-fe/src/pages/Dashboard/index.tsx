@@ -167,7 +167,7 @@ const Analysis: React.FC<Props> = ({
               }}
               style={{ marginTop: 20 }}
               showTime={{ format: 'HH:mm' }}
-              format="YYYY-MM-DD HH:mm"
+              format="yyyy-MM-DD HH:mm"
               placeholder={['Start Time', 'End Time']}
               onOk={firstRangeChange}
             />
@@ -209,7 +209,7 @@ const Analysis: React.FC<Props> = ({
               }}
               style={{ marginTop: 20 }}
               showTime={{ format: 'HH:mm' }}
-              format="YYYY-MM-DD HH:mm"
+              format="yyyy-MM-DD HH:mm"
               placeholder={['Start Time', 'End Time']}
               onOk={secondRangeChange}
             />

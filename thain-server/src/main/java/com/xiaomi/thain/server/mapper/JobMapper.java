@@ -11,6 +11,7 @@ import lombok.NonNull;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -22,7 +23,8 @@ public interface JobMapper {
     /**
      * 通过 flow id 和 name 和 deleted = 0 获取Job
      */
-    Optional<JobDr> getJobByFlowIdAndName(@Param("flowId") long flowId, @Param("name") @NonNull String name);
+    @Nullable
+    JobDr getJobByFlowIdAndName(@Param("flowId") long flowId, @Param("name") @NonNull String name);
 
     /**
      * 更新job的properties

@@ -1,11 +1,10 @@
-package com.xiaomi.thain.server.service.impl
+package com.xiaomi.thain.server.service
 
 import com.xiaomi.thain.common.exception.ThainException
 import com.xiaomi.thain.common.exception.ThainRuntimeException
 import com.xiaomi.thain.core.ThainFacade
 import com.xiaomi.thain.core.model.rq.AddFlowRq
 import com.xiaomi.thain.core.model.rq.AddJobRq
-import com.xiaomi.thain.server.service.CheckService
 import org.apache.commons.lang3.StringUtils
 import org.springframework.stereotype.Service
 import java.util.HashSet
@@ -16,9 +15,16 @@ import java.util.HashSet
  * @author liangyongrui@xiaomi.com
  */
 @Service
-class CheckServiceImpl(private val thainFacade: ThainFacade) : CheckService {
+class CheckService(private val thainFacade: ThainFacade) {
+
+    /**
+     * 检查flowModel是否合法，不合法则抛出异常
+     *
+     * @param addFlowRq addFlowRq
+     * @throws ThainException 不合法的异常
+     */
     @Throws(ThainException::class)
-    override fun checkFlowModel(addFlowRq: AddFlowRq) {
+    fun checkFlowModel(addFlowRq: AddFlowRq) {
         if (StringUtils.isBlank(addFlowRq.name)) {
             throw ThainException("flow name is empty")
         }
@@ -28,14 +34,17 @@ class CheckServiceImpl(private val thainFacade: ThainFacade) : CheckService {
     }
 
     @Throws(ThainException::class)
-    override fun checkJobModelList(jobModelList: List<AddJobRq>) {
+    fun checkJobModelList(jobModelList: List<AddJobRq>) {
         if (jobModelList.isEmpty()) {
-            throw ThainException("job node is empty")
+            throw ThainException("flow requires at least one job")
         }
         val jobNameSet = HashSet<String>()
         for ((name) in jobModelList) {
+            if (name.length < 2) {
+                throw ThainException("job name at least two characters ：$name")
+            }
             if (!jobNameSet.add(name)) {
-                throw ThainException("duplicated job node name：$name")
+                throw ThainException("duplicated job name：$name")
             }
         }
         jobModelList.forEach { jobModel ->

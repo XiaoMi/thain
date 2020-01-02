@@ -25,7 +25,7 @@ const SearchForm: React.FC<Props> = ({ condition, setCondition }) => {
   const [showMore, setShowMore] = useState(false);
   const [model, setModel] = useState<FlowSearch>(condition);
   const [searchDate, setSearchDate] = useState(initDate());
-  const format = 'YYYY-MM-DD HH:mm';
+  const format = 'yyyy-MM-DD HH:mm';
   function initDate() {
     let dateList: undefined | undefined[] | [moment.Moment, moment.Moment];
     if (model.updateTime && model.updateTime.length === 2) {

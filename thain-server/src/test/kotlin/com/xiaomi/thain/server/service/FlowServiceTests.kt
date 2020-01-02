@@ -80,7 +80,6 @@ class FlowServiceTests {
         Assertions.assertEquals(flowId, flowId2)
         val flow2 = flowService.getFlow(flowId) ?: throw ThainException()
         Assertions.assertEquals(FlowSchedulingStatus.SCHEDULING, FlowSchedulingStatus.getInstance(flow2.schedulingStatus))
-        Assertions.assertEquals(FlowLastRunStatus.ERROR, FlowLastRunStatus.getInstance(flow2.lastRunStatus))
         flowService.pause(flowId, "test", "test")
         flowService.scheduling(flowId, "test", "test")
         flowService.delete(flowId, "test", "test")

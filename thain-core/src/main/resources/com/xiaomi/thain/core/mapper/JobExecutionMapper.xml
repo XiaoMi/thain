@@ -16,12 +16,14 @@
 
     <update id="updateLogs">
         update thain_job_execution
-        set logs = #{logs}
+        set logs        = #{logs},
+            update_time = now()
         where id = #{jobExecutionId}
     </update>
     <update id="updateStatus">
         update thain_job_execution
-        set status = #{status}
+        set status      = #{status},
+            update_time = now()
         where id = #{jobExecutionId}
     </update>
     <update id="updateCreateTime">
@@ -31,7 +33,8 @@
     </update>
     <update id="killJobExecution">
         update thain_job_execution
-        set status = 4
+        set status      = 4,
+            update_time = now()
         where flow_execution_id = #{flowExecutionId}
           and status = 2
     </update>

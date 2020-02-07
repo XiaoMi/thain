@@ -3,19 +3,23 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-import { Effect } from 'dva';
-import { ApiResult, TableResult } from '@/typings/ApiResult';
-import { Reducer } from 'redux';
-import { addUser, deleteUser, getUsers, updateUser } from '../adminService';
-import { ConnectState } from '@/models/connect';
 import { notification } from 'antd';
+import { Effect } from 'dva';
+import { Reducer } from 'redux';
+import { ApiResult, TableResult } from '@/typings/ApiResult';
+import { ConnectState } from '@/models/connect';
+import { addUser, deleteUser, getUsers, updateUser } from '../adminService';
 
 export class UserModel {
-  userId?: string;
-  username?: string;
-  email?: string;
-  admin?: boolean;
-  password?: string;
+  userId: string | undefined;
+
+  username: string | undefined;
+
+  email: string | undefined;
+
+  admin: boolean | undefined;
+
+  password: string | undefined;
 }
 
 export class AdminUserModel {
@@ -45,9 +49,7 @@ const AdminUserModelType: AdminModel = {
       const result: ApiResult = yield call(addUser, payload);
       if (result !== undefined && callBack) {
         notification.success({
-          message: 'Tips',
-          description: 'Add User Success',
-          duration: 1,
+          message: '添加用户成功',
         });
         callBack();
       }
@@ -77,7 +79,7 @@ const AdminUserModelType: AdminModel = {
       const {
         tableResult: { page, pageSize },
       } = model;
-      const tableResult: AdminUserModel = yield call(getUsers, { page: page, pageSize: pageSize });
+      const tableResult: AdminUserModel = yield call(getUsers, { page, pageSize });
       yield put({
         type: 'updateState',
         payload: { tableResult },
@@ -92,8 +94,7 @@ const AdminUserModelType: AdminModel = {
         pageSize: model.tableResult ? model.tableResult.pageSize : 20,
       });
       notification.success({
-        message: 'Tips',
-        description: 'Update User Success',
+        message: '更新用户成功',
         duration: 1,
       });
       yield put({

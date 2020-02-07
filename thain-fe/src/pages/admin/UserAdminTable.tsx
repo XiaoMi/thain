@@ -5,13 +5,13 @@
  */
 import { useSelector, useDispatch } from 'dva';
 import { Button, Modal, Table, Select, Form } from 'antd';
-import { UserModel } from './models/UserAdminModel';
 import { ConnectState } from '@/models/connect';
 import React, { useState, useEffect } from 'react';
 import ButtonGroup from 'antd/es/button/button-group';
-import AddUserForm from './AddUserForm';
 import { PaginationConfig } from 'antd/lib/table';
 import { formatMessage } from 'umi-plugin-react/locale';
+import AddUserForm from './AddUserForm';
+import { UserModel } from './models/UserAdminModel';
 
 const UserAdminTable: React.FC<{}> = () => {
   const dispatch = useDispatch();
@@ -32,24 +32,27 @@ const UserAdminTable: React.FC<{}> = () => {
     {
       dataIndex: 'admin',
       title: formatMessage({ id: 'admin.user.admin' }),
-      render(text: boolean, record: UserModel, index: number) {
+      render(text: boolean, record: UserModel) {
         if (record.admin) {
           return <>{formatMessage({ id: 'admin.user.admin.yes' })}</>;
-        } else {
-          return <>{formatMessage({ id: 'admin.user.admin.no' })}</>;
         }
+        return <>{formatMessage({ id: 'admin.user.admin.no' })}</>;
       },
     },
     {
       title: formatMessage({ id: 'admin.user.operation' }),
-      render(text: string, record: UserModel, index: number) {
+      render(text: string, record: UserModel) {
         return (
           <ButtonGroup>
             <Button
               onClick={() => {
                 setModel({ ...new UserModel(), userId: record.userId });
                 setEditVisiable(true);
-                record.admin === true ? setDefaultValue('true') : setDefaultValue('false');
+                if (record.admin === true) {
+                  setDefaultValue('true');
+                } else {
+                  setDefaultValue('false');
+                }
               }}
             >
               {formatMessage({ id: 'admin.user.edit' })}
@@ -123,7 +126,7 @@ const UserAdminTable: React.FC<{}> = () => {
         loading={loading}
         pagination={{
           showSizeChanger: true,
-          pageSize: pageSize,
+          pageSize,
           total: count,
           current: page,
         }}
@@ -139,7 +142,7 @@ const UserAdminTable: React.FC<{}> = () => {
           setIsvisiable(false);
         }}
       >
-        'do you want to delete this user?'
+        确定要删除该用户吗？
       </Modal>
       <Modal
         destroyOnClose
@@ -152,12 +155,11 @@ const UserAdminTable: React.FC<{}> = () => {
       >
         <Form>
           <Item label={formatMessage({ id: 'admin.user.admin' })}>
-            <Select<string>
+            <Select
               defaultValue={defaultValue}
-              onChange={value => {
-                let admin: boolean;
-                value === 'false' ? (admin = false) : (admin = true);
-                setModel({ ...model, admin: admin });
+              onChange={(value: string) => {
+                const admin = value !== 'false';
+                setModel({ ...model, admin });
               }}
             >
               <Option value="true">{formatMessage({ id: 'admin.user.admin.yes' })}</Option>

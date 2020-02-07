@@ -12,11 +12,16 @@ import { notification } from 'antd';
 
 export class X5ConfigModel {
   appId: string = '';
+
   appKey: string = '';
+
   appName: string = '';
-  principals: Array<string> = new Array<string>();
+
+  principals: string[] = [];
+
   description: string = '';
-  createTime?: number = 0;
+
+  createTime: number = 0;
 }
 
 export class X5TableModel {
@@ -71,8 +76,7 @@ const X5ConfigModelType: X5Model = {
     *update({ payload }, { call, select, put }) {
       yield call(updateClent, payload);
       notification.success({
-        message: 'Tips',
-        description: 'Update X5Config Success',
+        message: '更新X5配置成功',
         duration: 1,
       });
       const state: TableResult<X5ConfigModel> = yield select(
@@ -94,9 +98,7 @@ const X5ConfigModelType: X5Model = {
           (s: ConnectState) => s.x5config.tableResult,
         );
         notification.success({
-          message: 'Tips',
-          description: 'Add X5Config Success',
-          duration: 1,
+          message: '添加X5配置成功',
         });
         const newState: ApiResult<X5ConfigModel> = yield call(getClients, {
           page: state.page,

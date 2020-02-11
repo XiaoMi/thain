@@ -5,16 +5,17 @@
  */
 import { Button, Col, DatePicker, Form, Icon, Input, Row, Select } from 'antd';
 import React, { ChangeEvent, useState } from 'react';
-import styles from './TableList.less';
 import { connect } from 'dva';
 import { ConnectProps } from '@/models/connect';
-import { FlowSearch } from './model';
 import { FlowLastRunStatusGetEntries } from '@/enums/FlowLastRunStatus';
 import { FlowSchedulingStatusGetEntries } from '@/enums/FlowSchedulingStatus';
 import { RangePickerPresetRange } from 'antd/lib/date-picker/interface';
 import { formatMessage } from 'umi-plugin-react/locale';
 import moment from 'moment';
+import styles from './TableList.less';
 import FlowTable from './FlowTable';
+import { FlowSearch } from './model';
+
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 interface Props extends ConnectProps<{ flowId: number }> {
@@ -24,8 +25,7 @@ interface Props extends ConnectProps<{ flowId: number }> {
 const SearchForm: React.FC<Props> = ({ condition, setCondition }) => {
   const [showMore, setShowMore] = useState(false);
   const [model, setModel] = useState<FlowSearch>(condition);
-  const [searchDate, setSearchDate] = useState(initDate());
-  const format = 'yyyy-MM-DD HH:mm';
+  const format = 'YYYY-MM-DD HH:mm';
   function initDate() {
     let dateList: undefined | undefined[] | [moment.Moment, moment.Moment];
     if (model.updateTime && model.updateTime.length === 2) {
@@ -36,6 +36,7 @@ const SearchForm: React.FC<Props> = ({ condition, setCondition }) => {
     }
     return dateList;
   }
+  const [searchDate, setSearchDate] = useState(initDate());
 
   function changeFormFlowId(event: ChangeEvent<HTMLInputElement>) {
     setModel({ ...model, flowId: Number(event.target.value) });

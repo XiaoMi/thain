@@ -3,9 +3,12 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-import * as React from 'react';
-import { useEffect } from 'react';
 import { Col, DatePicker, Row, Select } from 'antd';
+import { RangePickerPresetRange } from 'antd/lib/date-picker/interface';
+import { connect } from 'dva';
+import moment from 'moment';
+import React, { useEffect } from 'react';
+import { formatMessage } from 'umi-plugin-react/locale';
 import ScheduleStatusCountChart from './ScheduleStatusCountChart';
 import JobExecutionStatusHistoryCountChart from './JobExecutionStatusHistoryCountChart';
 import RunningFlowCountChart from './RunningFlowCountChart';
@@ -15,12 +18,9 @@ import RunningJobCountChart from './RunningJobCountChart';
 import JobExecutionStatusCountChart from './JobExecutionStatusCountChart';
 import FlowSourceCountChart from './FlowSourceCountChart';
 import FlowExecutionStatusCountChart from './FlowExecutionStatusCountChart';
-import { connect } from 'dva';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { FlowSchedulingStatus } from '@/enums/FlowSchedulingStatus';
-import { RangePickerPresetRange } from 'antd/lib/date-picker/interface';
-import moment from 'moment';
-import { formatMessage } from 'umi-plugin-react/locale';
+
 const { RangePicker } = DatePicker;
 
 const colLayout = {
@@ -167,7 +167,7 @@ const Analysis: React.FC<Props> = ({
               }}
               style={{ marginTop: 20 }}
               showTime={{ format: 'HH:mm' }}
-              format="yyyy-MM-DD HH:mm"
+              format="YYYY-MM-DD HH:mm"
               placeholder={['Start Time', 'End Time']}
               onOk={firstRangeChange}
             />
@@ -209,7 +209,7 @@ const Analysis: React.FC<Props> = ({
               }}
               style={{ marginTop: 20 }}
               showTime={{ format: 'HH:mm' }}
-              format="yyyy-MM-DD HH:mm"
+              format="YYYY-MM-DD HH:mm"
               placeholder={['Start Time', 'End Time']}
               onOk={secondRangeChange}
             />

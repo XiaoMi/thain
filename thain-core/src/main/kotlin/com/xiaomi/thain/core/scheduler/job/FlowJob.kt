@@ -12,7 +12,6 @@ import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp
 import com.xiaomi.thain.common.utils.HostUtils
 import com.xiaomi.thain.core.constant.FlowExecutionTriggerType
 import com.xiaomi.thain.core.process.ProcessEngine
-import lombok.extern.slf4j.Slf4j
 import org.quartz.Job
 import org.quartz.JobExecutionContext
 import org.slf4j.LoggerFactory

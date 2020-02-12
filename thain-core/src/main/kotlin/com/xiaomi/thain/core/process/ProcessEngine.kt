@@ -187,19 +187,18 @@ class ProcessEngine(processEngineConfiguration: ProcessEngineConfiguration, val 
         val x5ConfigDao = X5ConfigDao(sqlSessionFactory, mailService)
         val componentService = ComponentService()
         val flowExecutionWaitingQueue = LinkedBlockingQueue<FlowExecutionDr>()
-        processEngineStorage = ProcessEngineStorage.builder()
-                .flowExecutionJobExecutionThreadPool(flowExecutionJobExecutionThreadPool)
-                .flowExecutionThreadPool(flowExecutionThreadPool)
-                .processEngineId(processEngineId)
-                .flowDao(flowDao)
-                .flowExecutionDao(flowExecutionDao)
-                .jobDao(jobDao)
-                .jobExecutionDao(jobExecutionDao)
-                .x5ConfigDao(x5ConfigDao)
-                .mailService(mailService)
-                .componentService(componentService)
-                .flowExecutionWaitingQueue(flowExecutionWaitingQueue)
-                .build()
+        processEngineStorage = ProcessEngineStorage(
+                flowExecutionJobExecutionThreadPool = flowExecutionJobExecutionThreadPool,
+                flowExecutionThreadPool = flowExecutionThreadPool,
+                processEngineId = processEngineId,
+                flowDao = flowDao,
+                flowExecutionDao = flowExecutionDao,
+                jobDao = jobDao,
+                jobExecutionDao = jobExecutionDao,
+                x5ConfigDao = x5ConfigDao,
+                mailService = mailService,
+                componentService = componentService,
+                flowExecutionWaitingQueue = flowExecutionWaitingQueue)
         flowExecutionLoader = FlowExecutionLoader(processEngineStorage)
         val flowExecutionHeartbeat = FlowExecutionHeartbeat(flowExecutionDao, mailService)
         flowExecutionHeartbeat.addCollections(flowExecutionWaitingQueue)

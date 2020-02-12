@@ -1,6 +1,5 @@
 package com.xiaomi.thain.core.dao
 
-import com.xiaomi.thain.common.model.FlowExecutionModel
 import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr
 import com.xiaomi.thain.core.mapper.FlowExecutionMapper

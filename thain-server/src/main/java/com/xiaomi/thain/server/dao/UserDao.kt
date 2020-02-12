@@ -3,71 +3,55 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
+package com.xiaomi.thain.server.dao
 
-package com.xiaomi.thain.server.dao;
-
-import com.xiaomi.thain.server.model.rq.AddUserRq;
-import com.xiaomi.thain.server.model.rq.UpdateUserRq;
-import com.xiaomi.thain.server.model.ThainUser;
-import com.xiaomi.thain.server.mapper.UserMapper;
-import lombok.NonNull;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
+import com.xiaomi.thain.server.mapper.UserMapper
+import com.xiaomi.thain.server.model.ThainUser
+import com.xiaomi.thain.server.model.rq.AddUserRq
+import com.xiaomi.thain.server.model.rq.UpdateUserRq
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.stereotype.Repository
 
 /**
  * @author miaoyu
  */
 @Repository
-public class UserDao {
-
-    @NonNull
-    private final UserMapper userMapper;
-
-    public UserDao(@NonNull UserMapper userMapper) {
-        this.userMapper = userMapper;
+class UserDao(private val userMapper: UserMapper) {
+    fun getUserById(userId: String): ThainUser? {
+        return userMapper.getUserById(userId)
     }
 
-    public Optional<ThainUser> getUserById(@NonNull String userId) {
-        return userMapper.getUserById(userId);
+    fun insertUser(addUserRq: AddUserRq) {
+        val insertUser = ThainUser(
+                userId = addUserRq.userId,
+                username = addUserRq.username,
+                passwordHash = BCryptPasswordEncoder().encode(addUserRq.password),
+                email = addUserRq.email,
+                admin = addUserRq.admin)
+        userMapper.insertUser(insertUser)
     }
 
-    public void insertUser(@NonNull AddUserRq addUserRq) {
-        ThainUser insertUser = new ThainUser();
-        insertUser.setUserId(addUserRq.userId);
-        insertUser.setUsername(addUserRq.username);
-        insertUser.setPasswordHash(new BCryptPasswordEncoder().encode(addUserRq.password));
-        insertUser.setEmail(addUserRq.email);
-        insertUser.setAdmin(addUserRq.admin);
-        userMapper.insertUser(insertUser);
+    fun insertThirdUser(user: ThainUser) {
+        val insertUser: ThainUser = ThainUser(
+                userId=user.userId,
+                username=user.username,
+                passwordHash="thain")
+        userMapper.insertUser(insertUser)
     }
 
-    public void insertThirdUser(@NonNull ThainUser user) {
-        ThainUser insertUser = ThainUser.builder()
-                .userId(user.getUserId())
-                .username(user.getUsername())
-                .passwordHash("thain")
-                .build();
-        userMapper.insertUser(insertUser);
+    fun deleteUser(userId: String) {
+        userMapper.deleteUser(userId)
     }
 
-    public void deleteUser(@NonNull String userId) {
-        userMapper.deleteUser(userId);
-    }
+    val allUsers: List<ThainUser>
+        get() = userMapper.allUsers
 
-    public List<ThainUser> getAllUsers() {
-        return userMapper.getAllUsers();
-    }
-
-    public boolean updateUser(@NonNull UpdateUserRq updateUserRq) {
-        if (userMapper.getUserById(updateUserRq.userId).isPresent()) {
-            userMapper.updateUserBySelective(updateUserRq);
-            return true;
+    fun updateUser(updateUserRq: UpdateUserRq): Boolean {
+        if (userMapper.getUserById(updateUserRq.userId) != null) {
+            userMapper.updateUserBySelective(updateUserRq)
+            return true
         }
-        return false;
+        return false
     }
-
 
 }

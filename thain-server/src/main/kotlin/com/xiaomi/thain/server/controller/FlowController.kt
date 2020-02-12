@@ -9,7 +9,9 @@ import com.xiaomi.thain.common.entity.ApiResult
 import com.xiaomi.thain.common.exception.ThainFlowRunningException
 import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
 import com.xiaomi.thain.common.exception.ThainRuntimeException
-import com.xiaomi.thain.server.handler.ThreadLocalUser.*
+import com.xiaomi.thain.server.handler.ThreadLocalUser.authorities
+import com.xiaomi.thain.server.handler.ThreadLocalUser.isAdmin
+import com.xiaomi.thain.server.handler.ThreadLocalUser.username
 import com.xiaomi.thain.server.model.rp.FlowAllInfoRp
 import com.xiaomi.thain.server.model.rq.FlowListRq
 import com.xiaomi.thain.server.model.sp.FlowListSp
@@ -44,10 +46,10 @@ class FlowController(private val flowService: FlowService,
     @GetMapping("list")
     fun list(flowListRq: FlowListRq): ApiResult {
         return try {
-            val flowListSp: FlowListSp = if (isAdmin()) {
+            val flowListSp: FlowListSp = if (isAdmin) {
                 FlowListSp.getInstance(flowListRq)
             } else {
-                FlowListSp.getInstance(flowListRq, getUsername(), getAuthorities())
+                FlowListSp.getInstance(flowListRq, username, authorities)
             }
             ApiResult.success(
                     flowService.getFlowList(flowListSp),
@@ -62,7 +64,7 @@ class FlowController(private val flowService: FlowService,
     @GetMapping("all-info/{flowId}")
     fun getAllInfo(@PathVariable("flowId") flowId: Long): ApiResult {
         return try {
-            if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
+            if (!isAdmin && !permissionService.getFlowAccessible(flowId, username, authorities)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE)
             }
             val flowModel = flowService.getFlow(flowId) ?: throw ThainRuntimeException()
@@ -76,10 +78,10 @@ class FlowController(private val flowService: FlowService,
     @DeleteMapping("{flowId}")
     fun delete(@PathVariable flowId: Long): ApiResult {
         try {
-            if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
+            if (!isAdmin && !permissionService.getFlowAccessible(flowId, username, authorities)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE)
             }
-            flowService.delete(flowId, DEFAULT_APP_ID, getUsername())
+            flowService.delete(flowId, DEFAULT_APP_ID, username)
         } catch (e: Exception) {
             log.error("delete:", e)
             return ApiResult.fail(e.message)
@@ -90,10 +92,10 @@ class FlowController(private val flowService: FlowService,
     @PatchMapping("/start/{flowId}")
     fun start(@PathVariable flowId: Long, @RequestBody variables: Map<String, String>): ApiResult {
         return try {
-            if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
+            if (!isAdmin && !permissionService.getFlowAccessible(flowId, username, authorities)) {
                 ApiResult.fail(NO_PERMISSION_MESSAGE)
             } else {
-                ApiResult.success(flowService.start(flowId,variables, DEFAULT_APP_ID, getUsername()))
+                ApiResult.success(flowService.start(flowId,variables, DEFAULT_APP_ID, username))
             }
         } catch (e: ThainRepeatExecutionException) {
             log.warn(ExceptionUtils.getRootCauseMessage(e))
@@ -110,10 +112,10 @@ class FlowController(private val flowService: FlowService,
     @PatchMapping("/scheduling/{flowId}")
     fun scheduling(@PathVariable flowId: Long): ApiResult {
         try {
-            if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
+            if (!isAdmin && !permissionService.getFlowAccessible(flowId, username, authorities)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE)
             }
-            flowService.scheduling(flowId, DEFAULT_APP_ID, getUsername())
+            flowService.scheduling(flowId, DEFAULT_APP_ID, username)
         } catch (e: Exception) {
             log.error("scheduling:", e)
             return ApiResult.fail(e.message)
@@ -124,7 +126,7 @@ class FlowController(private val flowService: FlowService,
     @PatchMapping("/update/{flowId}/{cron}")
     fun updateCron(@PathVariable flowId: Long, @PathVariable cron: String): ApiResult {
         try {
-            if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
+            if (!isAdmin && !permissionService.getFlowAccessible(flowId, username, authorities)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE)
             }
             flowService.updateCron(flowId, cron)
@@ -138,10 +140,10 @@ class FlowController(private val flowService: FlowService,
     @PatchMapping("/pause/{flowId}")
     fun pause(@PathVariable flowId: Long): ApiResult {
         try {
-            if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
+            if (!isAdmin && !permissionService.getFlowAccessible(flowId, username, authorities)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE)
             }
-            flowService.pause(flowId, DEFAULT_APP_ID, getUsername())
+            flowService.pause(flowId, DEFAULT_APP_ID, username)
         } catch (e: Exception) {
             log.error("pause:", e)
             return ApiResult.fail(e.message)
@@ -152,10 +154,10 @@ class FlowController(private val flowService: FlowService,
     @PatchMapping("/kill/{flowId}")
     fun kill(@PathVariable flowId: Long): ApiResult {
         try {
-            if (!isAdmin() && !permissionService.getFlowAccessible(flowId, getUsername(), getAuthorities())) {
+            if (!isAdmin && !permissionService.getFlowAccessible(flowId, username, authorities)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE)
             }
-            if (!flowExecutionService.killFlowExecutionsByFlowId(flowId, DEFAULT_APP_ID, getUsername())) {
+            if (!flowExecutionService.killFlowExecutionsByFlowId(flowId, DEFAULT_APP_ID, username)) {
                 return ApiResult.fail("No execution need kill")
             }
         } catch (e: Exception) {

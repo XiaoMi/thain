@@ -10,10 +10,10 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser
 class ThainUser(
         val userId: String,
         private val username: String,
-        private val passwordHash: String?,
-        val admin: Boolean,
-        private val appIds: Set<String>?,
-        private val email: String?
+        val admin: Boolean = false,
+        private val passwordHash: String? = null,
+        val appIds: Set<String>? = null,
+        private val email: String? = null
 ) : UserDetails, OidcUser {
     override fun getAuthorities(): Collection<GrantedAuthority> {
         val result = HashSet<GrantedAuthority>()

@@ -43,7 +43,7 @@ class FlowExecutionController(private val flowExecutionService: FlowExecutionSer
     @GetMapping("all-info/{flowExecutionId}")
     fun getAllInfo(@PathVariable("flowExecutionId") flowExecutionId: Long): ApiResult {
         return try {
-            if (!ThreadLocalUser.isAdmin() && !permissionService.getFlowExecutionAccessible(flowExecutionId, ThreadLocalUser.getUsername(), ThreadLocalUser.getAuthorities())) {
+            if (!ThreadLocalUser.isAdmin && !permissionService.getFlowExecutionAccessible(flowExecutionId, ThreadLocalUser.username, ThreadLocalUser.authorities)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE)
             }
             val flowExecutionModel = flowExecutionService.getFlowExecution(flowExecutionId)
@@ -61,11 +61,11 @@ class FlowExecutionController(private val flowExecutionService: FlowExecutionSer
     @PatchMapping("kill/{flowExecutionId}")
     fun killFlowExecution(@PathVariable("flowExecutionId") flowExecutionId: Long): ApiResult {
         return try {
-            if (!ThreadLocalUser.isAdmin() && !permissionService.getFlowExecutionAccessible(flowExecutionId, ThreadLocalUser.getUsername(), ThreadLocalUser.getAuthorities())) {
+            if (!ThreadLocalUser.isAdmin && !permissionService.getFlowExecutionAccessible(flowExecutionId, ThreadLocalUser.username, ThreadLocalUser.authorities)) {
                 return ApiResult.fail(NO_PERMISSION_MESSAGE)
             }
             val (_, flowId) = flowExecutionService.getFlowExecution(flowExecutionId)
-            flowExecutionService.killFlowExecution(flowId, flowExecutionId, "thain", ThreadLocalUser.getUsername())
+            flowExecutionService.killFlowExecution(flowId, flowExecutionId, "thain", ThreadLocalUser.username)
             ApiResult.success()
         } catch (e: Exception) {
             ApiResult.fail(e.message)
@@ -75,7 +75,7 @@ class FlowExecutionController(private val flowExecutionService: FlowExecutionSer
     @GetMapping("{flowExecutionId}")
     fun getFlowExecution(@PathVariable("flowExecutionId") flowExecutionId: Long): ApiResult {
         return try {
-            if (!ThreadLocalUser.isAdmin() && !permissionService.getFlowExecutionAccessible(flowExecutionId, ThreadLocalUser.getUsername(), ThreadLocalUser.getAuthorities())) {
+            if (!ThreadLocalUser.isAdmin && !permissionService.getFlowExecutionAccessible(flowExecutionId, ThreadLocalUser.username, ThreadLocalUser.authorities)) {
                 ApiResult.fail(NO_PERMISSION_MESSAGE)
             } else ApiResult.success(flowExecutionService.getFlowExecution(flowExecutionId))
         } catch (e: Exception) {

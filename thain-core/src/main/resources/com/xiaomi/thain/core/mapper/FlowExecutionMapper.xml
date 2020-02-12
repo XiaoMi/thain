@@ -64,6 +64,7 @@
                status,
                host_info,
                trigger_type,
+               variables,
                logs,
                create_time,
                update_time,
@@ -72,15 +73,17 @@
         where id = #{flowExecutionId}
     </select>
 
-    <select id="getLatest" resultType="com.xiaomi.thain.common.model.FlowExecutionModel">
+    <select id="getLatest" resultType="com.xiaomi.thain.common.model.dr.FlowExecutionDr">
         select id,
                flow_id,
                status,
                host_info,
                trigger_type,
+               variables,
                logs,
                create_time,
-               update_time
+               update_time,
+               heartbeat
         from thain_flow_execution
         where flow_id = #{flowId}
         order by id desc
@@ -93,6 +96,7 @@
                status,
                host_info,
                trigger_type,
+               variables,
                logs,
                create_time,
                update_time,

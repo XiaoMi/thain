@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author miaoyu3@xiaomi.com
@@ -34,7 +33,7 @@ public class UserService {
         userDao.insertThirdUser(thainUser);
     }
 
-    public Optional<ThainUser> getUserById(@NonNull String userId) {
+    public ThainUser getUserById(@NonNull String userId) {
         return userDao.getUserById(userId);
     }
 
@@ -47,7 +46,7 @@ public class UserService {
     }
 
     public boolean insertUser(@NonNull AddUserRq addUserRq) {
-        if (!userDao.getUserById(addUserRq.userId).isPresent()) {
+        if (userDao.getUserById(addUserRq.userId) == null) {
             userDao.insertUser(addUserRq);
             return true;
         }

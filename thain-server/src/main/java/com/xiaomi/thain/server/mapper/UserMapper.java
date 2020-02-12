@@ -6,16 +6,16 @@
 
 package com.xiaomi.thain.server.mapper;
 
-import com.xiaomi.thain.server.model.rq.UpdateUserRq;
 import com.xiaomi.thain.server.model.ThainUser;
+import com.xiaomi.thain.server.model.rq.UpdateUserRq;
 import lombok.NonNull;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author miaoyu
@@ -28,7 +28,8 @@ public interface UserMapper {
      * @param userId userId
      * @return see {@link ThainUser}
      */
-    Optional<ThainUser> getUserById(@NonNull @Param("userId") String userId);
+    @Nullable
+    ThainUser getUserById(@NonNull @Param("userId") String userId);
 
     /**
      * insert user

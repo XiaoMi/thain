@@ -13,19 +13,19 @@ export async function getTableList(props: FlowSearch) {
 }
 
 export async function deleteFlow(flowId: number) {
-  return del('/api/flow/' + flowId);
+  return del(`/api/flow/${flowId}`);
 }
 
-export async function startFlow(flowId: number) {
-  return patch('/api/flow/start/' + flowId);
+export async function startFlow(flowId: number, variables: { [key: string]: string }) {
+  return patch(`/api/flow/start/${flowId}`, variables);
 }
 
 export async function schedulingFlow(flowId: number) {
-  return patch('/api/flow/scheduling/' + flowId);
+  return patch(`/api/flow/scheduling/${flowId}`);
 }
 
 export async function pauseFlow(flowId: number) {
-  return patch('/api/flow/pause/' + flowId);
+  return patch(`/api/flow/pause/${flowId}`);
 }
 
 export async function killFlow(flowId: number) {

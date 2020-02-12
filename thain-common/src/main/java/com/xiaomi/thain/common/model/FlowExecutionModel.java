@@ -8,9 +8,9 @@ package com.xiaomi.thain.common.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+import javax.annotation.Nullable;
 import java.sql.Timestamp;
 import java.util.Optional;
-import javax.annotation.Nullable;
 
 /**
  * flowExecution model
@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
  */
 @AllArgsConstructor
 @Builder
+@Deprecated
 public class FlowExecutionModel {
     /**
      * 自增id

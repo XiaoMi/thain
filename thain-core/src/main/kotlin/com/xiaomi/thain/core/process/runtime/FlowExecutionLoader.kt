@@ -1,8 +1,12 @@
 package com.xiaomi.thain.core.process.runtime
 
+import com.alibaba.fastjson.JSON
 import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.FlowLastRunStatus
-import com.xiaomi.thain.common.exception.*
+import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException
+import com.xiaomi.thain.common.exception.ThainException
+import com.xiaomi.thain.common.exception.ThainFlowRunningException
+import com.xiaomi.thain.common.exception.ThainRuntimeException
 import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr
 import com.xiaomi.thain.common.utils.HostUtils
@@ -55,9 +59,9 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
     }
 
     private fun checkFlowRunStatus(flowExecutionDr: FlowExecutionDr) {
-        val flowModel = flowDao.getFlow(flowExecutionDr.flowId).orElseThrow {
+        val flowModel = flowDao.getFlow(flowExecutionDr.flowId) ?: run {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.KILLED.code)
-            ThainException("flow does not exist")
+            throw ThainException("flow does not exist")
         }
         val flowLastRunStatus = FlowLastRunStatus.getInstance(flowModel.lastRunStatus)
         if (flowLastRunStatus == FlowLastRunStatus.RUNNING) {
@@ -77,39 +81,38 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
         }
     }
 
-    @Throws(ThainException::class, ThainRepeatExecutionException::class)
-    fun startAsync(flowId: Long): Long {
-        val addFlowExecutionDp = AddFlowExecutionDp.builder()
-                .flowId(flowId)
-                .hostInfo(HostUtils.getHostInfo())
-                .status(FlowExecutionStatus.WAITING.code)
-                .triggerType(FlowExecutionTriggerType.MANUAL.code)
-                .build()
+    fun startAsync(flowId: Long, variables: Map<String, String>): Long {
+        val addFlowExecutionDp = AddFlowExecutionDp(
+                flowId = flowId,
+                hostInfo = HostUtils.getHostInfo(),
+                status = FlowExecutionStatus.WAITING.code,
+                triggerType = FlowExecutionTriggerType.MANUAL.code,
+                variables = JSON.toJSONString(variables))
         processEngineStorage.flowExecutionDao.addFlowExecution(addFlowExecutionDp)
         if (addFlowExecutionDp.id == null) {
             throw ThainCreateFlowExecutionException()
         }
         val flowExecutionDr = processEngineStorage.flowExecutionDao
-                .getFlowExecution(addFlowExecutionDp.id!!).orElseThrow { ThainRuntimeException() }
+                .getFlowExecution(addFlowExecutionDp.id!!) ?: throw ThainRuntimeException()
         checkFlowRunStatus(flowExecutionDr)
         CompletableFuture.runAsync(Runnable { runFlowExecution(flowExecutionDr, 0) },
                 ThainThreadPool.MANUAL_TRIGGER_THREAD_POOL)
         return addFlowExecutionDp.id!!
     }
 
-    fun retryAsync(flowId: Long, retryNumber: Int): Long {
-        val addFlowExecutionDp = AddFlowExecutionDp.builder()
-                .flowId(flowId)
-                .hostInfo(HostUtils.getHostInfo())
-                .status(FlowExecutionStatus.WAITING.code)
-                .triggerType(FlowExecutionTriggerType.RETRY.code)
-                .build()
+    fun retryAsync(flowId: Long, retryNumber: Int, variables: Map<String, String>): Long {
+        val addFlowExecutionDp = AddFlowExecutionDp(
+                flowId = flowId,
+                hostInfo = HostUtils.getHostInfo(),
+                status = FlowExecutionStatus.WAITING.code,
+                triggerType = FlowExecutionTriggerType.RETRY.code,
+                variables = JSON.toJSONString(variables))
         processEngineStorage.flowExecutionDao.addFlowExecution(addFlowExecutionDp)
         if (addFlowExecutionDp.id == null) {
             throw ThainCreateFlowExecutionException()
         }
         val flowExecutionDr = processEngineStorage.flowExecutionDao
-                .getFlowExecution(addFlowExecutionDp.id!!).orElseThrow { ThainRuntimeException() }
+                .getFlowExecution(addFlowExecutionDp.id!!) ?: throw  ThainRuntimeException()
         CompletableFuture.runAsync(Runnable { runFlowExecution(flowExecutionDr, retryNumber) },
                 ThainThreadPool.RETRY_THREAD_POOL)
         return addFlowExecutionDp.id!!

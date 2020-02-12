@@ -15,7 +15,7 @@ interface ComponentTools {
      * @param subject 主题
      * @param content 正文
      */
-    fun sendMail(to: Array<String>, subject: String, content: String)
+    fun sendMail(to: List<String>, subject: String, content: String)
 
     /**
      * 保存当前节点产生的数据

@@ -71,7 +71,7 @@ class FlowServiceTests {
                                         "url" to "失败"
                                 )).build()), AddJobRq::class.java))
         val flowId = flowService!!.add(addFlowRq, jobs, "thain")
-        flowService.start(flowId, "test", "test")
+        flowService.start(flowId, mapOf(), "test", "test")
         TimeUnit.SECONDS.sleep(10)
         val flow = flowService.getFlow(flowId) ?: throw ThainException()
         Assertions.assertEquals(FlowSchedulingStatus.NOT_SET, FlowSchedulingStatus.getInstance(flow.schedulingStatus))

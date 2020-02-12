@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import kotlin.jvm.javaClass
 
 /**
  * @author liangyongrui@xiaomi.com
@@ -26,7 +25,7 @@ class EditorController(private val flowService: FlowService,
         return try {
             val gson = com.google.gson.Gson()
             val addRq = gson.fromJson(json, AddFlowAndJobsRq::class.java).copy()
-            add(addRq.copy(flowModel = addRq.flowModel.copy(createUser = com.xiaomi.thain.server.handler.ThreadLocalUser.getUsername())), "thain")
+            add(addRq.copy(flowModel = addRq.flowModel.copy(createUser = com.xiaomi.thain.server.handler.ThreadLocalUser.username)), "thain")
         } catch (e: Exception) {
             log.error("", e)
             ApiResult.fail(e.message)

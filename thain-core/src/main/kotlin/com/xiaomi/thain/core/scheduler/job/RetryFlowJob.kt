@@ -1,5 +1,7 @@
 package com.xiaomi.thain.core.scheduler.job
 
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.TypeReference
 import com.xiaomi.thain.core.process.ProcessEngine
 import org.quartz.Job
 import org.quartz.JobExecutionContext
@@ -16,12 +18,13 @@ class RetryFlowJob private constructor(private val processEngine: ProcessEngine)
         val dataMap = context.jobDetail.jobDataMap
         val flowId = dataMap.getLong("flowId")
         val retryNumber = dataMap.getInt("retryNumber")
-        processEngine.retryFlow(flowId, retryNumber)
+        val variables = JSON.parseObject(dataMap.getString("variables"), object : TypeReference<Map<String, String>>() {})
+        processEngine.retryFlow(flowId, retryNumber, variables)
         context.scheduler.deleteJob(context.jobDetail.key)
     }
 
     companion object {
-        private val RETRY_FLOW_JOB_MAP = ConcurrentHashMap<String, RetryFlowJob> ()
+        private val RETRY_FLOW_JOB_MAP = ConcurrentHashMap<String, RetryFlowJob>()
         @JvmStatic
         fun getInstance(processEngine: ProcessEngine): RetryFlowJob {
             return RETRY_FLOW_JOB_MAP.computeIfAbsent(processEngine.processEngineId) { RetryFlowJob(processEngine) }

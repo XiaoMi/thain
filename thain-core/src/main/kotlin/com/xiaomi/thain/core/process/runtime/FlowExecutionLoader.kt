@@ -59,9 +59,9 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
     }
 
     private fun checkFlowRunStatus(flowExecutionDr: FlowExecutionDr) {
-        val flowModel = flowDao.getFlow(flowExecutionDr.flowId).orElseThrow {
+        val flowModel = flowDao.getFlow(flowExecutionDr.flowId) ?: run {
             processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.KILLED.code)
-            ThainException("flow does not exist")
+            throw ThainException("flow does not exist")
         }
         val flowLastRunStatus = FlowLastRunStatus.getInstance(flowModel.lastRunStatus)
         if (flowLastRunStatus == FlowLastRunStatus.RUNNING) {
@@ -93,7 +93,7 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
             throw ThainCreateFlowExecutionException()
         }
         val flowExecutionDr = processEngineStorage.flowExecutionDao
-                .getFlowExecution(addFlowExecutionDp.id!!).orElseThrow { ThainRuntimeException() }
+                .getFlowExecution(addFlowExecutionDp.id!!) ?: throw ThainRuntimeException()
         checkFlowRunStatus(flowExecutionDr)
         CompletableFuture.runAsync(Runnable { runFlowExecution(flowExecutionDr, 0) },
                 ThainThreadPool.MANUAL_TRIGGER_THREAD_POOL)
@@ -112,7 +112,7 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
             throw ThainCreateFlowExecutionException()
         }
         val flowExecutionDr = processEngineStorage.flowExecutionDao
-                .getFlowExecution(addFlowExecutionDp.id!!).orElseThrow { ThainRuntimeException() }
+                .getFlowExecution(addFlowExecutionDp.id!!) ?: throw  ThainRuntimeException()
         CompletableFuture.runAsync(Runnable { runFlowExecution(flowExecutionDr, retryNumber) },
                 ThainThreadPool.RETRY_THREAD_POOL)
         return addFlowExecutionDp.id!!

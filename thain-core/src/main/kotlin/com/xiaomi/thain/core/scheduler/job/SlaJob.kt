@@ -29,17 +29,17 @@ class SlaJob private constructor(private val processEngine: ProcessEngine) : Job
         val flowExecutionId = dataMap.getLong("flowExecutionId")
         val (_, _, status) = processEngine.processEngineStorage.flowExecutionDao
                 .getFlowExecution(flowExecutionId)
-                .orElseThrow { ThainRuntimeException("flowExecution id does not exist：$flowExecutionId") }
+                ?: throw  ThainRuntimeException("flowExecution id does not exist：$flowExecutionId")
         if (status == FlowExecutionStatus.RUNNING.code) {
             try {
                 val (id, name, _, _, _, _, _, _, _, _, _, slaEmail, slaKill) = processEngine.processEngineStorage.flowDao.getFlow(flowId)
-                        .orElseThrow { ThainRuntimeException("flow does not exist， flowId:$flowId") }
+                        ?: throw ThainRuntimeException("flow does not exist， flowId:$flowId")
                 if (slaKill) {
                     processEngine.thainFacade.killFlowExecution(flowId, flowExecutionId, true, "auto", "auto")
                 }
                 if (StringUtils.isNotBlank(slaEmail)) {
                     processEngine.processEngineStorage.mailService.send(
-                            slaEmail.trim { it <= ' ' }.split(",".toRegex()).toTypedArray(),
+                            slaEmail.trim().split(",".toRegex()).toList(),
                             "Thain SLA提醒",
                             "您的任务：$name($id), 超出期望的执行时间"
                     )

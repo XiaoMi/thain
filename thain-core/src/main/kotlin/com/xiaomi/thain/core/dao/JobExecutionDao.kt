@@ -7,7 +7,6 @@ import com.xiaomi.thain.core.process.service.MailService
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.ibatis.session.SqlSessionFactory
 import org.slf4j.LoggerFactory
-import java.util.*
 
 /**
  * Date 19-5-17 下午5:22
@@ -20,17 +19,17 @@ class JobExecutionDao(private val sqlSessionFactory: SqlSessionFactory,
     private val log = LoggerFactory.getLogger(this.javaClass)!!
     private val dataReserveDays = sqlSessionFactory.configuration.variables["dataReserveDays"] as Int
 
-    private fun <T> execute(function: (JobExecutionMapper) -> T?): Optional<T> {
+    private fun <T> execute(function: (JobExecutionMapper) -> T?): T? {
         try {
             sqlSessionFactory.openSession().use { sqlSession ->
                 val apply = function(sqlSession.getMapper(JobExecutionMapper::class.java))
                 sqlSession.commit()
-                return Optional.ofNullable(apply)
+                return apply
             }
         } catch (e: Exception) {
             log.error("", e)
             mailService.sendSeriousError(ExceptionUtils.getStackTrace(e))
-            return Optional.empty()
+            return null
         }
     }
 

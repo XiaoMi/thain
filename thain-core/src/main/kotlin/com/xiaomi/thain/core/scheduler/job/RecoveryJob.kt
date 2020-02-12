@@ -32,11 +32,11 @@ class RecoveryJob private constructor(private val processEngine: ProcessEngine) 
         }
         val ids = flowExecutionDrList.map { it.id }
         flowExecutionDao.reWaiting(ids)
-        flowExecutionDrList.stream()
-                .filter { (_, _, status) -> status == FlowExecutionStatus.RUNNING.code }
-                .map { (_, flowId) -> flowId }
+        flowExecutionDrList
+                .filter { it.status == FlowExecutionStatus.RUNNING.code }
+                .map { it.flowId }
                 .distinct()
-                .forEach { flowId: Long? -> processEngine.processEngineStorage.flowDao.killFlow(flowId!!) }
+                .forEach { flowId -> processEngine.processEngineStorage.flowDao.killFlow(flowId) }
         jobExecutionDao.deleteJobExecutionByFlowExecutionIds(ids)
         log.info("Scanned some dead flows: \n" + JSON.toJSONString(flowExecutionDrList))
         processEngine.processEngineStorage.flowExecutionWaitingQueue.addAll(flowExecutionDrList)
@@ -46,6 +46,7 @@ class RecoveryJob private constructor(private val processEngine: ProcessEngine) 
 
     companion object {
         private val RECOVERY_JOB_MAP: MutableMap<String, RecoveryJob> = ConcurrentHashMap()
+
         @JvmStatic
         fun getInstance(processEngine: ProcessEngine): RecoveryJob {
             return RECOVERY_JOB_MAP.computeIfAbsent(processEngine.processEngineId) { RecoveryJob(processEngine) }

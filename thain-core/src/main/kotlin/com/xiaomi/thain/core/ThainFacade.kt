@@ -49,7 +49,7 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
     @Throws(ThainException::class)
     fun addFlow(addRq: AddFlowAndJobsRq): Long {
         val flowId = processEngine.addFlow(addRq.flowModel, addRq.jobModelList)
-                .orElseThrow { ThainException("failed to insert flow") }
+                ?: throw ThainException("failed to insert flow")
         if (addRq.flowModel.cron.isNullOrBlank()) {
             return flowId
         }
@@ -141,7 +141,7 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
     @Throws(ThainException::class)
     fun pauseFlow(flowId: Long, appId: String, username: String, auto: Boolean) {
         val flowDr = processEngine.processEngineStorage.flowDao.getFlow(flowId)
-                .orElseThrow { ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)) }
+                ?: throw ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId))
         try {
             processEngine.processEngineStorage.flowDao.pauseFlow(flowId)
             schedulerEngine.deleteFlow(flowId)
@@ -172,10 +172,9 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
         }
     }
 
-    @Throws(ThainException::class, SchedulerException::class, IOException::class)
     fun schedulingFlow(flowId: Long, appId: String, username: String) {
         val flowModel = processEngine.processEngineStorage.flowDao.getFlow(flowId)
-                .orElseThrow { ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)) }
+                ?: throw ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId))
         schedulerEngine.addFlow(flowModel.id, flowModel.cron)
         processEngine.processEngineStorage.flowDao
                 .updateSchedulingStatus(flowModel.id, FlowSchedulingStatus.SCHEDULING)
@@ -194,7 +193,7 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
     fun killFlowExecution(flowId: Long, flowExecutionId: Long, auto: Boolean, appId: String, username: String) {
         val flowExecutionModel = processEngine.processEngineStorage.flowExecutionDao
                 .getFlowExecution(flowExecutionId)
-                .orElseThrow { ThainException("flowExecution id does not exist：$flowExecutionId") }
+                ?: throw ThainException("flowExecution id does not exist：$flowExecutionId")
         if (FlowExecutionStatus.getInstance(flowExecutionModel.status) != FlowExecutionStatus.RUNNING) {
             throw ThainException("flowExecution does not running: $flowExecutionId")
         }
@@ -218,7 +217,7 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
     @Throws(ThainException::class, ParseException::class, SchedulerException::class, IOException::class)
     fun updateCron(flowId: Long, cron: String?) {
         val flowDr = processEngine.processEngineStorage.flowDao.getFlow(flowId)
-                .orElseThrow { ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId)) }
+                ?: throw ThainException(MessageFormat.format(NON_EXIST_FLOW, flowId))
         val jobModelList = processEngine.processEngineStorage.jobDao.getJobs(flowId).map { AddJobRq(it) }
         if (cron == null) {
             updateFlow(UpdateFlowRq(flowDr), jobModelList)

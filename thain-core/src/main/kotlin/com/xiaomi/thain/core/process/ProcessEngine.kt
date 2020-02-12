@@ -40,10 +40,12 @@ class ProcessEngine(processEngineConfiguration: ProcessEngineConfiguration, val 
 
     @JvmField
     val processEngineId: String = UUID.randomUUID().toString()
+
     @JvmField
     val processEngineStorage: ProcessEngineStorage
     val flowExecutionLoader: FlowExecutionLoader
     val sqlSessionFactory: SqlSessionFactory
+
     @Throws(IOException::class, SQLException::class)
     private fun createTable(connection: Connection) {
         val runner = ScriptRunner(connection)
@@ -73,7 +75,7 @@ class ProcessEngine(processEngineConfiguration: ProcessEngineConfiguration, val 
      * 插入flow
      * 成功返回 flow id
      */
-    fun addFlow(addFlowRq: AddFlowRq, jobModelList: List<AddJobRq>): Optional<Long> {
+    fun addFlow(addFlowRq: AddFlowRq, jobModelList: List<AddJobRq>): Long? {
         try {
             var schedulingStatus = FlowSchedulingStatus.NOT_SET
             if (StringUtils.isNotBlank(addFlowRq.cron)) {
@@ -83,7 +85,7 @@ class ProcessEngine(processEngineConfiguration: ProcessEngineConfiguration, val 
         } catch (e: Exception) {
             log.error("addFlow:", e)
         }
-        return Optional.empty()
+        return null
     }
 
     /**
@@ -105,10 +107,8 @@ class ProcessEngine(processEngineConfiguration: ProcessEngineConfiguration, val 
         return flowExecutionLoader.retryAsync(flowId, retryNumber, variables)
     }
 
-    @Throws(ThainException::class)
     fun getFlow(flowId: Long): FlowDr {
-        return processEngineStorage.flowDao
-                .getFlow(flowId).orElseThrow { ThainException("failed to obtain flow") }
+        return processEngineStorage.flowDao.getFlow(flowId) ?: throw ThainException("failed to obtain flow")
     }
 
     override fun equals(other: Any?): Boolean {
@@ -139,6 +139,7 @@ class ProcessEngine(processEngineConfiguration: ProcessEngineConfiguration, val 
 
     companion object {
         private val PROCESS_ENGINE_MAP: MutableMap<String, ProcessEngine> = ConcurrentHashMap()
+
         /**
          * 用id获取流程实例
          */
@@ -174,7 +175,7 @@ class ProcessEngine(processEngineConfiguration: ProcessEngineConfiguration, val 
                 // do nothing
             }
         }
-        val userDao = UserDao.getInstance(sqlSessionFactory)
+        val userDao = UserDao(sqlSessionFactory)
         val mailService = MailService.getInstance(processEngineConfiguration.mailHost,
                 processEngineConfiguration.mailSender,
                 processEngineConfiguration.mailSenderUsername,

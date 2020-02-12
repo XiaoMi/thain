@@ -5,7 +5,6 @@ import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.JobExecutionStatus
 import com.xiaomi.thain.common.exception.ThainCreateFlowExecutionException
 import com.xiaomi.thain.common.exception.ThainException
-import com.xiaomi.thain.common.exception.ThainFlowRunningException
 import com.xiaomi.thain.common.exception.ThainRuntimeException
 import com.xiaomi.thain.common.model.JobExecutionModel
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr
@@ -32,8 +31,8 @@ class FlowExecutor(flowExecutionDr: FlowExecutionDr,
                    retryNumber: Int) {
     private val log = LoggerFactory.getLogger(this.javaClass)!!
 
-    private val flowDr = processEngineStorage.flowDao.getFlow(flowExecutionDr.flowId)
-            .orElseThrow { ThainException() }
+    private val flowDr = processEngineStorage.flowDao.getFlow(flowExecutionDr.flowId) ?: throw ThainException()
+
     /**
      * 监控节点是否执行完
      */
@@ -45,6 +44,7 @@ class FlowExecutor(flowExecutionDr: FlowExecutionDr,
     private val flowExecutionService: FlowExecutionService
     private val flowExecutionJobThreadPool: ThainThreadPool
     private val jobExecutionModelMap: Map<Long, JobExecutionModel>
+
     /**
      * 当前未执行的节点
      */
@@ -80,7 +80,7 @@ class FlowExecutor(flowExecutionDr: FlowExecutionDr,
     @Synchronized
     private fun runExecutableJobs() {
         val flowExecutionModel = processEngineStorage.flowExecutionDao.getFlowExecution(flowExecutionId)
-                .orElseThrow { ThainRuntimeException("Failed to read FlowExecution information, flowExecutionId: $flowExecutionId") }
+                ?: throw ThainRuntimeException("Failed to read FlowExecution information, flowExecutionId: $flowExecutionId")
         when (FlowExecutionStatus.getInstance(flowExecutionModel.status)) {
             FlowExecutionStatus.KILLED -> {
                 flowExecutionService.killed()
@@ -125,7 +125,6 @@ class FlowExecutor(flowExecutionDr: FlowExecutionDr,
                             .filter { !jobs.contains(it) }
                             .toList()
                 }
-
 
     /**
      * 获取FlowExecutionExecutor实例

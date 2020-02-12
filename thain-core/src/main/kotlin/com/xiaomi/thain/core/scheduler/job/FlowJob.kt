@@ -37,7 +37,7 @@ class FlowJob private constructor(private val processEngine: ProcessEngine) : Jo
                 throw ThainCreateFlowExecutionException()
             }
             val flowExecutionDr = processEngine.processEngineStorage.flowExecutionDao
-                    .getFlowExecution(addFlowExecutionDp.id!!).orElseThrow { ThainRuntimeException() }
+                    .getFlowExecution(addFlowExecutionDp.id!!) ?: throw ThainRuntimeException()
             processEngine.processEngineStorage.flowExecutionWaitingQueue.put(flowExecutionDr)
             log.debug("flow {} add queue，There are currently {} flows in the queue",
                     flowId, processEngine.processEngineStorage.flowExecutionWaitingQueue.size)
@@ -48,6 +48,7 @@ class FlowJob private constructor(private val processEngine: ProcessEngine) : Jo
 
     companion object {
         private val FLOW_JOB_MAP: MutableMap<String, FlowJob> = ConcurrentHashMap()
+
         @JvmStatic
         fun getInstance(processEngine: ProcessEngine): FlowJob {
             return FLOW_JOB_MAP.computeIfAbsent(processEngine.processEngineId

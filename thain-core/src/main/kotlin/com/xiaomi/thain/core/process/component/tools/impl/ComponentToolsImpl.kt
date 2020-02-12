@@ -26,7 +26,7 @@ class ComponentToolsImpl(private val jobDr: JobDr,
     private val log = JobExecutionLogHandler.getInstance(jobExecutionId, processEngineStorage)
     private val mailService = processEngineStorage.mailService
 
-    override fun sendMail(to: Array<String>, subject: String, content: String) {
+    override fun sendMail(to: List<String>, subject: String, content: String) {
         mailService.send(to, subject, content)
     }
 
@@ -61,7 +61,7 @@ class ComponentToolsImpl(private val jobDr: JobDr,
      * @return 返回对应值, 值不存在则返回defaultValue
     </T> */
     override fun <T> getStorageValueOrDefault(jobName: String, key: String, defaultValue: T): T {
-        return getStorageValue<T>(jobName, key)?:defaultValue
+        return getStorageValue<T>(jobName, key) ?: defaultValue
     }
 
     /**
@@ -106,13 +106,15 @@ class ComponentToolsImpl(private val jobDr: JobDr,
         return jobExecutionId
     }
 
-    override fun getStorage(): Map<Pair<String,String>, Any> {
+    override fun getStorage(): Map<Pair<String, String>, Any> {
         return flowExecutionStorage.storageMap
     }
 
     override fun httpX5Post(url: String, data: Map<String, String>): String {
-        return processEngineStorage.flowExecutionDao.getFlowExecution(flowExecutionId).orElseThrow { ThainRuntimeException() }.flowId
-                .let { processEngineStorage.flowDao.getFlow(it).orElseThrow { ThainRuntimeException() } }.createAppId
+        return (processEngineStorage.flowExecutionDao.getFlowExecution(flowExecutionId)
+                ?: throw ThainRuntimeException())
+                .flowId
+                .let { processEngineStorage.flowDao.getFlow(it) ?: throw ThainRuntimeException() }.createAppId
                 .also {
                     if (it == "thain") {
                         throw ThainRuntimeException("Page creation flow cannot send x5 request")

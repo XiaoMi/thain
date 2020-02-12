@@ -6,7 +6,6 @@ import com.xiaomi.thain.core.process.service.MailService
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.ibatis.session.SqlSessionFactory
 import org.slf4j.LoggerFactory
-import java.util.*
 
 /**
  * Date 19-5-17 下午5:22
@@ -26,22 +25,22 @@ class JobDao(
      * @param function function 是一个事务
      * @return 自定义的返回值
      */
-    private fun <T> execute(function: (JobMapper) -> T?): Optional<T> {
+    private fun <T> execute(function: (JobMapper) -> T?): T? {
         try {
             sqlSessionFactory.openSession().use { sqlSession ->
                 val apply = function(sqlSession.getMapper(JobMapper::class.java))
                 sqlSession.commit()
-                return Optional.ofNullable(apply)
+                return apply
             }
         } catch (e: Exception) {
             log.error("", e)
             mailService.sendSeriousError(ExceptionUtils.getStackTrace(e))
-            return Optional.empty()
+            return null
         }
     }
 
     fun getJobs(flowId: Long): List<JobDr> {
-        return execute { it.getJobs(flowId) }.orElse(emptyList())
+        return execute { it.getJobs(flowId) } ?: listOf()
     }
 
     fun cleanUpExpiredAndDeletedJob() {

@@ -7,7 +7,6 @@ import com.xiaomi.thain.core.process.service.MailService
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.ibatis.session.SqlSessionFactory
 import org.slf4j.LoggerFactory
-import java.util.*
 
 /**
  * Date 19-5-17 下午5:22
@@ -27,17 +26,17 @@ class FlowExecutionDao(
      * @param function function 是一个事务
      * @return 自定义的返回值
      */
-    private fun <T> execute(function: (FlowExecutionMapper) -> T?): Optional<T> {
+    private fun <T> execute(function: (FlowExecutionMapper) -> T?): T? {
         try {
             sqlSessionFactory.openSession().use { sqlSession ->
                 val apply = function(sqlSession.getMapper(FlowExecutionMapper::class.java))
                 sqlSession.commit()
-                return Optional.ofNullable(apply)
+                return apply
             }
         } catch (e: Exception) {
             log.error("", e)
             mailService.sendSeriousError(ExceptionUtils.getStackTrace(e))
-            return Optional.empty()
+            return null
         }
     }
 
@@ -66,12 +65,12 @@ class FlowExecutionDao(
         execute { it.cleanUpExpiredFlowExecution(dataReserveDays) }
     }
 
-    fun getFlowExecution(flowExecutionId: Long): Optional<FlowExecutionDr> {
+    fun getFlowExecution(flowExecutionId: Long): FlowExecutionDr? {
         return execute { it.getFlowExecution(flowExecutionId) }
     }
 
     fun getLatest(flowId: Long, numbers: Long): List<FlowExecutionDr> {
-        return execute { it.getLatest(flowId, numbers) }.orElse(emptyList())
+        return execute { it.getLatest(flowId, numbers) } ?: listOf()
     }
 
     fun setFlowExecutionHeartbeat(flowExecutionIds: List<Long>) {
@@ -85,7 +84,7 @@ class FlowExecutionDao(
      * 获取超过2min没心跳的任务
      */
     val dead: List<FlowExecutionDr>
-        get() = execute { it.dead }.orElseGet { emptyList() }
+        get() = execute { it.dead } ?: listOf()
 
     /**
      * 重新排队

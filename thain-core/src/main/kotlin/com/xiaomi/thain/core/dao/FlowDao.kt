@@ -14,8 +14,6 @@ import com.xiaomi.thain.core.process.service.MailService
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.ibatis.session.SqlSessionFactory
 import org.slf4j.LoggerFactory
-import java.util.*
-import java.util.stream.Collectors
 
 /**
  * Date 19-5-17 下午5:22
@@ -35,17 +33,17 @@ class FlowDao(
      * @param function function 是一个事务
      * @return 自定义的返回值
      */
-    private fun <T> execute(function: (FlowMapper) -> T?): Optional<T> {
+    private fun <T> execute(function: (FlowMapper) -> T?): T? {
         try {
             sqlSessionFactory.openSession().use { sqlSession ->
                 val apply = function(sqlSession.getMapper(FlowMapper::class.java))
                 sqlSession.commit()
-                return Optional.ofNullable(apply)
+                return apply
             }
         } catch (e: Exception) {
             log.error("", e)
             mailService.sendSeriousError(ExceptionUtils.getStackTrace(e))
-            return Optional.empty()
+            return null
         }
     }
 
@@ -54,16 +52,14 @@ class FlowDao(
      */
     fun addFlow(addFlowRq: AddFlowRq,
                 jobModelList: List<AddJobRq>,
-                flowSchedulingStatus: FlowSchedulingStatus): Optional<Long> {
+                flowSchedulingStatus: FlowSchedulingStatus): Long? {
         return execute {
             val addFlowDp = AddFlowDp(addFlowRq, flowSchedulingStatus.code)
             it.addFlow(addFlowDp)
             if (addFlowDp.id == null) {
                 throw ThainRuntimeException("add flow error")
             }
-            it.addJobList(jobModelList.stream()
-                    .map { job: AddJobRq -> AddJobDp.getInstance(job, addFlowDp.id) }
-                    .collect(Collectors.toList()))
+            it.addJobList(jobModelList.map { job -> AddJobDp.getInstance(job, addFlowDp.id) })
             addFlowDp.id
         }
     }
@@ -78,9 +74,7 @@ class FlowDao(
             if (jobModelList.isEmpty()) {
                 return@execute
             }
-            it.addJobList(jobModelList.stream()
-                    .map { job: AddJobRq -> AddJobDp.getInstance(job, updateFlowDp.id) }
-                    .collect(Collectors.toList()))
+            it.addJobList(jobModelList.map { job -> AddJobDp.getInstance(job, updateFlowDp.id) })
         }
     }
 
@@ -97,7 +91,7 @@ class FlowDao(
     /**
      * 根据flow id 获取FlowModel
      */
-    fun getFlow(flowId: Long): Optional<FlowDr> {
+    fun getFlow(flowId: Long): FlowDr? {
         return execute { it.getFlow(flowId) }
     }
 

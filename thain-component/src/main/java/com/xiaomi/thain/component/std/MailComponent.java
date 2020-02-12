@@ -12,6 +12,7 @@ import lombok.val;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -67,7 +68,7 @@ public class MailComponent {
 
             }
         }
-        tools.sendMail(to, title, sb.toString());
+        tools.sendMail(Arrays.asList(to), title, sb.toString());
     }
 
 }

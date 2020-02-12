@@ -140,7 +140,7 @@ class FlowExecutionService(private val flowExecutionId: Long,
                 ?.takeIf { !flowDr.emailContinuousFailure.isBlank() }
                 ?.apply {
                     processEngineStorage.mailService.send(
-                            flowDr.emailContinuousFailure.trim().split(",".toRegex()).toTypedArray(),
+                            flowDr.emailContinuousFailure.trim().split(",".toRegex()).toList(),
                             "Thain 任务连续失败通知",
                             "您的任务：[thain-${flowDr.id}]${flowDr.name}, 连续失败了${flowDr.pauseContinuousFailure}次，任务已经暂停。最近一次失败原因：$errorMessage"
                     )

@@ -9,8 +9,8 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import com.xiaomi.thain.common.entity.ApiResult;
-import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.core.model.dr.X5ConfigDr;
+import com.xiaomi.thain.server.model.ThainUser;
 import com.xiaomi.thain.server.model.rp.UserRp;
 import com.xiaomi.thain.server.model.rp.X5ConfigRp;
 import com.xiaomi.thain.server.model.rq.AddUserRq;
@@ -55,7 +55,7 @@ public class AdminController {
             return ApiResult.success(thainUserPageInfo.getList().stream().map(t -> UserRp.builder()
                             .userId(t.getUserId())
                             .userName(t.getUsername())
-                            .admin(t.isAdmin())
+                            .admin(t.getAdmin())
                             .email(t.getEmail())
                             .build()).collect(Collectors.toList()),
                     thainUserPageInfo.getTotal(),

@@ -71,7 +71,7 @@ class FlowExecutionDao(
         return execute { it.getFlowExecution(flowExecutionId) }
     }
 
-    fun getLatest(flowId: Long, numbers: Long): List<FlowExecutionModel> {
+    fun getLatest(flowId: Long, numbers: Long): List<FlowExecutionDr> {
         return execute { it.getLatest(flowId, numbers) }.orElse(emptyList())
     }
 

@@ -3,21 +3,8 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-import {
-  Button,
-  Col,
-  Dropdown,
-  Icon,
-  Menu,
-  notification,
-  Popconfirm,
-  Row,
-  Table,
-  Tooltip,
-} from 'antd';
-import ButtonGroup from 'antd/lib/button/button-group';
+import { Button, Col, Dropdown, Icon, Menu, notification, Row, Table, Tooltip } from 'antd';
 import React, { useState } from 'react';
-import { router } from 'umi';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { connect } from 'dva';
 import { TableResult } from '@/typings/ApiResult';
@@ -28,6 +15,7 @@ import { PaginationConfig, SorterResult } from 'antd/lib/table';
 import { ClickParam } from 'antd/es/menu';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { FlowSearch } from './model';
+import OperationGroup from './OperationGroup';
 
 interface Props extends ConnectProps<{ flowId: number }> {
   tableResult?: TableResult<FlowModel>;
@@ -38,24 +26,44 @@ interface Props extends ConnectProps<{ flowId: number }> {
 }
 
 const FlowTable: React.FC<Props> = ({
-  tableResult,
+  tableResult: tableResultTmp,
   loading,
   dispatch,
   condition,
   setCondition,
   modelChange,
 }) => {
+  let tableResult = tableResultTmp;
   if (tableResult === undefined) {
     tableResult = new TableResult();
   }
   const { data, count, page, pageSize } = tableResult;
   const [batchId, setBatchId] = useState<number[] | string[]>([]);
+
+  function initSorterIndex(): [string, string] {
+    if (condition.sortKey) {
+      if (condition.sortKey === 'id') {
+        if (condition.sortOrderDesc === true) {
+          return ['descend', ''];
+        }
+        if (condition.sortOrderDesc === false) {
+          return ['ascend', ''];
+        }
+      }
+      if (condition.sortKey === 'updateTime') {
+        if (condition.sortOrderDesc === true) {
+          return ['', 'descend'];
+        }
+        if (condition.sortOrderDesc === false) {
+          return ['', 'ascend'];
+        }
+      }
+    }
+    return ['', ''];
+  }
+
   const sorterIndex: [string, string] = initSorterIndex();
-  function tableChange(
-    pagination: PaginationConfig,
-    filters: Record<any, string[]>,
-    sorter: SorterResult<any>,
-  ) {
+  function tableChange(pagination: PaginationConfig, sorter: SorterResult<any>) {
     const sort = sorter.order && {
       sortKey: sorter.columnKey,
       sortOrderDesc: sorter.order === 'descend',
@@ -77,81 +85,7 @@ const FlowTable: React.FC<Props> = ({
     setCondition(requestParam);
     modelChange({ ...requestParam });
   }
-  function initSorterIndex(): [string, string] {
-    if (condition.sortKey) {
-      if (condition.sortKey === 'id') {
-        if (condition.sortOrderDesc === true) {
-          return ['descend', ''];
-        } else if (condition.sortOrderDesc === false) {
-          return ['ascend', ''];
-        }
-      }
-      if (condition.sortKey === 'updateTime') {
-        if (condition.sortOrderDesc === true) {
-          return ['', 'descend'];
-        } else if (condition.sortOrderDesc === false) {
-          return ['', 'ascend'];
-        }
-      }
-    }
-    return ['', ''];
-  }
 
-  function renderButton(flow: FlowModel) {
-    if (flow.schedulingStatus) {
-      switch (flow.schedulingStatus) {
-        case FlowSchedulingStatus.NOT_SET:
-          return (
-            <Button
-              onClick={() => {
-                router.push('/flow-editor/' + flow.id);
-              }}
-            >
-              {formatMessage({ id: 'flow.set.schedule' })}
-            </Button>
-          );
-        case FlowSchedulingStatus.PAUSE:
-          return (
-            <Button
-              onClick={() => {
-                if (dispatch) {
-                  dispatch({
-                    type: 'flowList/scheduling',
-                    payload: {
-                      id: flow.id,
-                      condition: condition,
-                    },
-                  });
-                }
-              }}
-            >
-              {formatMessage({ id: 'flow.begin.schedule' })}
-            </Button>
-          );
-        case FlowSchedulingStatus.SCHEDULING:
-          return (
-            <Button
-              onClick={() => {
-                if (dispatch) {
-                  dispatch({
-                    type: 'flowList/pause',
-                    payload: {
-                      id: flow.id,
-                      condition: condition,
-                    },
-                  });
-                }
-              }}
-            >
-              {formatMessage({ id: 'flow.pause.schedule' })}
-            </Button>
-          );
-        default:
-          return <div />;
-      }
-    }
-    return <div />;
-  }
   const columns = [
     {
       title: 'ID',
@@ -225,60 +159,7 @@ const FlowTable: React.FC<Props> = ({
       key: 'operation',
       fixed: 'right',
       render: (id: number, item: FlowModel) => {
-        return (
-          <div>
-            <ButtonGroup>
-              <Button
-                onClick={() => {
-                  if (dispatch) {
-                    dispatch({
-                      type: 'flowList/start',
-                      payload: {
-                        id,
-                        condition,
-                      },
-                    });
-                  }
-                }}
-              >
-                {formatMessage({ id: 'flow.fire' })}
-              </Button>
-              {renderButton(item)}
-              <Button
-                onClick={() => {
-                  router.push('/flow-execution/list/' + id);
-                }}
-              >
-                {formatMessage({ id: 'flow.view.log' })}
-              </Button>
-              <Button
-                onClick={() => {
-                  router.push('/flow-editor/' + id);
-                }}
-              >
-                {formatMessage({ id: 'flow.edit' })}
-              </Button>
-              <Popconfirm
-                title={formatMessage({ id: 'flow.delete.tips' })}
-                onConfirm={() => {
-                  if (dispatch) {
-                    dispatch({
-                      type: 'flowList/delete',
-                      payload: {
-                        id,
-                        condition,
-                      },
-                    });
-                  }
-                }}
-                okText={formatMessage({ id: 'flow.delete' })}
-                cancelText={formatMessage({ id: 'flow.cancel' })}
-              >
-                <Button type="danger">{formatMessage({ id: 'flow.delete' })}</Button>
-              </Popconfirm>
-            </ButtonGroup>
-          </div>
-        );
+        return <OperationGroup condition={condition} flow={item} />;
       },
     },
   ];
@@ -286,7 +167,7 @@ const FlowTable: React.FC<Props> = ({
     if (dispatch) {
       switch (e.key) {
         case '1':
-          notification.info({ message: formatMessage({ id: 'flow.batch.fire' }) + ':' + batchId });
+          notification.info({ message: `${formatMessage({ id: 'flow.batch.fire' })}:${batchId}` });
           batchId.forEach((id: number | string) => {
             dispatch({
               type: 'flowList/start',
@@ -298,7 +179,7 @@ const FlowTable: React.FC<Props> = ({
           });
           break;
         case '2':
-          notification.info({ message: formatMessage({ id: 'flow.batch.begin' }) + ':' + batchId });
+          notification.info({ message: `${formatMessage({ id: 'flow.batch.begin' })}:${batchId}` });
           batchId.forEach((id: number | string) => {
             dispatch({
               type: 'flowList/scheduling',
@@ -310,7 +191,7 @@ const FlowTable: React.FC<Props> = ({
           });
           break;
         case '3':
-          notification.info({ message: formatMessage({ id: 'flow.batch.pause' }) + ':' + batchId });
+          notification.info({ message: `${formatMessage({ id: 'flow.batch.pause' })}:${batchId}` });
           batchId.forEach((id: number | string) => {
             dispatch({
               type: 'flowList/pause',
@@ -323,7 +204,7 @@ const FlowTable: React.FC<Props> = ({
           break;
         case '4':
           notification.info({
-            message: formatMessage({ id: 'flow.batch.delete' }) + ':' + batchId,
+            message: `${formatMessage({ id: 'flow.batch.delete' })}:${batchId}`,
           });
           batchId.forEach((id: number | string) => {
             dispatch({
@@ -336,7 +217,7 @@ const FlowTable: React.FC<Props> = ({
           });
           break;
         case '5':
-          notification.info({ message: formatMessage({ id: 'flow.batch.kill' }) + ':' + batchId });
+          notification.info({ message: `${formatMessage({ id: 'flow.batch.kill' })}:${batchId}` });
           batchId.forEach((id: number | string) => {
             dispatch({
               type: 'flowList/kill',
@@ -378,7 +259,7 @@ const FlowTable: React.FC<Props> = ({
   );
   const rowSelection = {
     selectedRowKeys: batchId,
-    onChange: (selectedRowKeys: string[] | number[], selectedRows: FlowModel[]) => {
+    onChange: (selectedRowKeys: string[] | number[]) => {
       setBatchId(selectedRowKeys);
     },
   };

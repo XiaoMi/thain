@@ -31,7 +31,7 @@ export interface FetchTableData {
 }
 
 export class FlowListModelState {
-  tableResult?: TableResult<FlowModel> = new TableResult<FlowModel>();
+  tableResult: TableResult<FlowModel> = new TableResult<FlowModel>();
 }
 
 interface FlowListModelType {
@@ -52,17 +52,27 @@ interface FlowListModelType {
 }
 
 export class FlowSearch {
-  flowId?: number;
-  lastRunStatus?: number;
-  flowName?: string;
-  searchApp?: string;
-  createUser?: string;
-  scheduleStatus?: FlowSchedulingStatus;
+  flowId: number | undefined;
+
+  lastRunStatus: number | undefined;
+
+  flowName: string | undefined;
+
+  searchApp: string | undefined;
+
+  createUser: string | undefined;
+
+  scheduleStatus: FlowSchedulingStatus | undefined;
+
   updateTime: number[] = [];
-  page?: number;
-  pageSize?: number;
-  sortKey?: string;
-  sortOrderDesc?: boolean;
+
+  page: number | undefined;
+
+  pageSize: number | undefined;
+
+  sortKey: string | undefined;
+
+  sortOrderDesc: boolean | undefined;
 }
 
 const FlowListModel: FlowListModelType = {
@@ -75,7 +85,7 @@ const FlowListModel: FlowListModelType = {
       yield put({
         type: 'updateState',
         payload: {
-          tableResult: tableResult,
+          tableResult,
         },
       });
     },
@@ -105,8 +115,8 @@ const FlowListModel: FlowListModelType = {
         payload: condition,
       });
     },
-    *start({ payload: { id, condition } }, { call, put }) {
-      const result = yield call(startFlow, id);
+    *start({ payload: { id, condition, variables } }, { call, put }) {
+      const result = yield call(startFlow, id, variables);
       if (result === undefined) {
         return;
       }

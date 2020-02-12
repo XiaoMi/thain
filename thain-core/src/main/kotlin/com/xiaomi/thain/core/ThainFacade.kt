@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON
 import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.FlowSchedulingStatus
 import com.xiaomi.thain.common.exception.ThainException
-import com.xiaomi.thain.common.exception.ThainRepeatExecutionException
 import com.xiaomi.thain.core.model.dp.UpdateFlowDp
 import com.xiaomi.thain.core.model.rq.AddFlowAndJobsRq
 import com.xiaomi.thain.core.model.rq.AddJobRq
@@ -125,15 +124,14 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
      *
      * 返回 flow execution id
      */
-    @Throws(ThainException::class, ThainRepeatExecutionException::class)
-    fun startFlow(flowId: Long, appId: String, username: String): Long {
-        val id = processEngine.startProcess(flowId)
+    fun startFlow(flowId: Long, variables: Map<String, String>, appId: String, username: String): Long {
+        val id = processEngine.startProcess(flowId, variables)
         FlowOperationLogHandler(
                 flowId = flowId,
                 operationType = FlowOperationType.MANUAL_TRIGGER,
                 appId = appId,
                 username = username,
-                extraInfo = "").save()
+                extraInfo = JSON.toJSONString(mapOf("variables" to variables))).save()
         return id
     }
 

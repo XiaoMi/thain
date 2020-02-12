@@ -55,7 +55,7 @@ public class SlaJob implements Job {
                 val flow = processEngine.processEngineStorage.flowDao.getFlow(flowId)
                         .orElseThrow(() -> new ThainRuntimeException("flow does not exist， flowId:" + flowId));
                 if (flow.getSlaKill()) {
-                    processEngine.thainFacade.killFlowExecution(flowId, flowExecutionId, true, "auto", "auto");
+                    processEngine.getThainFacade().killFlowExecution(flowId, flowExecutionId, true, "auto", "auto");
                 }
                 if (StringUtils.isNotBlank(flow.getSlaEmail())) {
                     processEngine.processEngineStorage.mailService.send(

@@ -5,7 +5,6 @@
  */
 package com.xiaomi.thain.core.mapper;
 
-import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.dp.AddFlowExecutionDp;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
 import lombok.NonNull;
@@ -37,7 +36,7 @@ public interface FlowExecutionMapper {
      * @param numbers 最近numbers 条
      * @return 记录
      */
-    List<FlowExecutionModel> getLatest(@Param("flowId") long flowId, @Param("numbers") long numbers);
+    List<FlowExecutionDr> getLatest(@Param("flowId") long flowId, @Param("numbers") long numbers);
 
     int addFlowExecution(@NonNull AddFlowExecutionDp addFlowExecutionDp);
 

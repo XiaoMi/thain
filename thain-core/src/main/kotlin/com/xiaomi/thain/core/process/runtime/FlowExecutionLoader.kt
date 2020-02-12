@@ -1,5 +1,6 @@
 package com.xiaomi.thain.core.process.runtime
 
+import com.alibaba.fastjson.JSON
 import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.FlowLastRunStatus
 import com.xiaomi.thain.common.exception.*
@@ -77,14 +78,13 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
         }
     }
 
-    @Throws(ThainException::class, ThainRepeatExecutionException::class)
-    fun startAsync(flowId: Long): Long {
-        val addFlowExecutionDp = AddFlowExecutionDp.builder()
-                .flowId(flowId)
-                .hostInfo(HostUtils.getHostInfo())
-                .status(FlowExecutionStatus.WAITING.code)
-                .triggerType(FlowExecutionTriggerType.MANUAL.code)
-                .build()
+    fun startAsync(flowId: Long, variables: Map<String, String>): Long {
+        val addFlowExecutionDp = AddFlowExecutionDp(
+                flowId = flowId,
+                hostInfo = HostUtils.getHostInfo(),
+                status = FlowExecutionStatus.WAITING.code,
+                triggerType = FlowExecutionTriggerType.MANUAL.code,
+                variables = JSON.toJSONString(variables))
         processEngineStorage.flowExecutionDao.addFlowExecution(addFlowExecutionDp)
         if (addFlowExecutionDp.id == null) {
             throw ThainCreateFlowExecutionException()
@@ -97,13 +97,13 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
         return addFlowExecutionDp.id!!
     }
 
-    fun retryAsync(flowId: Long, retryNumber: Int): Long {
-        val addFlowExecutionDp = AddFlowExecutionDp.builder()
-                .flowId(flowId)
-                .hostInfo(HostUtils.getHostInfo())
-                .status(FlowExecutionStatus.WAITING.code)
-                .triggerType(FlowExecutionTriggerType.RETRY.code)
-                .build()
+    fun retryAsync(flowId: Long, retryNumber: Int, variables: Map<String, String>): Long {
+        val addFlowExecutionDp = AddFlowExecutionDp(
+                flowId = flowId,
+                hostInfo = HostUtils.getHostInfo(),
+                status = FlowExecutionStatus.WAITING.code,
+                triggerType = FlowExecutionTriggerType.RETRY.code,
+                variables = JSON.toJSONString(variables))
         processEngineStorage.flowExecutionDao.addFlowExecution(addFlowExecutionDp)
         if (addFlowExecutionDp.id == null) {
             throw ThainCreateFlowExecutionException()

@@ -27,6 +27,7 @@
                status,
                host_info,
                trigger_type,
+               variables,
                logs,
                create_time,
                update_time,

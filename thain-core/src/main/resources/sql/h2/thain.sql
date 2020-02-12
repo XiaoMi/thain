@@ -34,6 +34,7 @@ create table thain_flow_execution
     status       int          default 0                     not null comment '流程执行状态，0 排队中，1 执行中，2 执行结束，3执行异常,4 手动kill',
     host_info    varchar(128) default ''                    not null comment '机器信息',
     trigger_type int          default 1                     not null comment '触发类型 1手动 2自动',
+    variables    text                                       null comment '执行时赋予的变量',
     logs         mediumtext                                 null comment '日志',
     create_time  timestamp    default '2019-01-01 00:00:00' not null comment '创建时间',
     update_time  timestamp    default '2019-01-01 00:00:00' not null comment '更新时间',

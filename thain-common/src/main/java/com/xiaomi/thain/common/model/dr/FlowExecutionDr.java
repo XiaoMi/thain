@@ -44,6 +44,10 @@ public class FlowExecutionDr {
      */
     public final int triggerType;
     /**
+     * 执行变量
+     */
+    public final String variables;
+    /**
      * 流程执行日志
      */
     @Nullable

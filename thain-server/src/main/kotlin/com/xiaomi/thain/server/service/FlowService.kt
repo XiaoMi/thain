@@ -55,9 +55,8 @@ class FlowService(
         return true
     }
 
-    @Throws(ThainException::class, ThainRepeatExecutionException::class)
-    fun start(flowId: Long, appId: String, username: String): Long {
-        return thainFacade.startFlow(flowId, appId, username)
+    fun start(flowId: Long, variables: Map<String, String>, appId: String, username: String): Long {
+        return thainFacade.startFlow(flowId, variables, appId, username)
     }
 
     fun getFlow(flowId: Long): FlowDr? {

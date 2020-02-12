@@ -24,6 +24,9 @@ export default {
   'flow.create.user': 'Create user',
   'flow.operation': 'Operator',
   'flow.fire': 'Fire',
+  'flow.fire.with.variables': 'Fire with variables',
+  'flow.fire.with.variables.tips':
+    'Please fill in the single execution variables, such as: xxx = yyy. Multiple variables are separated by newlines.',
   'flow.view.log': 'View log',
   'flow.create': 'Create',
   'flow.edit': 'Edit',

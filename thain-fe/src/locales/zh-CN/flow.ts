@@ -24,6 +24,8 @@ export default {
   'flow.create.user': '创建人',
   'flow.operation': '操作',
   'flow.fire': '立即执行',
+  'flow.fire.with.variables': '带自定义变量执行',
+  'flow.fire.with.variables.tips': '请填写单次执行变量，如：xxx = yyy。多个变量用换行隔开。',
   'flow.view.log': '查看日志',
   'flow.create': '新建',
   'flow.edit': '编辑',

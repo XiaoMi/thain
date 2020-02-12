@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
  */
 @AllArgsConstructor
 @Builder
+@Deprecated
 public class FlowExecutionModel {
     /**
      * 自增id

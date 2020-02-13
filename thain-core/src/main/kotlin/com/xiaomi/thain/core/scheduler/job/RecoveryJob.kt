@@ -40,7 +40,7 @@ class RecoveryJob private constructor(private val processEngine: ProcessEngine) 
         jobExecutionDao.deleteJobExecutionByFlowExecutionIds(ids)
         log.info("Scanned some dead flows: \n" + JSON.toJSONString(flowExecutionDrList))
         processEngine.processEngineStorage.flowExecutionWaitingQueue.addAll(flowExecutionDrList)
-        val hostInfo = HostUtils.getHostInfo()
+        val hostInfo = HostUtils.hostInfo
         flowExecutionDrList.forEach { (id) -> flowExecutionDao.updateHostInfo(id, hostInfo) }
     }
 

@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2019, Xiaomi, Inc.  All rights reserved.
- * This source code is licensed under the Apache License Version 2.0, which
- * can be found in the LICENSE file in the root directory of this source tree.
- */
 package com.xiaomi.thain.server.dao
 
 import com.xiaomi.thain.server.mapper.UserMapper
@@ -33,9 +28,9 @@ class UserDao(private val userMapper: UserMapper) {
 
     fun insertThirdUser(user: ThainUser) {
         val insertUser: ThainUser = ThainUser(
-                userId=user.userId,
-                username=user.username,
-                passwordHash="thain")
+                userId = user.userId,
+                username = user.username,
+                passwordHash = "thain")
         userMapper.insertUser(insertUser)
     }
 

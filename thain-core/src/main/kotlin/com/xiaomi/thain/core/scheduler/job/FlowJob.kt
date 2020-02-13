@@ -28,7 +28,7 @@ class FlowJob private constructor(private val processEngine: ProcessEngine) : Jo
             val flowId = context.jobDetail.jobDataMap.getLong("flowId")
             val addFlowExecutionDp = AddFlowExecutionDp(
                     flowId = flowId,
-                    hostInfo = HostUtils.getHostInfo(),
+                    hostInfo = HostUtils.hostInfo,
                     status = FlowExecutionStatus.WAITING.code,
                     triggerType = FlowExecutionTriggerType.AUTOMATIC.code,
                     variables = "{}")

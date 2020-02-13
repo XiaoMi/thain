@@ -1,20 +1,15 @@
-package com.xiaomi.thain.common.utils;
+package com.xiaomi.thain.common.utils
 
-import java.net.InetAddress;
+import java.net.InetAddress
 
 /**
  * @author liangyongrui
  */
-public class HostUtils {
-    private HostUtils() {
-
-    }
-
-    public static String getHostInfo() {
-        try {
-            return InetAddress.getLocalHost().toString();
-        } catch (Exception e) {
-            return "unknown";
+object HostUtils {
+    val hostInfo: String
+        get() = try {
+            InetAddress.getLocalHost().toString()
+        } catch (e: Exception) {
+            "unknown"
         }
-    }
 }

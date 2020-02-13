@@ -10,20 +10,14 @@ import java.util.concurrent.LinkedBlockingQueue
 
 class ProcessEngineStorage(val flowExecutionThreadPool: ThainThreadPool,
                            val processEngineId: String,
-                           @JvmField
                            val flowDao: FlowDao,
-                           @JvmField
                            val flowExecutionDao: FlowExecutionDao,
                            val jobDao: JobDao,
-                           @JvmField
                            val jobExecutionDao: JobExecutionDao,
                            val x5ConfigDao: X5ConfigDao,
-                           @JvmField
                            val mailService: MailService,
-                           @JvmField
                            val componentService: ComponentService,
                            private val flowExecutionJobExecutionThreadPool: (Long) -> ThainThreadPool,
-                           @JvmField
                            val flowExecutionWaitingQueue: LinkedBlockingQueue<FlowExecutionDr>) {
 
     fun getMailNotice(noticeEmail: String): MailNotice {

@@ -1,7 +1,10 @@
 package com.xiaomi.thain.core.process.runtime.executor.service
 
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.TypeReference
 import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.FlowLastRunStatus
+import com.xiaomi.thain.common.model.dr.FlowExecutionDr
 import com.xiaomi.thain.core.model.dr.FlowDr
 import com.xiaomi.thain.core.process.ProcessEngine
 import com.xiaomi.thain.core.process.ProcessEngineStorage
@@ -15,16 +18,18 @@ import com.xiaomi.thain.core.process.runtime.notice.FlowHttpNotice
  *
  * @author liangyongrui@xiaomi.com
  */
-class FlowExecutionService(private val flowExecutionId: Long,
+class FlowExecutionService(private val flowExecutionDr: FlowExecutionDr,
                            private val flowDr: FlowDr,
                            private val retryNumber: Int,
                            private val processEngineStorage: ProcessEngineStorage) {
 
-    private val flowExecutionLogHandler = FlowExecutionLogHandler.getInstance(flowExecutionId, processEngineStorage)
+
+    private val flowExecutionLogHandler = FlowExecutionLogHandler.getInstance(flowExecutionDr.id, processEngineStorage)
     private val mailNotice = processEngineStorage.getMailNotice(flowDr.callbackEmail)
-    private val flowHttpNotice = FlowHttpNotice.getInstance(flowDr.callbackUrl, flowDr.id, flowExecutionId)
+    private val flowHttpNotice = FlowHttpNotice.getInstance(flowDr.callbackUrl, flowDr.id, flowExecutionDr.id)
     private val flowService = FlowService.getInstance(flowDr.id, processEngineStorage)
     private val flowExecutionDao = processEngineStorage.flowExecutionDao
+
     /**
      * 如果是异常结束,异常信息.
      * 正常结束时，errorMessage为""
@@ -44,9 +49,9 @@ class FlowExecutionService(private val flowExecutionId: Long,
         if (flowDr.slaDuration > 0) {
             ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade
                     .schedulerEngine
-                    .addSla(flowExecutionId, flowDr)
+                    .addSla(flowExecutionDr.id, flowDr)
         }
-        flowExecutionLogHandler.addInfo("begin to execute flow：$flowExecutionId")
+        flowExecutionLogHandler.addInfo("begin to execute flow：${flowExecutionDr.id}")
     }
 
     /**
@@ -106,7 +111,8 @@ class FlowExecutionService(private val flowExecutionId: Long,
                         flowExecutionEndStatus = FlowExecutionStatus.ERROR_WAITING_RETRY
                         ProcessEngine.getInstance(processEngineStorage.processEngineId).thainFacade
                                 .schedulerEngine
-                                .addRetry(flowDr, retryNumber + 1)
+                                .addRetry(flowDr, retryNumber + 1,
+                                        JSON.parseObject(flowExecutionDr.variables, object : TypeReference<Map<String, String>>() {}))
                     }
                 }
             }
@@ -114,7 +120,7 @@ class FlowExecutionService(private val flowExecutionId: Long,
                 flowExecutionLogHandler.endError(errorMessage)
             }
         } finally {
-            processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionId, flowExecutionEndStatus.code)
+            processEngineStorage.flowExecutionDao.updateFlowExecutionStatus(flowExecutionDr.id, flowExecutionEndStatus.code)
         }
     }
 

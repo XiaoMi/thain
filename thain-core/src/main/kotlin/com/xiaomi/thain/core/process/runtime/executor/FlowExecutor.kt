@@ -139,7 +139,7 @@ class FlowExecutor(flowExecutionDr: FlowExecutionDr,
                     .updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.RUNNING.code)
             flowExecutionId = flowExecutionDr.id
             val jobModelList = processEngineStorage.jobDao.getJobs(flowDr.id)
-            flowExecutionService = FlowExecutionService(flowExecutionId, flowDr, retryNumber, processEngineStorage)
+            flowExecutionService = FlowExecutionService(flowExecutionDr, flowDr, retryNumber, processEngineStorage)
             notExecutedJobsPool = jobModelList.copyOf()
             jobConditionChecker = JobConditionChecker.getInstance(flowExecutionId)
             flowExecutionStorage = FlowExecutionStorage.getInstance(flowExecutionId)

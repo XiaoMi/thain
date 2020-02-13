@@ -1,5 +1,6 @@
 package com.xiaomi.thain.core.scheduler
 
+import com.alibaba.fastjson.JSON
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerInitException
 import com.xiaomi.thain.common.exception.scheduler.ThainSchedulerStartException
 import com.xiaomi.thain.core.model.dr.FlowDr
@@ -107,11 +108,12 @@ class SchedulerEngine(schedulerEngineConfiguration: SchedulerEngineConfiguration
         scheduler.deleteJob(JobKey("flow_$flowId", "flow"))
     }
 
-    fun addRetry(flowDr: FlowDr, retryNumber: Int) {
+    fun addRetry(flowDr: FlowDr, retryNumber: Int, variables: Map<String, String>) {
         val jobDetail = JobBuilder.newJob(RetryFlowJob::class.java)
                 .withIdentity("flow_retry_${flowDr.id}", "flow_retry")
                 .usingJobData("flowId", flowDr.id)
                 .usingJobData("retryNumber", retryNumber)
+                .usingJobData("variables", JSON.toJSONString(variables))
                 .build()
         val trigger = TriggerBuilder.newTrigger()
                 .withIdentity("flow_retry_${flowDr.id}", "flow_retry")

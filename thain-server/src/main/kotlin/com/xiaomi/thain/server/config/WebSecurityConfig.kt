@@ -35,7 +35,7 @@ class WebSecurityConfig(private val customOauth2UserServiceImpl: OAuth2UserServi
     }
 
     fun apiAuthenticationFailureHandler(): AuthenticationFailureHandler {
-        return AuthenticationFailureHandler { request: HttpServletRequest?, response: HttpServletResponse, exception: AuthenticationException ->
+        return AuthenticationFailureHandler { _, response, exception ->
             response.contentType = UTF8_JSON_TYPE
             response.writer.write(JSON.toJSONString(ApiResult.builder()
                     .status(400)

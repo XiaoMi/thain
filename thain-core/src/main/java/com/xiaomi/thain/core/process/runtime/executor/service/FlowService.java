@@ -26,7 +26,7 @@ public class FlowService {
     private FlowService(long flowId,
                         @NonNull ProcessEngineStorage processEngineStorage) {
         this.flowId = flowId;
-        this.flowDao = processEngineStorage.flowDao;
+        this.flowDao = processEngineStorage.getFlowDao();
 
     }
 

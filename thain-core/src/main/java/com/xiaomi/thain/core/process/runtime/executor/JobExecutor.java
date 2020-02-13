@@ -9,8 +9,8 @@ package com.xiaomi.thain.core.process.runtime.executor;
 import com.xiaomi.thain.common.exception.JobExecuteException;
 import com.xiaomi.thain.common.exception.ThainException;
 import com.xiaomi.thain.common.model.JobExecutionModel;
-import com.xiaomi.thain.core.model.dr.JobDr;
 import com.xiaomi.thain.component.tools.ComponentTools;
+import com.xiaomi.thain.core.model.dr.JobDr;
 import com.xiaomi.thain.core.process.ProcessEngineStorage;
 import com.xiaomi.thain.core.process.component.tools.impl.ComponentToolsImpl;
 import com.xiaomi.thain.core.process.runtime.executor.service.JobExecutionService;
@@ -81,7 +81,7 @@ public class JobExecutor {
                 jobExecutionService.endJobExecution();
             } catch (Exception e) {
                 try {
-                    processEngineStorage.mailService.sendSeriousError(
+                    processEngineStorage.getMailService().sendSeriousError(
                             "Failed to modify job status, detail message：" + ExceptionUtils.getStackTrace(e));
                 } catch (Exception ex) {
                     log.error("", ex);
@@ -94,7 +94,7 @@ public class JobExecutor {
      * 执行组件
      */
     private void execute() throws ThainException {
-        val clazz = processEngineStorage.componentService.getComponentClass(jobDr.getComponent())
+        val clazz = processEngineStorage.getComponentService().getComponentClass(jobDr.getComponent())
                 .orElseThrow(() -> new ThainException("component does not exist"));
         try {
             val instance = clazz.getConstructor().newInstance();

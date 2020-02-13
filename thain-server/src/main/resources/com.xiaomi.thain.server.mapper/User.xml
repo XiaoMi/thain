@@ -7,16 +7,16 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaomi.thain.server.mapper.UserMapper">
-    <resultMap id="ThainUser" type="com.xiaomi.thain.server.model.ThainUser">
-        <id column="user_id" javaType="java.lang.String" property="userId"/>
-        <result column="user_name" javaType="java.lang.String" property="username"/>
-        <result column="password_hash" javaType="java.lang.String" property="passwordHash"/>
-        <result column="admin" javaType="java.lang.Boolean" property="admin"/>
-        <collection property="appIds" ofType="java.lang.String">
-            <result column="app_id"/>
-        </collection>
+<!--    <resultMap id="ThainUser" type="com.xiaomi.thain.server.model.ThainUser">-->
+<!--        <id column="user_id" javaType="java.lang.String" property="userId"/>-->
+<!--        <result column="user_name" javaType="java.lang.String" property="username"/>-->
+<!--        <result column="password_hash" javaType="java.lang.String" property="passwordHash"/>-->
+<!--        <result column="admin" javaType="java.lang.Boolean" property="admin"/>-->
+<!--        <collection property="appIds" ofType="java.lang.String">-->
+<!--            <result column="app_id"/>-->
+<!--        </collection>-->
 
-    </resultMap>
+<!--    </resultMap>-->
     <insert id="insertUser">
         insert into thain_user(user_id, user_name, password_hash, email, admin)
         values (#{userId}, #{username} ,
@@ -48,16 +48,18 @@
         </choose>
         )
     </insert>
-    <select id="getUserById" resultMap="ThainUser">
+    <select id="getUserById" resultType="com.xiaomi.thain.server.model.ThainUser">
         select user_id,
-               user_name,
+               user_name as `username`,
                password_hash,
+               email,
                admin,
-               app_id
+               group_concat(app_id) as `appIds`
         from thain_user as tu
                  left join thain_x5_config as txc
                            on principal like concat('%"', #{userId}, '"%')
         where tu.user_id = #{userId}
+
     </select>
 
     <update id="updateUserBySelective" parameterType="com.xiaomi.thain.server.model.rq.UpdateUserRq">

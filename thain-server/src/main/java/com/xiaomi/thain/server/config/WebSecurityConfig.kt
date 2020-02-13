@@ -3,87 +3,73 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
+package com.xiaomi.thain.server.config
 
-package com.xiaomi.thain.server.config;
-
-import com.alibaba.fastjson.JSON;
-import com.xiaomi.thain.common.entity.ApiResult;
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import com.alibaba.fastjson.JSON
+import com.xiaomi.thain.common.entity.ApiResult
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.ApplicationContext
+import org.springframework.security.authentication.AuthenticationProvider
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.core.AuthenticationException
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
+import org.springframework.security.web.AuthenticationEntryPoint
+import org.springframework.security.web.authentication.AuthenticationFailureHandler
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint
+import java.io.IOException
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 /**
  * @author miaoyu
  */
-
 @EnableWebSecurity
-@Slf4j
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private final OAuth2UserService<OidcUserRequest, OidcUser> customOauth2UserServiceImpl;
-    private final AuthenticationProvider authenticationProvider;
-    private static final String UTF8_JSON_TYPE = "application/json; charset=utf-8";
-
-    public WebSecurityConfig(@NonNull OAuth2UserService<OidcUserRequest, OidcUser> customOauth2UserServiceImpl,
-                             @NonNull @Value("${thain.login.source}") String authenticationProviderName,
-                             @NonNull ApplicationContext applicationContext
-    ) {
-        this.customOauth2UserServiceImpl = customOauth2UserServiceImpl;
-        this.authenticationProvider = (AuthenticationProvider) applicationContext.getBean(authenticationProviderName);
+class WebSecurityConfig(private val customOauth2UserServiceImpl: OAuth2UserService<OidcUserRequest, OidcUser>,
+                        @Value("\${thain.login.source}") authenticationProviderName: String,
+                        applicationContext: ApplicationContext
+) : WebSecurityConfigurerAdapter() {
+    private val authenticationProvider: AuthenticationProvider = applicationContext.getBean(authenticationProviderName) as AuthenticationProvider
+    override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.authenticationProvider(authenticationProvider)
     }
 
-    @Override
-    protected void configure(@NonNull AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider);
-    }
-
-    public AuthenticationFailureHandler apiAuthenticationFailureHandler() {
-        return (request, response, exception) -> {
-            response.setContentType(UTF8_JSON_TYPE);
-            response.getWriter().write(JSON.toJSONString(ApiResult.builder()
+    fun apiAuthenticationFailureHandler(): AuthenticationFailureHandler {
+        return AuthenticationFailureHandler { request: HttpServletRequest?, response: HttpServletResponse, exception: AuthenticationException ->
+            response.contentType = UTF8_JSON_TYPE
+            response.writer.write(JSON.toJSONString(ApiResult.builder()
                     .status(400)
-                    .message(exception.getMessage()).build()));
-        };
+                    .message(exception.message!!).build()))
+        }
     }
 
-    public AuthenticationSuccessHandler apiAuthenticationSuccessHandler() {
-        return (request, response, authentication) -> {
-            response.setContentType(UTF8_JSON_TYPE);
-            response.getWriter().write(JSON.toJSONString(ApiResult.success(authentication.getAuthorities())));
-        };
+    fun apiAuthenticationSuccessHandler(): AuthenticationSuccessHandler {
+        return AuthenticationSuccessHandler { _, response, authentication ->
+            response.contentType = UTF8_JSON_TYPE
+            val authorities = authentication.authorities
+            val json = JSON.toJSONString(ApiResult.success(authorities))
+            response.writer.write(json)
+        }
     }
 
-    public AuthenticationEntryPoint apiAuthenticationEntryPoint(String loginPage) {
-        return new LoginUrlAuthenticationEntryPoint(loginPage) {
-            @Override
-            public void commence(HttpServletRequest request, HttpServletResponse response,
-                                 AuthenticationException authException) throws IOException {
-                response.setContentType(UTF8_JSON_TYPE);
-                response.getWriter().write(JSON.toJSONString(ApiResult.builder().status(401).message("Logon expires, please refresh the page and log in again").build()));
+    fun apiAuthenticationEntryPoint(loginPage: String?): AuthenticationEntryPoint {
+        return object : LoginUrlAuthenticationEntryPoint(loginPage) {
+            @Throws(IOException::class)
+            override fun commence(request: HttpServletRequest, response: HttpServletResponse,
+                                  authException: AuthenticationException) {
+                response.contentType = UTF8_JSON_TYPE
+                response.writer.write(JSON.toJSONString(ApiResult.builder().status(401).message("Logon expires, please refresh the page and log in again").build()))
             }
-        };
+        }
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Throws(Exception::class)
+    override fun configure(http: HttpSecurity) {
         http.exceptionHandling()
                 .authenticationEntryPoint(apiAuthenticationEntryPoint("/"))
                 .and()
@@ -97,8 +83,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/api/login")
                 .failureHandler(apiAuthenticationFailureHandler())
                 .successHandler(apiAuthenticationSuccessHandler())
-                .usernameParameter("userId").and();
-        thirdConfig(http);
+                .usernameParameter("userId").and()
+        thirdConfig(http)
     }
 
     /**
@@ -106,7 +92,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      *
      * @param http HttpSecurity
      */
-    private void thirdConfig(HttpSecurity http) throws Exception {
+    @Throws(Exception::class)
+    private fun thirdConfig(http: HttpSecurity) {
         http.oauth2Login()
                 .loginPage("/")
                 .defaultSuccessUrl("/", true)
@@ -116,6 +103,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().and()
                 .sessionManagement()
                 .maximumSessions(1)
-                .maxSessionsPreventsLogin(false);
+                .maxSessionsPreventsLogin(false)
     }
+
+    companion object {
+        private const val UTF8_JSON_TYPE = "application/json; charset=utf-8"
+    }
+
 }

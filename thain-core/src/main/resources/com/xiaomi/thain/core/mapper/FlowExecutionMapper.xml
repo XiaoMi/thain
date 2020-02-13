@@ -10,9 +10,9 @@
 
     <insert id="addFlowExecution" parameterType="com.xiaomi.thain.common.model.dp.AddFlowExecutionDp"
             useGeneratedKeys="true" keyProperty="id">
-        insert into thain_flow_execution (flow_id, status, host_info, trigger_type,
+        insert into thain_flow_execution (flow_id, status, host_info, trigger_type, variables,
                                           create_time, update_time, heartbeat)
-        values (#{flowId}, #{status}, #{hostInfo}, #{triggerType},
+        values (#{flowId}, #{status}, #{hostInfo}, #{triggerType}, #{variables},
                 now(), now(), now())
     </insert>
 

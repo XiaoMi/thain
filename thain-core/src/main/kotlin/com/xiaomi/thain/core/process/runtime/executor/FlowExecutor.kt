@@ -1,5 +1,7 @@
 package com.xiaomi.thain.core.process.runtime.executor
 
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.TypeReference
 import com.mchange.lang.ThrowableUtils
 import com.xiaomi.thain.common.constant.FlowExecutionStatus
 import com.xiaomi.thain.common.constant.JobExecutionStatus
@@ -15,6 +17,7 @@ import com.xiaomi.thain.core.process.ProcessEngineStorage
 import com.xiaomi.thain.core.process.runtime.checker.JobConditionChecker
 import com.xiaomi.thain.core.process.runtime.executor.service.FlowExecutionService
 import com.xiaomi.thain.core.process.runtime.storage.FlowExecutionStorage
+import com.xiaomi.thain.core.process.runtime.storage.GLOBAL_JOB_NAME
 import com.xiaomi.thain.core.thread.pool.ThainThreadPool
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.slf4j.LoggerFactory
@@ -136,10 +139,13 @@ class FlowExecutor(flowExecutionDr: FlowExecutionDr,
                     .updateFlowExecutionStatus(flowExecutionDr.id, FlowExecutionStatus.RUNNING.code)
             flowExecutionId = flowExecutionDr.id
             val jobModelList = processEngineStorage.jobDao.getJobs(flowDr.id)
-            flowExecutionService = FlowExecutionService(flowExecutionId, flowDr, retryNumber, processEngineStorage)
+            flowExecutionService = FlowExecutionService(flowExecutionDr, flowDr, retryNumber, processEngineStorage)
             notExecutedJobsPool = jobModelList.copyOf()
             jobConditionChecker = JobConditionChecker.getInstance(flowExecutionId)
             flowExecutionStorage = FlowExecutionStorage.getInstance(flowExecutionId)
+            flowExecutionDr.variables
+                    ?.let { JSON.parseObject(it, object : TypeReference<Map<String, String>>() {}) }
+                    ?.entries?.forEach { flowExecutionStorage.put(GLOBAL_JOB_NAME, it.key, it.value) }
             flowExecutionJobThreadPool = processEngineStorage.flowExecutionJobThreadPool(flowExecutionId)
             jobExecutionModelMap = jobModelList
                     .map {

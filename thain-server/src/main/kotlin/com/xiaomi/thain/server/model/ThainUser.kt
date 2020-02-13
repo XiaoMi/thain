@@ -10,13 +10,24 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser
 class ThainUser(
         val userId: String,
         private val username: String,
-        val admin: Boolean = false,
         private val passwordHash: String? = null,
-        val appIds: Set<String>? = null,
-        private val email: String? = null
+        private val email: String? = null,
+        val admin: Boolean = false,
+        val appIds: Set<String>? = null
 ) : UserDetails, OidcUser {
-    override fun getAuthorities(): Collection<GrantedAuthority> {
-        val result = HashSet<GrantedAuthority>()
+
+    constructor(userId: String,
+                username: String,
+                passwordHash: String?,
+                email: String?,
+                admin: Boolean,
+                appIds: String?
+    ) : this(
+            userId, username, passwordHash, email, admin,
+            appIds?.split(",")?.toSet())
+
+    override fun getAuthorities(): MutableSet<GrantedAuthority> {
+        val result = mutableSetOf<GrantedAuthority>()
         if (admin) {
             result.add(GrantedAuthority { "admin" })
         }

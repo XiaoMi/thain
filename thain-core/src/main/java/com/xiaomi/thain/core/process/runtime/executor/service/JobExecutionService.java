@@ -47,7 +47,7 @@ public class JobExecutionService {
                                 @NonNull String jobExecutionName,
                                 @NonNull ProcessEngineStorage processEngineStorage) {
         this.jobExecutionLogHandler = JobExecutionLogHandler.getInstance(jobExecutionId, processEngineStorage);
-        this.jobExecutionDao = processEngineStorage.jobExecutionDao;
+        this.jobExecutionDao = processEngineStorage.getJobExecutionDao();
         this.jobExecutionId = jobExecutionId;
         this.jobExecutionName = jobExecutionName;
     }

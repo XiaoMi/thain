@@ -88,7 +88,7 @@ const OperationGroup: React.FC<Props> = ({ condition, flow }) => {
                 .map(row => row.split('='))
                 .reduce((o, t) => {
                   const [key, value] = t;
-                  return { ...o, [key]: value };
+                  return { ...o, [key.trim()]: value.trim() };
                 }, {}),
             },
           });

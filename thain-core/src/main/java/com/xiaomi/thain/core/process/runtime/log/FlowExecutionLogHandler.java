@@ -31,7 +31,7 @@ public class FlowExecutionLogHandler {
     private FlowExecutionLogHandler(long flowExecutionId,
                                     @NonNull ProcessEngineStorage processEngineStorage) {
         this.flowExecutionId = flowExecutionId;
-        this.flowExecutionDao = processEngineStorage.flowExecutionDao;
+        this.flowExecutionDao = processEngineStorage.getFlowExecutionDao();
         logs = new CopyOnWriteArrayList<>();
 
     }

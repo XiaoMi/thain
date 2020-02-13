@@ -92,7 +92,7 @@
     "cross-port-killer": "^1.1.1",
     "enzyme": "^3.11.0",
     "gh-pages": "^2.2.0",
-    "husky": "^4.2.2",
+    "husky": "^4.2.3",
     "jsdom-global": "^3.0.2",
     "less": "^3.11.1",
     "lint-staged": "^10.0.7",

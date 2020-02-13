@@ -84,16 +84,14 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
     fun startAsync(flowId: Long, variables: Map<String, String>): Long {
         val addFlowExecutionDp = AddFlowExecutionDp(
                 flowId = flowId,
-                hostInfo = HostUtils.getHostInfo(),
+                hostInfo = HostUtils.hostInfo,
                 status = FlowExecutionStatus.WAITING.code,
                 triggerType = FlowExecutionTriggerType.MANUAL.code,
                 variables = JSON.toJSONString(variables))
         processEngineStorage.flowExecutionDao.addFlowExecution(addFlowExecutionDp)
-        if (addFlowExecutionDp.id == null) {
-            throw ThainCreateFlowExecutionException()
-        }
         val flowExecutionDr = processEngineStorage.flowExecutionDao
-                .getFlowExecution(addFlowExecutionDp.id!!) ?: throw ThainRuntimeException()
+                .getFlowExecution(addFlowExecutionDp.id ?: throw ThainCreateFlowExecutionException())
+                ?: throw ThainRuntimeException()
         checkFlowRunStatus(flowExecutionDr)
         CompletableFuture.runAsync(Runnable { runFlowExecution(flowExecutionDr, 0) },
                 ThainThreadPool.MANUAL_TRIGGER_THREAD_POOL)
@@ -103,7 +101,7 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
     fun retryAsync(flowId: Long, retryNumber: Int, variables: Map<String, String>): Long {
         val addFlowExecutionDp = AddFlowExecutionDp(
                 flowId = flowId,
-                hostInfo = HostUtils.getHostInfo(),
+                hostInfo = HostUtils.hostInfo,
                 status = FlowExecutionStatus.WAITING.code,
                 triggerType = FlowExecutionTriggerType.RETRY.code,
                 variables = JSON.toJSONString(variables))

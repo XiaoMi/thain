@@ -37,9 +37,9 @@ class LdapAuthenticationConfig(private val ldapContextSource: LdapContextSource)
                 return ThainUser(userId = ctx.getStringAttribute(USER_ID_ATTRIBUTE_NAME),
                         username = ctx.getStringAttribute(USERNAME_ATTRIBUTE_NAME),
                         passwordHash = p.toString(),
-                        admin = "admin" == ctx.getStringAttribute(GROUP_ATTRIBUTE_NAME),
                         email = null,
-                        appIds = null)
+                        admin = "admin" == ctx.getStringAttribute(GROUP_ATTRIBUTE_NAME),
+                        appIds = setOf())
             }
         })
         return authProvider

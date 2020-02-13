@@ -36,7 +36,7 @@ public class JobExecutionLogHandler {
     private JobExecutionLogHandler(long jobExecutionId,
                                    @NonNull ProcessEngineStorage processEngineStorage) {
         this.jobExecutionId = jobExecutionId;
-        this.jobExecutionDao = processEngineStorage.jobExecutionDao;
+        this.jobExecutionDao = processEngineStorage.getJobExecutionDao();
         logs = new CopyOnWriteArrayList<>();
 
     }

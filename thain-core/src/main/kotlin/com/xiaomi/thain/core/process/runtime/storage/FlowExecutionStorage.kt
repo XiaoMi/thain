@@ -9,6 +9,8 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @author liangyongrui@xiaomi.com
  */
+const val GLOBAL_JOB_NAME = "g"
+
 class FlowExecutionStorage {
 
     val storageMap = ConcurrentHashMap<Pair<String, String>, Any>()
@@ -40,6 +42,7 @@ class FlowExecutionStorage {
 
     companion object {
         private val FLOW_EXECUTION_STORAGE_MAP: MutableMap<Long, FlowExecutionStorage> = ConcurrentHashMap()
+
         @JvmStatic
         fun getInstance(flowExecutionId: Long): FlowExecutionStorage {
             return FLOW_EXECUTION_STORAGE_MAP.computeIfAbsent(flowExecutionId) { FlowExecutionStorage() }

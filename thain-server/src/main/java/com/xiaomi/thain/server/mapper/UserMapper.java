@@ -43,7 +43,7 @@ public interface UserMapper {
      *
      * @return see {@link ThainUser}
      */
-    @Select("select id, user_id, user_name, email, admin from thain_user order by admin desc, id")
+    @Select("select user_id, user_name, email, admin from thain_user order by admin desc, id")
     List<ThainUser> getAllUsers();
 
     /**

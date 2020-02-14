@@ -18,6 +18,12 @@ class ThainUser(
 
     constructor(userId: String,
                 username: String,
+                email: String?,
+                admin: Boolean
+    ) : this(userId, username, "", email, admin, setOf())
+
+    constructor(userId: String,
+                username: String,
                 passwordHash: String?,
                 email: String?,
                 admin: Boolean,

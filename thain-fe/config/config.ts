@@ -3,19 +3,22 @@
  * This source code is licensed under the Apache License Version 2.0, which
  * can be found in the LICENSE file in the root directory of this source tree.
  */
-// https://umijs.org/config/
-import os from 'os';
+import { IConfig, IPlugin } from 'umi-types';
+import defaultSettings from './defaultSettings'; // https://umijs.org/config/
+
 import slash from 'slash2';
-import { IPlugin, IConfig } from 'umi-types';
-import defaultSettings from './defaultSettings';
-import webpackPlugin from './plugin.config';
+import themePluginConfig from './themePluginConfig';
+import proxy from './proxy';
 import routerConfig from './router.config';
 
-const { pwa, primaryColor } = defaultSettings;
-// preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+const { pwa } = defaultSettings;
 
-const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION, TEST, NODE_ENV } = process.env;
+// preview.pro.ant.design only do not use in your production ;
+// preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION, REACT_APP_ENV } = process.env;
+const isAntDesignProPreview = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site';
 const plugins: IPlugin[] = [
+  ['umi-plugin-antd-icon-config', {}],
   [
     'umi-plugin-react',
     {
@@ -44,15 +47,6 @@ const plugins: IPlugin[] = [
             },
           }
         : false,
-      ...(!TEST && os.platform() === 'darwin'
-        ? {
-            dll: {
-              include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
-              exclude: ['@babel/runtime', 'netlify-lambda'],
-            },
-            hardSource: false,
-          }
-        : {}),
     },
   ],
   [
@@ -64,63 +58,36 @@ const plugins: IPlugin[] = [
       autoAddMenu: true,
     },
   ],
-]; // 针对 preview.pro.ant.design 的 GA 统计代码
-// preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+];
 
-if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
+if (isAntDesignProPreview) {
+  // 针对 preview.pro.ant.design 的 GA 统计代码
   plugins.push([
     'umi-plugin-ga',
     {
       code: 'UA-72788897-6',
     },
   ]);
+  plugins.push(['umi-plugin-antd-theme', themePluginConfig]);
 }
 
-const uglifyJSOptions =
-  NODE_ENV === 'production'
-    ? {
-        uglifyOptions: {
-          // remove console.* except console.error
-          compress: {
-            drop_console: true,
-            pure_funcs: ['console.error'],
-          },
-        },
-      }
-    : {};
 export default {
-  // add for transfer to umi
   plugins,
-  define: {
-    ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:
-      ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION || '', // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
-  },
-  block: {
-    defaultGitUrl: 'https://github.com/ant-design/pro-blocks',
-  },
-  treeShaking: true,
+  hash: true,
   targets: {
     ie: 11,
   },
-  devtool: ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION ? 'source-map' : false,
-  // 路由配置
+  // umi routes: https://umijs.org/zh/guide/router.html
   routes: routerConfig,
-  // Theme for antd
-  // https://ant.design/docs/react/customize-theme-cn
+  // Theme for antd: https://ant.design/docs/react/customize-theme-cn
   theme: {
-    'primary-color': primaryColor,
+    // ...darkTheme,
   },
-  proxy: {
-    '/api/': {
-      target: 'http://localhost:9900/',
-      changeOrigin: true,
-      pathRewrite: { '^/': '' },
-    },
+  define: {
+    REACT_APP_ENV: REACT_APP_ENV || false,
+    ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:
+      ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION || '', // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
   },
-  hash: true,
-  outputPath: '../thain-server/src/main/resources/static',
-  publicPath: '/',
-
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
@@ -132,7 +99,7 @@ export default {
       context: {
         resourcePath: string;
       },
-      localIdentName: string,
+      _: string,
       localName: string,
     ) => {
       if (
@@ -142,9 +109,7 @@ export default {
       ) {
         return localName;
       }
-
       const match = context.resourcePath.match(/src(.*)/);
-
       if (match && match[1]) {
         const antdProPath = match[1].replace('.less', '');
         const arr = slash(antdProPath)
@@ -153,13 +118,11 @@ export default {
           .map((a: string) => a.toLowerCase());
         return `antd-pro${arr.join('-')}-${localName}`.replace(/--/g, '-');
       }
-
       return localName;
     },
   },
   manifest: {
     basePath: '/',
   },
-  uglifyJSOptions,
-  chainWebpack: webpackPlugin,
+  proxy: proxy[REACT_APP_ENV || 'dev'],
 } as IConfig;

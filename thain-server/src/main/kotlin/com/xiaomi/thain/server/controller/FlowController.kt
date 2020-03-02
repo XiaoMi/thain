@@ -22,6 +22,9 @@ import org.apache.commons.lang3.exception.ExceptionUtils
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.*
 
+private const val NO_PERMISSION_MESSAGE = "You do not have permission to do this operation"
+private const val DEFAULT_APP_ID = "thain"
+
 /**
  * @author liangyongrui@xiaomi.com
  */
@@ -90,12 +93,12 @@ class FlowController(private val flowService: FlowService,
     }
 
     @PatchMapping("/start/{flowId}")
-    fun start(@PathVariable flowId: Long, @RequestBody variables: Map<String, String>): ApiResult {
+    fun start(@PathVariable flowId: Long, @RequestBody variables: Map<String, Any>): ApiResult {
         return try {
             if (!isAdmin && !permissionService.getFlowAccessible(flowId, username, authorities)) {
                 ApiResult.fail(NO_PERMISSION_MESSAGE)
             } else {
-                ApiResult.success(flowService.start(flowId,variables, DEFAULT_APP_ID, username))
+                ApiResult.success(flowService.start(flowId, variables, DEFAULT_APP_ID, username))
             }
         } catch (e: ThainRepeatExecutionException) {
             log.warn(ExceptionUtils.getRootCauseMessage(e))
@@ -165,11 +168,6 @@ class FlowController(private val flowService: FlowService,
             return ApiResult.fail(e.message)
         }
         return ApiResult.success()
-    }
-
-    companion object {
-        private const val NO_PERMISSION_MESSAGE = "You do not have permission to do this operation"
-        private const val DEFAULT_APP_ID = "thain"
     }
 
 }

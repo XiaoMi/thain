@@ -21,6 +21,7 @@ export default {
   'flow.execution.execution.machine': '执行机器',
   'flow.execution.create.time': '创建时间',
   'flow.execution.update.time': '更新时间',
+  'flow.execution.variables': '执行变量',
   'flow.execution.status': '作业状态',
   'flow.execution.operation': '操作',
   'flow.execution.log.detail': '日志详情',

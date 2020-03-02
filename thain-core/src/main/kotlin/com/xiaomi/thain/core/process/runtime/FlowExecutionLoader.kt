@@ -81,7 +81,7 @@ class FlowExecutionLoader(private val processEngineStorage: ProcessEngineStorage
         }
     }
 
-    fun startAsync(flowId: Long, variables: Map<String, String>): Long {
+    fun startAsync(flowId: Long, variables: Map<String, Any>): Long {
         val addFlowExecutionDp = AddFlowExecutionDp(
                 flowId = flowId,
                 hostInfo = HostUtils.hostInfo,

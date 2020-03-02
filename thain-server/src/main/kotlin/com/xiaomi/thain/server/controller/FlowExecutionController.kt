@@ -1,12 +1,15 @@
 package com.xiaomi.thain.server.controller
 
 import com.xiaomi.thain.common.entity.ApiResult
+import com.xiaomi.thain.common.model.rp.FlowExecutionRp
 import com.xiaomi.thain.server.handler.ThreadLocalUser
 import com.xiaomi.thain.server.model.rp.FlowExecutionAllInfoRp
 import com.xiaomi.thain.server.service.FlowExecutionService
 import com.xiaomi.thain.server.service.PermissionService
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.web.bind.annotation.*
+
+private const val NO_PERMISSION_MESSAGE = "You do not have permission to do this operation"
 
 /**
  * @author liangyongrui
@@ -30,7 +33,7 @@ class FlowExecutionController(private val flowExecutionService: FlowExecutionSer
             if (flowId == null || flowId <= 0) {
                 ApiResult.success(emptyList<Any>(), 0, 1, pageSizeT)
             } else ApiResult.success(
-                    flowExecutionService.getFlowExecutionList(flowId, pageT, pageSizeT),
+                    flowExecutionService.getFlowExecutionList(flowId, pageT, pageSizeT).map { FlowExecutionRp(it) },
                     flowExecutionService.getFlowExecutionCount(flowId),
                     pageT,
                     pageSizeT
@@ -81,10 +84,6 @@ class FlowExecutionController(private val flowExecutionService: FlowExecutionSer
         } catch (e: Exception) {
             ApiResult.fail(e.message)
         }
-    }
-
-    companion object {
-        private const val NO_PERMISSION_MESSAGE = "You do not have permission to do this operation"
     }
 
 }

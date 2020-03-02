@@ -28,6 +28,9 @@ import java.text.ParseException
  * @author liangyongrui@xiaomi.com
  * @date 19-5-16 下午8:38
  */
+
+private const val NON_EXIST_FLOW = "flow does not exist:{0}"
+
 class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
                   schedulerEngineConfiguration: SchedulerEngineConfiguration) {
 
@@ -124,7 +127,7 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
      *
      * 返回 flow execution id
      */
-    fun startFlow(flowId: Long, variables: Map<String, String>, appId: String, username: String): Long {
+    fun startFlow(flowId: Long, variables: Map<String, Any>, appId: String, username: String): Long {
         val id = processEngine.startProcess(flowId, variables)
         FlowOperationLogHandler(
                 flowId = flowId,
@@ -227,10 +230,6 @@ class ThainFacade(processEngineConfiguration: ProcessEngineConfiguration,
         if (isNotBlank(flowDr.modifyCallbackUrl)) {
             SendModifyUtils.sendScheduling(flowId, flowDr.modifyCallbackUrl)
         }
-    }
-
-    companion object {
-        private const val NON_EXIST_FLOW = "flow does not exist:{0}"
     }
 
 }

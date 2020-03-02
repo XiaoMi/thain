@@ -97,22 +97,22 @@ class FlowExecutor(flowExecutionDr: FlowExecutionDr,
                 // do down
             }
         }
-        executableJobs.forEach { job ->
+        executableJobs.forEach {
             val future = CompletableFuture.runAsync(Runnable {
-                flowExecutionService.addInfo("Start executing the job [${job.name}]")
+                flowExecutionService.addInfo("Start executing the job [${it.name}]")
                 try {
-                    JobExecutor.start(flowExecutionId, job, jobExecutionModelMap[job.id]
+                    JobExecutor.start(flowExecutionId, it, jobExecutionModelMap[it.id]
                             ?: error(""), processEngineStorage)
                 } catch (e: Exception) {
-                    flowExecutionService.addError("Job[${job.name}] exception: ${ExceptionUtils.getRootCauseMessage(e)}")
+                    flowExecutionService.addError("Job[${it.name}] exception: ${ExceptionUtils.getRootCauseMessage(e)}")
                     return@Runnable
                 } catch (e: Throwable) {
                     processEngineStorage.mailService.sendSeriousError(ThrowableUtils.extractStackTrace(e))
-                    flowExecutionService.addError("Job[${job.name}] exception: ${e.message}")
+                    flowExecutionService.addError("Job[${it.name}] exception: ${e.message}")
                     return@Runnable
                 }
-                flowExecutionService.addInfo("Execute job[${job.name}] complete")
-                flowExecutionStorage.addFinishJob(job.name)
+                flowExecutionService.addInfo("Execute job[${it.name}] complete")
+                flowExecutionStorage.addFinishJob(it.name)
                 runExecutableJobs()
             }, flowExecutionJobThreadPool)
             jobFutureQueue.add(future)

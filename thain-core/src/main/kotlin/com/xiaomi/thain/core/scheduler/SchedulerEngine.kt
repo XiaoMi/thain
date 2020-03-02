@@ -19,11 +19,10 @@ import java.util.*
  * @author liangyongrui@xiaomi.com
  */
 
+private const val SYSTEM_GROUP = "system"
+
 class SchedulerEngine(schedulerEngineConfiguration: SchedulerEngineConfiguration,
                       processEngine: ProcessEngine) {
-    companion object {
-        private const val SYSTEM_GROUP = "system"
-    }
 
     private val log = LoggerFactory.getLogger(this.javaClass)!!
     private val scheduler: Scheduler

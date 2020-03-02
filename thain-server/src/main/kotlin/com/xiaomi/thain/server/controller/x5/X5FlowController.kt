@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+private const val NO_PERMISSION_MESSAGE = "You do not have permission to do this operation"
+private const val FLOW_ID = "flowId"
+private const val VARIABLES = "variables"
+private const val UNKNOWN_USER = "unknown"
+
 /**
  * Date 19-7-8 下午2:51
  */
@@ -60,10 +65,12 @@ class X5FlowController(private val flowService: FlowService,
     @PostMapping("start")
     fun start(@RequestBody json: String, appId: String): ApiResult {
         return try {
-            val flowId = JSON.parseObject(json).getLong(FLOW_ID)
+            val jsonObject = JSON.parseObject(json)
+            val flowId = jsonObject.getLong(FLOW_ID)
+            val variables = jsonObject.getJSONObject(VARIABLES)
             if (!permissionService.getFlowAccessible(flowId, appId)) {
                 ApiResult.fail(NO_PERMISSION_MESSAGE)
-            } else ApiResult.success(flowService.start(flowId, mapOf(), appId, UNKNOWN_USER))
+            } else ApiResult.success(flowService.start(flowId, variables, appId, UNKNOWN_USER))
         } catch (e: ThainRepeatExecutionException) {
             log.warn(ExceptionUtils.getRootCauseMessage(e))
             ApiResult.fail(e.message)
@@ -108,12 +115,6 @@ class X5FlowController(private val flowService: FlowService,
             return ApiResult.fail(e.message)
         }
         return ApiResult.success()
-    }
-
-    companion object {
-        private const val NO_PERMISSION_MESSAGE = "You do not have permission to do this operation"
-        private const val FLOW_ID = "flowId"
-        private const val UNKNOWN_USER = "unknown"
     }
 
 }

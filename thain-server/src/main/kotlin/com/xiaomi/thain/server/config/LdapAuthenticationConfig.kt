@@ -13,6 +13,11 @@ import org.springframework.security.ldap.authentication.BindAuthenticator
 import org.springframework.security.ldap.authentication.LdapAuthenticationProvider
 import org.springframework.security.ldap.userdetails.LdapUserDetailsMapper
 
+private const val UP_ATTRIBUTE_NAME = "userPassword"
+private const val USERNAME_ATTRIBUTE_NAME = "sn"
+private const val USER_ID_ATTRIBUTE_NAME = "uid"
+private const val GROUP_ATTRIBUTE_NAME = "ou"
+
 /**
  * @author liangyongrui
  */
@@ -43,13 +48,6 @@ class LdapAuthenticationConfig(private val ldapContextSource: LdapContextSource)
             }
         })
         return authProvider
-    }
-
-    companion object {
-        private const val UP_ATTRIBUTE_NAME = "userPassword"
-        private const val USERNAME_ATTRIBUTE_NAME = "sn"
-        private const val USER_ID_ATTRIBUTE_NAME = "uid"
-        private const val GROUP_ATTRIBUTE_NAME = "ou"
     }
 
 }

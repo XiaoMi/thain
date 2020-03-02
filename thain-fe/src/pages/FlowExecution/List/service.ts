@@ -5,21 +5,21 @@
  */
 import { get, patch } from '@/utils/request';
 import { FlowExecutionListModelState } from '@/pages/FlowExecution/List/models/flowExecutionList';
-import { FlowExecutionModel } from '@/commonModels/FlowExecutionModel';
-import { FlowExecutionAllInfo } from '@/commonModels/FlowExecutionAllInfo';
+import FlowExecutionModel from '@/commonModels/FlowExecutionModel';
+import FlowExecutionAllInfo from '@/commonModels/FlowExecutionAllInfo';
 
 export function getTableList(data: { flowId?: number; page?: number; pageSize?: number }) {
   return get<FlowExecutionListModelState>('/api/flow-execution/list', data);
 }
 
 export function killFlowExecution(flowExecutionId: number) {
-  return patch<FlowExecutionModel[]>('/api/flow-execution/kill/' + flowExecutionId);
+  return patch<FlowExecutionModel[]>(`/api/flow-execution/kill/${flowExecutionId}`);
 }
 
 export function getFlowExecution(flowExecutionId: number) {
-  return get<FlowExecutionModel>('/api/flow-execution/' + flowExecutionId);
+  return get<FlowExecutionModel>(`/api/flow-execution/${flowExecutionId}`);
 }
 
 export function getFlowExecutionAllInfoByFlowExecutionId(flowExecutionId: number) {
-  return get<FlowExecutionAllInfo>('/api/flow-execution/all-info/' + flowExecutionId);
+  return get<FlowExecutionAllInfo>(`/api/flow-execution/all-info/${flowExecutionId}`);
 }

@@ -37,9 +37,10 @@ public class ThainClient {
     private static final String ALL_EXECUTION_INFO = "/x5/flow-execution/infos";
     private static final String UPDATE_JOB_PROPERTIES = "/x5/job/update-properties";
 
-    
+
     private static final String KEY_FLOW_ID = "flowId";
-    
+    private static final String VARIABLES = "variables";
+
     public static ThainClient getInstance(@NonNull String appId, @NonNull String appKey, @NonNull String host) {
         return new ThainClient(appId, appKey, host);
     }
@@ -76,8 +77,9 @@ public class ThainClient {
     /**
      * 立即触发一次
      */
-    public ApiResult startFlow(long flowId) throws IOException {
-        return buildRequest(url + START_PATH, JSON.toJSONString(ImmutableMap.of(KEY_FLOW_ID, flowId)));
+    public ApiResult startFlow(long flowId, Map<String, Object> variables) throws IOException {
+        return buildRequest(url + START_PATH, JSON.toJSONString(ImmutableMap.of(
+                KEY_FLOW_ID, flowId, VARIABLES, variables)));
     }
 
     public ApiResult deleteFlow(long flowId) throws IOException {

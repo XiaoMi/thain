@@ -1,6 +1,5 @@
 package com.xiaomi.thain.server.dao
 
-import com.xiaomi.thain.common.model.FlowExecutionModel
 import com.xiaomi.thain.common.model.JobExecutionModel
 import com.xiaomi.thain.common.model.JobModel
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class FlowExecutionDao(private val flowExecutionMapper: FlowExecutionMapper) {
 
-    fun getFlowExecutionList(flowId: Long, page: Int, pageSize: Int): List<FlowExecutionModel> {
+    fun getFlowExecutionList(flowId: Long, page: Int, pageSize: Int): List<FlowExecutionDr> {
         val offset = (page - 1) * pageSize
         return flowExecutionMapper.getFlowExecutionList(flowId, offset, pageSize)
     }

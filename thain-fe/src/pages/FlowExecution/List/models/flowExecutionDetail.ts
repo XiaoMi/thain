@@ -12,7 +12,7 @@ import { Reducer } from 'redux';
 import { EditorFlowEntity } from '@/pages/FlowEditor/EditorFlowEntity';
 import { JobExecutionStatus } from '@/enums/JobExecutionStatus';
 import { getFlowExecutionAllInfoByFlowExecutionId } from '../service';
-import { FlowExecutionAllInfo } from '@/commonModels/FlowExecutionAllInfo';
+import FlowExecutionAllInfo from '@/commonModels/FlowExecutionAllInfo';
 
 export class FlowExecutionDetailModelState extends FlowExecutionAllInfo {}
 
@@ -33,7 +33,7 @@ const FlowExecutionDetailModel: FlowExecutionDetailModelType = {
   state: new FlowExecutionDetailModelState(),
 
   effects: {
-    *getGraph({ payload: { flowExecutionId, graph } }, { call, put, select }) {
+    *getGraph({ payload: { flowExecutionId, graph } }, { call, put }) {
       const flowExecutionAllInfo: FlowExecutionAllInfo | undefined = yield call(
         getFlowExecutionAllInfoByFlowExecutionId,
         flowExecutionId,
@@ -55,21 +55,22 @@ const FlowExecutionDetailModel: FlowExecutionDetailModelType = {
       if (editorFlowEntity === undefined) {
         return;
       }
-      const nodes = editorFlowEntity.editorNodes;
+      let nodes = editorFlowEntity.editorNodes;
       const edges = editorFlowEntity.editorEdges;
       let minX = Number.MAX_VALUE;
       let minY = Number.MAX_VALUE;
 
-      for (const node of nodes) {
+      nodes.forEach(node => {
         minX = Math.min(minX, node.x);
         minY = Math.min(minY, node.y);
-      }
+      });
 
       // 修复边框问题
       minX -= 45;
       minY -= 30;
 
-      for (const node of nodes) {
+      nodes = nodes.map(p => {
+        const node = p;
         node.x -= minX;
         node.y -= minY;
         const jobExecutionModel = getJobExecutionModel(node.jobId);
@@ -92,7 +93,8 @@ const FlowExecutionDetailModel: FlowExecutionDetailModelType = {
         } else {
           node.color = '#C0C0C0';
         }
-      }
+        return node;
+      });
       graph.read({ nodes, edges });
 
       yield put({

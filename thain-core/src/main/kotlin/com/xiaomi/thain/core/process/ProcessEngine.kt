@@ -99,7 +99,7 @@ class ProcessEngine(processEngineConfiguration: ProcessEngineConfiguration, val 
     /**
      * 手动触发一次
      */
-    fun startProcess(flowId: Long, variables: Map<String, String>): Long {
+    fun startProcess(flowId: Long, variables: Map<String, Any>): Long {
         return flowExecutionLoader.startAsync(flowId, variables)
     }
 

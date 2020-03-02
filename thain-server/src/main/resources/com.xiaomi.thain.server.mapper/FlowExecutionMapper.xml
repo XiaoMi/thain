@@ -7,15 +7,17 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaomi.thain.server.mapper.FlowExecutionMapper">
-    <select id="getFlowExecutionList" resultType="com.xiaomi.thain.common.model.FlowExecutionModel">
+    <select id="getFlowExecutionList" resultType="com.xiaomi.thain.common.model.dr.FlowExecutionDr">
         select id,
                flow_id,
                status,
                host_info,
                trigger_type,
+               variables,
                logs,
                create_time,
-               update_time
+               update_time,
+               heartbeat
         from thain_flow_execution
         where flow_id = #{flowId}
         order by id desc

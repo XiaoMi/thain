@@ -22,6 +22,7 @@ export default {
   'flow.execution.execution.machine': 'Execution machine',
   'flow.execution.create.time': 'Create time',
   'flow.execution.update.time': 'Update time',
+  'flow.execution.variables': 'Variables',
   'flow.execution.operation': 'Operation',
   'flow.execution.log.detail': 'Log details',
   'job.execution.running': 'Running',

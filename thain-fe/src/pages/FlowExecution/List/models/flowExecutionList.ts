@@ -12,14 +12,18 @@ import { Reducer } from 'redux';
 import { getTableList, killFlowExecution } from '@/pages/FlowExecution/List/service';
 import { notification } from 'antd';
 import { ConnectState } from '@/models/connect';
-import { FlowExecutionModel } from '@/commonModels/FlowExecutionModel';
+import FlowExecutionModel from '@/commonModels/FlowExecutionModel';
 import { formatMessage } from 'umi-plugin-react/locale';
 
 export class FlowExecutionListModelState {
-  flowId?: number;
+  flowId: number | undefined;
+
   page = 1;
+
   pageSize = 20;
+
   count = 0;
+
   data: FlowExecutionModel[] = [];
 }
 
@@ -47,17 +51,13 @@ const FlowExecutionListModel: FlowExecutionListModelType = {
       );
       let { page, pageSize, flowId } = state;
       if (payload) {
-        page = payload.page;
-        pageSize = payload.pageSize;
-        flowId = payload.flowId;
+        ({ page, pageSize, flowId } = payload);
       }
-      const response: FlowExecutionListModelState | undefined = yield call(() =>
-        getTableList({
-          page,
-          pageSize,
-          flowId,
-        }),
-      );
+      const response: FlowExecutionListModelState | undefined = yield call(getTableList, {
+        page,
+        pageSize,
+        flowId,
+      });
       yield put({
         type: 'updateState',
         payload: { ...response, flowId },

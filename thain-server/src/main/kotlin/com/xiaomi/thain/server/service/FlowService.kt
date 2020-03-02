@@ -54,7 +54,7 @@ class FlowService(
         return true
     }
 
-    fun start(flowId: Long, variables: Map<String, String>, appId: String, username: String): Long {
+    fun start(flowId: Long, variables: Map<String, Any>, appId: String, username: String): Long {
         return thainFacade.startFlow(flowId, variables, appId, username)
     }
 

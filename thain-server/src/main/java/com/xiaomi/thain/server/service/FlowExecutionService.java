@@ -6,7 +6,6 @@
 package com.xiaomi.thain.server.service;
 
 import com.xiaomi.thain.common.exception.ThainException;
-import com.xiaomi.thain.common.model.FlowExecutionModel;
 import com.xiaomi.thain.common.model.JobExecutionModel;
 import com.xiaomi.thain.common.model.JobModel;
 import com.xiaomi.thain.common.model.dr.FlowExecutionDr;
@@ -37,7 +36,7 @@ public class FlowExecutionService {
         this.thainFacade = thainFacade;
     }
 
-    public List<FlowExecutionModel> getFlowExecutionList(long flowId, int page, int pageSize) {
+    public List<FlowExecutionDr> getFlowExecutionList(long flowId, int page, int pageSize) {
         return flowExecutionDao.getFlowExecutionList(flowId, page, pageSize);
     }
 

@@ -2,6 +2,7 @@ package com.xiaomi.thain.server.controller.x5
 
 import com.alibaba.fastjson.JSON
 import com.xiaomi.thain.common.entity.ApiResult
+import com.xiaomi.thain.common.model.rp.FlowExecutionRp
 import com.xiaomi.thain.server.model.rp.FlowExecutionAllInfoRp
 import com.xiaomi.thain.server.service.FlowExecutionService
 import com.xiaomi.thain.server.service.PermissionService
@@ -9,6 +10,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+
+private const val NO_PERMISSION_MESSAGE = "You do not have permission to do this operation"
 
 /**
  * Date 19-7-8 下午2:57
@@ -63,16 +66,12 @@ class X5FlowExecutionController(private val flowExecutionService: FlowExecutionS
             if (pageSize < 1) {
                 pageSize = 10
             }
-            return ApiResult.success(flowExecutionService.getFlowExecutionList(flowId, page, pageSize),
+            return ApiResult.success(flowExecutionService.getFlowExecutionList(flowId, page, pageSize).map { FlowExecutionRp(it) },
                     flowExecutionService.getFlowExecutionCount(flowId),
                     page,
                     pageSize)
         }
         return ApiResult.fail(NO_PERMISSION_MESSAGE)
-    }
-
-    companion object {
-        private const val NO_PERMISSION_MESSAGE = "You do not have permission to do this operation"
     }
 
 }

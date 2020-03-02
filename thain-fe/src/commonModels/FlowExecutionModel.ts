@@ -6,13 +6,23 @@
 /**
  * 数据库中的 thain_flow_execution
  */
-export class FlowExecutionModel {
+class FlowExecutionModel {
   id = 0;
+
   flowId = 0;
+
   status = 0;
+
   hostInfo = '';
+
   triggerType = 0;
+
+  variables: { [key: string]: string } | undefined;
+
   logs = '';
+
   createTime = 0;
+
   updateTime = 0;
 }
+export default FlowExecutionModel;

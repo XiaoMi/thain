@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletResponse
 /**
  * @author miaoyu
  */
+private const val UTF8_JSON_TYPE = "application/json; charset=utf-8"
+
 @EnableWebSecurity
 class WebSecurityConfig(private val customOauth2UserServiceImpl: OAuth2UserService<OidcUserRequest, OidcUser>,
                         @Value("\${thain.login.source}") authenticationProviderName: String,
@@ -99,10 +101,6 @@ class WebSecurityConfig(private val customOauth2UserServiceImpl: OAuth2UserServi
                 .sessionManagement()
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(false)
-    }
-
-    companion object {
-        private const val UTF8_JSON_TYPE = "application/json; charset=utf-8"
     }
 
 }

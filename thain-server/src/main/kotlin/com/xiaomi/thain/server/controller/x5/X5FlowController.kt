@@ -67,7 +67,7 @@ class X5FlowController(private val flowService: FlowService,
         return try {
             val jsonObject = JSON.parseObject(json)
             val flowId = jsonObject.getLong(FLOW_ID)
-            val variables = jsonObject.getJSONObject(VARIABLES)
+            val variables = jsonObject.getJSONObject(VARIABLES) ?: mapOf<String, Any>()
             if (!permissionService.getFlowAccessible(flowId, appId)) {
                 ApiResult.fail(NO_PERMISSION_MESSAGE)
             } else ApiResult.success(flowService.start(flowId, variables, appId, UNKNOWN_USER))

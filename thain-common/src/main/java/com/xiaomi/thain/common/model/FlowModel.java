@@ -8,9 +8,8 @@ package com.xiaomi.thain.common.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
-import java.sql.Timestamp;
-import java.util.Optional;
 import javax.annotation.Nullable;
+import java.sql.Timestamp;
 
 /**
  * Date 19-5-17 下午12:07
@@ -95,17 +94,4 @@ public class FlowModel {
     @Nullable
     public final Timestamp statusUpdateTime;
 
-    public final boolean deleted;
-
-    public Optional<Long> getCreateTime() {
-        return Optional.ofNullable(createTime).map(Timestamp::getTime);
-    }
-
-    public Optional<Long> getUpdateTime() {
-        return Optional.ofNullable(updateTime).map(Timestamp::getTime);
-    }
-
-    public Optional<Long> getStatusUpdateTime() {
-        return Optional.ofNullable(statusUpdateTime).map(Timestamp::getTime);
-    }
 }

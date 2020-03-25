@@ -5,5 +5,8 @@
 dependencies {
     api project(':thain-common')
 }
-
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs << "-Xlint:unchecked"
+}
 description = 'thain-component'

@@ -15,5 +15,8 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.18'
     implementation 'com.h2database:h2:1.4.200'
 }
-
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs << "-Xlint:unchecked"
+}
 description = 'thain-core'

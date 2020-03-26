@@ -25,7 +25,6 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 
 1. Environmental Requirements
 
-   - os : Linux or MacOS
    - jdk >= 8
    - nodejs >= 8
 

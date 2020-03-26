@@ -69,9 +69,8 @@ Thain has completed backend management system which supports depending, re-run, 
 
 Now Thain continues to be developed by xiaomi internal developers. If you have any questions, you can ask in the issues or send email to:
 
+- huangshan3@xiaomi.com
 - zuojianguang@xiaomi.com
-- liangyongrui@xiaomi.com
-- miaoyu3@xiaomi.com
 - lupeng5@xiaomi.com
 
 ## License

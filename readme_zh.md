@@ -66,14 +66,12 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 - [poplp](https://github.com/poplp)
 - [SingleMeen](https://github.com/SingleMeen)
 
-
 ## 帮助我们做的更好
 
 有任何疑问都可以在 issues 中提出，或发送邮件到：
 
+- huangshan3@xiaomi.com
 - zuojianguang@xiaomi.com
-- liangyongrui@xiaomi.com
-- miaoyu3@xiaomi.com
 - lupeng5@xiaomi.com
 
 ## License

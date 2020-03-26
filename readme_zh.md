@@ -58,15 +58,14 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 ## Maintainers
 
 - [liangyongrui](https://github.com/liangyongrui)
-- [holiday12138](https://github.com/holiday12138)
 
 ## Contributors
 
 - [liangyongrui](https://github.com/liangyongrui)
-- [SingleMeen](https://github.com/SingleMeen)
+- [godisjohnny](https://github.com/godisjohnny)
 - [zuojianguang](https://github.com/zuojianguang)
 - [poplp](https://github.com/poplp)
-- [holiday12138](https://github.com/holiday12138)
+- [SingleMeen](https://github.com/SingleMeen)
 
 
 ## 帮助我们做的更好

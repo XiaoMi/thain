@@ -57,15 +57,14 @@ Thain has completed backend management system which supports depending, re-run, 
 ## Maintainers
 
 - [liangyongrui](https://github.com/liangyongrui)
-- [holiday12138](https://github.com/holiday12138)
 
 ## Contributors
 
 - [liangyongrui](https://github.com/liangyongrui)
-- [SingleMeen](https://github.com/SingleMeen)
+- [godisjohnny](https://github.com/godisjohnny)
 - [zuojianguang](https://github.com/zuojianguang)
 - [poplp](https://github.com/poplp)
-- [holiday12138](https://github.com/holiday12138)
+- [SingleMeen](https://github.com/SingleMeen)
 
 ## Help Us Do Better
 

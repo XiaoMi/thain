@@ -53,10 +53,6 @@ Thain has completed backend management system which supports depending, re-run, 
 
 1. Initial account password: admin, admin
 
-## Maintainers
-
-- [liangyongrui](https://github.com/liangyongrui)
-
 ## Contributors
 
 - [liangyongrui](https://github.com/liangyongrui)
@@ -69,9 +65,7 @@ Thain has completed backend management system which supports depending, re-run, 
 
 Now Thain continues to be developed by xiaomi internal developers. If you have any questions, you can ask in the issues or send email to:
 
-- huangshan3@xiaomi.com
 - zuojianguang@xiaomi.com
-- lupeng5@xiaomi.com
 
 ## License
 

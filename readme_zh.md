@@ -54,10 +54,6 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 
 1. 初始账号密码：admin, admin
 
-## Maintainers
-
-- [liangyongrui](https://github.com/liangyongrui)
-
 ## Contributors
 
 - [liangyongrui](https://github.com/liangyongrui)
@@ -70,9 +66,7 @@ Thain 提供了任务调度与执行的一整套解决方案，在小米集团�
 
 有任何疑问都可以在 issues 中提出，或发送邮件到：
 
-- huangshan3@xiaomi.com
 - zuojianguang@xiaomi.com
-- lupeng5@xiaomi.com
 
 ## License
 

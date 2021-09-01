@@ -49,7 +49,7 @@ const FlowSourceCountChart: React.FC<Props> = ({
   const cols = {
     percent: {
       formatter: (val: number) => {
-        return (val * 100).toFixed(2) + '%';
+        return `${(val * 100).toFixed(2)}%`;
       },
     },
   };
@@ -78,12 +78,12 @@ const FlowSourceCountChart: React.FC<Props> = ({
         ],
       ]}
     >
-      <Coord type={'theta'} radius={0.75} innerRadius={0.6} />
+      <Coord type="theta" radius={0.75} innerRadius={0.6} />
       <Axis name="percent" />
       <Legend
         itemFormatter={(item: string) => {
           if (item.length > 10) {
-            return item.substr(0, 8) + '...';
+            return `${item.substr(0, 8)}...`;
           }
           return item;
         }}
@@ -95,8 +95,8 @@ const FlowSourceCountChart: React.FC<Props> = ({
           fontWeight: 'bold',
         }}
         onClick={(ev: any) => {
-          const value = ev.item.value;
-          const checked = ev.checked;
+          const {value} = ev.item;
+          const {checked} = ev;
           if (dispatch) {
             dispatch({
               type: 'dashboard/updateState',
@@ -131,7 +131,7 @@ const FlowSourceCountChart: React.FC<Props> = ({
         tooltip={[
           'source*percent',
           (source, percent) => {
-            percent = (percent * 100).toFixed(2) + '%';
+            percent = `${(percent * 100).toFixed(2)  }%`;
             return {
               name: source,
               value: percent,

@@ -27,13 +27,13 @@ export function LineChart(props: { data: { x?: number; time: number }[] }) {
             type: 'y',
           }}
         />
-        <Geom type="line" position="x*time" size={2} shape={'smooth'} />
+        <Geom type="line" position="x*time" size={2} shape="smooth" />
         <Geom
           type="point"
           position="x*time"
           size={3}
-          shape={'circle'}
-          color={'city'}
+          shape="circle"
+          color="city"
           style={{
             stroke: '#fff',
           }}

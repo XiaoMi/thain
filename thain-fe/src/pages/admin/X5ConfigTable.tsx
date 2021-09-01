@@ -5,12 +5,12 @@
  */
 import React, { useState, useEffect } from 'react';
 import { ConnectState } from '@/models/connect';
-import { X5ConfigModel } from './models/X5ConfigModel';
 import { formatMessage } from 'umi-plugin-locale';
 import ButtonGroup from 'antd/es/button/button-group';
 import { Button, Table, Modal, Form, Input, message } from 'antd';
 import { useDispatch, useSelector } from 'dva';
 import { PaginationConfig } from 'antd/lib/table';
+import { X5ConfigModel } from './models/X5ConfigModel';
 import X5Tag from './X5Tag';
 
 const { Item } = Form;
@@ -63,15 +63,13 @@ const X5ConfigTable: React.FC<{}> = () => {
         });
         setIsVisiable(false);
       }
-    } else {
-      if (dispatch) {
+    } else if (dispatch) {
         dispatch({
           type: 'x5config/add',
           payload: model,
           callback: setIsVisiable,
         });
       }
-    }
   }
   useEffect(() => {
     return () => {
@@ -201,7 +199,7 @@ const X5ConfigTable: React.FC<{}> = () => {
         </Form>
       </Modal>
       <Modal
-        title={'delete info'}
+        title="delete info"
         onOk={handelDelete}
         visible={deleteVisiable}
         onCancel={() => {
@@ -229,7 +227,7 @@ const X5ConfigTable: React.FC<{}> = () => {
         loading={loading}
         pagination={{
           current: page,
-          pageSize: pageSize,
+          pageSize,
           total: count,
           showSizeChanger: true,
         }}

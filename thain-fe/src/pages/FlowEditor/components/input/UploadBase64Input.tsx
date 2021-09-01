@@ -4,10 +4,10 @@
  * can be found in the LICENSE file in the root directory of this source tree.
  */
 import React, { useState } from 'react';
-import { Button, Icon } from 'antd';
-import { InputProps } from './InputProps';
+import { Icon } from 'antd';
 // @ts-ignore
 import FileBase64 from 'react-file-base64';
+import { InputProps } from './InputProps';
 import '../../style/UploadBase64Input.less';
 
 /**

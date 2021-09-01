@@ -11,7 +11,8 @@
 import { Popover, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { InputProps } from './InputProps';
-const Option = Select.Option;
+
+const {Option} = Select;
 
 export default function SelectInput(props: InputProps) {
   const { updateGraph, attr, value, onBlurFunction, selectList, updateAttributes } = props;

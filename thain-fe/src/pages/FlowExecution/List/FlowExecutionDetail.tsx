@@ -8,10 +8,10 @@ import { Row, Col, Button, Table, Icon } from 'antd';
 import { ConnectState } from '@/models/connect';
 import { useSelector, useDispatch } from 'dva';
 import Editor from '@/pages/FlowEditor/editor';
+import { formatMessage } from 'umi-plugin-react/locale';
 import Logs from './Logs';
 import { JobExecutionModel } from '@/commonModels/JobExecutionModel';
 import { JobExecutionStatus } from '@/enums/JobExecutionStatus';
-import { formatMessage } from 'umi-plugin-react/locale';
 
 const height = window.innerHeight - 350;
 
@@ -106,7 +106,7 @@ const FlowExecutionDetail: React.FC<Props> = ({ flowExecutionId }) => {
       dataIndex: 'updateTime',
       key: 'spendTime',
       render: (time: any, item: JobExecutionModel) => {
-        return (item.updateTime - item.createTime) / 1000 + 's';
+        return `${(item.updateTime - item.createTime) / 1000  }s`;
       },
     },
     {

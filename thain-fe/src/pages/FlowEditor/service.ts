@@ -22,5 +22,5 @@ export async function addFlow(data: FlowAllInfo) {
 }
 
 export async function getFlow(flowId: number) {
-  return get<FlowAllInfo>('/api/flow/all-info/' + flowId);
+  return get<FlowAllInfo>(`/api/flow/all-info/${  flowId}`);
 }

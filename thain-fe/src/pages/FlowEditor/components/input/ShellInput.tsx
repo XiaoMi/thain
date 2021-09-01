@@ -14,8 +14,8 @@ import React, { useEffect, useState } from 'react';
 
 import { Modal, Input } from 'antd';
 import { Controlled as CodeMirror } from 'react-codemirror2';
-import { InputProps } from './InputProps';
 import { formatMessage } from 'umi-plugin-react/locale';
+import { InputProps } from './InputProps';
 
 export default function ShellInput(props: InputProps) {
   const { updateGraph, attr, value, onBlurFunction, updateAttributes } = props;

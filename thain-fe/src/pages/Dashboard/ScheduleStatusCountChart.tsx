@@ -60,7 +60,7 @@ const ScheduleStatusCountChart: React.FC<Props> = ({
   const cols = {
     percent: {
       formatter: (val: number) => {
-        return (val * 100).toFixed(2) + '%';
+        return `${(val * 100).toFixed(2)  }%`;
       },
     },
   };
@@ -90,7 +90,7 @@ const ScheduleStatusCountChart: React.FC<Props> = ({
         ],
       ]}
     >
-      <Coord type={'theta'} radius={0.75} innerRadius={0.6} />
+      <Coord type="theta" radius={0.75} innerRadius={0.6} />
       <Axis name="percent" />
       <Legend
         offsetY={-40}
@@ -99,8 +99,8 @@ const ScheduleStatusCountChart: React.FC<Props> = ({
           fontWeight: 'bold',
         }}
         onClick={(ev: any) => {
-          const value = ev.item.value;
-          const checked = ev.checked;
+          const {value} = ev.item;
+          const {checked} = ev;
           if (dispatch) {
             dispatch({
               type: 'dashboard/updateState',
@@ -139,7 +139,7 @@ const ScheduleStatusCountChart: React.FC<Props> = ({
         tooltip={[
           'status*percent',
           (status, percent) => {
-            percent = (percent * 100).toFixed(2) + '%';
+            percent = `${(percent * 100).toFixed(2)  }%`;
             return {
               name: status,
               value: percent,

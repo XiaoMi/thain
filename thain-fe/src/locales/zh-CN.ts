@@ -16,6 +16,7 @@ import exception500 from '@/pages/Exception/500/locales/zh-CN';
 import admin from './zh-CN/admin';
 import x5config from './zh-CN/x5config';
 import editor from './zh-CN/editor';
+
 export default {
   ...global,
   ...flow,

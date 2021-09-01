@@ -14,8 +14,8 @@ import 'codemirror/mode/sql/sql.js';
 
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { Modal, Input } from 'antd';
-import { InputProps } from './InputProps';
 import { formatMessage } from 'umi-plugin-react/locale';
+import { InputProps } from './InputProps';
 
 export default function SqlInput(props: InputProps) {
   const { updateGraph, attr, value, onBlurFunction, updateAttributes } = props;

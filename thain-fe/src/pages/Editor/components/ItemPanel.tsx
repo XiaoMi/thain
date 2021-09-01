@@ -5,12 +5,12 @@
  * @date 2019年03月19日
  * @author liangyongrui@xiaomi.com
  */
-import Editor from '../../FlowEditor/editor';
 import React, { useRef, useEffect } from 'react';
 import '../style/itempanel.less';
 import { useSelector } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { formatMessage } from 'umi-plugin-react/locale';
+import Editor from '../../FlowEditor/editor';
 
 const nodeCommonDefine = {
   src: require('../item-icon/node.svg'),

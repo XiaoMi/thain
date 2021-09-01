@@ -9,11 +9,11 @@ import { Card, Form, Row, Col, Input } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { connect, useSelector, useDispatch } from 'dva';
-import FlowExecutionTable from './FlowExecutionTable';
 import { router } from 'umi';
+import { formatMessage } from 'umi-plugin-react/locale';
+import FlowExecutionTable from './FlowExecutionTable';
 import { LineChart } from './LineChart';
 import { delay } from '@/utils/delay';
-import { formatMessage } from 'umi-plugin-react/locale';
 
 const FlowExecutionList: React.FC<ConnectProps<{ flowId: number }>> = ({ computedMatch }) => {
   const dispatch = useDispatch();

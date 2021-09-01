@@ -7,9 +7,9 @@ import React from 'react';
 import { Chart, Geom, Axis, Tooltip, Legend } from 'bizcharts';
 import { ConnectState, ConnectProps } from '@/models/connect';
 import { connect } from 'dva';
-import LoadingWrapper from './LoadingWrapper';
 import moment from 'moment';
 import { formatMessage } from 'umi-plugin-react/locale';
+import LoadingWrapper from './LoadingWrapper';
 
 interface Props extends ConnectProps {
   statusHistoryCountLoading: boolean;
@@ -43,7 +43,7 @@ const JobExecutionStatusHistoryCountChart: React.FC<Props> = ({
       .split('~')
       .map(t => moment.unix(Number(t)).format('YYYY-MM-DD HH:mm:ss'))
       .reduce((pre, cur) => {
-        return pre + '\n ~ \n' + cur;
+        return `${pre  }\n ~ \n${  cur}`;
       });
     return {
       ...countData,
@@ -66,13 +66,13 @@ const JobExecutionStatusHistoryCountChart: React.FC<Props> = ({
           type: 'y',
         }}
       />
-      <Geom type="line" position="time*count" size={2} color={'status'} shape={'smooth'} />
+      <Geom type="line" position="time*count" size={2} color="status" shape="smooth" />
       <Geom
         type="point"
         position="time*count"
         size={4}
-        shape={'circle'}
-        color={'stataus'}
+        shape="circle"
+        color="stataus"
         style={{
           stroke: '#fff',
         }}

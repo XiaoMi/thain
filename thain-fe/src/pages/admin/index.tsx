@@ -5,11 +5,12 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import AdminTabs from './AdminTabs';
 import { ConnectProps } from '@/models/connect';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { Card } from 'antd';
 import { formatMessage } from 'umi-plugin-react/locale';
+import AdminTabs from './AdminTabs';
+
 interface Prpos extends ConnectProps<{ type: string }> {}
 const Admin: React.FC<Prpos> = ({ dispatch, computedMatch }) => {
   let type;

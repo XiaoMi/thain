@@ -6,10 +6,11 @@
 import { Tabs } from 'antd';
 import React, { useEffect } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
-import UserAdminTable from './UserAdminTable';
-import X5ConfigTable from './X5ConfigTable';
 import { router } from 'umi';
 import { useDispatch } from 'dva';
+import UserAdminTable from './UserAdminTable';
+import X5ConfigTable from './X5ConfigTable';
+
 interface Props {
   type: string;
 }

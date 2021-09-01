@@ -53,7 +53,7 @@ const JobExecutionStatusCountChart: React.FC<Props> = ({
   const cols = {
     percent: {
       formatter: (val: number) => {
-        return (val * 100).toFixed(2) + '%';
+        return `${(val * 100).toFixed(2)  }%`;
       },
     },
   };
@@ -62,7 +62,7 @@ const JobExecutionStatusCountChart: React.FC<Props> = ({
     jobExecutionStatusCountLoading,
     formatMessage({ id: 'job.execution.status.chart.title' }),
     <Chart height={300} data={dv} scale={cols} padding={0} forceFit>
-      <Coord type={'theta'} radius={0.75} innerRadius={0.6} />
+      <Coord type="theta" radius={0.75} innerRadius={0.6} />
       <Axis name="percent" />
       <Legend
         offsetY={-40}
@@ -92,7 +92,7 @@ const JobExecutionStatusCountChart: React.FC<Props> = ({
         tooltip={[
           'status*percent',
           (status, percent) => {
-            percent = (percent * 100).toFixed(2) + '%';
+            percent = `${(percent * 100).toFixed(2)  }%`;
             return {
               name: status,
               value: percent,

@@ -11,8 +11,8 @@ import 'braft-editor/dist/index.css';
 import BraftEditor from 'braft-editor';
 import 'braft-extensions/dist/table.css';
 import { Modal, Input } from 'antd';
-import { InputProps } from './InputProps';
 import { formatMessage } from 'umi-plugin-react/locale';
+import { InputProps } from './InputProps';
 
 export default function RichTextInput(props: InputProps) {
   const { updateGraph, attr, value, onBlurFunction, updateAttributes } = props;

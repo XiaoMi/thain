@@ -97,7 +97,7 @@
     "jsdom-global": "^3.0.2",
     "less": "^3.11.1",
     "lint-staged": "^10.0.8",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "prettier": "~1.19.1",
     "slash2": "^2.0.0",
     "stylelint": "^13.2.0",
